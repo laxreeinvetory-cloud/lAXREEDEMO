@@ -1,0 +1,329 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────────────────────
+   LaxRee Amenities — Design Tokens ("The Corridor at Dusk")
+   ───────────────────────────────────────────────────────────── */
+@theme inline {
+  /* Brand palette */
+  --color-charcoal: #12100d;
+  --color-ivory: #f7f3ea;
+  --color-brass: #c6a15b;
+  --color-brass-light: #e4c989;
+  --color-emerald: #1e4638;
+  --color-ink: #1a1712;
+  --color-sand: #b7ac97;
+  --color-ink-muted: #6b6455;
+
+  /* Fonts */
+  --font-display: var(--font-display), Georgia, serif;
+  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* shadcn aliases mapped to brand palette */
+  --color-background: var(--color-ivory);
+  --color-foreground: var(--color-ink);
+  --color-card: #ffffff;
+  --color-card-foreground: var(--color-ink);
+  --color-popover: #ffffff;
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-charcoal);
+  --color-primary-foreground: var(--color-ivory);
+  --color-secondary: #ece5d4;
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: #ece5d4;
+  --color-muted-foreground: var(--color-ink-muted);
+  --color-accent: var(--color-brass);
+  --color-accent-foreground: var(--color-charcoal);
+  --color-destructive: #b3261e;
+  --color-destructive-foreground: #ffffff;
+  --color-border: rgba(26, 23, 18, 0.1);
+  --color-input: rgba(26, 23, 18, 0.1);
+  --color-ring: var(--color-brass);
+  --color-chart-1: var(--color-brass);
+  --color-chart-2: var(--color-emerald);
+  --color-chart-3: var(--color-sand);
+  --color-chart-4: var(--color-brass-light);
+  --color-chart-5: var(--color-ink-muted);
+
+  /* Radius — 24px cards, 999px pills (set on utility classes) */
+  --radius: 1.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Base layer
+   ───────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    border-color: var(--color-border);
+    outline-color: color-mix(in srgb, var(--color-brass) 60%, transparent);
+  }
+
+  html {
+    scroll-behavior: auto; /* Lenis handles smooth scroll */
+  }
+
+  body {
+    background-color: var(--color-charcoal);
+    color: var(--color-ivory);
+    font-family: var(--font-body);
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-brass);
+    color: var(--color-charcoal);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-charcoal);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--color-brass) 40%, var(--color-charcoal));
+    border-radius: 999px;
+    border: 2px solid var(--color-charcoal);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brass);
+  }
+
+  /* Focus ring (brass, 2px) */
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Headlines */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Component utilities (plain CSS — not in @layer so Tailwind 4
+   always emits them)
+   ───────────────────────────────────────────────────────────── */
+.section {
+  position: relative;
+  width: 100%;
+}
+.section-charcoal {
+  background-color: var(--color-charcoal);
+  color: var(--color-ivory);
+}
+.section-ivory {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+}
+.section-emerald {
+  background-color: var(--color-emerald);
+  color: var(--color-ivory);
+}
+
+/* Container */
+.container-laxree {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1280px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (min-width: 640px) {
+  .container-laxree { padding-left: 2rem; padding-right: 2rem; }
+}
+@media (min-width: 1024px) {
+  .container-laxree { padding-left: 3rem; padding-right: 3rem; }
+}
+
+/* Glass cards */
+.glass-on-charcoal {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass-on-ivory {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(26, 23, 18, 0.06);
+}
+
+/* Eyebrow label (Plex Mono, uppercase, tracking) */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* Data/labels (Plex Mono) */
+.data-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Brass gradient text */
+.text-brass-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--color-brass) 0%,
+    var(--color-brass-light) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.pill-brass {
+  background: var(--color-brass);
+  color: var(--color-charcoal);
+}
+.pill-brass:hover {
+  background: var(--color-brass-light);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px -10px rgba(198, 161, 91, 0.5);
+}
+.pill-ghost-ivory {
+  background: transparent;
+  color: var(--color-ivory);
+  border: 1px solid rgba(247, 243, 234, 0.4);
+}
+.pill-ghost-ivory:hover {
+  background: rgba(247, 243, 234, 0.08);
+  border-color: var(--color-ivory);
+}
+.pill-ghost-brass {
+  background: transparent;
+  color: var(--color-brass);
+  border: 1px solid var(--color-brass);
+}
+.pill-ghost-brass:hover {
+  background: rgba(198, 161, 91, 0.1);
+}
+
+/* Card base 24px radius */
+.card-24 {
+  border-radius: 24px;
+}
+.card-20 {
+  border-radius: 20px;
+}
+
+/* Hairline brass divider */
+.hairline-brass {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(198, 161, 91, 0.4) 50%,
+    transparent 100%
+  );
+  height: 1px;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Animations & keyframes
+   ───────────────────────────────────────────────────────────── */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee-x 28s linear infinite;
+}
+.animate-marquee-slow {
+  animation: marquee-x 40s linear infinite;
+}
+.marquee-pause:hover .animate-marquee,
+.marquee-pause:hover .animate-marquee-slow {
+  animation-play-state: paused;
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float {
+  animation: float-y 4s ease-in-out infinite;
+}
+
+@keyframes card-3d-rotate {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+@keyframes badge-3d-flip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-float {
+    animation: none !important;
+  }
+}
+
+/* Hide scrollbar on horizontal carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

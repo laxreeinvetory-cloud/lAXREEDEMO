@@ -1,0 +1,298 @@
+# LaxRee Amenities 3D Website — Worklog
+
+This file is the shared work log for all agents working on the LaxRee Amenities website rebuild.
+Each agent MUST read this before starting and append a new section after finishing.
+
+---
+Task ID: 1
+Agent: main (orchestrator)
+Task: Foundation — install packages, set up fonts (Fraunces, Work Sans, IBM Plex Mono), design tokens in globals.css, smooth-scroll provider (Lenis), enquiry context, motion hooks, and full site-data.ts content.
+
+Work Log:
+- Installed gsap, lenis, three, @react-three/fiber, @react-three/drei, @types/three
+- Updated src/app/layout.tsx with Fraunces, Work Sans, IBM Plex Mono fonts via next/font/google; wrapped children in EnquiryProvider + SmoothScrollProvider
+- Rewrote src/app/globals.css with full LaxRee brand token system: charcoal/ivory/brass/brass-light/emerald/ink/sand/ink-muted; radius 24px cards / 999px pills; glass-on-charcoal & glass-on-ivory utility classes; eyebrow & data-label classes; pill-brass / pill-ghost-ivory / pill-ghost-brass; marquee / float / pulse-glow keyframes; prefers-reduced-motion guards; custom brass scrollbar; focus-visible brass ring
+- Created src/components/providers/smooth-scroll-provider.tsx — Lenis init with anchor link integration, respects reduced-motion
+- Created src/components/providers/enquiry-provider.tsx — context for opening/closing Enquiry and Catalogue modals, body scroll lock
+- Created src/hooks/laxree/use-laxree-motion.ts — useCountUp, useTilt (spring-based), usePrefersReducedMotion, useScrollProgress
+- Created src/lib/laxree/site-data.ts with all content: SITE info, NAV_LINKS, HERO_STATS, CERTIFICATIONS_MARQUEE, CATEGORIES (5), SPOTLIGHT_PRODUCTS (9), ROOM_SOLUTIONS (7), TESTIMONIALS (3), CLIENT_LOGOS (10), EXHIBITIONS (5), CERTIFICATIONS (5), USPS (7), BLOG_POSTS (3), WHATSAPP_EXECUTIVES (4), ENQUIRY_CATEGORIES
+
+Stage Summary:
+- Design system live: charcoal #12100D, ivory #F7F3EA, brass #C6A15B, brass-light #E4C989, emerald #1E4638, ink #1A1712, sand #B7AC97, ink-muted #6B6455
+- Fonts: Fraunces (display), Work Sans (body), IBM Plex Mono (data/labels)
+- Image generation running in background (~23 images) → /public/images/{categories,products,gallery,blog,about}/
+- Foundation ready for parallel section subagents
+- IMPORTANT NOTE for subagents: read /home/z/my-project/upload/LaxRee_3D_Website_Master_Prompt.md for the full spec; use 'use client' for any component using framer-motion, hooks, or browser APIs; import shared data from '@/lib/laxree/site-data'; import motion hooks from '@/hooks/laxree/use-laxree-motion'; use the EnquiryProvider modal via `useEnquiry()` from '@/components/providers/enquiry-provider'
+
+---
+Task ID: 2-a
+Agent: full-stack-developer (navbar/hero/trust-marquee)
+Task: Build navbar, hero section with 3D stage, and trust certification marquee.
+
+Work Log:
+- Read worklog.md, master prompt (sections 1/2/3/15/16), site-data.ts, use-laxree-motion.ts, enquiry-provider.tsx, and globals.css to understand the foundation and brand utility classes available.
+- Created src/components/site/navbar.tsx — sticky motion.header interpolating height 88→64px and padY 22→14px via useScroll/useTransform on first 40px of scroll. Charcoal glass background rgba(18,16,13,0.7) + backdrop-blur(20px) + brass-to-transparent gradient bottom border (borderImage). Text-based LaxRee wordmark (Fraunces 24px ivory + brass diamond + "AMENITIES" Plex Mono 9px sand tracking-[0.3em]). Desktop center nav links with dim-others group hover. Right side: 32px circular brass-bordered WhatsApp icon button + brass pill "Enquire Now" → openModal("enquiry"). Mobile hamburger (lg:hidden) opens full-screen charcoal/95 backdrop-blur-xl drawer with AnimatePresence + staggered 0.05s slide-from-right variants per link, X close button top-right, Enquire pill + WhatsApp icon at bottom. Reduced-motion: height/padY collapse to fixed 64/14.
+- Created src/components/site/hero.tsx — full min-h-screen charcoal section with id="home" and radial brass glow div behind the 3D stage. Two-column lg:grid lg:grid-cols-[55fr_45fr]. Left: brass eyebrow "HOTEL SUPPLIES REDEFINED" (13px Plex Mono tracking-[0.2em]); Fraunces 600 headline clamp(2.75rem,6vw,5.25rem) with word-by-word reveal — each word a motion.span with opacity/y:24→0, delay i*0.07, duration 0.6, ease [0.22,1,0.36,1]; words "Whole", "New", "World" tagged for .text-brass-gradient; subheadline 18px sand max-w-480px; brass pill "Explore Products →" linking to #products + ghost-ivory pill "Get a Quotation" → openModal("enquiry"); glass-on-charcoal stat strip with 4 HERO_STATS items (Plex Mono 28px brass count-up via useCountUp, 11px sand labels) separated by 1px brass/30 vertical dividers (2x2 grid on mobile). Right: 520×520 (max on mobile) 3D stage with brass radial halo; dynamic-imports HeroStage from @/components/three/hero-stage with ssr:false; mouse-move tilt ±10° via useSpring (stiffness 150, damping 20) wrapped in TiltStage with perspective 1200. Mounted check via useSyncExternalStore (avoids setState-in-effect lint rule). show3D gated on mounted && !reduced && !isMobile — falls back to HeroFallback (rounded-24 charcoal box with /images/products/mini-bar.png + onError hide → charcoal box).
+- Created src/components/site/trust-marquee.tsx — emerald (#1E4638) full-width band, 56px tall, overflow-hidden. Inner .animate-marquee track (28s linear infinite, translateX 0 → -50%) wrapped in .marquee-pause so it pauses on hover. CERTIFICATIONS_MARQUEE duplicated 4× to guarantee ≥200% track width and seamless loop. Each item Plex Mono 14px uppercase tracking-[0.1em] ivory, separated by 8px brass diamond glyph (rotated square). Edge fade masks on left/right (linear-gradient to emerald) for clean look. prefers-reduced-motion handled by globals.css media query (animation:none), so the strip just shows the static content.
+- Ran `bun run lint` — my three files are lint-clean. Pre-existing lint errors remain in src/hooks/laxree/use-laxree-motion.ts (foundation agent's setState-in-effect pattern) and in another agent's floating-element countdown timer; neither is mine to modify.
+
+Stage Summary:
+- Files created (ONLY these):
+  • src/components/site/navbar.tsx
+  • src/components/site/hero.tsx
+  • src/components/site/trust-marquee.tsx
+- Key design decisions:
+  • Used useSyncExternalStore instead of useState+useEffect for the hero "mounted" flag — same SSR-safe behaviour, no setState-in-effect lint violation.
+  • Dynamic-imported HeroStage with ssr:false to keep R3F out of the server bundle; loading skeleton (spinning brass ring) shown while the chunk loads.
+  • TiltStage wraps HeroStage in a motion.div with useSpring-driven rotateX/rotateY (±10°) and perspective 1200 for the tactile mouse-tilt feel.
+  • Hero stat-strip dividers implemented as absolute-positioned 1px brass/30 vertical lines on sm+ (cleaner than border-collapse); items collapse to a 2x2 grid on mobile.
+  • Headline word-by-word reveal uses an array of Word objects so we can tag "Whole New World" with brass-gradient fill while keeping natural word wrapping via inline-block + whitespace:pre.
+  • Marquee track duplicated 4× (4 copies of CERTIFICATIONS_MARQUEE) — well over the 200% width minimum, so the -50% translateX loop never shows a gap.
+  • Navbar desktop nav uses group + group-hover to dim sibling links to sand/60 while the hovered link pops to brass — the classic "dim others" effect.
+- Blockers / notes for downstream agents:
+  • HeroStage is imported from @/components/three/hero-stage with named export `HeroStage` and ssr:false. The 3D agent (Task 2-b or similar) MUST export `export function HeroStage(...) {}` (or `export const HeroStage = ...`) from that path. If they use a default export instead, hero.tsx's `.then((m) => m.HeroStage)` will return undefined and the dynamic loader will render the loading skeleton forever — please coordinate.
+  • The hero fallback image /images/products/mini-bar.png is referenced; if the image-generation pipeline hasn't placed it yet, the onError handler silently hides the <img> and leaves a charcoal box, so the layout never breaks.
+  • The "Get a Quotation" CTA calls openModal("enquiry") — the actual EnquiryModal UI is a separate floating-element agent's responsibility (Task 2-x); the context wiring is already in place from the foundation agent.
+  • Did NOT modify page.tsx, globals.css, layout.tsx, or site-data.ts per instructions. The orchestrator should compose these three components into src/app/page.tsx once the rest of the page sections are ready.
+
+---
+Task ID: 2-b
+Agent: full-stack-developer (category-bento + about-us)
+Task: Build the 5-card category bento grid with tilt hover and the About Us split parallax section.
+
+Work Log:
+- Read worklog.md (Task 1 foundation), site-data.ts (CATEGORIES array + Category type), use-laxree-motion.ts (useTilt, usePrefersReducedMotion, useScrollProgress), globals.css (brand tokens + utility classes), and master prompt sections 4 & 5 for exact spec.
+- Inspected existing sibling component why-choose.tsx to match project conventions (motion entrance patterns, eyebrow + clamp heading layout, glass-on-charcoal usage).
+- Created src/components/site/category-bento.tsx — ivory section, "WHAT WE SUPPLY" eyebrow, "Five Categories. One Standard." Fraunces heading with clamp(2rem, 4vw, 3.25rem). Bento grid: base 1-col stack / md 2-col with Amenities col-span-2 / lg 12-col × 2-row with Amenities col-span-6 row-span-2 and the four small cards (Furniture, Linen, Roofing, Dome) at col-span-3 each (top row + bottom row). Each card is a motion.a link to #products with useTilt(6) spring-based 3D tilt (rotateX/rotateY + transformPerspective 1000), image scales 1.04 on group-hover via duration-700 transition, charcoal→transparent gradient overlay, brass border fades from /0 to /40 on hover, Fraunces 28px ivory name + Plex Mono 13px brass product count, large Amenities card additionally shows the blurb in Work Sans 13px sand. Added a subtle brass corner dot that brightens on hover for affordance. Reduced-motion path: tilt style + handlers are removed (only the CSS hover scale remains).
+- Created src/components/site/about-us.tsx — charcoal section, 12-col split (lg:col-span-5 left / lg:col-span-7 right). Left: brass "WHO WE ARE" eyebrow, Fraunces 5xl/6xl "About Us" heading, Work Sans 17px sand body copy (max-w 520px), three glass-on-charcoal Plex Mono chips ("OEM Manufacturer — Minibar & Safe Locker", "Ajmer's Largest Hospitality Exhibition Centre", "Pan-India Delivery"), brass-outline pill CTA "Know More →" using ArrowRight lucide icon. Right: tall image (h-[480px] → 640px responsive) inside rounded-24px overflow-hidden mask; parallax implemented with useScroll (target ref on image wrapper, offset start end → end start) → useTransform [-8% → 8%] → useSpring (stiffness 120, damping 30, mass 0.4) applied as motion.img style.y. Image is scale-110 so the ±8% translate never reveals edges. Floating glass card bottom-left: "11+" Plex Mono 32px brass + "Years Industry Experience" Plex Mono 11px sand uppercase. Added a subtle "Ajmer · Rajasthan" location pill top-right with pulse-glow brass dot. Reduced-motion path: parallax y is omitted (static image).
+- Verified lint clean on the two new files (the 3 remaining lint errors live in pre-existing use-laxree-motion.ts / enquiry-provider.tsx and are out of scope). Dev server compiles cleanly.
+
+Stage Summary:
+- Files created:
+  - src/components/site/category-bento.tsx (CategoryBento, default export)
+  - src/components/site/about-us.tsx (AboutUs, default export)
+- Key decisions:
+  - Used motion.a (not motion.div + inner <a>) so the entire tilt-transformed surface is the clickable link — cleaner a11y and one less DOM layer.
+  - Conditional `style={reduced ? undefined : tilt.style}` + `onMouseMove={reduced ? undefined : tilt.handleMove}` — when reduced motion is preferred, the tilt MotionValues are not bound at all, avoiding spring computation and respecting the user preference at the React level (not just CSS).
+  - Parallax uses useSpring on a percentage-string MotionValue — framer-motion v12 handles unit interpolation correctly, giving a buttery scrubbed feel without GSAP ScrollTrigger.
+  - Plain <img> with explicit width/height + loading="lazy" + decoding="async" per spec to avoid layout shift and avoid next/image domain config overhead.
+  - Kept card border on the link itself with hover:border-brass/40 (the link is the group), and image scale uses group-hover:scale-[1.04] so the hover state triggers from anywhere on the card.
+  - Image references: /images/categories/{amenities,furniture,linen,roofing,dome}.png (from site-data) and /images/about/factory.png — these are the paths the foundation's image-generation step is populating; components degrade gracefully (alt text + gradient overlay) if any image is still missing.
+- Notes for downstream agents:
+  - Both components are named + default-exported, ready to drop into page.tsx as <CategoryBento /> and <AboutUs />.
+  - Section IDs: #categories and #about — already wired into NAV_LINKS.
+  - No changes to page.tsx, globals.css, layout.tsx, or site-data.ts (per task constraints).
+
+---
+Task ID: 2-e
+Agent: full-stack-developer (why-choose + hospitality-trends + lead-cta-banner + site-footer)
+Task: Build Why Choose bento USP grid, Hospitality Trends blog grid, Lead Capture CTA banner with inline form, and 4-column footer.
+
+Work Log:
+- Read worklog.md (Tasks 1, 2-a, 2-b foundation + sibling conventions), master prompt §11–14, site-data.ts (USPS, BLOG_POSTS, SITE, ENQUIRY_CATEGORIES, USP/BlogPost types), use-laxree-motion.ts (usePrefersReducedMotion available but not needed — framer-motion's `viewport` prop handles the fade-in guard), enquiry-provider.tsx (not used — the CTA banner has an inline form, not a modal), and globals.css (brand utilities: .section-*, .glass-on-charcoal, .eyebrow, .pill-brass, .pill-ghost-ivory, .pill-ghost-brass, .hairline-brass, .container-laxree).
+- Verified lucide-react@0.525.0 exports: Leaf, BadgeIndianRupee, Headset, LayoutGrid, ShieldCheck, Sparkles, Gem (for why-choose icons); Phone, MessageCircle, ArrowRight (for CTA); Facebook, Twitter, Youtube, Linkedin, Mail, Briefcase (for footer). Twitter is still exported — used it for the X social slot per spec.
+- Created src/components/site/why-choose.tsx — charcoal section py-28 md:py-36, id="why-us". Brass "WHY US" eyebrow + Fraunces ivory heading at clamp(2rem, 4vw, 3.25rem). 7-item bento: `grid sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[1fr]`. ICON_MAP lookup maps USP.icon string → lucide component. Glass-on-charcoal rounded-[24px] p-6 cards with 24px brass line-icon (strokeWidth 1.5), Work Sans 16px medium ivory title, Work Sans 13px sand blurb. The two `size: "wide"` USPs (Great After-Sales Service, Highly Affordable & Highly Durable) get `sm:col-span-2`, producing an intentionally asymmetric bento with sparse grid flow. Framer Motion `motion.div` with `initial={{opacity:0,y:20}}` → `whileInView={{opacity:1,y:0}}`, `viewport={{once:true, margin:"-50px"}}`, `transition={{duration:0.5, delay:i*0.06, ease:"easeOut"}}` — single gentle staggered fade-up, nothing more, per the master prompt's motion-budget note.
+- Created src/components/site/hospitality-trends.tsx — ivory section py-28 md:py-36, id="blog". ink-muted "EXPLORE TRENDS" eyebrow + Fraunces ink heading at same clamp. 3-card grid `md:grid-cols-3 gap-6`. Each article card: `rounded-[20px] bg-white overflow-hidden border border-ink/5 hover:-translate-y-2 hover:shadow-xl transition-transform duration-300 flex flex-col`. Top: aspect-[16/10] object-cover lazy-loaded image. Body p-6 with a brass/10 pill chip carrying the category (10px uppercase Plex Mono brass), 11px ink-muted date·readTime meta, Fraunces 20px ink headline with `min-h-[3.5rem]`, Work Sans 14px ink-muted excerpt `line-clamp-2`, "Read More →" in Plex Mono 12px brass with ArrowRight icon and `hover:gap-2.5` micro-interaction. Centered `.pill .pill-ghost-brass` "View All Articles" CTA below the grid with ArrowRight.
+- Created src/components/site/lead-cta-banner.tsx — emerald section py-20 md:py-24, id="contact". Centered Fraunces ivory headline "Have a Question or Need a Quote?" (text-4xl md:text-5xl) + ivory/80 subline "We're Just a Call Away!" (18px). Two-column grid `lg:grid-cols-[1.5fr_1fr] gap-8 items-stretch`: left = inline glass-on-charcoal rounded-[24px] p-6 md:p-8 controlled form (useState for name/email/phone/category/message; Field wrapper component with Plex Mono 10px uppercase ivory/60 label). Row 1: 3-col grid (name text, email, phone tel); Row 2: 2-col grid (category select using ENQUIRY_CATEGORIES with charcoal-bg options, message textarea); Row 3: centered `.pill .pill-brass` Submit button with `submitting` boolean state — disabled + "Submitting…" label swap while POSTing. handleSubmit preventDefault → fetch POST /api/lead JSON → success/error via `sonner` toast → reset form on success. Custom input class (bg-white/5 border-white/10 rounded-xl px-4 py-2.5 text-sm ivory placeholder:ivory/40 focus:border-brass focus:ring-1 focus:ring-brass). Right = glass-on-charcoal panel with "Call Toll-Free" label + Phone icon (brass, 28px) + SITE.tollFreeDisplay in Plex Mono 32px ivory (links tel:), hairline divider, "Chat With Us" label + `.pill .pill-ghost-ivory border-ivory/40` WhatsApp pill linking wa.me/${SITE.whatsapp} with MessageCircle icon, plus an ivory/70 reassurance line. The emerald+glass combo intentionally bookends the trust marquee (same emerald accent per master prompt §13).
+- Created src/components/site/site-footer.tsx — server component (no "use client"; lucide-react icons render fine in RSC). Charcoal `<footer>` py-16 md:py-20. Four-column grid `sm:grid-cols-2 lg:grid-cols-4 gap-10`. (1) Brand: Fraunces 24px ivory "LaxRee" + brass ◆ + Plex Mono 10px sand tracking-[0.3em] "AMENITIES" (mirrors navbar logo style); Work Sans 13px sand address (SITE.address); 9×9 circular social buttons with border-sand/30 hover:border-brass hover:text-brass, carrying Facebook/Twitter(as X)/Youtube/Linkedin icons (16px strokeWidth 1.5). (2) Company: Plex Mono 11px brass uppercase heading + 8 Work Sans 14px sand→hover:ivory links (About Us/Clients/Dealers/Catalogue/Career/Contact/Blogs/Privacy Policy) anchoring to the relevant section IDs. (3) Categories: same heading style + 5 links all anchoring to #categories. (4) Contact: same heading style + 4 contact rows (Phone→tel:phoneHref, MessageCircle→wa.me/whatsapp, Mail→mailto:email, Briefcase→mailto:careersEmail), each with brass 14px icon + Work Sans 14px sand→hover:ivory label. Below the grid: `.hairline-brass my-10` divider, then a `flex flex-col sm:flex-row justify-between gap-4` final row with "LaxRee Amenities © 2026 — All Rights Reserved" left and SITE.tagline right, both Plex Mono 12px sand. No min-h-screen/flex wrapper — orchestrator's page wrapper handles sticky footer behavior per task instructions.
+- Ran `bun run lint` — 0 errors in my four files. The 3 lint errors reported are pre-existing in src/hooks/laxree/use-laxree-motion.ts and src/components/floating/catalogue-modal.tsx (foundation + floating-element agents' setState-in-effect patterns), out of my scope. Dev server compiles cleanly.
+
+Stage Summary:
+- Files created (ONLY these four):
+  • src/components/site/why-choose.tsx (WhyChoose, default + named export)
+  • src/components/site/hospitality-trends.tsx (HospitalityTrends, default + named export)
+  • src/components/site/lead-cta-banner.tsx (LeadCtaBanner, default + named export)
+  • src/components/site/site-footer.tsx (SiteFooter, default + named export)
+- Key decisions:
+  • Motion budget respected — only the Why-Choose cards get a single gentle fade-up; trends/footer are pure CSS hovers; CTA banner has no entrance animation at all. The hero/carousels already spent the budget per master prompt §11.
+  • Why-Choose bento is intentionally asymmetric: 2 wide cards (size: "wide" → sm:col-span-2) cause sparse grid flow on lg:grid-cols-4, producing organic rows like [1][1][2-wide] / [1][1][1] / [2-wide] rather than a rigid 4×2.
+  • Lead CTA form is controlled via useState (not react-hook-form) — the spec is small (5 fields) and the dependency isn't in the standard stack; plain controlled inputs + fetch keep the bundle lean.
+  • `sonner` toast chosen over the shadcn toast radix stack because `sonner` is already in package.json (v2.0.6) and the master prompt explicitly mentions toast notifications for user actions.
+  • Form posts to /api/lead with JSON `{ name, email, phone, category, message }` — orchestrator must create this endpoint. Non-2xx triggers an error toast with the toll-free number as fallback.
+  • Footer is a React Server Component (no "use client") — saves client JS. lucide-react icons are RSC-safe SVG renderers.
+  • Section IDs: #why-us, #blog, #contact — already wired into NAV_LINKS and the hero CTAs.
+  • Used `rounded-[24px]` / `rounded-[20px]` arbitrary Tailwind values for explicitness rather than relying on the `--radius-lg` token (which would resolve to 24px via `rounded-lg`) — clearer for the next reader.
+- Notes for orchestrator:
+  • The /api/lead route is NOT created — please add it. It should accept POST JSON `{ name, email, phone, category, message }` and return 2xx on success. Suggest persisting to Prisma Lead model + optionally emailing SITE.email.
+  • All four components are dual-exported (named + default) — orchestrator can import either way.
+  • Footer is a plain `<footer>` element (no id); add `id="footer"` or similar if you want a back-to-top anchor target.
+  • Mobile responsiveness verified: all grids collapse to single-column on small screens, form rows stack, footer collapses to 2 columns on `sm:` then 4 on `lg:`.
+  • Did NOT modify page.tsx, globals.css, layout.tsx, or site-data.ts per task constraints.
+
+---
+Task ID: 2-f
+Agent: full-stack-developer (floating elements + modals)
+Task: Build WhatsApp launcher, Enquire modal, Catalogue modal with 10-min countdown, mobile sticky bottom bar, and floating-root aggregator.
+
+Work Log:
+- Read master prompt section 15, site-data.ts (WHATSAPP_EXECUTIVES, ENQUIRY_CATEGORIES, SITE), enquiry-provider.tsx (useEnquiry → openModal/closeModal/activeModal), globals.css (tokens: charcoal/ivory/brass/brass-light/emerald/sand, .glass-on-charcoal, .pill-brass, .data-label, .animate-pulse-glow), and use-laxree-motion.ts (usePrefersReducedMotion hook)
+- Created src/components/floating/whatsapp-launcher.tsx — fixed bottom-right (hidden below md) launcher: 56px circle with 2px brass ring around WhatsApp-green (#25D366) button, brand-glyph SVG (28px white) with X icon swap via AnimatePresence; pulse-glow ring on closed state using .animate-pulse-glow; expands to 4 executive chips staggered 0.05s via containerVariants/chipVariants (staggerChildren) with fade+slide-up; reduced-motion zeros the stagger; each chip = glass-on-charcoal pill, Plex Mono 11px ivory name + small WhatsApp glyph, opens wa.me/{phone} in new tab
+- Created src/components/floating/enquire-modal.tsx — renders when activeModal === "enquiry" via AnimatePresence; backdrop bg-charcoal/70 backdrop-blur-md click-closes; panel = glass-on-charcoal rounded-[24px] p-8 max-w-md with the specified initial/animate/exit (opacity/scale/y) and transition {duration:0.3, ease:[0.22,1,0.36,1]}; header "Enquire Now" Fraunces 24px ivory + sub "We'll get back within 24 hours" Work Sans 13px sand + close X button; form fields Name/Email/Contact/Category(select with ENQUIRY_CATEGORIES)/Message(textarea) all styled bg-white/5 border-white/10 focus:border-brass; brass pill submit POSTs JSON to /api/lead, on success fires sonner toast.success, closes modal, resets form; on error fires toast.error; submitting state disables button + shows spinner; Escape key closes; reduced-motion skips scale/y
+- Created src/components/floating/catalogue-modal.tsx — same backdrop/panel/animation as enquire modal; header "Download Our Catalogue" + "Enter your number for instant access + 10% off code"; 600-second countdown (MM:SS, Plex Mono tabular-nums, brass) in a brass-tinted box, with `expired` flag disabling the reveal-submit button and showing "Code expired — refresh for a new offer"; on submit (non-expired, phone non-empty) → submitted=true reveals LAXREE10 in a styled code box (with Copy button) + "Download Catalogue (PDF)" placeholder link (#) + Close button. Used inner-component pattern (CatalogueModalInner) so fresh useState initializers give clean form + fresh countdown on every open WITHOUT calling setState synchronously in an effect (avoids react-hooks/set-state-in-effect lint rule)
+- Created src/components/floating/mobile-sticky-bar.tsx — fixed bottom-0 inset-x-0 z-30 md:hidden, two flex-1 py-4 buttons split by a 1px hairline: left "Call Now" (emerald hover, Phone icon, tel: link), right "WhatsApp" (#25D366 bg with hover #1fb855, MessageCircle icon, wa.me link, _blank). Plex Mono 13px uppercase tracking-[0.12em]. Bar gets pb-[env(safe-area-inset-bottom)] via inline style + backdrop-blur + border-t border-white/10
+- Created src/components/floating/floating-root.tsx — single client aggregator mounting <WhatsappLauncher/> + <MobileStickyBar/> + <EnquireModal/> + <CatalogueModal/> in a fragment, ready to drop into page.tsx once
+- Ran `bun run lint` — all 5 new floating files pass cleanly. Remaining lint errors are pre-existing in src/hooks/laxree/use-laxree-motion.ts and src/components/three/hero-stage.tsx (other agents' files, not mine to modify). Dev log shows successful compiles.
+
+Stage Summary:
+- Files created (5):
+  - src/components/floating/whatsapp-launcher.tsx
+  - src/components/floating/enquire-modal.tsx
+  - src/components/floating/catalogue-modal.tsx
+  - src/components/floating/mobile-sticky-bar.tsx
+  - src/components/floating/floating-root.tsx
+- Key decisions:
+  - Used WhatsApp brand SVG path (not lucide MessageCircle) inside the launcher + executive chips for instant brand recognition; kept MessageCircle on the mobile sticky bar per spec wording
+  - Used the inner-component pattern for catalogue-modal so the countdown + form state reset cleanly between opens without triggering the react-hooks/set-state-in-effect lint rule
+  - All modals: Escape-to-close + backdrop click-to-close + stopPropagation on panel + AnimatePresence for graceful exit; catalogue-modal pauses countdown naturally once expired via the [secondsLeft] dependency
+  - Reduced-motion handling: whatsapp stagger zeroed, modal scale/y skipped (opacity-only), all driven by the existing usePrefersReducedMotion() hook
+  - Enquire modal submits to /api/lead with source:"enquiry-modal" tag — orchestrator can use this to attribute leads
+  - Catalogue download link is href="#" with preventDefault placeholder, ready to be wired to the real PDF later
+- Notes:
+  - The FloatingRoot component is NOT yet mounted in page.tsx — that's the orchestrator's job (instructions: "Do NOT modify any other files")
+  - The /api/lead route is NOT yet created — orchestrator's job (per task spec)
+  - All 5 floating files pass ESLint. Dev server compiles cleanly (verified in dev.log)
+
+---
+Task ID: 2-g
+Agent: full-stack-developer (3D hero stage R3F)
+Task: Build the React Three Fiber 3D hero stage with a stylized procedural minibar, brass rim light, contact shadows, auto-rotate + mouse tilt, and mobile/reduced-motion static fallback.
+
+Work Log:
+- Read worklog.md, master prompt §2 (HERO right column 3D stage) and §16 (PERFORMANCE & ACCESSIBILITY), and globals.css for brand tokens.
+- Inspected src/components/site/hero.tsx to confirm the import contract: `dynamic(() => import("@/components/three/hero-stage").then(m => m.HeroStage), { ssr: false })`. Parent already gates my mount with `show3D = mounted && !reduced && !isMobile`, so HeroStage only mounts on desktop without reduced-motion.
+- Inspected existing hooks: `usePrefersReducedMotion` (from `@/hooks/laxree/use-laxree-motion`) and `useIsMobile` (from `@/hooks/use-mobile`) — reused both to keep the codebase consistent and avoid duplicating setState-in-effect patterns.
+- Created `src/components/three/hero-stage.tsx` as a `"use client"` component with a named `HeroStage` export.
+- Built a stylized procedural "LaxRee Minibar" from drei primitives (no GLB required): warm-charcoal RoundedBox body (`meshStandardMaterial` metalness 0.3 / roughness 0.4), interior cavity, glass door panel (`meshPhysicalMaterial` transmission 0.9, roughness 0.05, thickness 0.5, ivory tint, opacity 0.45 transparent), brass trim strips around all four door edges + a vertical handle + a nameplate above the door (all `meshStandardMaterial` color #c6a15b, metalness 0.9, roughness 0.2, with a dim warm emissive #3a2d18 to give a brass glow without needing an env map), an interior shelf with two small "bottles" for character, and an interior warm point light that makes the glass glow.
+- Lighting: ambientLight intensity 0.3, soft warm key directionalLight at [4,6,4] intensity 1.2 castShadow color #fff5e6, brass-tinted rim pointLight at [-4,2,-4] intensity 2 color #c6a15b, soft ivory fill pointLight at [3,-1,3] intensity 0.4.
+- Grounded with drei `<ContactShadows/>` at y=-1.15, opacity 0.55, scale 7, blur 2.8, resolution 512.
+- Camera + controls: `<Canvas camera={{ position: [3, 2, 4], fov: 35 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>`. NO OrbitControls (per spec) — instead a manual `<group ref={groupRef}>` whose rotation is updated each frame in `useFrame`: `g.rotation.y += delta * (Math.PI * 2 / 6)` for a steady 6s/revolution auto-rotate, plus `g.rotation.x = tiltX.get() * 0.175` and `g.rotation.z = tiltZ.get() * 0.175` for the ±10° (±0.175 rad) mouse tilt.
+- Mouse tilt (desktop only): two Framer Motion `useSpring(0, { stiffness: 150, damping: 20 })` values (mouseX, mouseY), fed by an `onMouseMove` handler on the wrapper div that normalises cursor position to -0.5..0.5. Springs are passed as MotionValue props through `<Scene>` → `<RotatingStage>` and read inside `useFrame` — works across the React/R3F boundary because MotionValues are plain JS objects.
+- Mobile (<768px) path: returns a static fallback `<HeroStageFallback/>` rendering `/images/products/mini-bar.png` (object-contain) inside a charcoal rounded panel with a subtle 4°-max scroll parallax (`useScroll` + `useTransform` mapping scrollYProgress [0,1] → rotate [-2°, 2°]). Has an `onError` fallback to a procedural CSS placeholder (rounded charcoal box with brass border + LaxRee label) so the stage is never visually broken if the photo asset is missing.
+- Desktop reduced-motion path: renders the Canvas with lights and Minibar, but `autoRotate=false` and `enableTilt=false` — a static lit scene, no rotation, no mouse-tilt.
+- Added the subtle radial brass glow `<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(198,161,91,0.15),transparent_60%)]" />` behind the Canvas (and behind the mobile fallback) per spec.
+- Performance: kept geometry low-poly (RoundedBox smoothness 2-4, cylinders 12-segment, ContactShadows resolution 512), `dpr={[1, 2]}`, `alpha: true` so the brass glow shows through. Default `frameloop="always"` since we have continuous auto-rotation — `frameloop="demand"` would freeze the rotation.
+- Wrapped the rotating group in `<Suspense fallback={null}>` inside the Canvas as required.
+- Fixed two lint issues: removed an unused `eslint-disable-next-line @next/next/no-img-element` comment (rule is off in this project), and removed a `setState`-in-effect pattern by switching from a custom `mounted` + `matchMedia` effect to the existing `useIsMobile()` hook (which the parent hero.tsx already uses and which passes lint cleanly).
+- Verified: `bunx eslint src/components/three/hero-stage.tsx` passes with zero errors/warnings. Full `bun run lint` shows only pre-existing errors in `src/hooks/laxree/use-laxree-motion.ts` (Task 1 file, not mine to touch). Dev server compiles cleanly and `GET / 200`.
+
+Stage Summary:
+- File created: `src/components/three/hero-stage.tsx` — named export `HeroStage`, no props, plus a default export for convenience. `"use client"` at top.
+- Key decisions:
+  - Procedural drei-primitive minibar instead of a GLB (no model URL was provided; keeps the scene network-free for the sandbox and ships instantly).
+  - Manual `useFrame` rotation on a group ref instead of `<PresentationControls>` or `<OrbitControls>` — matches the spec's "6s per revolution, OrbitControls disabled" exactly.
+  - Emissive brass material (`emissive: #3a2d18`) instead of an `<Environment>` preset so the brass trim glows warmly without fetching an HDR from a CDN (avoids sandbox/offline network risk and avoids blocking Suspense).
+  - Reused the existing `useIsMobile()` hook instead of duplicating `matchMedia` logic — keeps a single source of truth and avoids a `react-hooks/set-state-in-effect` lint error.
+  - Mobile fallback includes a procedural CSS placeholder if `/images/products/mini-bar.png` is missing, so the stage never looks broken.
+- Notes for orchestrator:
+  - Component exports `HeroStage` as a named export (and also default for flexibility). Takes no props.
+  - Use it via dynamic import with `ssr: false` — already wired up in `src/components/site/hero.tsx`.
+  - Parent hero.tsx wraps HeroStage in its own `TiltStage` (CSS-based rotateX/rotateY via Framer Motion). My internal mouse-tilt is a SEPARATE 3D-group rotation. Both fire on mousemove and stack. If the doubled tilt feels too tactile, you can either remove the parent's `TiltStage` wrapper OR remove the `onMouseMove`/`onMouseLeave` handlers from my HeroStage — they are independent.
+  - Parent's `show3D = mounted && !reduced && !isMobile` gate means my HeroStage only mounts on desktop without reduced-motion. My internal mobile + reduced-motion branches are therefore defensive (they cover the case where the parent's gating changes in the future).
+  - Lint pre-existing errors in `src/hooks/laxree/use-laxree-motion.ts` (lines 19, 73) are from Task 1 and were NOT introduced by this task. They're the same `react-hooks/set-state-in-effect` pattern that `use-mobile.ts` somehow avoids (likely a static-analysis heuristic difference). Not in scope for 2-g.
+
+---
+Task ID: 2-d
+Agent: full-stack-developer (clients-testimonials + our-presence + certifications)
+Task: Build clients & testimonials (logo marquee + floating glass cards), our presence exhibition coverflow gallery, and certifications 3D badge wall.
+
+Work Log:
+- Read worklog.md (Task 1 foundation), master prompt sections 8/9/10, site-data.ts (confirmed TESTIMONIALS/CLIENT_LOGOS/EXHIBITIONS/CERTIFICATIONS exports + Testimonial/Exhibition/Certification types), use-laxree-motion.ts (usePrefersReducedMotion), globals.css (verified .animate-marquee-slow, .marquee-pause, .animate-float, .glass-on-ivory, .glass-on-charcoal, .card-24, .eyebrow, .data-label, .hairline-brass, reduced-motion guards all present)
+- Created src/components/site/clients-testimonials.tsx (ivory section, centered header, full-width logo marquee with 2x-duplicated CLIENT_LOGOS via .animate-marquee-slow + .marquee-pause hover-pause, 3 .glass-on-ivory .card-24 testimonial cards with .animate-float + inline animationDelay [0s, -1.3s, -2.6s] negative delays for staggered phases from t=0; Quote icon brass 32px, hairline-brass divider, name in Fraunces 16px ink, role/hotel in Plex Mono 11px)
+- Created src/components/site/our-presence.tsx (charcoal section, centered header w/ brass eyebrow, coverflow stage with perspective:1600px and aspect-video, 5 EXHIBITIONS slides absolutely positioned with norm-offset math ((offset+total+2)%total)-2 ∈ [-2,2]; active centered+flat+opacity1+z30; ±1 scale0.82+rotateY∓25°+x±26%+opacity0.55+z20; ±2 scale0.7+opacity0+z10; framer-motion motion.div parent with drag="x" + dragConstraints {0,0} + dragElastic 0.18 + dragMomentum false + onDragEnd 60px threshold; ChevronLeft/ChevronRight arrow pills in glass-on-charcoal; subtle pagination dots; active-slide caption with charcoal bottom-up gradient; usePrefersReducedMotion disables rotateY when reduced)
+- Created src/components/site/certifications.tsx (ivory section py-20 md:py-24, centered header, 5 medallions flex-wrap gap-6 md:gap-10; each is w-24 h-24 rounded-full border-2 border-brass bg-gradient-to-b from-white to-ivory inside a group parent with perspective:1000px; medallion-inner uses Tailwind arbitrary [transform:rotateY(0deg)] [transform-style:preserve-3d] transition-transform duration-[600ms] ease-in-out group-hover:[transform:rotateY(180deg)]; front face Fraunces 13px ink code + data-label 8px ink-muted "CERTIFIED"; back face Fraunces 11px ink fullName pre-rotated 180° with backfaceVisibility:hidden; reduced-motion handled by global CSS media query that collapses transitions to 0.001ms)
+- Verified: bunx eslint on the three files → clean (no output); bunx tsc --noEmit -p tsconfig.json → no errors on the three files (pre-existing errors only in examples/ and skills/ folders)
+- Did NOT modify any other files (per instructions)
+- Wrote detailed agent-ctx record at /agent-ctx/2-d-full-stack-developer.md
+
+Stage Summary:
+- Files created:
+  - /home/z/my-project/src/components/site/clients-testimonials.tsx
+  - /home/z/my-project/src/components/site/our-presence.tsx
+  - /home/z/my-project/src/components/site/certifications.tsx
+  - /home/z/my-project/agent-ctx/2-d-full-stack-developer.md
+- Key decisions:
+  - Negative animationDelay for floating cards so they start staggered immediately (no initial wait)
+  - Coverflow uses norm-offset shortest-path math for clean wrap-around with 5 items
+  - Back face font reduced from 13px → 11px to fit long full names (e.g. "Restriction of Hazardous Substances") inside 96px medallion; front face stays 13px as spec'd
+  - Pagination dots added (not in spec) as a usability enhancement — subtle 1.5px pills, active is w-8 bg-brass
+  - Reduced-motion in coverflow keeps scale/opacity layering but drops rotateY to 0
+  - CSS-only state-free medallion flip via Tailwind arbitrary `group-hover:[transform:rotateY(180deg)]` (no JS state needed)
+- Notes:
+  - The three sections are NOT yet wired into src/app/page.tsx — orchestrator composes them later in section order 8 → 9 → 10
+  - Section IDs (#clients, #presence, #certifications) match NAV_LINKS so anchor nav works once rendered
+  - Pre-existing lint errors in use-laxree-motion.ts (set-state-in-effect) and pre-existing next/font axes error in layout.tsx are both from Task 1 and were not touched by this task
+
+---
+Task ID: 2-c
+Agent: full-stack-developer (product-spotlight + category-explorer)
+Task: Build the draggable 3D coverflow product carousel and the 7-card accordion deep category explorer.
+
+Work Log:
+- Read worklog.md, master prompt (sections 6 + 7), site-data.ts (SPOTLIGHT_PRODUCTS + ROOM_SOLUTIONS), use-laxree-motion.ts (usePrefersReducedMotion) and globals.css to align with the LaxRee brand tokens (charcoal/ivory/brass/ink/sand) and existing utility classes (section-ivory, section-charcoal, glass-on-charcoal, eyebrow, card-20, no-scrollbar, animate-pulse-glow).
+- Created /home/z/my-project/src/components/site/product-spotlight.tsx — a "use client" 3D coverflow carousel over the 9 SPOTLIGHT_PRODUCTS:
+  • Ivory section, py-28 md:py-36, eyebrow "EXPLORE" + Fraunces heading "Our Latest Offerings" at clamp(2rem, 4vw, 3.25rem).
+  • Stage has perspective: 1600px and a Framer Motion track with drag="x", dragConstraints={{left:0,right:0}}, dragElastic 0.2, dragMomentum false. onDragEnd uses info.offset.x with a 50px threshold to bump activeIndex ±1 (clamped 0..8).
+  • Each card is an absolutely-positioned motion.div centered via left/top 50% + animated x/y offsets. Active card: translateX 0, rotateY 0, scale 1, opacity 1, border-2 border-brass, shadow-2xl, plus a tiny pulsing brass dot. Side cards: rotateY ±25°, scale 0.82. Cards 2+ away add an extra 30px/step outward push and fade to 0.55 / 0.3 opacity; cards >3 away get pointer-events:none. Spring transition (stiffness 260, damping 30) for the snap.
+  • Card body: 280×360, rounded-20px overflow-hidden, white bg, 60%-height product image on charcoal bg (plain <img> loading="lazy" with group-hover scale-105), category micro-eyebrow, Fraunces 20px name, Plex Mono 12px brass "View Category →".
+  • onTap (Framer Motion, fires only on tap — not after drag) sets a non-centered card active when clicked.
+  • Brass outline arrow buttons (ChevronLeft / ChevronRight) below the stage with a Plex Mono "01 / 09" indicator between them; disabled state at the ends. Plus a dot rail for direct jumps.
+  • Mobile (<768px) or prefers-reduced-motion: falls back to a horizontal snap-x snap-mandatory scroll strip with no-scrollbar styling — the perspective/rotateY transforms are skipped entirely to keep mobile jank-free.
+- Created /home/z/my-project/src/components/site/category-explorer.tsx — a "use client" 7-card accordion over ROOM_SOLUTIONS:
+  • Charcoal section, py-28 md:py-36, eyebrow "BY ROOM" in brass + Fraunces ivory heading "Hospitality Solutions, By Room" at the same clamp.
+  • Grid sm:grid-cols-2 lg:grid-cols-3 gap-4. Each card is a motion.div with `layout` and glass-on-charcoal styling, rounded-[24px] p-6 cursor-pointer.
+  • Lucide icon resolved via ICONS lookup {BedDouble, ShowerHead, ConciergeBell, Armchair, Layers, Warehouse, Globe}, rendered at 28px brass strokeWidth 1.5; name in Fraunces 22px ivory; one-liner in Work Sans 14px sand; ChevronDown on the right rotates 180° when expanded via a nested motion.div.
+  • Accordion state: single expandedSlug (defaults to the first room). Clicking a card toggles it; clicking the open card closes it. AnimatePresence + initial/animate/exit on height:"auto" + opacity drives the smooth reveal. Expanded card adds sm:col-span-2 lg:col-span-3 so its two-column item list is never visually clipped; `layout` animates the grid reflow.
+  • Expanded content: hairline white/10 divider, a Plex Mono "N Items Included" label with a brass rule, then the items rendered as a 2-col grid (1-col on mobile) of Plex Mono 12px sand uppercase tags, each preceded by a 1.5px brass dot.
+  • Accessibility: each card has role="button", tabIndex=0, aria-expanded, and an Enter/Space keydown handler; focus-visible adds a brass border.
+- Verified: `bun run lint` reports zero new errors (the 2 remaining errors are pre-existing in use-laxree-motion.ts from Task 1 — react-hooks/set-state-in-effect in useCountUp and usePrefersReducedMotion, untouched by this task). Dev server compiles cleanly (dev.log shows ✓ Compiled in <500ms with no module-not-found or type errors after the new files were added).
+
+Stage Summary:
+- Files created:
+  • /home/z/my-project/src/components/site/product-spotlight.tsx
+  • /home/z/my-project/src/components/site/category-explorer.tsx
+- Key decisions:
+  • Coverflow perspective lives on the stage wrapper, not on the dragged track — this keeps the 3D vanishing point stable while the track itself only translates a few px during drag (dragElastic 0.2). On drag end the track snaps back to origin while the cards' spring transition handles the activeIndex swap, giving a clean coverflow feel without a separate dragX motion-value pipeline.
+  • Used Framer Motion's onTap (not onClick) on each card so a drag-then-release does NOT also fire a click on the underlying card — important because the whole track is draggable.
+  • Mobile/reduced-motion fallback is a pure CSS snap-scroll strip (no Framer Motion transforms) to protect the procurement-manager-on-mobile use case called out in the master prompt's performance guardrails.
+  • Category explorer uses `layout` on the card + `lg:col-span-3 sm:col-span-2` on the expanded card so the grid reflows smoothly and the expanded card claims its own full-width row — auto-placement moves it to a fresh row when needed, and `layout` animates the position change for the cards around it.
+  • Default expandedSlug is the first room (Room Amenities) so the section demonstrates the accordion behavior on first paint rather than showing seven identical collapsed cards.
+- Notes for downstream agents:
+  • Both components are pure presentational exports (no DB, no API). The orchestrator can drop <ProductSpotlight /> and <CategoryExplorer /> into src/app/page.tsx in the section-6 / section-7 slots.
+  • Product images are referenced at /images/products/{slug}.png per site-data.ts — they don't exist yet; the cards will show a charcoal image block with the brass name underneath until the background image-generation job populates them. This is intentional (spec said plain <img>, no placeholder).
+  • "View Category →" is a styled span, not a link, since the marketing site is single-page and the room explorer already lives directly below on the same page — wiring it to open the EnquiryProvider modal or scroll to #solutions is a trivial follow-up if the orchestrator wants that affordance.
+
+---
+Task ID: 3 + 4
+Agent: main (orchestrator)
+Task: Integration, bug-fixing, and Agent Browser self-verification.
+
+Work Log:
+- Wired all 16 sections into src/app/page.tsx with sticky-footer layout (`min-h-screen flex flex-col` + `flex-1` main + footer)
+- Created POST /api/lead endpoint with server-side validation (name ≥2 chars, phone ≥8 digits, email format) — logs leads to stdout, returns JSON
+- Generated all 23 brand images via z-ai CLI (5 category backgrounds, 9 product shots, 1 about/factory, 5 exhibition gallery, 3 blog covers) — saved to /public/images/{categories,products,about,gallery,blog}/
+- Fixed named-vs-default import mismatch in page.tsx (3 components had only default exports)
+- Fixed useCountUp hook: added fallback timer to guarantee animation starts even if useInView is slow (the 1347+ Projects stat was stuck at 0 because framer-motion's useInView wasn't firing for above-the-fold elements)
+- Replaced sonner toast system with a custom React-context-based SiteToaster (sonner's <Toaster> wasn't rendering toasts in the Next.js 16 + Turbopack environment — the <ol> container was empty). The new system uses the EnquiryProvider's notify() method + a custom <Toaster/> component with Framer Motion AnimatePresence
+- CRITICAL FIX: Converted @layer components block in globals.css to plain CSS — Tailwind 4 was not generating the custom classes (.section-charcoal, .section-ivory, .section-emerald, .glass-on-charcoal, .eyebrow, .pill-brass, etc.) when they were inside @layer components. Moving them to plain CSS forced emission. Verified all 11 section backgrounds now render with correct colors (charcoal #12100D ↔ ivory #F7F3EA ↔ emerald #1E4638 alternating pattern = "corridor of lit rooms" concept)
+- Created favicon.svg (charcoal rounded square with brass ring + ivory "L")
+- Added `relative` to page wrapper to fix Lenis smooth-scroll container warning
+
+Agent Browser Verification Results:
+- ✅ All 12 visible sections render with content and images (Hero, Categories, About, Products, Solutions, Clients, Presence, Certifications, Why Choose, Trends, Contact, Footer)
+- ✅ 3D hero stage (R3F) renders with stylized procedural minibar, brass rim light, contact shadows
+- ✅ Count-up stats animate correctly: 1,347+ Projects / 11+ Years / 700+ SKUs / 7+ Certifications
+- ✅ Enquire Now modal opens from navbar, form submits to /api/lead, success/error toasts appear
+- ✅ Lead capture form in CTA banner submits successfully (POST /api/lead 200, [LEAD] logged)
+- ✅ Mobile view: hamburger menu opens full-screen drawer, sticky bottom bar with Call/WhatsApp, hero stacks vertically
+- ✅ Alternating charcoal/ivory/emerald section backgrounds confirmed via computed styles
+- ✅ Sticky footer at bottom of page
+- ✅ Lint clean (0 errors, 0 warnings)
+- ✅ No runtime errors in dev.log (only deprecation warning from THREE.Clock — cosmetic, from R3F)
+
+Stage Summary:
+- 20 component files + 1 API route + 23 images + 1 favicon delivered
+- Design system: charcoal/ivory/brass/brass-light/emerald/ink/sand/ink-muted with Fraunces (display) + Work Sans (body) + IBM Plex Mono (data/labels)
+- All 16 sections from the master prompt implemented: Navbar, Hero (3D), Trust Marquee, Category Bento, About Us (parallax), Product Spotlight (coverflow), Category Explorer (accordion), Clients & Testimonials, Our Presence (coverflow), Certifications (3D badge flip), Why Choose (bento), Hospitality Trends (blog), Lead CTA, Footer, Floating Elements (WhatsApp + modals + mobile sticky bar)
+- Toast system: custom React-context-based (replaced sonner which wasn't rendering)
+- Smooth scroll: Lenis with anchor link integration + reduced-motion guard
+- Accessibility: prefers-reduced-motion respected, focus-visible brass rings, ARIA labels on modals/buttons
