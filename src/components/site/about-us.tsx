@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import {
   motion,
   useScroll,
@@ -92,17 +93,21 @@ export function AboutUs() {
             </motion.div>
 
             {/* Brass outline pill CTA */}
-            <motion.a
-              href="#about"
+            <motion.div
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: 0.24, ease: "easeOut" }}
-              className="pill pill-ghost-brass mt-10 self-start px-6 py-3 text-xs"
+              className="mt-10 self-start"
             >
-              Know More
-              <ArrowRight className="ml-2 h-3.5 w-3.5" strokeWidth={1.75} />
-            </motion.a>
+              <Link
+                href="/about-us"
+                className="pill pill-ghost-brass px-6 py-3 text-xs"
+              >
+                Know More
+                <ArrowRight className="ml-2 h-3.5 w-3.5" strokeWidth={1.75} />
+              </Link>
+            </motion.div>
           </div>
 
           {/* ───────── Right column (55% — lg:col-span-7) ───────── */}

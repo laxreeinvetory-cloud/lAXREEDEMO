@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BLOG_POSTS, type BlogPost } from "@/lib/laxree/site-data";
 
@@ -19,9 +20,10 @@ export function HospitalityTrends() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {BLOG_POSTS.map((post: BlogPost) => (
-            <article
+            <Link
               key={post.slug}
-              className="rounded-[20px] bg-white overflow-hidden border border-ink/5 hover:-translate-y-2 hover:shadow-xl transition-transform duration-300 flex flex-col"
+              href={`/blog/${post.slug}`}
+              className="group rounded-[20px] bg-white overflow-hidden border border-ink/5 hover:-translate-y-2 hover:shadow-xl transition-transform duration-300 flex flex-col"
             >
               <div className="aspect-[16/10] w-full overflow-hidden bg-ink/5">
                 <img
@@ -46,26 +48,23 @@ export function HospitalityTrends() {
                 <p className="font-body text-sm text-ink-muted leading-relaxed line-clamp-2">
                   {post.excerpt}
                 </p>
-                <a
-                  href={`#blog-${post.slug}`}
-                  className="mt-auto inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-brass hover:gap-2.5 transition-all"
-                >
+                <span className="mt-auto inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-brass group-hover:gap-2.5 transition-all">
                   Read More
                   <ArrowRight size={14} strokeWidth={1.5} />
-                </a>
+                </span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 
         <div className="mt-10 flex justify-center">
-          <a
-            href="#blog"
+          <Link
+            href="/blog"
             className="pill pill-ghost-brass px-6 py-2.5 text-xs inline-flex items-center gap-2"
           >
             View All Articles
             <ArrowRight size={14} strokeWidth={1.5} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

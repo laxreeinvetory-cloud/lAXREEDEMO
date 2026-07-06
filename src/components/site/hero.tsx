@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useSyncExternalStore } from "react";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
   motion,
@@ -258,13 +259,13 @@ export function Hero() {
               }}
               className="mt-8 flex flex-wrap items-center gap-3"
             >
-              <a
-                href="#products"
+              <Link
+                href="/products"
                 className="pill pill-brass text-[13px] px-6 py-3 gap-2"
               >
                 Explore Products
                 <ArrowRight className="w-4 h-4" strokeWidth={2} />
-              </a>
+              </Link>
               <button
                 type="button"
                 onClick={() => openModal("enquiry")}

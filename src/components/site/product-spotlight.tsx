@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion, type PanInfo } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SPOTLIGHT_PRODUCTS, type Product } from "@/lib/laxree/site-data";
@@ -33,7 +34,9 @@ function useIsMobile(breakpoint = 768) {
 
 function ProductCard({ product, active }: { product: Product; active: boolean }) {
   return (
-    <div
+    <Link
+      href="/products/amenities"
+      aria-label={`${product.name} — view category`}
       className={`group card-20 overflow-hidden bg-white h-full w-full flex flex-col border-2 transition-shadow duration-300 ${
         active ? "border-brass shadow-2xl" : "border-transparent shadow-md"
       }`}
@@ -79,7 +82,7 @@ function ProductCard({ product, active }: { product: Product; active: boolean })
           View Category →
         </span>
       </div>
-    </div>
+    </Link>
   );
 }
 

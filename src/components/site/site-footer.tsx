@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Facebook,
   Twitter,
@@ -14,22 +15,22 @@ import { SITE } from "@/lib/laxree/site-data";
 type LinkItem = { label: string; href: string };
 
 const COMPANY_LINKS: LinkItem[] = [
-  { label: "About Us", href: "#about" },
-  { label: "Clients", href: "#clients" },
-  { label: "Dealers", href: "#dealers" },
-  { label: "Catalogue", href: "#catalogue" },
-  { label: "Career", href: "#career" },
-  { label: "Contact", href: "#contact" },
-  { label: "Blogs", href: "#blog" },
-  { label: "Privacy Policy", href: "#" },
+  { label: "About Us", href: "/about-us" },
+  { label: "Clients", href: "/clients" },
+  { label: "Dealers", href: "/dealers" },
+  { label: "Catalogue", href: "/catalogue" },
+  { label: "Career", href: "/career" },
+  { label: "Contact", href: "/contact-us" },
+  { label: "Blogs", href: "/blog" },
+  { label: "Privacy Policy", href: "/" },
 ];
 
 const CATEGORY_LINKS: LinkItem[] = [
-  { label: "Amenities", href: "#categories" },
-  { label: "Furniture", href: "#categories" },
-  { label: "Linen", href: "#categories" },
-  { label: "Roofing", href: "#categories" },
-  { label: "Dome", href: "#categories" },
+  { label: "Amenities", href: "/products/amenities" },
+  { label: "Furniture", href: "/products/furniture" },
+  { label: "Linen", href: "/products/linen" },
+  { label: "Roofing", href: "/products/roofing" },
+  { label: "Dome", href: "/products/dome" },
 ];
 
 const SOCIALS: { label: string; href: string; Icon: LucideIcon }[] = [
@@ -46,7 +47,7 @@ export function SiteFooter() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand column */}
           <div className="flex flex-col gap-5">
-            <div>
+            <Link href="/" className="group">
               <div className="flex items-center gap-2">
                 <span className="font-display text-2xl text-ivory leading-none">
                   LaxRee
@@ -58,7 +59,7 @@ export function SiteFooter() {
               <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-sand mt-2">
                 Amenities
               </div>
-            </div>
+            </Link>
             <p className="font-body text-[13px] leading-relaxed text-sand max-w-xs">
               {SITE.address}
             </p>
@@ -142,12 +143,12 @@ function FooterLinkColumn({
       <ul className="flex flex-col gap-3">
         {links.map((link) => (
           <li key={link.label}>
-            <a
+            <Link
               href={link.href}
               className="font-body text-sm text-sand hover:text-ivory transition-colors"
             >
               {link.label}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
