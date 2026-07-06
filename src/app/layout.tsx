@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SiteToaster } from "@/components/ui/site-toaster";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
+import { Navbar } from "@/components/site/navbar";
+import { SiteFooter } from "@/components/site/site-footer";
+import { FloatingRoot } from "@/components/floating/floating-root";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -73,8 +76,15 @@ export default function RootLayout({
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
         <EnquiryProvider>
-          <SmoothScrollProvider>{children}</SmoothScrollProvider>
-          <SiteToaster />
+          <SmoothScrollProvider>
+            <div className="relative flex min-h-screen flex-col bg-charcoal">
+              <Navbar />
+              <main className="flex-1 flex flex-col">{children}</main>
+              <SiteFooter />
+            </div>
+            <FloatingRoot />
+            <SiteToaster />
+          </SmoothScrollProvider>
         </EnquiryProvider>
         <Toaster />
       </body>

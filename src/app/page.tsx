@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/site/navbar";
 import { Hero } from "@/components/site/hero";
 import { TrustMarquee } from "@/components/site/trust-marquee";
 import { CategoryBento } from "@/components/site/category-bento";
@@ -11,57 +10,45 @@ import Certifications from "@/components/site/certifications";
 import { WhyChoose } from "@/components/site/why-choose";
 import { HospitalityTrends } from "@/components/site/hospitality-trends";
 import { LeadCtaBanner } from "@/components/site/lead-cta-banner";
-import { SiteFooter } from "@/components/site/site-footer";
-import { FloatingRoot } from "@/components/floating/floating-root";
 
 export default function Home() {
   return (
-    <div className="relative flex min-h-screen flex-col bg-charcoal">
-      <Navbar />
+    <>
+      {/* 2. HERO — charcoal */}
+      <Hero />
 
-      <main className="flex-1 flex flex-col">
-        {/* 2. HERO — charcoal */}
-        <Hero />
+      {/* 3. TRUST / CERTIFICATION MARQUEE — emerald */}
+      <TrustMarquee />
 
-        {/* 3. TRUST / CERTIFICATION MARQUEE — emerald */}
-        <TrustMarquee />
+      {/* 4. CATEGORY BENTO GRID — ivory */}
+      <CategoryBento />
 
-        {/* 4. CATEGORY BENTO GRID — ivory */}
-        <CategoryBento />
+      {/* 5. ABOUT US — charcoal split parallax */}
+      <AboutUs />
 
-        {/* 5. ABOUT US — charcoal split parallax */}
-        <AboutUs />
+      {/* 6. PRODUCT SPOTLIGHT — ivory coverflow */}
+      <ProductSpotlight />
 
-        {/* 6. PRODUCT SPOTLIGHT — ivory coverflow */}
-        <ProductSpotlight />
+      {/* 7. DEEP CATEGORY EXPLORER — charcoal accordion */}
+      <CategoryExplorer />
 
-        {/* 7. DEEP CATEGORY EXPLORER — charcoal accordion */}
-        <CategoryExplorer />
+      {/* 8. CLIENTS & TESTIMONIALS — ivory */}
+      <ClientsTestimonials />
 
-        {/* 8. CLIENTS & TESTIMONIALS — ivory */}
-        <ClientsTestimonials />
+      {/* 9. OUR PRESENCE — charcoal coverflow gallery */}
+      <OurPresence />
 
-        {/* 9. OUR PRESENCE — charcoal coverflow gallery */}
-        <OurPresence />
+      {/* 10. CERTIFICATIONS — ivory badge wall */}
+      <Certifications />
 
-        {/* 10. CERTIFICATIONS — ivory badge wall */}
-        <Certifications />
+      {/* 11. WHY CHOOSE LAXREE — charcoal bento */}
+      <WhyChoose />
 
-        {/* 11. WHY CHOOSE LAXREE — charcoal bento */}
-        <WhyChoose />
+      {/* 12. HOSPITALITY TRENDS — ivory blog grid */}
+      <HospitalityTrends />
 
-        {/* 12. HOSPITALITY TRENDS — ivory blog grid */}
-        <HospitalityTrends />
-
-        {/* 13. LEAD CAPTURE CTA — emerald */}
-        <LeadCtaBanner />
-      </main>
-
-      {/* 14. FOOTER — charcoal */}
-      <SiteFooter />
-
-      {/* 15. FLOATING ELEMENTS — WhatsApp launcher, modals, mobile sticky bar */}
-      <FloatingRoot />
-    </div>
+      {/* 13. LEAD CAPTURE CTA — emerald */}
+      <LeadCtaBanner />
+    </>
   );
 }

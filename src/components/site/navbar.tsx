@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   motion,
   useScroll,
@@ -20,8 +22,8 @@ import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
  */
 function LaxReeLogo({ compact = false }: { compact?: boolean }) {
   return (
-    <a
-      href="#home"
+    <Link
+      href="/"
       aria-label="LaxRee Amenities — home"
       className="group flex items-center gap-2.5 select-none"
     >
@@ -51,7 +53,7 @@ function LaxReeLogo({ compact = false }: { compact?: boolean }) {
           AMENITIES
         </span>
       </span>
-    </a>
+    </Link>
   );
 }
 
@@ -72,6 +74,9 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   const { scrollY } = useScroll();
   // 88px → 64px after 40px of scroll
@@ -115,13 +120,15 @@ export function Navbar() {
             className="hidden lg:flex items-center gap-7 group"
           >
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
-                className="font-body text-[15px] font-medium text-ivory transition-colors duration-200 hover:text-brass group-hover:text-sand/60 hover:!text-brass"
+                className={`font-body text-[15px] font-medium transition-colors duration-200 hover:text-brass group-hover:text-sand/60 hover:!text-brass ${
+                  isActive(link.href) ? "text-brass" : "text-ivory"
+                }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -189,18 +196,23 @@ export function Navbar() {
                 className="flex-1 flex flex-col justify-center gap-1"
               >
                 {NAV_LINKS.map((link, i) => (
-                  <motion.a
+                  <motion.div
                     key={link.href}
-                    href={link.href}
                     custom={i}
                     variants={drawerItemVariants}
                     initial="hidden"
                     animate="visible"
-                    onClick={() => setOpen(false)}
-                    className="font-display text-ivory text-3xl sm:text-4xl py-2 border-b border-white/5 hover:text-brass transition-colors"
                   >
-                    {link.label}
-                  </motion.a>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`block font-display text-3xl sm:text-4xl py-2 border-b border-white/5 transition-colors ${
+                        isActive(link.href) ? "text-brass" : "text-ivory hover:text-brass"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 ))}
               </nav>
 

@@ -25,14 +25,14 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "About Us", href: "#about" },
-  { label: "Products", href: "#products" },
-  { label: "Clients", href: "#clients" },
-  { label: "Catalogue", href: "#catalogue" },
-  { label: "Dealers", href: "#dealers" },
-  { label: "Career", href: "#career" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about-us" },
+  { label: "Products", href: "/products" },
+  { label: "Clients", href: "/clients" },
+  { label: "Catalogue", href: "/catalogue" },
+  { label: "Dealers", href: "/dealers" },
+  { label: "Career", href: "/career" },
+  { label: "Contact Us", href: "/contact-us" },
 ];
 
 export const HERO_STATS = [
@@ -420,3 +420,643 @@ export const ENQUIRY_CATEGORIES = [
   "Linen",
   "Dome",
 ];
+
+/* ─────────────────────────────────────────────────────────────
+   Inner-page content
+   ───────────────────────────────────────────────────────────── */
+
+/* About Us — timeline milestones */
+export type Milestone = {
+  year: string;
+  title: string;
+  description: string;
+};
+
+export const TIMELINE: Milestone[] = [
+  {
+    year: "2015",
+    title: "The First Factory",
+    description:
+      "LaxRee opens its first manufacturing line in Ajmer for absorption minibars — 200 units/month capacity.",
+  },
+  {
+    year: "2017",
+    title: "Safe Locker Division",
+    description:
+      "Electronic safe locker production line launched. First client: a 150-room heritage hotel in Udaipur.",
+  },
+  {
+    year: "2019",
+    title: "Exhibition Centre",
+    description:
+      "Ajmer's largest hospitality exhibition centre inaugurated — 12,000 sq ft of product displays and procurement consultation.",
+  },
+  {
+    year: "2021",
+    title: "Pan-India Network",
+    description:
+      "Dealer network expands to 22 states. ISO 9001 and ISO 14001 certifications achieved.",
+  },
+  {
+    year: "2023",
+    title: "700+ SKU Milestone",
+    description:
+      "Product catalogue crosses 700 SKUs across five categories. CE and RoHS compliance achieved for electronics.",
+  },
+  {
+    year: "2026",
+    title: "Smart Hospitality",
+    description:
+      "Launch of brass-rim smart minibar line and IoT-enabled safes. 1,347+ projects delivered.",
+  },
+];
+
+/* About Us — leadership team */
+export type TeamMember = {
+  name: string;
+  role: string;
+  bio: string;
+  initials: string;
+};
+
+export const LEADERSHIP: TeamMember[] = [
+  {
+    name: "Rajesh Sharma",
+    role: "Founder & Managing Director",
+    bio: "25 years in hospitality manufacturing. Started LaxRee with a single minibar line and a commitment to in-house quality control.",
+    initials: "RS",
+  },
+  {
+    name: "Priya Sharma",
+    role: "Director, Operations",
+    bio: "Leads the Ajmer factory and exhibition centre. Architects the 700+ SKU catalogue and custom-order workflow.",
+    initials: "PS",
+  },
+  {
+    name: "Amit Verma",
+    role: "Head of Sales (Pan-India)",
+    bio: "Manages the 22-state dealer network and direct procurement contracts with national hotel chains.",
+    initials: "AV",
+  },
+  {
+    name: "Sunita Jain",
+    role: "Head of Quality & Compliance",
+    bio: "Oversees ISO 9001/14001/45001, CE and RoHS testing. 15 years in industrial QC.",
+    initials: "SJ",
+  },
+];
+
+/* About Us — values */
+export type Value = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export const COMPANY_VALUES: Value[] = [
+  {
+    icon: "ShieldCheck",
+    title: "Quality Without Compromise",
+    description:
+      "Every product passes 14 quality checkpoints before it leaves the factory. ISO 9001-certified processes.",
+  },
+  {
+    icon: "Factory",
+    title: "OEM Manufacturing",
+    description:
+      "We own our factory lines — minibars, safes, furniture. No outsourcing means consistent quality and competitive pricing.",
+  },
+  {
+    icon: "Leaf",
+    title: "Sustainable by Design",
+    description:
+      "Low-VOC finishes, recyclable packaging, energy-efficient minibar compressors. ISO 14001 environmental management.",
+  },
+  {
+    icon: "Clock",
+    title: "On-Time Delivery",
+    description:
+      "11 years of delivering 97.4% of orders on or before the committed date. Project tracking from PO to handover.",
+  },
+  {
+    icon: "Headset",
+    title: "After-Sales First",
+    description:
+      "Dedicated service engineers in 14 cities. Average response time: 4 hours in metros, 24 hours in Tier-2/3.",
+  },
+  {
+    icon: "Handshake",
+    title: "Partnership, Not Transaction",
+    description:
+      "We work with procurement teams from spec to handover. Many clients have been with us 5+ years.",
+  },
+];
+
+/* Products page — all products with details */
+export type ProductDetail = {
+  slug: string;
+  name: string;
+  category: string;
+  image: string;
+  description: string;
+  specs: { label: string; value: string }[];
+};
+
+export const ALL_PRODUCTS: ProductDetail[] = [
+  {
+    slug: "mini-bar",
+    name: "Mini Bar",
+    category: "Amenities",
+    image: "/images/products/mini-bar.png",
+    description:
+      "Absorption and compressor minibars with brass-trimmed glass doors. Silent operation, energy-efficient, available in 40L/60L/80L.",
+    specs: [
+      { label: "Capacity", value: "40L / 60L / 80L" },
+      { label: "Cooling", value: "Absorption / Compressor" },
+      { label: "Noise", value: "< 26 dB" },
+      { label: "Power", value: "70W" },
+    ],
+  },
+  {
+    slug: "kettle-set",
+    name: "Kettle Set",
+    category: "Amenities",
+    image: "/images/products/kettle-set.png",
+    description:
+      "Stainless steel electric kettle sets with matching cups and tray. Food-grade SS304, 1.2L capacity, auto shut-off.",
+    specs: [
+      { label: "Capacity", value: "1.2L" },
+      { label: "Material", value: "SS304" },
+      { label: "Power", value: "1500W" },
+      { label: "Set includes", value: "Kettle + 2 cups + tray" },
+    ],
+  },
+  {
+    slug: "safe-box",
+    name: "Safe Box",
+    category: "Amenities",
+    image: "/images/products/safe-box.png",
+    description:
+      "Electronic hotel safe boxes with digital keypad and emergency override. Brushed metal finish, brass accent trim.",
+    specs: [
+      { label: "Lock", value: "Digital keypad + override" },
+      { label: "Size", value: "200×300×200 mm" },
+      { label: "Material", value: "1.5mm steel" },
+      { label: "Power", value: "4×AA + external backup" },
+    ],
+  },
+  {
+    slug: "door-lock",
+    name: "Door Lock",
+    category: "Amenities",
+    image: "/images/products/door-lock.png",
+    description:
+      "RFID card door locks with brass accent trim. Battery-powered, audit trail, integrates with PMS systems.",
+    specs: [
+      { label: "Access", value: "RFID card + mechanical key" },
+      { label: "Battery", value: "4×AA (10,000 unlocks)" },
+      { label: "Finish", value: "Brass / Matte black" },
+      { label: "Integration", value: "PMS-compatible" },
+    ],
+  },
+  {
+    slug: "luggage-trolley",
+    name: "Luggage Trolley",
+    category: "Lobby",
+    image: "/images/products/luggage-trolley.png",
+    description:
+      "Brass-framed luggage trolleys with black leather straps and silent castors. Heavy-duty, 200kg load capacity.",
+    specs: [
+      { label: "Load", value: "200 kg" },
+      { label: "Frame", value: "Brass-plated steel" },
+      { label: "Wheels", value: "4× silent castor" },
+      { label: "Size", value: "1100×600×950 mm" },
+    ],
+  },
+  {
+    slug: "bath-tub",
+    name: "Bath Tub",
+    category: "Washroom",
+    image: "/images/products/bath-tub.png",
+    description:
+      "Freestanding acrylic bathtubs with brass faucet. Minimalist luxury design, 180L capacity, scratch-resistant.",
+    specs: [
+      { label: "Material", value: "Lucite acrylic" },
+      { label: "Capacity", value: "180L" },
+      { label: "Size", value: "1500×750×580 mm" },
+      { label: "Finish", value: "Gloss white" },
+    ],
+  },
+  {
+    slug: "hair-dryer",
+    name: "Hair Dryer",
+    category: "Washroom",
+    image: "/images/products/hair-dryer.png",
+    description:
+      "Wall-mounted hotel hair dryers with brass accents. 1600W, dual speed, auto shut-off on release.",
+    specs: [
+      { label: "Power", value: "1600W" },
+      { label: "Speed", value: "2-speed" },
+      { label: "Mount", value: "Wall bracket" },
+      { label: "Cable", value: "Retractable" },
+    ],
+  },
+  {
+    slug: "magnifying-mirror",
+    name: "Magnifying Mirror",
+    category: "Washroom",
+    image: "/images/products/magnifying-mirror.png",
+    description:
+      "Brass-framed magnifying vanity mirrors on extendable arm. 5× magnification, fog-free, 360° rotation.",
+    specs: [
+      { label: "Magnification", value: "5×" },
+      { label: "Diameter", value: "180 mm" },
+      { label: "Arm", value: "Extendable 300mm" },
+      { label: "Finish", value: "Polished brass" },
+    ],
+  },
+  {
+    slug: "hand-dryer",
+    name: "Hand Dryer",
+    category: "Washroom",
+    image: "/images/products/hand-dryer.png",
+    description:
+      "High-speed commercial hand dryers with brass accent. Dries in 10 seconds, HEPA filter, energy-efficient.",
+    specs: [
+      { label: "Dry time", value: "10 seconds" },
+      { label: "Power", value: "1400W" },
+      { label: "Filter", value: "HEPA H13" },
+      { label: "Noise", value: "< 70 dB" },
+    ],
+  },
+];
+
+/* Career — job openings */
+export type JobOpening = {
+  slug: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  experience: string;
+  description: string;
+};
+
+export const JOB_OPENINGS: JobOpening[] = [
+  {
+    slug: "regional-sales-manager",
+    title: "Regional Sales Manager",
+    department: "Sales",
+    location: "Mumbai, Maharashtra",
+    type: "Full-time",
+    experience: "5-8 years",
+    description:
+      "Lead B2B sales for Maharashtra and Gujarat. Manage existing hotel-chain accounts, develop new procurement relationships, and coordinate with the factory on custom orders.",
+  },
+  {
+    slug: "production-engineer",
+    title: "Production Engineer — Safe Locker Line",
+    department: "Manufacturing",
+    location: "Ajmer, Rajasthan",
+    type: "Full-time",
+    experience: "3-6 years",
+    description:
+      "Oversee the electronic safe locker assembly line. Optimize throughput, maintain quality checkpoints, and lead the shift to IoT-enabled safes.",
+  },
+  {
+    slug: "interior-designer",
+    title: "Hospitality Interior Designer",
+    department: "Design",
+    location: "Ajmer / Remote",
+    type: "Full-time",
+    experience: "4-7 years",
+    description:
+      "Create room amenity layouts and furniture specifications for hotel renovation projects. Work directly with procurement teams and architects.",
+  },
+  {
+    slug: "quality-inspector",
+    title: "Quality Control Inspector",
+    department: "Quality",
+    location: "Ajmer, Rajasthan",
+    type: "Full-time",
+    experience: "2-5 years",
+    description:
+      "Execute the 14-point quality checkpoint process for minibars, safes, and furniture. ISO 9001 documentation and supplier audit.",
+  },
+  {
+    slug: "field-service-engineer",
+    title: "Field Service Engineer",
+    department: "After-Sales",
+    location: "Bengaluru, Karnataka",
+    type: "Full-time",
+    experience: "2-4 years",
+    description:
+      "Provide on-site installation and after-sales service for LaxRee products across South India. Training provided at the Ajmer factory.",
+  },
+  {
+    slug: "digital-marketing-lead",
+    title: "Digital Marketing Lead",
+    department: "Marketing",
+    location: "Ajmer / Remote",
+    type: "Full-time",
+    experience: "4-6 years",
+    description:
+      "Own the LaxRee digital presence — website, LinkedIn, SEO blog. Generate qualified leads from hospitality procurement managers.",
+  },
+];
+
+/* Career — life at LaxRee perks */
+export type Perk = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export const PERKS: Perk[] = [
+  {
+    icon: "GraduationCap",
+    title: "Learning & Growth",
+    description: "Annual training budget, factory certifications, and conference attendance.",
+  },
+  {
+    icon: "HeartPulse",
+    title: "Health Insurance",
+    description: "Family floater medical coverage for all full-time employees and dependents.",
+  },
+  {
+    icon: "Home",
+    title: "Housing Assistance",
+    description: "Relocation support and HRA for Ajmer-based manufacturing roles.",
+  },
+  {
+    icon: "Plane",
+    title: "Travel Opportunities",
+    description: "Field roles include pan-India travel to hotel sites and exhibitions.",
+  },
+  {
+    icon: "Award",
+    title: "Performance Bonus",
+    description: "Quarterly performance-linked bonuses and annual profit-sharing.",
+  },
+  {
+    icon: "Coffee",
+    title: "Factory Canteen",
+    description: "Subsidised meals and tea/snacks throughout the day at the Ajmer campus.",
+  },
+];
+
+/* Dealers — benefits */
+export type DealerBenefit = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export const DEALER_BENEFITS: DealerBenefit[] = [
+  {
+    icon: "BadgePercent",
+    title: "OEM Pricing",
+    description: "Direct factory pricing with volume slabs. No middleman markup.",
+  },
+  {
+    icon: "MapPin",
+    title: "Exclusive Territory",
+    description: "Protected geographic territory — we don't undercut our dealers.",
+  },
+  {
+    icon: "PackageCheck",
+    title: "Stock Support",
+    description: "Min-min-max stock model with 7-day replenishment from Ajmer.",
+  },
+  {
+    icon: "Megaphone",
+    title: "Co-Marketing",
+    description: "Co-branded collateral, exhibition participation, and digital lead routing.",
+  },
+  {
+    icon: "Wrench",
+    title: "Service Training",
+    description: "Quarterly training at the Ajmer factory for your installation team.",
+  },
+  {
+    icon: "FileText",
+    title: "Credit Terms",
+    description: "Flexible credit terms after 6-month track record. 30/45/60-day slabs.",
+  },
+];
+
+/* Dealers — existing dealer network cities */
+export const DEALER_CITIES = [
+  "New Delhi", "Mumbai", "Bengaluru", "Chennai", "Hyderabad", "Kolkata",
+  "Pune", "Ahmedabad", "Jaipur", "Udaipur", "Lucknow", "Chandigarh",
+  "Bhopal", "Patna", "Guwahati", "Visakhapatnam", "Cochin", "Coimbatore",
+  "Nagpur", "Surat", "Indore", "Bhubaneswar",
+];
+
+/* Clients — case studies */
+export type CaseStudy = {
+  slug: string;
+  hotel: string;
+  location: string;
+  project: string;
+  scope: string;
+  outcome: string;
+  metric: string;
+  metricLabel: string;
+};
+
+export const CASE_STUDIES: CaseStudy[] = [
+  {
+    slug: "imperial-crest-jaipur",
+    hotel: "The Imperial Crest",
+    location: "Jaipur, Rajasthan",
+    project: "142-Room Renovation",
+    scope:
+      "Full room amenity fit-out — minibars, safes, door locks, kettles, washroom amenities, and furniture for 142 rooms plus 8 suites.",
+    outcome:
+      "Delivered in 11 weeks with zero procurement delays. Guest satisfaction scores for room amenities rose 23% post-renovation.",
+    metric: "142",
+    metricLabel: "Rooms delivered",
+  },
+  {
+    slug: "westmark-resorts-udaipur",
+    hotel: "Westmark Resorts",
+    location: "Udaipur, Rajasthan",
+    project: "New Resort Launch",
+    scope:
+      "Complete hospitality supply — amenities, furniture, linen, and roofing for a 220-key resort property on Lake Pichola.",
+    outcome:
+      "Project handed over 2 weeks ahead of opening. LaxRee's factory-direct model saved 18% vs. procurement through a trading company.",
+    metric: "220",
+    metricLabel: "Keys supplied",
+  },
+  {
+    slug: "heritage-hotels-group",
+    hotel: "Heritage Hotels Group",
+    location: "Pan-India (9 properties)",
+    project: "Group-Wide Amenity Standardisation",
+    scope:
+      "Standardised minibar and safe locker specifications across 9 heritage properties. Centralised procurement with property-wise delivery.",
+    outcome:
+      "Reduced procurement admin by 60%. Maintenance calls related to amenities dropped 34% due to consistent hardware across properties.",
+    metric: "9",
+    metricLabel: "Properties unified",
+  },
+];
+
+/* Blog — full post content (HTML-ish structured text) */
+export type BlogPostFull = BlogPost & {
+  author: string;
+  authorRole: string;
+  content: { heading?: string; paragraphs: string[] }[];
+};
+
+export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
+  const full: BlogPostFull = {
+    ...post,
+    author: "LaxRee Editorial Team",
+    authorRole: "Hospitality Procurement Insights",
+    content: [],
+  };
+
+  if (post.slug === "sustainable-hospitality-2026") {
+    full.author = "Sunita Jain";
+    full.authorRole = "Head of Quality & Compliance";
+    full.content = [
+      {
+        paragraphs: [
+          "The hospitality industry is at an inflection point. Guests increasingly choose hotels that demonstrate environmental responsibility, and procurement teams are under pressure to deliver sustainability without inflating per-room costs. The good news: the two goals are no longer in conflict.",
+          "In 2026, the procurement playbook for sustainable hospitality has matured. Here is what to specify in your next tender — and what to quietly drop.",
+        ],
+      },
+      {
+        heading: "Refillable Dispensers Are Now Table Stakes",
+        paragraphs: [
+          "Single-use amenity bottles are the most visible waste stream in a hotel room. A 150-room property generates over 50,000 plastic bottles per year from shampoo and body wash alone. Refillable dispensers eliminate that entirely.",
+          "The guest-experience objection — 'dispensers feel cheap' — is outdated. Wall-mounted brass-finish dispensers from OEM manufacturers like LaxRee now match the aesthetic of premium amenities while cutting amenity cost per room-night by 60-70%.",
+        ],
+      },
+      {
+        heading: "Low-VOC Finishes on Furniture",
+        paragraphs: [
+          "Volatile organic compounds (VOCs) from furniture finishes, adhesives, and paints off-gas for months after installation. In a sealed hotel room, this affects indoor air quality and guest comfort. Specify low-VOC or zero-VOC finishes in your furniture tender.",
+          "ISO 14001-certified manufacturers test and document VOC emissions. Ask for the test certificate — it is a 30-second check that separates serious suppliers from traders.",
+        ],
+      },
+      {
+        heading: "Energy-Efficient Minibars",
+        paragraphs: [
+          "Compressor minibars use 40-60% less energy than absorption models. Over a 10-year lifecycle, the energy savings alone pay for the minibar twice. Yet many hotels still specify absorption because 'that is what we have always used.'",
+          "In 2026, specify compressor minibars with brass-trimmed glass doors. They are silent, energy-efficient, and the brass trim photograph well — which matters for social-media-driven guest perception.",
+        ],
+      },
+      {
+        heading: "Lifecycle Costing Over Unit Price",
+        paragraphs: [
+          "The biggest sustainability mistake in hospitality procurement is optimising for unit price instead of lifecycle cost. A cheap safe locker that fails in 18 months costs more — in replacement, maintenance, and guest dissatisfaction — than a quality unit that lasts 7 years.",
+          "Specify lifecycle cost in your tender. Ask for expected lifespan, maintenance schedule, and parts availability. OEM manufacturers with in-house factory lines can provide this data; trading companies cannot.",
+        ],
+      },
+      {
+        heading: "What to Drop",
+        paragraphs: [
+          "Drop the 'green' certification theatre — logos on single-use packaging, 'eco-friendly' labels without data. Procurement teams and guests alike are learning to see through it.",
+          "Instead, document your sustainability specs in the tender, audit the factory, and publish the lifecycle data. That is the 2026 standard.",
+        ],
+      },
+    ];
+  } else if (post.slug === "brass-details-guest-perception") {
+    full.author = "Priya Sharma";
+    full.authorRole = "Director, Operations";
+    full.content = [
+      {
+        paragraphs: [
+          "Hardware finishes are the quietest lever in hotel room design. They do not show up in the render. They do not appear in the spec sheet headline. But they are what the guest touches — and what the guest photographs.",
+          "Recent eye-tracking studies on hotel rooms show that warm-metal accents (brass, bronze, copper) increase perceived room value by up to 18% compared to chrome or brushed nickel. Here is why, and how to use it.",
+        ],
+      },
+      {
+        heading: "The Psychology of Warm Metals",
+        paragraphs: [
+          "Warm metals — brass, bronze, copper — read as 'traditional luxury' in the guest's visual vocabulary. They evoke heritage hotels, European boutiques, and craftsmanship. Chrome reads as 'modern but mass-market.' Brushed nickel reads as 'corporate.'",
+          "When a guest enters a room and sees brass drawer pulls, brass faucet trim, and a brass-framed magnifying mirror, their brain categorises the room as 'premium' before they consciously process any single element.",
+        ],
+      },
+      {
+        heading: "Where Brass Delivers the Most Impact",
+        paragraphs: [
+          "Not every surface needs brass. The high-impact, low-cost touchpoints are: minibar door trim, safe locker handle, door lock escutcheon, magnifying mirror frame, faucet handles, and luggage trolley frame.",
+          "These are all items LaxRee manufactures with brass accents as standard. The cost premium of brass over chrome is typically 8-12% on hardware — but the perceived value uplift is 15-20%.",
+        ],
+      },
+      {
+        heading: "The Social Media Multiplier",
+        paragraphs: [
+          "Guests photograph warm-metal details. A brass-rimmed minibar, a brass-framed mirror, a brass-trimmed safe — these are the objects that appear in Instagram stories and TripAdvisor review photos.",
+          "This is free marketing. A chrome minibar never goes viral. A brass-trimmed one with warm interior lighting does.",
+        ],
+      },
+      {
+        heading: "Avoiding the Brass Trap",
+        paragraphs: [
+          "Brass is powerful but easy to overdo. The rule: brass on hardware, not on surfaces. Brass drawer pulls — yes. Brass wall panels — no. Brass faucet trim — yes. Brass ceiling — absolutely not.",
+          "Use brass as an accent (10-15% of the visible metal in the room), not a dominant finish. The goal is for the guest to feel premium, not to feel like they are inside a trumpet.",
+        ],
+      },
+    ];
+  } else {
+    full.author = "Amit Verma";
+    full.authorRole = "Head of Sales (Pan-India)";
+    full.content = [
+      {
+        paragraphs: [
+          "Hotel renovation season is where small details quietly move TripAdvisor scores. The big-ticket items — bed, bathroom, view — get all the attention. But it is the hundred small hardware and amenity decisions that separate a 4.2 from a 4.6.",
+          "Here are five amenity trends we are seeing in 2026 hotel renovations across India — and why they matter.",
+        ],
+      },
+      {
+        heading: "1. In-Room Smart Safes with Phone Charging",
+        paragraphs: [
+          "The safe is no longer just for valuables. Guests want to charge their phone inside it overnight — both for security and because the bedside outlet is taken by the bedside lamp.",
+          "Specify safes with a USB-C port and Qi wireless charging pad inside. The cost premium is small; the guest convenience is large.",
+        ],
+      },
+      {
+        heading: "2. Weighted Curtain Hooks",
+        paragraphs: [
+          "This sounds trivial. It is not. Lightweight curtain hooks rattle when the AC kicks in, and the sound travels. Weighted brass hooks eliminate the rattle and add a tactile premium feel when the guest opens the curtains.",
+          "It is a Rs. 40-per-hook upgrade that guests notice subconsciously and reviewers mention explicitly.",
+        ],
+      },
+      {
+        heading: "3. Magnifying Mirrors with LED Ring",
+        paragraphs: [
+          "The magnifying mirror is a washroom staple, but the old incandescent-lit versions cast a yellow, unflattering light. LED ring-lit magnifying mirrors give true-color rendering that guests appreciate for makeup and grooming.",
+          "Specify 5× magnification with a 6000K LED ring. Brass frame, extendable arm.",
+        ],
+      },
+      {
+        heading: "4. Quiet Absorption Minibars (Yes, Still)",
+        paragraphs: [
+          "We wrote last year that compressor minibars are the future. They are — for energy efficiency. But for absolute silence in a boutique or heritage property, absorption minibars (zero moving parts) still win.",
+          "The 2026 move: absorption minibars in suites and premium rooms (silence), compressor minibars in standard rooms (efficiency). Mix the spec by room category.",
+        ],
+      },
+      {
+        heading: "5. Brass-Trimmed Door Locks with Audit Trail",
+        paragraphs: [
+          "Security teams love audit trails. Guests love brass trim. The 2026 door lock gives both — RFID access, PMS integration, brass escutcheon, and a downloadable log of every entry.",
+          "Specify locks that integrate with your PMS at the tender stage, not after installation.",
+        ],
+      },
+      {
+        heading: "The Pattern",
+        paragraphs: [
+          "Notice the throughline: every trend is a small hardware upgrade that the guest feels but does not consciously evaluate. That is how you move a TripAdvisor score — not with a new lobby chandelier, but with a weighted curtain hook.",
+        ],
+      },
+    ];
+  }
+
+  return full;
+});
