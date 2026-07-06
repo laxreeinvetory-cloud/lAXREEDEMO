@@ -1060,3 +1060,81 @@ export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
 
   return full;
 });
+
+/* ─────────────────────────────────────────────────────────────
+   Catalogue — category-wise PDF downloads
+   Each category has its own downloadable catalogue PDF.
+   The master catalogue covers all categories in one file.
+   ───────────────────────────────────────────────────────────── */
+export type CatalogueFile = {
+  slug: string;
+  name: string;
+  description: string;
+  fileName: string;
+  fileSize: string;
+  category: string; // matches CATEGORIES slug, or "master" for the full catalogue
+  available: boolean; // whether the actual PDF is uploaded
+};
+
+export const CATALOGUES: CatalogueFile[] = [
+  {
+    slug: "master",
+    name: "Master Catalogue 2026",
+    description:
+      "The complete LaxRee product catalogue — all 700+ SKUs across Amenities, Furniture, Linen, Roofing and Dome in a single PDF. Full specifications, pricing tiers, and lead times.",
+    fileName: "master-catalogue.pdf",
+    fileSize: "18 MB",
+    category: "master",
+    available: true,
+  },
+  {
+    slug: "amenities",
+    name: "Amenities Catalogue",
+    description:
+      "226 SKUs — minibars, safe lockers, kettles, door locks, hair dryers, magnifying mirrors, hand dryers, amenity trays, and more. Room, washroom and lobby essentials.",
+    fileName: "amenities-catalogue.pdf",
+    fileSize: "Coming soon",
+    category: "amenities",
+    available: false,
+  },
+  {
+    slug: "furniture",
+    name: "Furniture Catalogue",
+    description:
+      "246 SKUs — beds, headboards, night stands, work desks, lounge chairs, wardrobes, TV consoles, lobby seating, and outdoor furniture. Custom-grade casegoods and seating.",
+    fileName: "furniture-catalogue.pdf",
+    fileSize: "Coming soon",
+    category: "furniture",
+    available: false,
+  },
+  {
+    slug: "linen",
+    name: "Linen Catalogue",
+    description:
+      "20 SKUs — bed sheets, pillow cases, duvets, bath towels, bath robes, table linen, napkins, and kitchen linen. Long-staple cotton, custom-branded.",
+    fileName: "linen-catalogue.pdf",
+    fileSize: "Coming soon",
+    category: "linen",
+    available: false,
+  },
+  {
+    slug: "roofing",
+    name: "Roofing Catalogue",
+    description:
+      "12 SKUs — standing seam panels, insulated roof panels, polycarbonate sheets, flashings, trims, and gutter systems. Architectural metal roofing and cladding.",
+    fileName: "roofing-catalogue.pdf",
+    fileSize: "48 MB",
+    category: "roofing",
+    available: true,
+  },
+  {
+    slug: "dome",
+    name: "Dome Catalogue",
+    description:
+      "2 SKUs — glass geodesic domes, polycarbonate geodesic domes, and dome accessories. For glamping and experiential stays.",
+    fileName: "dome-catalogue.pdf",
+    fileSize: "Coming soon",
+    category: "dome",
+    available: false,
+  },
+];

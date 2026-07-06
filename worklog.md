@@ -586,3 +586,27 @@ Stage Summary:
 - Navigation: next/link client-side routing with active-link highlighting via usePathname()
 - Mobile responsive with hamburger drawer navigation
 - Lint clean, no runtime errors
+
+---
+Task ID: CAT-1
+Agent: main (orchestrator)
+Task: Redesign Catalogue page to be category-wise with real downloadable PDFs.
+
+Work Log:
+- Copied uploaded PDFs to public/catalogues/: master-catalogue.pdf (18MB, covers all categories) and roofing-catalogue.pdf (48MB, roofing-specific)
+- Added CATALOGUES data array to site-data.ts with 6 catalogue entries: master, amenities, furniture, linen, roofing, dome — each with name, description, fileName, fileSize, category, available flag
+- Completely redesigned /catalogue page:
+  - Section 1 (charcoal): PageHero with "Download Catalogues by Category" + quick stats (700+ SKUs, 2 PDFs Available Now, No Email Required)
+  - Section 2 (charcoal): Featured Master Catalogue card — large card with factory image, "Complete Catalogue" badge, "Available" badge, full description, brass "Download PDF" button that triggers direct download
+  - Section 3 (ivory): "Download by Category" grid of 5 category catalogue cards (Amenities, Furniture, Linen, Roofing, Dome). Each card: category image, name, file size, description, and either "Download PDF" (if available) or "Request Catalogue" (if coming soon). Roofing = Available, others = Coming Soon. Info note below explains availability.
+  - Section 4 (charcoal): "What's Inside" checklist + 4 benefit cards + QuickLeadForm for 10% discount code (name, phone, email, category → POST /api/lead → reveals LAXREE10 code)
+  - Section 5 (emerald): PageCTA "Need a printed catalogue couriered?"
+- Download logic: CategoryCatalogueCard component creates a temporary <a> element with download attribute and clicks it for available PDFs; for unavailable ones, opens the enquiry modal
+- Verified both PDFs are accessible: master-catalogue.pdf (18MB, HTTP 200) and roofing-catalogue.pdf (48MB, HTTP 200)
+
+Stage Summary:
+- Catalogue page is now category-wise with 6 catalogue cards (Master + 5 categories)
+- 2 PDFs are directly downloadable (Master + Roofing) — no email gate, instant download
+- 4 categories marked "Coming Soon" with "Request Catalogue" buttons that open the enquiry modal
+- Discount code form (LAXREE10) remains for 10% off first order
+- Lint clean, page returns 200, all sections verified rendering correctly via Agent Browser
