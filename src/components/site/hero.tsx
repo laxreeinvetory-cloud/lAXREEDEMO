@@ -359,7 +359,7 @@ function HeroFallback() {
   return (
     <div className="w-full h-full rounded-[24px] overflow-hidden border border-brass/15 bg-charcoal/60 grid place-items-center">
       <img
-        src="/images/products/mini-bar.png"
+        src="/images/products/mini-bar.jpg"
         alt="LaxRee Minibar — flagship product"
         className="w-full h-full object-contain p-8"
         onError={(e) => {

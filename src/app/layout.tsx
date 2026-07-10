@@ -8,6 +8,7 @@ import { EnquiryProvider } from "@/components/providers/enquiry-provider";
 import { Navbar } from "@/components/site/navbar";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingRoot } from "@/components/floating/floating-root";
+import { ScrollProgress } from "@/components/site/scroll-progress";
 
 const fraunces = Fraunces({
   variable: "--font-display",
@@ -78,6 +79,7 @@ export default function RootLayout({
         <EnquiryProvider>
           <SmoothScrollProvider>
             <div className="relative flex min-h-screen flex-col bg-charcoal">
+              <ScrollProgress />
               <Navbar />
               <main className="flex-1 flex flex-col">{children}</main>
               <SiteFooter />

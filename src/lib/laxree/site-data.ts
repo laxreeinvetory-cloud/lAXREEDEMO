@@ -112,15 +112,15 @@ export type Product = {
 };
 
 export const SPOTLIGHT_PRODUCTS: Product[] = [
-  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.png" },
-  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.png" },
-  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.png" },
-  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.png" },
-  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.png" },
-  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.png" },
-  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.png" },
-  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.png" },
-  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.png" },
+  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.jpg" },
+  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.jpg" },
+  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.jpg" },
+  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.jpg" },
+  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.jpg" },
+  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.jpg" },
+  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.jpg" },
+  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.jpg" },
+  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.jpg" },
 ];
 
 export type RoomSolution = {
@@ -567,7 +567,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "mini-bar",
     name: "Mini Bar",
     category: "Amenities",
-    image: "/images/products/mini-bar.png",
+    image: "/images/products/mini-bar.jpg",
     description:
       "Absorption and compressor minibars with brass-trimmed glass doors. Silent operation, energy-efficient, available in 40L/60L/80L.",
     specs: [
@@ -581,7 +581,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "kettle-set",
     name: "Kettle Set",
     category: "Amenities",
-    image: "/images/products/kettle-set.png",
+    image: "/images/products/kettle-set.jpg",
     description:
       "Stainless steel electric kettle sets with matching cups and tray. Food-grade SS304, 1.2L capacity, auto shut-off.",
     specs: [
@@ -595,7 +595,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "safe-box",
     name: "Safe Box",
     category: "Amenities",
-    image: "/images/products/safe-box.png",
+    image: "/images/products/safe-box.jpg",
     description:
       "Electronic hotel safe boxes with digital keypad and emergency override. Brushed metal finish, brass accent trim.",
     specs: [
@@ -609,7 +609,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "door-lock",
     name: "Door Lock",
     category: "Amenities",
-    image: "/images/products/door-lock.png",
+    image: "/images/products/door-lock.jpg",
     description:
       "RFID card door locks with brass accent trim. Battery-powered, audit trail, integrates with PMS systems.",
     specs: [
@@ -623,7 +623,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "luggage-trolley",
     name: "Luggage Trolley",
     category: "Lobby",
-    image: "/images/products/luggage-trolley.png",
+    image: "/images/products/luggage-trolley.jpg",
     description:
       "Brass-framed luggage trolleys with black leather straps and silent castors. Heavy-duty, 200kg load capacity.",
     specs: [
@@ -637,7 +637,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "bath-tub",
     name: "Bath Tub",
     category: "Washroom",
-    image: "/images/products/bath-tub.png",
+    image: "/images/products/bath-tub.jpg",
     description:
       "Freestanding acrylic bathtubs with brass faucet. Minimalist luxury design, 180L capacity, scratch-resistant.",
     specs: [
@@ -651,7 +651,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "hair-dryer",
     name: "Hair Dryer",
     category: "Washroom",
-    image: "/images/products/hair-dryer.png",
+    image: "/images/products/hair-dryer.jpg",
     description:
       "Wall-mounted hotel hair dryers with brass accents. 1600W, dual speed, auto shut-off on release.",
     specs: [
@@ -665,7 +665,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "magnifying-mirror",
     name: "Magnifying Mirror",
     category: "Washroom",
-    image: "/images/products/magnifying-mirror.png",
+    image: "/images/products/magnifying-mirror.jpg",
     description:
       "Brass-framed magnifying vanity mirrors on extendable arm. 5× magnification, fog-free, 360° rotation.",
     specs: [
@@ -679,7 +679,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "hand-dryer",
     name: "Hand Dryer",
     category: "Washroom",
-    image: "/images/products/hand-dryer.png",
+    image: "/images/products/hand-dryer.jpg",
     description:
       "High-speed commercial hand dryers with brass accent. Dries in 10 seconds, HEPA filter, energy-efficient.",
     specs: [

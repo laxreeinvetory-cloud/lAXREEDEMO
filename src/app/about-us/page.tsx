@@ -255,7 +255,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src="/images/products/mini-bar.png"
+                  src="/images/products/mini-bar.jpg"
                   alt="A LaxRee absorption minibar assembled on the Ajmer production line"
                   width={800}
                   height={640}
