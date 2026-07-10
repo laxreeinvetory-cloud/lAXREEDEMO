@@ -345,7 +345,7 @@ export default function CareerPage() {
             <FadeIn delay={0.1}>
               <div className="relative rounded-[24px] overflow-hidden aspect-[4/3] md:aspect-[5/4]">
                 <img
-                  src="/images/about/factory.png"
+                  src="/images/about/factory.jpg"
                   alt="The LaxRee manufacturing campus in Ajmer, Rajasthan"
                   loading="lazy"
                   decoding="async"

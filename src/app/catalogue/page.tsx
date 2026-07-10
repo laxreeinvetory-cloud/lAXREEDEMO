@@ -93,8 +93,8 @@ function CategoryCatalogueCard({
   // Find the matching category image (master uses the amenities image as a cover)
   const categoryData = CATEGORIES.find((c) => c.slug === catalogue.category);
   const image = isMaster
-    ? "/images/about/factory.png"
-    : categoryData?.image ?? "/images/about/factory.png";
+    ? "/images/about/factory.jpg"
+    : categoryData?.image ?? "/images/about/factory.jpg";
 
   return (
     <FadeIn delay={index * 0.06}>

@@ -67,7 +67,7 @@ export const CATEGORIES: Category[] = [
     name: "Amenities",
     count: 226,
     blurb: "Room, washroom & lobby essentials — minibars to magnifying mirrors.",
-    image: "/images/categories/amenities.png",
+    image: "/images/categories/amenities.jpg",
     span: "large",
   },
   {
@@ -75,7 +75,7 @@ export const CATEGORIES: Category[] = [
     name: "Furniture",
     count: 246,
     blurb: "Lobby, room & outdoor furniture engineered for high-traffic hospitality.",
-    image: "/images/categories/furniture.png",
+    image: "/images/categories/furniture.jpg",
     span: "default",
   },
   {
@@ -83,7 +83,7 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 20,
     blurb: "Bed, bath & F&B linen in long-staple cotton, custom-branded.",
-    image: "/images/categories/linen.png",
+    image: "/images/categories/linen.jpg",
     span: "default",
   },
   {
@@ -91,7 +91,7 @@ export const CATEGORIES: Category[] = [
     name: "Roofing",
     count: 12,
     blurb: "Architectural metal roofing & cladding systems for resorts.",
-    image: "/images/categories/roofing.png",
+    image: "/images/categories/roofing.jpg",
     span: "default",
   },
   {
@@ -99,7 +99,7 @@ export const CATEGORIES: Category[] = [
     name: "Dome",
     count: 2,
     blurb: "Geodesic dome structures for glamping & experiential stays.",
-    image: "/images/categories/dome.png",
+    image: "/images/categories/dome.jpg",
     span: "default",
   },
 ];
@@ -291,11 +291,11 @@ export type Exhibition = {
 };
 
 export const EXHIBITIONS: Exhibition[] = [
-  { image: "/images/gallery/exhibition-1.png", caption: "Hospitality India Expo, New Delhi", year: "2025" },
-  { image: "/images/gallery/exhibition-2.png", caption: "HotelTech Summit, Mumbai", year: "2025" },
-  { image: "/images/gallery/exhibition-3.png", caption: "Resort & Spa Showcase, Goa", year: "2024" },
-  { image: "/images/gallery/exhibition-4.png", caption: "B2B Procurement Fair, Bengaluru", year: "2024" },
-  { image: "/images/gallery/exhibition-5.png", caption: "Heritage Hotels Conclave, Udaipur", year: "2024" },
+  { image: "/images/gallery/exhibition-1.jpg", caption: "Hospitality India Expo, New Delhi", year: "2025" },
+  { image: "/images/gallery/exhibition-2.jpg", caption: "HotelTech Summit, Mumbai", year: "2025" },
+  { image: "/images/gallery/exhibition-3.jpg", caption: "Resort & Spa Showcase, Goa", year: "2024" },
+  { image: "/images/gallery/exhibition-4.jpg", caption: "B2B Procurement Fair, Bengaluru", year: "2024" },
+  { image: "/images/gallery/exhibition-5.jpg", caption: "Heritage Hotels Conclave, Udaipur", year: "2024" },
 ];
 
 export type Certification = {
@@ -380,7 +380,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Sustainability",
     excerpt:
       "Refillable dispensers, low-VOC finishes and lifecycle costing are no longer optional. Here is what to specify in your next tender.",
-    image: "/images/blog/blog-1.png",
+    image: "/images/blog/blog-1.jpg",
     date: "Jan 2026",
     readTime: "6 min",
   },
@@ -390,7 +390,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Design",
     excerpt:
       "Eye-tracking studies show warm-metal accents increase perceived room value by 18%. A case for rethinking your hardware palette.",
-    image: "/images/blog/blog-2.png",
+    image: "/images/blog/blog-2.jpg",
     date: "Dec 2025",
     readTime: "4 min",
   },
@@ -400,7 +400,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Trends",
     excerpt:
       "From in-room smart safes to weighted curtain hooks, the details that quietly move your TripAdvisor score.",
-    image: "/images/blog/blog-3.png",
+    image: "/images/blog/blog-3.jpg",
     date: "Dec 2025",
     readTime: "5 min",
   },

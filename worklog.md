@@ -661,3 +661,37 @@ Stage Summary:
 - Professional motion: scroll progress indicator, magnetic buttons available
 - Lint clean, all routes return 200
 - VLM rated the hero section 8/10 for premium hospitality design
+
+---
+Task ID: REAL-IMAGES
+Agent: main (orchestrator)
+Task: Replace ALL AI-generated images with real photos extracted from the uploaded catalogue PDFs.
+
+Work Log:
+- Extracted 2793 images from "Laxree Master Catalogue New.pdf" using pdfimages
+- Extracted images from "Roofing Catalog (1).pdf"
+- Rendered all 53 master catalogue pages + all roofing pages at 150 DPI using pdftoppm
+- Identified product/category on each page using VLM (pages 1-30 identified before rate limit)
+- Extracted real product photos for ALL 9 products:
+  - mini-bar (page 4), kettle-set (page 6), safe-box (page 8), door-lock (page 10)
+  - luggage-trolley (page 20), bath-tub (page 14), hair-dryer (page 15)
+  - magnifying-mirror (page 15), hand-dryer (page 18)
+- Extracted real category cover images for ALL 5 categories:
+  - amenities (page 4), furniture (page 24), linen (page 12), roofing (roofing catalogue page 1), dome (page 50)
+- Extracted real about/factory image (page 2 - About Us)
+- Extracted 5 gallery images from furniture/showroom pages (pages 27, 29, 30, 26, 24)
+- Extracted 3 blog cover images from category pages (pages 4, 14, 8)
+- Processed all images with sharp: resized to appropriate dimensions, charcoal backgrounds for products, JPEG quality 88-92
+- Updated ALL image references in site-data.ts from .png to .jpg
+- Updated ALL image references in component files (about-us.tsx, catalogue/page.tsx, career/page.tsx, about-us/page.tsx) from .png to .jpg
+- Removed all old .png files
+
+Stage Summary:
+- 25 real .jpg images from catalogue PDFs, 0 AI-generated .png images remaining
+- Categories: 5/5 real (amenities, furniture, linen, roofing, dome)
+- Products: 9/9 real (mini-bar, kettle-set, safe-box, door-lock, luggage-trolley, bath-tub, hair-dryer, magnifying-mirror, hand-dryer)
+- About: 1/1 real (factory/showroom from About Us page)
+- Gallery: 5/5 real (furniture showroom photos)
+- Blog: 3/3 real (product category photos)
+- Lint clean, all 17 routes return 200
+- Browser verification: 20/23 images loaded are .jpg (real), 0 .png (AI)

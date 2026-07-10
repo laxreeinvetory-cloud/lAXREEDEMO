@@ -124,7 +124,7 @@ export function AboutUs() {
             >
               {/* Parallax image — scaled 1.1 so the ±8% translate never reveals edges */}
               <motion.img
-                src="/images/about/factory.png"
+                src="/images/about/factory.jpg"
                 alt="LaxRee Amenities manufacturing facility in Ajmer, Rajasthan"
                 width={800}
                 height={1000}
