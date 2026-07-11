@@ -335,9 +335,7 @@ export function Hero() {
               />
 
               {show3D ? (
-                <TiltStage>
-                  <HeroStage />
-                </TiltStage>
+                <HeroStage />
               ) : (
                 <HeroFallback />
               )}
