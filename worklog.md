@@ -729,3 +729,35 @@ Stage Summary:
 - Categories, gallery, blog, about all use product photos (not page screenshots)
 - Lint clean, all 17 routes return 200
 - 0 AI-generated images, 0 catalogue page crops with text
+
+---
+Task ID: IMAGE-FIX-FINAL
+Agent: main (orchestrator)
+Task: Fix all product images that were page crops with text — replace with clean embedded product photos from the catalogue PDF.
+
+Work Log:
+- Audited all 9 product images: mini-bar, magnifying-mirror, hand-dryer were PAGE_CROP (had text/borders)
+- Used pdfimages to extract individual embedded images from specific catalogue pages:
+  - Page 4 (minibar): extracted p4-006 (839x1194) — LaxRee cover image, CLEAN
+  - Page 5 (minibar models): extracted p5-027 (636x454) — mini fridge product photo, CLEAN
+  - Page 10 (door lock): extracted p10-044 (127x178) — door lock product photo, CLEAN
+  - Page 15 (hair dryer + mirror): extracted p15-083 (839x391) — hair dryer, CLEAN; p15-006 (194x207) — magnifying mirror, CLEAN
+  - Page 18 (hand dryer): extracted p18-080 (207x181) — hand dryer, CLEAN
+- Processed all 5 fixed products with sharp: 1024x1024, charcoal background, sharpened, brightness/saturation enhanced, JPEG quality 92
+- Fixed category images:
+  - amenities → mini-bar (clean product photo)
+  - furniture → safe-box (clean product photo)
+  - linen → bath-tub (clean product photo)
+  - roofing → tight crop from roofing catalogue page 1 top 35% (product photo area only)
+  - dome → tight crop from master catalogue page 52 top 40% (Space Pod product area only)
+- Fixed gallery images (5): all use clean product photos
+- Fixed blog images (3): all use clean product photos
+- Fixed about/factory: uses mini-bar product photo
+- All images verified loading correctly in browser (1024px width)
+
+Stage Summary:
+- ALL 9 product images are now clean embedded photos from the catalogue (extracted via pdfimages, not page renders)
+- ZERO page crops with text/borders
+- Category images use clean product photos for amenities/furniture/linen, and tight product-area crops for roofing/dome
+- Gallery, blog, and about images all use clean product photos
+- Lint clean, all routes return 200
