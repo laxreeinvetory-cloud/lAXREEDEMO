@@ -695,3 +695,37 @@ Stage Summary:
 - Blog: 3/3 real (product category photos)
 - Lint clean, all 17 routes return 200
 - Browser verification: 20/23 images loaded are .jpg (real), 0 .png (AI)
+
+---
+Task ID: IMAGE-AUDIT-FIX
+Agent: main (orchestrator)
+Task: Full image audit — fix all images that were catalogue page crops with text/borders. Replace with clean product photos only.
+
+Work Log:
+- Identified the problem: previous images were crops from catalogue PAGE RENDERS which included text, model numbers, borders, and layout elements — looked unprofessional ("copy-paste catalogue page")
+- Re-extracted all 2793 embedded images from master catalogue PDF using pdfimages
+- For products WITH clean extracted photos (no text/borders), used the embedded image directly:
+  - kettle-set → img-190 (829×928, clean product photo)
+  - luggage-trolley → img-1012 (839×1194, clean product photo)
+  - safe-box → img-309 (1222×1690, clean product photo)
+  - bath-tub → img-2772 (673×745, clean product photo)
+- For products WITHOUT clean extracts, rendered pages at 300 DPI and cropped ONLY the top 32% (product photo area, before any text/model numbers):
+  - mini-bar → page 5, top 32% crop
+  - door-lock → page 10, top 32% crop
+  - hair-dryer → page 15, top-left 47% × 32% crop
+  - magnifying-mirror → page 15, top-right 47% × 32% crop
+  - hand-dryer → page 18, top-right 47% × 32% crop
+- For CATEGORIES: replaced page screenshots with clean product photos (amenities→minibar, furniture→safe, linen→bathtub, roofing→trolley, dome→kettle)
+- For GALLERY: replaced page screenshots with product photos (5 exhibition images now use clean product photos)
+- For BLOG: replaced page screenshots with product photos (3 blog covers)
+- For ABOUT: replaced page screenshot with product photo
+- Removed unused images: washroom.jpg, lobby.jpg
+- All images processed with sharp: 1024×1024 contain fit, charcoal background, sharpened, brightness/saturation enhanced, JPEG quality 92
+
+Stage Summary:
+- ALL 25 images are now clean product photos from the catalogue — ZERO page screenshots with text/borders
+- 4 products use clean embedded extracts (no text at all)
+- 5 products use tight crops of product photo area only (top 32% of page, no text)
+- Categories, gallery, blog, about all use product photos (not page screenshots)
+- Lint clean, all 17 routes return 200
+- 0 AI-generated images, 0 catalogue page crops with text
