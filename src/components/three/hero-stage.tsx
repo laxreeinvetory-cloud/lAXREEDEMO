@@ -3,8 +3,10 @@
 /**
  * HeroStage — the single "wow" 3D moment of the LaxRee Amenities site.
  *
- * Uses a real 3D minibar model embedded from Sketchfab:
- *   https://sketchfab.com/3d-models/bar-fridge-low-poly-af72eb035ed44acab49f3f6b9d28ed29
+ * Uses a realistic 3D hotel room model embedded from Sketchfab:
+ *   "Minimalistic Modern Bedroom" — a premium furnished room with bed,
+ *   furniture, and amenities that showcases the hospitality context.
+ *   https://sketchfab.com/3d-models/minimalistic-modern-bedroom-4f3db3cb57bd4bce886f7b9a13273a2f
  *
  * The embed is wrapped in a charcoal-themed stage with:
  *  - CSS brass particles floating upward (depth & atmosphere)
@@ -28,10 +30,10 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
    Constants
    ───────────────────────────────────────────────────────────── */
 
-const SKETCHFAB_MODEL_ID = "af72eb035ed44acab49f3f6b9d28ed29";
+const SKETCHFAB_MODEL_ID = "4f3db3cb57bd4bce886f7b9a13273a2f";
 
-// Sketchfab embed URL with minimal UI — just the 3D model auto-rotating
-const SKETCHFAB_EMBED = `https://sketchfab.com/models/${SKETCHFAB_MODEL_ID}/embed?autostart=1&autospin=0.4&ui_infos=0&ui_watermark=0&ui_controls=0&ui_hint=0&ui_annotations=0&ui_stop=0&ui_help=0&ui_settings=0&ui_inspector=0&ui_snapshots=0&ui_ar=0&ui_vr=0&ui_fullscreen=0&ui_related=0`;
+// Sketchfab embed URL with minimal UI — just the 3D hotel room auto-rotating
+const SKETCHFAB_EMBED = `https://sketchfab.com/models/${SKETCHFAB_MODEL_ID}/embed?autostart=1&autospin=0.3&ui_infos=0&ui_watermark=0&ui_controls=0&ui_hint=0&ui_annotations=0&ui_stop=0&ui_help=0&ui_settings=0&ui_inspector=0&ui_snapshots=0&ui_ar=0&ui_vr=0&ui_fullscreen=0&ui_related=0`;
 
 const BRASS = "#c6a15b";
 const CHARCOAL = "#12100d";
@@ -204,7 +206,7 @@ function SketchfabEmbed() {
 
       {/* Sketchfab iframe */}
       <iframe
-        title="LaxRee Minibar 3D Model"
+        title="LaxRee Hotel Room 3D Model"
         src={SKETCHFAB_EMBED}
         onLoad={() => setLoaded(true)}
         allow="autoplay; fullscreen; xr-spatial-tracking"
