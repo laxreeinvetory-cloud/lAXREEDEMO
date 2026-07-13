@@ -30,8 +30,11 @@ const HeroStage = dynamic(
 
 function HeroStageSkeleton() {
   return (
-    <div className="w-full h-full grid place-items-center">
-      <div className="w-40 h-40 rounded-full border border-brass/30 border-t-brass animate-spin" />
+    <div className="w-full h-full grid place-items-center rounded-[24px] border border-brass/15 bg-charcoal/40">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 rounded-full border-2 border-brass/20 border-t-brass animate-spin" />
+        <span className="data-label text-[10px] text-sand/60">Loading…</span>
+      </div>
     </div>
   );
 }
@@ -169,8 +172,12 @@ export function Hero() {
     () => false // server snapshot
   );
 
-  // Decide whether to render the live 3D stage or the static fallback.
-  const show3D = mounted && !reduced && !isMobile;
+  // Decide whether to render the live 3D stage, the static fallback,
+  // or a skeleton (during SSR / before hydration).
+  // show3D = null → skeleton (loading), true → 3D, false → static fallback
+  const show3D: boolean | null = !mounted
+    ? null // SSR / pre-hydration → skeleton
+    : !reduced && !isMobile;
 
   return (
     <section
@@ -334,7 +341,9 @@ export function Hero() {
                 }}
               />
 
-              {show3D ? (
+              {show3D === null ? (
+                <HeroStageSkeleton />
+              ) : show3D ? (
                 <HeroStage />
               ) : (
                 <HeroFallback />
