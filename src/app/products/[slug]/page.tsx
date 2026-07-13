@@ -1,28 +1,24 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import {
   CATEGORIES,
   CATALOGUE_CATEGORIES,
-  type CatalogueProduct,
 } from "@/lib/laxree/site-data";
 import {
   PageHero,
   SectionHeading,
   PageCTA,
   FadeIn,
-  GlassCard,
 } from "@/components/site/page-primitives";
 
 /* ─────────────────────────────────────────────────────────────
    Pre-generate the category slugs at build time.
    ───────────────────────────────────────────────────────────── */
 export function generateStaticParams() {
-  // Generate params for all catalogue categories + all CATEGORIES slugs
   const slugs = new Set<string>();
   CATEGORIES.forEach((c) => slugs.add(c.slug));
-  CATALOGUE_CATEGORIES.forEach((c) => slugs.add(c.slug));
   return Array.from(slugs).map((slug) => ({ slug }));
 }
 
@@ -41,60 +37,58 @@ export async function generateMetadata({
 }
 
 /* ─────────────────────────────────────────────────────────────
-   ProductCard — individual product with image + specs
+   ItemTypeCard — card for each item type (Minibar, Kettle, etc.)
+   Links to /products/[category]/[itemSlug]
    ───────────────────────────────────────────────────────────── */
-function ProductCard({ product, index }: { product: CatalogueProduct; index: number }) {
+function ItemTypeCard({
+  item,
+  index,
+}: {
+  item: (typeof CATALOGUE_CATEGORIES)[0];
+  index: number;
+}) {
   return (
-    <FadeIn delay={index * 0.04}>
-      <GlassCard
-        theme="ivory"
-        radius="20px"
-        className="flex h-full flex-col overflow-hidden"
+    <FadeIn delay={index * 0.06}>
+      <Link
+        href={`/products/amenities/${item.slug}`}
+        className="group glass-on-ivory rounded-24px overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full"
       >
         {/* Product image */}
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
           <img
-            src={product.image}
-            alt={`${product.name} — ${product.model}`}
+            src={item.products[0]?.image}
+            alt={item.name}
             loading="lazy"
-            className="h-full w-full object-contain"
+            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
           />
-          {/* Model number badge */}
-          <span className="absolute left-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">
-            {product.model}
+          {/* Model count badge */}
+          <span className="absolute right-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">
+            {item.products.length} Models
           </span>
         </div>
 
-        {/* Product info */}
+        {/* Body */}
         <div className="flex flex-1 flex-col p-5">
-          <h3 className="font-display text-[18px] font-medium text-ink leading-tight">
-            {product.name}
+          <h3 className="font-display text-[20px] font-medium text-ink leading-tight">
+            {item.name}
           </h3>
-          <p className="mt-2 font-body text-[13px] leading-relaxed text-ink-muted">
-            {product.description}
+          <p className="mt-2 font-body text-[13px] leading-relaxed text-ink-muted line-clamp-2">
+            {item.products[0]?.description}
           </p>
-
-          {/* Specifications */}
-          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2">
-            {product.specs.map((spec) => (
-              <div key={spec.label} className="flex flex-col">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-ink-muted/60">
-                  {spec.label}
-                </span>
-                <span className="font-body text-[12px] font-medium text-ink">
-                  {spec.value}
-                </span>
-              </div>
-            ))}
-          </div>
+          <span className="mt-auto pt-4 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider text-brass">
+            View All Models
+            <ArrowRight size={14} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </span>
         </div>
-      </GlassCard>
+      </Link>
     </FadeIn>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────
    Category page — server component
+   For "amenities": shows item type cards (Minibar, Kettle, etc.)
+   For other categories: shows coming soon
    ───────────────────────────────────────────────────────────── */
 export default async function CategoryPage({
   params,
@@ -105,18 +99,8 @@ export default async function CategoryPage({
   const category = CATEGORIES.find((c) => c.slug === slug);
   if (!category) notFound();
 
-  // For "amenities" category, show ALL products from all catalogue categories
-  // For other categories (furniture, linen, roofing, dome), show coming soon
-  let products: CatalogueProduct[] = [];
-  if (slug === "amenities") {
-    // Flatten all catalogue categories' products
-    products = CATALOGUE_CATEGORIES.flatMap((c) => c.products);
-  } else {
-    const catalogueCategory = CATALOGUE_CATEGORIES.find((c) => c.slug === slug);
-    products = catalogueCategory?.products ?? [];
-  }
-
   const otherCategories = CATEGORIES.filter((c) => c.slug !== slug);
+  const hasProducts = slug === "amenities" && CATALOGUE_CATEGORIES.length > 0;
 
   return (
     <>
@@ -129,26 +113,26 @@ export default async function CategoryPage({
         ]}
         eyebrow={category.name.toUpperCase()}
         title={category.name}
-        subtitle={`${category.blurb} — ${products.length > 0 ? `${products.length} products` : `${category.count} products`} available with full specifications.`}
+        subtitle={`${category.blurb} — ${category.count} products available with full specifications.`}
       >
-        {products.length > 0 && (
+        {hasProducts && (
           <div className="flex flex-wrap items-center gap-6 mt-2">
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-brass" />
               <span className="data-label text-[11px] text-sand">
-                {products.length} Models Available
+                {CATALOGUE_CATEGORIES.length} Item Types
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="h-4 w-4 text-brass" />
+              <span className="data-label text-[11px] text-sand">
+                {CATALOGUE_CATEGORIES.reduce((sum, c) => sum + c.products.length, 0)} Models
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-brass" />
               <span className="data-label text-[11px] text-sand">
                 Full Specifications
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="h-4 w-4 text-brass" />
-              <span className="data-label text-[11px] text-sand">
-                OEM Manufactured
               </span>
             </div>
           </div>
@@ -173,8 +157,8 @@ export default async function CategoryPage({
                 className="mt-2 font-display text-ivory"
                 style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)", fontWeight: 500 }}
               >
-                {products.length > 0
-                  ? `${products.length} Products with Full Specs`
+                {hasProducts
+                  ? `${CATALOGUE_CATEGORIES.length} Item Types, ${CATALOGUE_CATEGORIES.reduce((sum, c) => sum + c.products.length, 0)} Models`
                   : `${category.count} Products Available`}
               </h2>
             </div>
@@ -182,20 +166,20 @@ export default async function CategoryPage({
         </div>
       </section>
 
-      {/* ── Products grid ── */}
-      {products.length > 0 ? (
+      {/* ── Item types grid (amenities) ── */}
+      {hasProducts ? (
         <section className="section section-ivory py-20 md:py-28">
           <div className="container-laxree">
             <SectionHeading
               theme="ivory"
-              eyebrow="PRODUCT CATALOGUE"
-              title={`${category.name} Collection`}
-              body={`All ${products.length} products in the ${category.name} category, with model numbers, specifications, and real catalogue images.`}
+              eyebrow="ITEM TYPES"
+              title={`Browse ${category.name} by Type`}
+              body={`Click any item type below to see all available models with full specifications, images, and model numbers.`}
             />
 
             <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((prod, i) => (
-                <ProductCard key={prod.model} product={prod} index={i} />
+              {CATALOGUE_CATEGORIES.map((item, i) => (
+                <ItemTypeCard key={item.slug} item={item} index={i} />
               ))}
             </div>
           </div>
