@@ -43,7 +43,7 @@ export function OwnerMessage() {
               <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-brass/40 bg-charcoal">
                 <img
                   src="/images/owner-cropped.jpg"
-                  alt="Rajesh Sharma — Founder & Managing Director, LaxRee Amenities"
+                  alt="Ashish Agarwal — Founder & Managing Director, LaxRee Amenities"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
@@ -93,7 +93,7 @@ export function OwnerMessage() {
                   className="font-display text-ivory"
                   style={{ fontSize: "1.25rem", fontWeight: 500 }}
                 >
-                  Rajesh Sharma
+                  Ashish Agarwal
                 </div>
                 <div className="data-label text-[11px] text-brass mt-1">
                   Founder &amp; Managing Director
