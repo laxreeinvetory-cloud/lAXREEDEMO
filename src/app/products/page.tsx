@@ -1,340 +1,175 @@
 "use client";
 
-/**
- * Products overview page — LaxRee Amenities
- * Task ID: P-2
- *
- * A "corridor of lit rooms" walk through the full LaxRee product range:
- *   1. PageHero (charcoal) — breadcrumbs + headline
- *   2. Category grid (ivory) — 5 large image cards, one per category
- *   3. All-products grid (charcoal) — filterable by sub-category
- *   4. Room solutions teaser (ivory) — first 3 room packages
- *   5. PageCTA (emerald)
- *
- * This page is a client component because Section 3 implements a
- * client-side category filter via useState.
- */
-
 import { useState } from "react";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BedDouble,
-  ShowerHead,
-  ConciergeBell,
-  Armchair,
-  Layers,
-  Warehouse,
-  Globe,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import {
   PageHero,
   SectionHeading,
   PageCTA,
   FadeIn,
-  GlassCard,
 } from "@/components/site/page-primitives";
-import { CATEGORIES, ALL_PRODUCTS, ROOM_SOLUTIONS } from "@/lib/laxree/site-data";
+import {
+  CATEGORIES,
+  CATALOGUE_CATEGORIES,
+  type CatalogueCategory,
+} from "@/lib/laxree/site-data";
 
 /* ─────────────────────────────────────────────────────────────
-   Filter chips — "All" + the three amenity sub-categories that
-   actually appear in ALL_PRODUCTS (Amenities / Washroom / Lobby).
+   CategoryCard — large image card linking to category page
    ───────────────────────────────────────────────────────────── */
-const FILTERS = ["All", "Amenities", "Washroom", "Lobby"] as const;
-type Filter = (typeof FILTERS)[number];
+function CategoryCard({
+  category,
+  productCount,
+  index,
+}: {
+  category: (typeof CATEGORIES)[0];
+  productCount: number;
+  index: number;
+}) {
+  return (
+    <FadeIn delay={index * 0.06}>
+      <Link
+        href={`/products/${category.slug}`}
+        className="group relative block h-full w-full overflow-hidden rounded-24px border border-ink/0 transition-colors duration-500 hover:border-brass/40"
+      >
+        <div className="relative aspect-[4/3] w-full overflow-hidden">
+          <img
+            src={category.image}
+            alt={category.name}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-transparent" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 p-5">
+          <h3
+            className="font-display text-ivory leading-tight"
+            style={{ fontSize: "24px" }}
+          >
+            {category.name}
+          </h3>
+          <p className="mt-1 font-mono text-[13px] tracking-wide text-brass">
+            {productCount} Products
+          </p>
+          <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-sand opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            Explore <ArrowRight size={12} strokeWidth={1.5} />
+          </span>
+        </div>
+      </Link>
+    </FadeIn>
+  );
+}
 
-/* Room-solution icon lookup — same map as the homepage explorer. */
-const ICONS: Record<string, LucideIcon> = {
-  BedDouble,
-  ShowerHead,
-  ConciergeBell,
-  Armchair,
-  Layers,
-  Warehouse,
-  Globe,
-};
-
+/* ─────────────────────────────────────────────────────────────
+   Products overview page
+   ───────────────────────────────────────────────────────────── */
 export default function ProductsPage() {
-  const [activeFilter, setActiveFilter] = useState<Filter>("All");
-
-  const filteredProducts =
-    activeFilter === "All"
-      ? ALL_PRODUCTS
-      : ALL_PRODUCTS.filter((p) => p.category === activeFilter);
-
   return (
     <>
-      {/* ═══════════════════════════════════════════════════════════
-          SECTION 1 — PageHero (charcoal)
-          ═══════════════════════════════════════════════════════════ */}
+      {/* ── PageHero ── */}
       <PageHero
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Products" }]}
-        eyebrow="What We Supply"
+        eyebrow="WHAT WE SUPPLY"
         title="700+ SKUs. Five Categories. One Standard."
-        subtitle="From minibars to geodesic domes — manufactured and supplied pan-India. Explore our full hospitality product range."
+        subtitle="From minibars to geodesic domes — manufactured and supplied pan-India. Explore our full hospitality product range with detailed specifications."
       />
 
-      {/* ═══════════════════════════════════════════════════════════
-          SECTION 2 — Category grid (ivory)
-          5 large image cards. Each links to /products/{slug}.
-          ═══════════════════════════════════════════════════════════ */}
+      {/* ── Category grid ── */}
       <section className="section section-ivory py-20 md:py-28">
         <div className="container-laxree">
           <SectionHeading
             theme="ivory"
-            eyebrow="Categories"
+            eyebrow="CATEGORIES"
             title="Explore by Category"
-            body="Five focused product lines, each manufactured in-house and shipped pan-India. Tap any card to dive into the collection."
+            body="Click any category to see all products with full specifications, model numbers, and images from our catalogue."
           />
 
-          <div className="mt-12 md:mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CATEGORIES.map((cat, i) => (
-              <FadeIn key={cat.slug} delay={i * 0.06}>
-                <Link
-                  href={`/products/${cat.slug}`}
-                  aria-label={`Browse the ${cat.name} category`}
-                  className="group block relative overflow-hidden rounded-[24px] border border-transparent transition-colors duration-500 hover:border-brass/40 focus-visible:border-brass"
-                  style={{ minHeight: 320 }}
-                >
-                  {/* Background image — scales 1.04 on hover */}
-                  <img
-                    src={cat.image}
-                    alt={cat.name}
-                    loading="lazy"
-                    width={640}
-                    height={480}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  />
-                  {/* Charcoal gradient overlay */}
-                  <div
-                    aria-hidden
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(18,16,13,0.92) 0%, rgba(18,16,13,0.55) 45%, rgba(18,16,13,0.25) 100%)",
-                    }}
-                  />
-                  {/* Bottom-left text block */}
-                  <div className="relative p-6 md:p-7 flex flex-col justify-end h-full min-h-[320px]">
-                    <h3
-                      className="font-display text-ivory"
-                      style={{ fontSize: 24, fontWeight: 500, lineHeight: 1.1 }}
-                    >
-                      {cat.name}
-                    </h3>
-                    <div
-                      className="font-mono text-brass mt-1.5"
-                      style={{
-                        fontSize: 13,
-                        letterSpacing: "0.12em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {cat.count} Products
-                    </div>
-                    <p
-                      className="text-sand mt-2"
-                      style={{ fontSize: 13, lineHeight: 1.5 }}
-                    >
-                      {cat.blurb}
-                    </p>
-                    {/* Brass arrow that slides in on hover */}
-                    <div
-                      className="mt-4 inline-flex items-center gap-1.5 font-mono text-brass uppercase opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
-                      style={{ fontSize: 11, letterSpacing: "0.15em" }}
-                    >
-                      Explore <ArrowRight className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                </Link>
-              </FadeIn>
-            ))}
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {CATEGORIES.map((cat, i) => {
+              const catData = CATALOGUE_CATEGORIES.find(
+                (c: CatalogueCategory) => c.slug === cat.slug
+              );
+              const productCount = catData?.products.length ?? cat.count;
+              return (
+                <CategoryCard
+                  key={cat.slug}
+                  category={cat}
+                  productCount={productCount}
+                  index={i}
+                />
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          SECTION 3 — All products grid (charcoal)
-          Client-side filter by sub-category. Glass-on-charcoal cards.
-          ═══════════════════════════════════════════════════════════ */}
+      {/* ── All products preview ── */}
       <section className="section section-charcoal py-20 md:py-28">
         <div className="container-laxree">
           <SectionHeading
             theme="charcoal"
-            eyebrow="Product Catalogue"
-            title="Our Latest Offerings"
-            body="A curated cross-section of our 700+ SKU range. Filter by room to find what you need — every item is manufactured, QC'd and shipped from Ajmer."
+            eyebrow="PRODUCT CATALOGUE"
+            title="Browse All Products"
+            body="Each category contains multiple products with detailed specifications. Click a product to view full details."
           />
 
-          {/* Filter chips */}
-          <div
-            className="mt-8 flex flex-wrap items-center gap-3"
-            role="tablist"
-            aria-label="Filter products by category"
-          >
-            <span
-              className="font-mono text-sand/60 uppercase mr-1"
-              style={{ fontSize: 11, letterSpacing: "0.15em" }}
-            >
-              Filter:
-            </span>
-            {FILTERS.map((f) => {
-              const isActive = activeFilter === f;
-              return (
-                <button
-                  key={f}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => setActiveFilter(f)}
-                  className={`pill text-[12px] px-5 py-2.5 cursor-pointer transition-colors duration-300 ${
-                    isActive ? "pill-brass" : "pill-ghost-brass"
-                  }`}
-                >
-                  {f}
-                  {isActive && (
-                    <span className="ml-2 font-mono text-[10px] opacity-70">
-                      {f === "All"
-                        ? ALL_PRODUCTS.length
-                        : ALL_PRODUCTS.filter((p) => p.category === f).length}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Product cards */}
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((p, i) => (
-              <FadeIn key={p.slug} delay={(i % 3) * 0.05}>
-                <GlassCard
-                  theme="charcoal"
-                  radius="20px"
-                  className="overflow-hidden h-full flex flex-col group/card"
-                >
-                  {/* Image — charcoal bg, object-cover */}
-                  <div className="relative aspect-[4/3] bg-charcoal overflow-hidden">
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-[1.04]"
-                    />
-                  </div>
-                  {/* Body */}
-                  <div className="p-5 flex-1 flex flex-col">
-                    <div
-                      className="font-mono text-brass uppercase"
-                      style={{ fontSize: 11, letterSpacing: "0.15em" }}
-                    >
-                      {p.category}
-                    </div>
+          <div className="mt-12 grid grid-cols-1 gap-8">
+            {CATALOGUE_CATEGORIES.map((cat, ci) => (
+              <FadeIn key={cat.slug} delay={ci * 0.05}>
+                <div>
+                  <div className="mb-5 flex items-center justify-between">
                     <h3
-                      className="font-display text-ivory mt-2"
-                      style={{ fontSize: 18, fontWeight: 500, lineHeight: 1.2 }}
+                      className="font-display text-ivory"
+                      style={{ fontSize: "1.75rem", fontWeight: 500 }}
                     >
-                      {p.name}
+                      {cat.name}
                     </h3>
-                    <p
-                      className="text-sand/80 mt-2 flex-1"
-                      style={{ fontSize: 13, lineHeight: 1.5 }}
-                    >
-                      {p.description}
-                    </p>
                     <Link
-                      href="/products/amenities"
-                      className="mt-4 inline-flex items-center gap-1.5 font-mono text-brass uppercase transition-colors hover:text-brass-light"
-                      style={{ fontSize: 12, letterSpacing: "0.1em" }}
+                      href={`/products/${cat.slug}`}
+                      className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider text-brass hover:gap-2.5 transition-all"
                     >
-                      View Details <ArrowRight className="h-3.5 w-3.5" />
+                      View All {cat.name} <ArrowRight size={14} strokeWidth={1.5} />
                     </Link>
                   </div>
-                </GlassCard>
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                    {cat.products.slice(0, 6).map((prod, pi) => (
+                      <Link
+                        key={prod.model}
+                        href={`/products/${cat.slug}`}
+                        className="group glass-on-charcoal rounded-20px overflow-hidden transition-all duration-300 hover:border-brass/40"
+                      >
+                        <div className="aspect-square w-full overflow-hidden bg-charcoal">
+                          <img
+                            src={prod.image}
+                            alt={`${prod.name} — ${prod.model}`}
+                            loading="lazy"
+                            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                        <div className="p-3">
+                          <p className="font-mono text-[10px] text-brass">
+                            {prod.model}
+                          </p>
+                          <p className="mt-0.5 font-body text-[11px] text-ivory leading-tight line-clamp-2">
+                            {prod.name}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </FadeIn>
             ))}
           </div>
-
-          {/* Empty state — defensive, shouldn't fire with current data */}
-          {filteredProducts.length === 0 && (
-            <div className="mt-10 glass-on-charcoal rounded-[20px] p-10 text-center">
-              <p className="font-mono text-sand text-sm uppercase tracking-wider">
-                No products in this filter yet.
-              </p>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          SECTION 4 — Room solutions teaser (ivory)
-          3-column preview of the first 3 ROOM_SOLUTIONS.
-          ═══════════════════════════════════════════════════════════ */}
-      <section className="section section-ivory py-20 md:py-28">
-        <div className="container-laxree">
-          <SectionHeading
-            theme="ivory"
-            eyebrow="By Room"
-            title="Solutions for Every Space"
-            body="Complete procurement packages organised by where they live in the property — from the guest room to the lobby entrance."
-          />
-
-          <div className="mt-12 md:mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ROOM_SOLUTIONS.slice(0, 3).map((sol, i) => {
-              const Icon = ICONS[sol.icon] ?? ConciergeBell;
-              return (
-                <FadeIn key={sol.slug} delay={i * 0.06}>
-                  <div className="glass-on-ivory rounded-[20px] p-6 md:p-7 h-full flex flex-col group">
-                    {/* Icon in a brass-tinted square */}
-                    <div className="w-12 h-12 rounded-xl bg-brass/12 border border-brass/25 grid place-items-center">
-                      <Icon
-                        className="h-5 w-5 text-brass"
-                        strokeWidth={1.75}
-                        aria-hidden
-                      />
-                    </div>
-
-                    <h3
-                      className="font-display text-ink mt-5"
-                      style={{ fontSize: 22, fontWeight: 500, lineHeight: 1.1 }}
-                    >
-                      {sol.name}
-                    </h3>
-                    <p
-                      className="text-ink-muted mt-2 flex-1"
-                      style={{ fontSize: 14, lineHeight: 1.5 }}
-                    >
-                      {sol.oneLine}
-                    </p>
-
-                    {/* Item count chip */}
-                    <div
-                      className="mt-4 font-mono text-ink-muted uppercase"
-                      style={{ fontSize: 11, letterSpacing: "0.12em" }}
-                    >
-                      {sol.items.length} items included
-                    </div>
-
-                    <Link
-                      href="/products"
-                      className="mt-4 inline-flex items-center gap-1.5 font-mono text-brass uppercase transition-colors hover:text-ink"
-                      style={{ fontSize: 12, letterSpacing: "0.1em" }}
-                    >
-                      Explore <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
-                </FadeIn>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════
-          SECTION 5 — PageCTA (emerald)
-          ═══════════════════════════════════════════════════════════ */}
-      <PageCTA />
+      {/* ── PageCTA ── */}
+      <PageCTA
+        title="Need a custom product?"
+        subtitle="Our factory can manufacture to your specifications."
+      />
     </>
   );
 }
