@@ -39,7 +39,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 /* ─────────────────────────────────────────────────────────────
-   SEO Metadata — comprehensive for search engines + social
+   SEO Metadata
    ───────────────────────────────────────────────────────────── */
 const BASE_URL = "https://laxree.com";
 
@@ -132,52 +132,6 @@ export const viewport: Viewport = {
 };
 
 /* ─────────────────────────────────────────────────────────────
-   JSON-LD Structured Data for SEO
-   ───────────────────────────────────────────────────────────── */
-const jsonLdOrganization = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "LaxRee Amenities",
-  url: BASE_URL,
-  logo: `${BASE_URL}/images/laxree-logo.png`,
-  description:
-    "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. Ajmer's largest hospitality exhibition centre.",
-  foundingDate: "2015",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines",
-    addressLocality: "Ajmer",
-    addressRegion: "Rajasthan",
-    postalCode: "305001",
-    addressCountry: "IN",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+91-92516-83662",
-    contactType: "sales",
-    areaServed: "IN",
-    availableLanguage: ["English", "Hindi"],
-  },
-  sameAs: [
-    "https://facebook.com",
-    "https://linkedin.com",
-    "https://youtube.com",
-  ],
-};
-
-const jsonLdWebsite = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "LaxRee Amenities",
-  url: BASE_URL,
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${BASE_URL}/products?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
-};
-
-/* ─────────────────────────────────────────────────────────────
    Root Layout
    ───────────────────────────────────────────────────────────── */
 export default function RootLayout({
@@ -187,25 +141,42 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Preconnect to external domains for faster resource loading */}
-        <link rel="preconnect" href="https://sketchfab.com" />
-        <link rel="dns-prefetch" href="https://sketchfab.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Structured data for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganization) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebsite) }}
-        />
-      </head>
       <body
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
+        {/* SEO: Preconnect to external domains */}
+        <link rel="preconnect" href="https://sketchfab.com" />
+        <link rel="dns-prefetch" href="https://sketchfab.com" />
+
+        {/* SEO: Structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "LaxRee Amenities",
+              url: BASE_URL,
+              logo: `${BASE_URL}/images/laxree-logo.png`,
+              foundingDate: "2015",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines",
+                addressLocality: "Ajmer",
+                addressRegion: "Rajasthan",
+                postalCode: "305001",
+                addressCountry: "IN",
+              },
+              contactPoint: {
+                "@type": "ContactPoint",
+                telephone: "+91-92516-83662",
+                contactType: "sales",
+                areaServed: "IN",
+              },
+            }),
+          }}
+        />
+
         <EnquiryProvider>
           <SmoothScrollProvider>
             <div className="relative flex min-h-screen flex-col bg-charcoal">
