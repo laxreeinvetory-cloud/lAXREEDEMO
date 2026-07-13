@@ -291,10 +291,9 @@ export type Exhibition = {
 };
 
 export const EXHIBITIONS: Exhibition[] = [
-  { image: "/images/gallery/exhibition-1.jpg", caption: "Aahar International Fair, New Delhi", year: "2025" },
-  { image: "/images/gallery/exhibition-2.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
-  { image: "/images/gallery/exhibition-3.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
-  { image: "/images/gallery/exhibition-4.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
+  { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
+  { image: "/images/gallery/exhibition-2.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
+  { image: "/images/gallery/exhibition-3.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
 ];
 
 export type Certification = {
