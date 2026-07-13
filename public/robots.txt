@@ -1,14 +1,10 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# LaxRee Amenities — Hotel Supplies
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://laxree.com/sitemap.xml
+
+# Crawl delay for server-friendly crawling
+Crawl-delay: 1

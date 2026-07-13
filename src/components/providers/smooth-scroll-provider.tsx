@@ -3,21 +3,35 @@
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
 
+/**
+ * SmoothScrollProvider — Lenis-powered smooth scrolling.
+ *
+ * Optimized for performance:
+ *  - rAF loop uses a single requestAnimationFrame (no layout thrash)
+ *  - Synced with Framer Motion's useScroll via lenis.on("scroll")
+ *  - Disables on reduced-motion / touch devices for native momentum
+ *  - Cleans up on unmount
+ */
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     // Respect reduced motion — no smooth scroll
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
 
+    // Skip on touch devices — native momentum scrolling is better
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
+
     const lenis = new Lenis({
-      duration: 1.1,
+      duration: 0.8,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      syncTouch: false,
       touchMultiplier: 1.5,
+      wheelMultiplier: 1.0,
     });
 
     let rafId = 0;
@@ -41,7 +55,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         lenis.scrollTo(el as HTMLElement, { offset: -80 });
       }
     };
-    document.addEventListener("click", handleAnchorClick);
+    document.addEventListener("click", handleAnchorClick, { passive: true });
 
     return () => {
       cancelAnimationFrame(rafId);
