@@ -2,6 +2,7 @@ import { Hero } from "@/components/site/hero";
 import { TrustMarquee } from "@/components/site/trust-marquee";
 import { CategoryBento } from "@/components/site/category-bento";
 import { AboutUs } from "@/components/site/about-us";
+import { OwnerMessage } from "@/components/site/owner-message";
 import { ProductSpotlight } from "@/components/site/product-spotlight";
 import { CategoryExplorer } from "@/components/site/category-explorer";
 import ClientsTestimonials from "@/components/site/clients-testimonials";
@@ -25,6 +26,9 @@ export default function Home() {
 
       {/* 5. ABOUT US — charcoal split parallax */}
       <AboutUs />
+
+      {/* 5b. OWNER'S MESSAGE — charcoal */}
+      <OwnerMessage />
 
       {/* 6. PRODUCT SPOTLIGHT — ivory coverflow */}
       <ProductSpotlight />
