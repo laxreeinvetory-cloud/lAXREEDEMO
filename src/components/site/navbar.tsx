@@ -16,43 +16,24 @@ import { useEnquiry } from "@/components/providers/enquiry-provider";
 import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
 
 /**
- * LaxRee wordmark logo — text-based.
- * "LaxRee" in Fraunces ivory + a brass diamond, with
- * "AMENITIES" in IBM Plex Mono sand beneath.
+ * LaxRee logo — uses the official LaxRee logo image.
+ * Horizontal logo with gold "LAXREE" text + "Hotel Supplies Redefined" tagline.
  */
 function LaxReeLogo({ compact = false }: { compact?: boolean }) {
   return (
     <Link
       href="/"
       aria-label="LaxRee Amenities — home"
-      className="group flex items-center gap-2.5 select-none"
+      className="group flex items-center select-none"
     >
-      <span
-        aria-hidden
-        className="block w-[6px] h-[6px] rotate-45 bg-brass transition-transform duration-500 group-hover:rotate-[135deg]"
+      <img
+        src="/images/laxree-logo.png"
+        alt="LaxRee Amenities — Hotel Supplies Redefined"
+        width={compact ? 120 : 150}
+        height={compact ? 29 : 36}
+        className="h-auto w-auto transition-opacity duration-300 group-hover:opacity-90"
+        style={{ maxWidth: compact ? 120 : 150 }}
       />
-      <span className="flex flex-col leading-none">
-        <span
-          className="font-display text-ivory"
-          style={{
-            fontSize: compact ? 20 : 24,
-            fontWeight: 600,
-            letterSpacing: "-0.01em",
-          }}
-        >
-          LaxRee
-        </span>
-        <span
-          className="data-label text-sand"
-          style={{
-            fontSize: 9,
-            letterSpacing: "0.3em",
-            marginTop: 2,
-          }}
-        >
-          AMENITIES
-        </span>
-      </span>
     </Link>
   );
 }

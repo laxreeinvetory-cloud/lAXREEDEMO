@@ -48,17 +48,14 @@ export function SiteFooter() {
           {/* Brand column */}
           <div className="flex flex-col gap-5">
             <Link href="/" className="group">
-              <div className="flex items-center gap-2">
-                <span className="font-display text-2xl text-ivory leading-none">
-                  LaxRee
-                </span>
-                <span className="text-brass text-base" aria-hidden="true">
-                  ◆
-                </span>
-              </div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-sand mt-2">
-                Amenities
-              </div>
+              <img
+                src="/images/laxree-logo.png"
+                alt="LaxRee Amenities — Hotel Supplies Redefined"
+                width={160}
+                height={38}
+                className="h-auto w-auto transition-opacity duration-300 group-hover:opacity-90"
+                style={{ maxWidth: 160 }}
+              />
             </Link>
             <p className="font-body text-[13px] leading-relaxed text-sand max-w-xs">
               {SITE.address}
