@@ -148,6 +148,7 @@ function CSSParticles() {
 function SketchfabEmbed() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const [userActivated, setUserActivated] = useState(false);
 
   // Mouse-parallax tilt
   const mouseX = useSpring(0, { stiffness: 150, damping: 20 });
@@ -158,7 +159,7 @@ function SketchfabEmbed() {
     const rect = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x * 6);  // ±6° tilt
+    mouseX.set(x * 6);
     mouseY.set(-y * 6);
   };
 
@@ -189,38 +190,61 @@ function SketchfabEmbed() {
       }}
       className="relative w-full h-full"
     >
-      {/* Loading skeleton */}
-      {!loaded && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div
-              className="h-10 w-10 animate-spin rounded-full border-2 border-brass/30 border-t-brass"
-              aria-hidden
-            />
-            <span className="data-label text-[10px] text-sand">
-              Loading 3D Model…
-            </span>
-          </div>
-        </div>
-      )}
+      {/* Click-to-activate 3D (prevents auto-loading heavy iframe) */}
+      {!userActivated ? (
+        <button
+          type="button"
+          onClick={() => setUserActivated(true)}
+          className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-[20px] border border-brass/20 bg-charcoal/60 transition-colors hover:border-brass/40 hover:bg-charcoal/40"
+        >
+          {/* 3D icon */}
+          <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-brass/40 bg-brass/10">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6A15B" strokeWidth="1.5">
+              <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z" />
+              <path d="M3 7l9 5 9-5" />
+              <path d="M12 22V12" />
+            </svg>
+          </span>
+          <span className="font-display text-ivory text-lg">View 3D Hotel Room</span>
+          <span className="data-label text-[10px] text-brass">Click to load interactive 3D model</span>
+        </button>
+      ) : (
+        <>
+          {/* Loading skeleton */}
+          {!loaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex flex-col items-center gap-4">
+                <div
+                  className="h-10 w-10 animate-spin rounded-full border-2 border-brass/30 border-t-brass"
+                  aria-hidden
+                />
+                <span className="data-label text-[10px] text-sand">
+                  Loading 3D Model…
+                </span>
+              </div>
+            </div>
+          )}
 
-      {/* Sketchfab iframe */}
-      <iframe
-        title="LaxRee Hotel Room 3D Model"
-        src={SKETCHFAB_EMBED}
-        onLoad={() => setLoaded(true)}
-        allow="autoplay; fullscreen; xr-spatial-tracking"
-        allowFullScreen
-        style={{
-          width: "100%",
-          height: "100%",
-          border: "none",
-          borderRadius: "20px",
-          background: CHARCOAL,
-          opacity: loaded ? 1 : 0,
-          transition: "opacity 0.6s ease",
-        }}
-      />
+          {/* Sketchfab iframe — only loads after user clicks */}
+          <iframe
+            title="LaxRee Hotel Room 3D Model"
+            src={SKETCHFAB_EMBED}
+            onLoad={() => setLoaded(true)}
+            allow="autoplay; fullscreen; xr-spatial-tracking"
+            allowFullScreen
+            loading="lazy"
+            style={{
+              width: "100%",
+              height: "100%",
+              border: "none",
+              borderRadius: "20px",
+              background: CHARCOAL,
+              opacity: loaded ? 1 : 0,
+              transition: "opacity 0.6s ease",
+            }}
+          />
+        </>
+      )}
     </motion.div>
   );
 }

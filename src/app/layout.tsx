@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Work_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SiteToaster } from "@/components/ui/site-toaster";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
@@ -189,7 +188,6 @@ export default function RootLayout({
             <SiteToaster />
           </SmoothScrollProvider>
         </EnquiryProvider>
-        <Toaster />
       </body>
     </html>
   );
