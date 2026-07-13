@@ -291,11 +291,11 @@ export type Exhibition = {
 };
 
 export const EXHIBITIONS: Exhibition[] = [
-  { image: "/images/gallery/exhibition-1.jpg", caption: "Hospitality India Expo, New Delhi", year: "2025" },
-  { image: "/images/gallery/exhibition-2.jpg", caption: "HotelTech Summit, Mumbai", year: "2025" },
-  { image: "/images/gallery/exhibition-3.jpg", caption: "Resort & Spa Showcase, Goa", year: "2024" },
-  { image: "/images/gallery/exhibition-4.jpg", caption: "B2B Procurement Fair, Bengaluru", year: "2024" },
-  { image: "/images/gallery/exhibition-5.jpg", caption: "Heritage Hotels Conclave, Udaipur", year: "2024" },
+  { image: "/images/gallery/exhibition-1.jpg", caption: "Aahar International Fair, New Delhi", year: "2025" },
+  { image: "/images/gallery/exhibition-2.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
+  { image: "/images/gallery/exhibition-3.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
+  { image: "/images/gallery/exhibition-4.jpg", caption: "Hospitality Expo, Mumbai", year: "2024" },
+  { image: "/images/gallery/exhibition-5.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
 ];
 
 export type Certification = {
