@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, type PanInfo } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { EXHIBITIONS, type Exhibition } from "@/lib/laxree/site-data";
 import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
 
@@ -12,28 +12,46 @@ import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
  * carousel (section 6) but images-only.
  *
  * - Centered header (eyebrow brass + Fraunces ivory headline + sand body)
- * - 5 exhibition photos in a perspective(1600px) stage
+ * - Exhibition photos in a perspective(1600px) stage
  * - Active slide centered + flat; ±1 neighbors scale 0.82 + rotateY ±25°;
  *   ±2 neighbors hidden (opacity 0) so only 3 are visible at any time.
  * - Framer Motion `drag="x"` swipe with threshold + arrow buttons.
+ * - Auto-advances every 5 seconds (pauses on hover/drag, respects reduced-motion).
  * - Reduced-motion: rotateY is dropped (still layered scale/opacity, but
  *   no 3D rotation); spring transition remains snappy.
  */
 const DRAG_THRESHOLD = 60;
+const AUTO_ADVANCE_MS = 5000;
 
 export default function OurPresence() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const reduced = usePrefersReducedMotion();
   const total = EXHIBITIONS.length;
 
-  const goTo = (i: number) => setActiveIndex(((i % total) + total) % total);
-  const next = () => goTo(activeIndex + 1);
-  const prev = () => goTo(activeIndex - 1);
+  const goTo = useCallback((i: number) => {
+    setActiveIndex(((i % total) + total) % total);
+  }, [total]);
+
+  const next = useCallback(() => {
+    setActiveIndex((prev) => ((prev + 1) % total + total) % total);
+  }, [total]);
+
+  const prev = useCallback(() => {
+    setActiveIndex((p) => ((p - 1) % total + total) % total);
+  }, [total]);
 
   const handleDragEnd = (_event: unknown, info: PanInfo) => {
     if (info.offset.x < -DRAG_THRESHOLD) next();
     else if (info.offset.x > DRAG_THRESHOLD) prev();
   };
+
+  // Auto-advance every 5s, pause on hover/drag/reduced-motion
+  useEffect(() => {
+    if (isPaused || reduced) return;
+    const timer = setInterval(next, AUTO_ADVANCE_MS);
+    return () => clearInterval(timer);
+  }, [isPaused, reduced, next]);
 
   return (
     <section id="presence" className="section section-charcoal py-28 md:py-36">
@@ -55,7 +73,11 @@ export default function OurPresence() {
 
         {/* ── Coverflow stage ────────────────────────────────── */}
         <div className="mt-16">
-          <div className="relative">
+          <div
+            className="relative"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <motion.div
               className="relative mx-auto w-full max-w-[960px] aspect-video cursor-grab active:cursor-grabbing"
               style={{ perspective: "1600px" }}
@@ -63,12 +85,13 @@ export default function OurPresence() {
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.18}
               dragMomentum={false}
+              onDragStart={() => setIsPaused(true)}
               onDragEnd={handleDragEnd}
             >
               {EXHIBITIONS.map((ex: Exhibition, i: number) => {
                 const offset = i - activeIndex;
-                // Shortest signed offset for a 5-item carousel → [-2, 2]
-                const norm = ((offset + total + 2) % total) - 2;
+                // Shortest signed offset for the carousel
+                const norm = ((offset + total + Math.floor(total / 2)) % total) - Math.floor(total / 2);
                 const absNorm = Math.abs(norm);
                 const isActive = norm === 0;
 
@@ -144,6 +167,16 @@ export default function OurPresence() {
               className="absolute right-2 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full glass-on-charcoal flex items-center justify-center text-ivory hover:text-brass hover:border-brass/40 transition-colors"
             >
               <ChevronRight size={22} strokeWidth={1.75} />
+            </button>
+
+            {/* Play/Pause toggle */}
+            <button
+              type="button"
+              onClick={() => setIsPaused((p) => !p)}
+              aria-label={isPaused ? "Play auto-scroll" : "Pause auto-scroll"}
+              className="absolute top-2 right-2 z-40 w-9 h-9 rounded-full glass-on-charcoal flex items-center justify-center text-sand hover:text-brass transition-colors"
+            >
+              {isPaused ? <Play size={14} strokeWidth={2} /> : <Pause size={14} strokeWidth={2} />}
             </button>
           </div>
 
