@@ -64,7 +64,10 @@ export default function CartPage() {
           })),
         }),
       });
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ message: `Server error (${res.status})` }));
+        throw new Error(errorData.message || `Request failed (${res.status})`);
+      }
       const data = await res.json();
       setQuotationResult({
         date: data.date,
@@ -74,8 +77,9 @@ export default function CartPage() {
       });
       setSubmitted(true);
       notify("success", `Quotation ${data.refNo} generated! Sending to sales team...`);
-    } catch {
-      notify("error", "Failed to generate quotation. Please try again.");
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "Failed to generate quotation. Please try again.";
+      notify("error", errorMsg);
     } finally {
       setSubmitting(false);
     }
