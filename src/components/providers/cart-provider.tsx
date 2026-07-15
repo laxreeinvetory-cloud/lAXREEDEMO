@@ -37,24 +37,33 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "laxree-cart";
 const EVENT_NAME = "laxree-cart-change";
+const EMPTY_CART: CartItem[] = [];
 
 /* ─────────────────────────────────────────────────────────────
    External store (localStorage + event-based, no setState in effect)
    ───────────────────────────────────────────────────────────── */
+let cachedCart: CartItem[] = EMPTY_CART;
+let cacheValid = false;
+
 function readCart(): CartItem[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return EMPTY_CART;
+  if (cacheValid) return cachedCart;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    cachedCart = raw ? (JSON.parse(raw) as CartItem[]) : EMPTY_CART;
   } catch {
-    return [];
+    cachedCart = EMPTY_CART;
   }
+  cacheValid = true;
+  return cachedCart;
 }
 
 function writeCart(items: CartItem[]) {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    cachedCart = items;
+    cacheValid = true;
     window.dispatchEvent(new Event(EVENT_NAME));
   } catch {
     // ignore
@@ -72,11 +81,13 @@ function subscribe(callback: () => void) {
 }
 
 function getSnapshot(): CartItem[] {
+  // Invalidate cache so next readCart picks up any external changes
+  cacheValid = false;
   return readCart();
 }
 
 function getServerSnapshot(): CartItem[] {
-  return [];
+  return EMPTY_CART;
 }
 
 /* ─────────────────────────────────────────────────────────────
