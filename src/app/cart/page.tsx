@@ -51,7 +51,6 @@ export default function CartPage() {
     if (submitting || items.length === 0) return;
     setSubmitting(true);
     try {
-      // Step 1: Generate quotation via API
       const res = await fetch("/api/quotation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -70,89 +69,14 @@ export default function CartPage() {
         throw new Error(errorData.message || `Request failed (${res.status})`);
       }
       const data = await res.json();
-
-      // Store quotation result
-      const result = {
+      setQuotationResult({
         date: data.date,
         refNo: data.refNo,
         whatsappUrl: data.whatsappUrl,
         csv: data.csv,
-      };
-      setQuotationResult(result);
+      });
       setSubmitted(true);
-      notify("success", `Quotation ${data.refNo} generated! Downloading files & opening WhatsApp...`);
-
-      // Step 2: Auto-download Excel file
-      try {
-        const excelRes = await fetch("/api/generate-excel", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...form,
-            refNo: data.refNo,
-            date: data.date || "",
-            items: items.map((i) => ({
-              model: i.model,
-              name: i.name,
-              category: i.category,
-              quantity: i.quantity,
-            })),
-          }),
-        });
-        if (excelRes.ok) {
-          const blob = await excelRes.blob();
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = `LaxRee_Quotation_${data.refNo}.xlsx`;
-          link.click();
-          URL.revokeObjectURL(url);
-        }
-      } catch {
-        // Excel download failed — not critical, continue
-      }
-
-      // Step 3: Auto-download PDF (via print)
-      setTimeout(() => {
-        const printWin = window.open("", "_blank");
-        if (printWin) {
-          const html = generateProfessionalQuotationHTML(form, items, data.refNo, data.date || "");
-          printWin.document.write(html);
-          printWin.document.close();
-          setTimeout(() => printWin.print(), 800);
-        }
-      }, 500);
-
-      // Step 4: Open WhatsApp to sales executive with pre-filled message
-      // WhatsApp doesn't support file attachments via URL, so we:
-      // - Open WhatsApp with the quotation details pre-filled
-      // - The user manually attaches the downloaded Excel file
-      setTimeout(() => {
-        // Simple WhatsApp message with instruction to attach file
-        const waMsg = `*New Quotation Request — LaxRee Amenities*
-━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 *Ref:* ${data.refNo}
-📅 *Date:* ${data.date}
-━━━━━━━━━━━━━━━━━━━━━━━━━
-👤 Name: ${form.name}
-📞 Phone: ${form.phone}
-📧 Email: ${form.email || "—"}
-🏨 Hotel: ${form.hotel || "—"}
-💰 Avg Room Rent: ${form.avgRoomRent || "—"}
-⏱ Timeline: ${form.timeline || "—"}
-🏗 Property: ${form.propertyType === "new" ? "New Property" : "Renovation"}
-${form.propertyType === "new" && form.projectStage ? `📊 Stage: ${form.projectStage}` : ""}
-━━━━━━━━━━━━━━━━━━━━━━━━━
-*Selected Products (${items.length} items):*
-${items.map((item, i) => `${i + 1}. ${item.name} (${item.model}) — Qty: ${item.quantity}`).join("\n")}
-━━━━━━━━━━━━━━━━━━━━━━━━━
-Here is my requirement, please share price of above items.
-
-📎 *Note:* Excel & PDF quotation files have been downloaded. Please attach them in this chat.`;
-        const waUrl = `https://wa.me/919251683660?text=${encodeURIComponent(waMsg)}`;
-        window.open(waUrl, "_blank");
-      }, 1500);
-
+      notify("success", `Quotation ${data.refNo} generated successfully!`);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Failed to generate quotation. Please try again.";
       notify("error", errorMsg);
@@ -262,21 +186,12 @@ Here is my requirement, please share price of above items.
                   </div>
                 </div>
 
-                <p className="font-body text-[14px] leading-relaxed text-ink-muted mb-4">
+                <p className="font-body text-[14px] leading-relaxed text-ink-muted mb-8">
                   Your quotation request has been generated with reference{" "}
-                  <strong className="text-ink">{quotationResult.refNo}</strong>.
-                  Excel & PDF files have been auto-downloaded, and WhatsApp has been opened
-                  to our sales executive.
+                  <strong className="text-ink">{quotationResult.refNo}</strong>. Download
+                  the PDF or Excel file for your records, and click below to send it
+                  directly to our sales executive.
                 </p>
-
-                {/* Instruction box */}
-                <div className="mb-8 rounded-2xl border border-brass/30 bg-brass/5 p-5">
-                  <p className="font-body text-[13px] leading-relaxed text-ink">
-                    <strong className="text-brass">📎 Next Step:</strong> In the WhatsApp chat that just opened,
-                    attach the downloaded <strong>Excel file</strong> ({quotationResult.refNo}.xlsx)
-                    and send the message. Our sales team will reply with pricing within 24 hours.
-                  </p>
-                </div>
 
                 {/* Download buttons */}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mb-8">
@@ -298,24 +213,18 @@ Here is my requirement, please share price of above items.
                   </button>
                 </div>
 
-                {/* WhatsApp button — re-open if user closed it */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Re-download Excel
-                    downloadCSV();
-                    // Re-open WhatsApp
-                    setTimeout(() => {
-                      window.open(quotationResult.whatsappUrl, "_blank");
-                    }, 800);
-                  }}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3.5 text-[14px] font-medium text-white transition-transform hover:scale-[1.02] cursor-pointer"
+                {/* WhatsApp send button */}
+                <a
+                  href={quotationResult.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3.5 text-[14px] font-medium text-white transition-transform hover:scale-[1.02]"
                 >
                   <Send className="h-4 w-4" />
-                  Re-open WhatsApp & Download Excel
-                </button>
+                  Send to Sales Executive via WhatsApp
+                </a>
                 <p className="mt-3 text-center text-[11px] text-ink-muted">
-                  Click to re-download Excel file and open WhatsApp → +91 92516 83660
+                  Opens WhatsApp with your quotation pre-filled → +91 92516 83660
                 </p>
 
                 {/* Clear and start over */}
@@ -650,37 +559,24 @@ function generateProfessionalQuotationHTML(
 <title>LaxRee Amenities — Quotation ${refNo}</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Work Sans', 'Helvetica Neue', Arial, sans-serif; color: #1a1712; background: #f7f3ea; padding: 0; }
   .page { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 0 40px rgba(18,16,13,0.08); }
-
-  /* ── Header ── */
   .header { background: #12100d; padding: 36px 48px; display: flex; justify-content: space-between; align-items: center; }
   .header-logo { display: flex; align-items: center; gap: 12px; }
-  .header-logo .diamond { width: 10px; height: 10px; background: #C6A15B; transform: rotate(45deg); }
-  .header-logo .brand { font-family: 'Fraunces', Georgia, serif; font-size: 30px; font-weight: 700; color: #C6A15B; letter-spacing: -0.5px; }
-  .header-logo .tagline { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: #b7ac97; text-transform: uppercase; letter-spacing: 3px; margin-top: 2px; }
+  .header-logo img { height: 44px; width: auto; }
   .header-ref { text-align: right; }
   .header-ref .label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #b7ac97; text-transform: uppercase; letter-spacing: 2px; }
   .header-ref .ref-no { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: #C6A15B; font-weight: 600; margin-top: 4px; }
   .header-ref .date { font-size: 11px; color: #b7ac97; margin-top: 2px; }
-
-  /* ── Title bar ── */
   .title-bar { background: linear-gradient(90deg, #C6A15B, #E4C989); padding: 16px 48px; }
   .title-bar h1 { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #12100d; }
-
-  /* ── Body ── */
   .body { padding: 36px 48px; }
-
-  /* ── Customer section ── */
   .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2.5px; color: #C6A15B; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #ede7d8; }
   .customer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
   .customer-field { display: flex; flex-direction: column; gap: 4px; }
   .customer-field .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #b7ac97; }
   .customer-field .field-value { font-size: 14px; color: #1a1712; font-weight: 500; }
-
-  /* ── Products table ── */
   .table-wrap { margin-bottom: 24px; border-radius: 10px; overflow: hidden; border: 1px solid #ede7d8; }
   table { width: 100%; border-collapse: collapse; }
   thead tr { background: #12100d; }
@@ -688,40 +584,24 @@ function generateProfessionalQuotationHTML(
   th.center { text-align: center; }
   th.right { text-align: right; }
   tbody tr:nth-child(even) { background: #faf8f2; }
-  tbody tr:hover { background: #f5f0e4; }
-
-  /* ── Summary ── */
   .summary { display: flex; justify-content: flex-end; margin-bottom: 32px; }
   .summary-box { min-width: 260px; }
   .summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
   .summary-row.total { border-top: 2px solid #C6A15B; margin-top: 8px; padding-top: 12px; font-weight: 700; font-size: 15px; color: #12100d; }
-  .summary-row .label { color: #6b6455; }
-  .summary-row .value { color: #1a1712; font-weight: 600; }
-
-  /* ── Note ── */
   .note { background: #fffaf0; border-left: 4px solid #C6A15B; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 32px; }
   .note p { font-size: 12px; color: #6b6455; line-height: 1.6; }
-  .note strong { color: #1a1712; }
-
-  /* ── Footer ── */
   .footer { background: #12100d; padding: 28px 48px; text-align: center; }
-  .footer-brand { font-family: 'Fraunces', Georgia, serif; font-size: 18px; font-weight: 600; color: #C6A15B; margin-bottom: 6px; }
+  .footer img { height: 32px; width: auto; margin: 0 auto 10px; display: block; }
   .footer-addr { font-size: 11px; color: #b7ac97; line-height: 1.7; }
   .footer-certs { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #6b6455; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; }
-
-  @media print {
-    body { background: #fff; }
-    .page { box-shadow: none; max-width: 100%; }
-    @page { margin: 0; size: A4; }
-  }
+  @media print { body { background: #fff; } .page { box-shadow: none; max-width: 100%; } @page { margin: 0; size: A4; } }
 </style>
 </head>
 <body>
 <div class="page">
-  <!-- Header -->
   <div class="header">
     <div class="header-logo">
-      <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" style="height: 44px; width: auto;" />
+      <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" />
     </div>
     <div class="header-ref">
       <div class="label">Quotation Request</div>
@@ -729,102 +609,52 @@ function generateProfessionalQuotationHTML(
       <div class="date">${date || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</div>
     </div>
   </div>
-
-  <!-- Title bar -->
-  <div class="title-bar">
-    <h1>Product Quotation Request</h1>
-  </div>
-
-  <!-- Body -->
+  <div class="title-bar"><h1>Product Quotation Request</h1></div>
   <div class="body">
-    <!-- Customer details -->
     <div class="section-label">Customer Details</div>
     <div class="customer-grid">
-      <div class="customer-field">
-        <div class="field-label">Name</div>
-        <div class="field-value">${form.name}</div>
-      </div>
-      <div class="customer-field">
-        <div class="field-label">Phone</div>
-        <div class="field-value">${form.phone}</div>
-      </div>
-      <div class="customer-field">
-        <div class="field-label">Email</div>
-        <div class="field-value">${form.email || "—"}</div>
-      </div>
-      <div class="customer-field">
-        <div class="field-label">Hotel / Company</div>
-        <div class="field-value">${form.hotel || "—"}</div>
-      </div>
+      <div class="customer-field"><div class="field-label">Name</div><div class="field-value">${form.name}</div></div>
+      <div class="customer-field"><div class="field-label">Phone</div><div class="field-value">${form.phone}</div></div>
+      <div class="customer-field"><div class="field-label">Email</div><div class="field-value">${form.email || "—"}</div></div>
+      <div class="customer-field"><div class="field-label">Hotel / Company</div><div class="field-value">${form.hotel || "—"}</div></div>
     </div>
-
-    <!-- Project details -->
     <div class="section-label">Project Details</div>
     <div class="customer-grid">
-      <div class="customer-field">
-        <div class="field-label">Average Room Rent / Night</div>
-        <div class="field-value">${form.avgRoomRent || "—"}</div>
-      </div>
-      <div class="customer-field">
-        <div class="field-label">Delivery Timeline Required</div>
-        <div class="field-value">${form.timeline || "—"}</div>
-      </div>
-      <div class="customer-field">
-        <div class="field-label">Property Type</div>
-        <div class="field-value">${form.propertyType === "new" ? "New Property" : "Renovation"}</div>
-      </div>
+      <div class="customer-field"><div class="field-label">Average Room Rent / Night</div><div class="field-value">${form.avgRoomRent || "—"}</div></div>
+      <div class="customer-field"><div class="field-label">Delivery Timeline Required</div><div class="field-value">${form.timeline || "—"}</div></div>
+      <div class="customer-field"><div class="field-label">Property Type</div><div class="field-value">${form.propertyType === "new" ? "New Property" : "Renovation"}</div></div>
       ${form.propertyType === "new" ? `<div class="customer-field"><div class="field-label">Current Project Stage</div><div class="field-value">${form.projectStage || "—"}</div></div>` : ""}
       ${form.message ? `<div class="customer-field" style="grid-column:1/3;"><div class="field-label">Message</div><div class="field-value">${form.message}</div></div>` : ""}
     </div>
-
-    <!-- Products table -->
     <div class="section-label">Selected Products (${items.length} Items, ${totalUnits} Units)</div>
     <div class="table-wrap">
       <table>
-        <thead>
-          <tr>
-            <th style="width:40px;" class="center">#</th>
-            <th style="width:100px;">Model</th>
-            <th>Product Name</th>
-            <th style="width:110px;">Category</th>
-            <th style="width:60px;" class="center">Qty</th>
-            <th style="width:100px;" class="center">Rate (INR)</th>
-            <th style="width:110px;" class="right">Amount (INR)</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th style="width:40px;" class="center">#</th>
+          <th style="width:100px;">Model</th>
+          <th>Product Name</th>
+          <th style="width:110px;">Category</th>
+          <th style="width:60px;" class="center">Qty</th>
+          <th style="width:100px;" class="center">Rate (INR)</th>
+          <th style="width:110px;" class="right">Amount (INR)</th>
+        </tr></thead>
         <tbody>${itemsHTML}</tbody>
       </table>
     </div>
-
-    <!-- Summary -->
-    <div class="summary">
-      <div class="summary-box">
-        <div class="summary-row"><span class="label">Total Items</span><span class="value">${items.length}</span></div>
-        <div class="summary-row"><span class="label">Total Units</span><span class="value">${totalUnits}</span></div>
-        <div class="summary-row"><span class="label">Estimated Total</span><span class="value">To be quoted</span></div>
-        <div class="summary-row total"><span>Grand Total</span><span>To be quoted</span></div>
-      </div>
-    </div>
-
-    <!-- Note -->
-    <div class="note">
-      <p><strong>Note:</strong> This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation. Prices may vary based on order quantity, customization, and delivery location.</p>
-    </div>
+    <div class="summary"><div class="summary-box">
+      <div class="summary-row"><span class="label">Total Items</span><span class="value">${items.length}</span></div>
+      <div class="summary-row"><span class="label">Total Units</span><span class="value">${totalUnits}</span></div>
+      <div class="summary-row"><span class="label">Estimated Total</span><span class="value">To be quoted</span></div>
+      <div class="summary-row total"><span>Grand Total</span><span>To be quoted</span></div>
+    </div></div>
+    <div class="note"><p><strong>Note:</strong> This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation.</p></div>
   </div>
-
-  <!-- Footer -->
   <div class="footer">
-    <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" style="height: 32px; width: auto; margin: 0 auto 10px; display: block;" />
-    <div class="footer-addr">
-      Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>
-      Phone: +91-92516 83662 &nbsp;|&nbsp; Toll Free: 1800 120 7001 &nbsp;|&nbsp; Email: contactus@laxree.com
-    </div>
+    <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" />
+    <div class="footer-addr">Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>Phone: +91-92516 83662 &nbsp;|&nbsp; Toll Free: 1800 120 7001 &nbsp;|&nbsp; Email: contactus@laxree.com</div>
     <div class="footer-certs">ISO 9001 • ISO 14001 • ISO 45001 • CE Certified • RoHS Compliant</div>
   </div>
 </div>
 </body>
 </html>`;
 }
-
-/* Excel generation moved to server-side API: /api/generate-excel */
-

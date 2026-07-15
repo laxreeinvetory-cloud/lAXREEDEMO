@@ -108,8 +108,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: "/favicon.jpg",
+    apple: "/favicon.jpg",
   },
   manifest: "/manifest.webmanifest",
   openGraph: {
