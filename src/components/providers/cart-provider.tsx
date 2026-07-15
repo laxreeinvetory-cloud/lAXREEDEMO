@@ -3,7 +3,6 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useSyncExternalStore,
   type ReactNode,
@@ -28,66 +27,60 @@ type CartContextValue = {
   updateQuantity: (model: string, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
-  isOpen: boolean;
-  openCart: () => void;
-  closeCart: () => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "laxree-cart";
-const EVENT_NAME = "laxree-cart-change";
-const EMPTY_CART: CartItem[] = [];
+const EMPTY: CartItem[] = [];
 
 /* ─────────────────────────────────────────────────────────────
-   External store (localStorage + event-based, no setState in effect)
+   Cached external store — returns the SAME reference until data
+   actually changes. This prevents useSyncExternalStore infinite
+   loops (getSnapshot must be referentially stable).
    ───────────────────────────────────────────────────────────── */
-let cachedCart: CartItem[] = EMPTY_CART;
-let cacheValid = false;
+let cache: CartItem[] = EMPTY;
+let initialized = false;
 
-function readCart(): CartItem[] {
-  if (typeof window === "undefined") return EMPTY_CART;
-  if (cacheValid) return cachedCart;
+function init(): void {
+  if (initialized || typeof window === "undefined") return;
+  initialized = true;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    cachedCart = raw ? (JSON.parse(raw) as CartItem[]) : EMPTY_CART;
+    cache = raw ? (JSON.parse(raw) as CartItem[]) : EMPTY;
   } catch {
-    cachedCart = EMPTY_CART;
+    cache = EMPTY;
   }
-  cacheValid = true;
-  return cachedCart;
 }
 
-function writeCart(items: CartItem[]) {
+function persist(items: CartItem[]): void {
+  cache = items;
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    cachedCart = items;
-    cacheValid = true;
-    window.dispatchEvent(new Event(EVENT_NAME));
+    window.dispatchEvent(new Event("laxree-cart-change"));
   } catch {
     // ignore
   }
 }
 
-function subscribe(callback: () => void) {
+function subscribe(callback: () => void): () => void {
   if (typeof window === "undefined") return () => {};
-  window.addEventListener(EVENT_NAME, callback);
+  window.addEventListener("laxree-cart-change", callback);
   window.addEventListener("storage", callback);
   return () => {
-    window.removeEventListener(EVENT_NAME, callback);
+    window.removeEventListener("laxree-cart-change", callback);
     window.removeEventListener("storage", callback);
   };
 }
 
 function getSnapshot(): CartItem[] {
-  // Invalidate cache so next readCart picks up any external changes
-  cacheValid = false;
-  return readCart();
+  init();
+  return cache; // same reference until persist() changes it
 }
 
 function getServerSnapshot(): CartItem[] {
-  return EMPTY_CART;
+  return EMPTY;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -96,94 +89,32 @@ function getServerSnapshot(): CartItem[] {
 export function CartProvider({ children }: { children: ReactNode }) {
   const items = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  // Track open state for cart drawer
-  const isOpenStore = useSyncExternalStore(
-    (cb: () => void) => {
-      if (typeof window === "undefined") return () => {};
-      window.addEventListener("laxree-cart-open", cb);
-      return () => window.removeEventListener("laxree-cart-open", cb);
-    },
-    () => {
-      if (typeof window === "undefined") return false;
-      return (window as unknown as { __laxreeCartOpen?: boolean }).__laxreeCartOpen ?? false;
-    },
-    () => false
-  );
-
   const addItem = (product: CatalogueProduct) => {
-    const current = readCart();
+    const current = getSnapshot();
     const existing = current.find((i) => i.model === product.model);
     if (existing) {
-      existing.quantity += 1;
-      writeCart([...current]);
+      persist(current.map((i) => (i.model === product.model ? { ...i, quantity: i.quantity + 1 } : i)));
     } else {
-      writeCart([
-        ...current,
-        {
-          model: product.model,
-          name: product.name,
-          category: product.category,
-          image: product.image,
-          quantity: 1,
-        },
-      ]);
+      persist([...current, { model: product.model, name: product.name, category: product.category, image: product.image, quantity: 1 }]);
     }
   };
 
   const removeItem = (model: string) => {
-    const current = readCart();
-    writeCart(current.filter((i) => i.model !== model));
+    persist(getSnapshot().filter((i) => i.model !== model));
   };
 
   const updateQuantity = (model: string, quantity: number) => {
-    if (quantity < 1) {
-      removeItem(model);
-      return;
-    }
-    const current = readCart();
-    const item = current.find((i) => i.model === model);
-    if (item) {
-      item.quantity = quantity;
-      writeCart([...current]);
-    }
+    if (quantity < 1) { removeItem(model); return; }
+    persist(getSnapshot().map((i) => (i.model === model ? { ...i, quantity } : i)));
   };
 
-  const clearCart = () => {
-    writeCart([]);
-  };
+  const clearCart = () => { persist(EMPTY); };
 
-  const openCart = () => {
-    if (typeof window !== "undefined") {
-      (window as unknown as { __laxreeCartOpen?: boolean }).__laxreeCartOpen = true;
-      window.dispatchEvent(new Event("laxree-cart-open"));
-    }
-  };
-
-  const closeCart = () => {
-    if (typeof window !== "undefined") {
-      (window as unknown as { __laxreeCartOpen?: boolean }).__laxreeCartOpen = false;
-      window.dispatchEvent(new Event("laxree-cart-open"));
-    }
-  };
-
-  const totalItems = useMemo(
-    () => items.reduce((sum, i) => sum + i.quantity, 0),
-    [items]
-  );
+  const totalItems = useMemo(() => items.reduce((s, i) => s + i.quantity, 0), [items]);
 
   const value = useMemo(
-    () => ({
-      items,
-      addItem,
-      removeItem,
-      updateQuantity,
-      clearCart,
-      totalItems,
-      isOpen: isOpenStore,
-      openCart,
-      closeCart,
-    }),
-    [items, totalItems, isOpenStore]
+    () => ({ items, addItem, removeItem, updateQuantity, clearCart, totalItems }),
+    [items, totalItems]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
