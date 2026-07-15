@@ -1,4 +1,4 @@
-import { BLOG_POSTS } from "@/lib/laxree/site-data";
+import { BLOG_POSTS, type BlogPostFull } from "@/lib/laxree/site-data";
 
 export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
   const full: BlogPostFull = {
