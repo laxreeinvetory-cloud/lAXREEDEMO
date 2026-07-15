@@ -81,13 +81,13 @@ export default function CartPage() {
 
   const downloadCSV = () => {
     if (!quotationResult) return;
-    // Generate professional Excel-compatible CSV
-    const csv = generateProfessionalCSV(form, items, quotationResult.refNo, quotationResult.date || "");
-    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    // Generate professional Excel-compatible HTML table
+    const excelHTML = generateProfessionalExcel(form, items, quotationResult.refNo, quotationResult.date || "");
+    const blob = new Blob(["\uFEFF" + excelHTML], { type: "application/vnd.ms-excel;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `LaxRee_Quotation_${quotationResult.refNo}.csv`;
+    link.download = `LaxRee_Quotation_${quotationResult.refNo}.xls`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -606,11 +606,7 @@ function generateProfessionalQuotationHTML(
   <!-- Header -->
   <div class="header">
     <div class="header-logo">
-      <div class="diamond"></div>
-      <div>
-        <div class="brand">LaxRee</div>
-        <div class="tagline">Amenities • Hotel Supplies Redefined</div>
-      </div>
+      <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" style="height: 44px; width: auto;" />
     </div>
     <div class="header-ref">
       <div class="label">Quotation Request</div>
@@ -703,7 +699,7 @@ function generateProfessionalQuotationHTML(
 
   <!-- Footer -->
   <div class="footer">
-    <div class="footer-brand">LaxRee Amenities</div>
+    <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" style="height: 32px; width: auto; margin: 0 auto 10px; display: block;" />
     <div class="footer-addr">
       Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>
       Phone: +91-92516 83662 &nbsp;|&nbsp; Toll Free: 1800 120 7001 &nbsp;|&nbsp; Email: contactus@laxree.com
@@ -716,9 +712,9 @@ function generateProfessionalQuotationHTML(
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Helper: Generate PROFESSIONAL Excel CSV
+   Helper: Generate PROFESSIONAL Excel (HTML table format)
    ───────────────────────────────────────────────────────────── */
-function generateProfessionalCSV(
+function generateProfessionalExcel(
   form: { name: string; email: string; phone: string; hotel: string; message: string; avgRoomRent: string; timeline: string; propertyType: string; projectStage: string },
   items: { model: string; name: string; category: string; quantity: number; image: string }[],
   refNo: string,
@@ -728,47 +724,153 @@ function generateProfessionalCSV(
   const d = date || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
   const propType = form.propertyType === "new" ? "New Property" : "Renovation";
 
-  const rows: string[][] = [
-    ["LaxRee Amenities — Quotation Request"],
-    ["Hotel Supplies Redefined"],
-    [],
-    ["Reference No.", refNo],
-    ["Date", d],
-    [],
-    ["CUSTOMER DETAILS"],
-    ["Name", form.name],
-    ["Phone", form.phone],
-    ["Email", form.email || "—"],
-    ["Hotel / Company", form.hotel || "—"],
-    [],
-    ["PROJECT DETAILS"],
-    ["Average Room Rent / Night", form.avgRoomRent || "—"],
-    ["Delivery Timeline Required", form.timeline || "—"],
-    ["Property Type", propType],
-    ...(form.propertyType === "new" ? [["Current Project Stage", form.projectStage || "—"]] : []),
-    ["Message", form.message || "—"],
-    [],
-    ["PRODUCT DETAILS"],
-    ["S.No", "Model", "Product Name", "Category", "Quantity", "Rate (INR)", "Amount (INR)"],
-    ...items.map((item, i) => [
-      String(i + 1),
-      item.model,
-      item.name,
-      item.category,
-      String(item.quantity),
-      "To be quoted",
-      "To be quoted",
-    ]),
-    [],
-    ["", "", "", "Total Items:", String(items.length), "", ""],
-    ["", "", "", "Total Units:", String(totalUnits), "", ""],
-    ["", "", "", "Grand Total:", "To be quoted", "", ""],
-    [],
-    ["Note: This is a quotation request, not a confirmed order. Rates will be provided by LaxRee sales team."],
-    ["Contact: +91-92516 83662 | Toll Free: 1800 120 7001 | Email: contactus@laxree.com"],
-    ["Address: Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001"],
-    ["Certifications: ISO 9001, ISO 14001, ISO 45001, CE Certified, RoHS Compliant"],
-  ];
+  const itemRows = items
+    .map(
+      (item, i) => `<tr>
+        <td style="text-align:center;border:1px solid #d4cdb8;padding:8px;">${i + 1}</td>
+        <td style="border:1px solid #d4cdb8;padding:8px;color:#C6A15B;font-weight:600;font-family:monospace;">${item.model}</td>
+        <td style="border:1px solid #d4cdb8;padding:8px;">${item.name}</td>
+        <td style="border:1px solid #d4cdb8;padding:8px;color:#6b6455;">${item.category}</td>
+        <td style="text-align:center;border:1px solid #d4cdb8;padding:8px;font-weight:700;">${item.quantity}</td>
+        <td style="text-align:center;border:1px solid #d4cdb8;padding:8px;color:#b7ac97;">To be quoted</td>
+        <td style="text-align:right;border:1px solid #d4cdb8;padding:8px;color:#b7ac97;">To be quoted</td>
+      </tr>`
+    )
+    .join("");
 
-  return rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")).join("\n");
+  return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Quotation</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11px; }
+  table { border-collapse: collapse; }
+  td { font-size: 11px; }
+  .header-bg { background: #12100d; }
+  .header-text { color: #C6A15B; font-size: 14px; font-weight: bold; }
+  .ref-text { color: #C6A15B; font-size: 12px; font-weight: bold; }
+  .section-header { background: #C6A15B; color: #12100d; font-weight: bold; font-size: 10px; padding: 6px 10px; }
+  .field-label { background: #f7f3ea; color: #6b6455; font-weight: bold; padding: 6px 10px; border: 1px solid #d4cdb8; }
+  .field-value { padding: 6px 10px; border: 1px solid #d4cdb8; }
+  .table-header { background: #12100d; color: #C6A15B; font-size: 9px; font-weight: bold; text-transform: uppercase; padding: 8px; border: 1px solid #12100d; }
+  .table-row-alt { background: #faf8f2; }
+  .summary-label { text-align: right; padding: 6px 10px; border: 1px solid #d4cdb8; font-weight: bold; }
+  .summary-value { padding: 6px 10px; border: 1px solid #d4cdb8; }
+  .total-row { background: #C6A15B; color: #12100d; font-weight: bold; }
+  .note { background: #fffaf0; border: 1px solid #C6A15B; padding: 10px; color: #6b6455; font-size: 10px; }
+  .footer { background: #12100d; color: #b7ac97; text-align: center; padding: 12px; font-size: 10px; }
+  .footer-cert { font-size: 8px; color: #6b6455; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr>
+    <td class="header-bg" style="padding:20px;">
+      <table cellspacing="0" cellpadding="0"><tr>
+        <td style="width:12px;"></td>
+        <td><span style="font-size:22px;font-weight:bold;color:#C6A15B;font-family:Georgia,serif;">LaxRee</span><br/>
+        <span style="font-size:8px;color:#b7ac97;letter-spacing:2px;">AMENITIES &bull; HOTEL SUPPLIES REDEFINED</span></td>
+      </tr></table>
+    </td>
+    <td class="header-bg" style="padding:20px;text-align:right;">
+      <span style="font-size:9px;color:#b7ac97;text-transform:uppercase;letter-spacing:1px;">Quotation Request</span><br/>
+      <span class="ref-text">${refNo}</span><br/>
+      <span style="font-size:10px;color:#b7ac97;">${d}</span>
+    </td>
+  </tr>
+</table>
+
+<!-- Title -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr><td style="background:#C6A15B;padding:10px 20px;font-size:14px;font-weight:bold;color:#12100d;font-family:Georgia,serif;">Product Quotation Request</td></tr>
+</table>
+
+<br/>
+
+<!-- Customer Details -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr><td class="section-header" colspan="4">CUSTOMER DETAILS</td></tr>
+  <tr>
+    <td class="field-label" style="width:15%;">Name</td>
+    <td class="field-value" style="width:35%;">${form.name}</td>
+    <td class="field-label" style="width:15%;">Phone</td>
+    <td class="field-value" style="width:35%;">${form.phone}</td>
+  </tr>
+  <tr>
+    <td class="field-label">Email</td>
+    <td class="field-value">${form.email || "—"}</td>
+    <td class="field-label">Hotel / Company</td>
+    <td class="field-value">${form.hotel || "—"}</td>
+  </tr>
+</table>
+
+<br/>
+
+<!-- Project Details -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr><td class="section-header" colspan="4">PROJECT DETAILS</td></tr>
+  <tr>
+    <td class="field-label" style="width:15%;">Avg Room Rent</td>
+    <td class="field-value" style="width:35%;">${form.avgRoomRent || "—"}</td>
+    <td class="field-label" style="width:15%;">Timeline</td>
+    <td class="field-value" style="width:35%;">${form.timeline || "—"}</td>
+  </tr>
+  <tr>
+    <td class="field-label">Property Type</td>
+    <td class="field-value">${propType}</td>
+    ${form.propertyType === "new" ? `<td class="field-label">Project Stage</td><td class="field-value">${form.projectStage || "—"}</td>` : `<td class="field-label">Message</td><td class="field-value">${form.message || "—"}</td>`}
+  </tr>
+  ${form.propertyType === "new" && form.message ? `<tr><td class="field-label">Message</td><td class="field-value" colspan="3">${form.message}</td></tr>` : ""}
+</table>
+
+<br/>
+
+<!-- Products Table -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr><td class="section-header" colspan="7">SELECTED PRODUCTS (${items.length} ITEMS, ${totalUnits} UNITS)</td></tr>
+  <tr>
+    <td class="table-header" style="width:5%;text-align:center;">S.No</td>
+    <td class="table-header" style="width:12%;">Model</td>
+    <td class="table-header" style="width:30%;">Product Name</td>
+    <td class="table-header" style="width:15%;">Category</td>
+    <td class="table-header" style="width:8%;text-align:center;">Qty</td>
+    <td class="table-header" style="width:13%;text-align:center;">Rate (INR)</td>
+    <td class="table-header" style="width:17%;text-align:right;">Amount (INR)</td>
+  </tr>
+  ${itemRows}
+</table>
+
+<br/>
+
+<!-- Summary -->
+<table cellspacing="0" cellpadding="0" style="width:45%;margin-left:55%;">
+  <tr><td class="summary-label">Total Items</td><td class="summary-value">${items.length}</td></tr>
+  <tr><td class="summary-label">Total Units</td><td class="summary-value">${totalUnits}</td></tr>
+  <tr><td class="summary-label">Estimated Total</td><td class="summary-value">To be quoted</td></tr>
+  <tr class="total-row"><td class="summary-label" style="background:#C6A15B;color:#12100d;">Grand Total</td><td class="summary-value" style="background:#C6A15B;color:#12100d;font-weight:bold;">To be quoted</td></tr>
+</table>
+
+<br/>
+
+<!-- Note -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr><td class="note"><b>Note:</b> This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation.</td></tr>
+</table>
+
+<br/>
+
+<!-- Footer -->
+<table cellspacing="0" cellpadding="0" style="width:100%;">
+  <tr><td class="footer">
+    <span style="font-size:14px;font-weight:bold;color:#C6A15B;font-family:Georgia,serif;">LaxRee Amenities</span><br/>
+    Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br/>
+    Phone: +91-92516 83662 &nbsp;|&nbsp; Toll Free: 1800 120 7001 &nbsp;|&nbsp; Email: contactus@laxree.com<br/>
+    <span class="footer-cert">ISO 9001 &bull; ISO 14001 &bull; ISO 45001 &bull; CE CERTIFIED &bull; RoHS COMPLIANT</span>
+  </td></tr>
+</table>
+
+</body>
+</html>`;
 }
