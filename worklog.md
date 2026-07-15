@@ -761,3 +761,26 @@ Stage Summary:
 - Category images use clean product photos for amenities/furniture/linen, and tight product-area crops for roofing/dome
 - Gallery, blog, and about images all use clean product photos
 - Lint clean, all routes return 200
+
+---
+Task ID: FIX-VERCEL-BUILD
+Agent: main (orchestrator)
+Task: Fix Vercel deployment build error — "Property 'blogPost' does not exist on type 'PrismaClient'" in src/app/api/admin/blog/route.ts
+
+Work Log:
+- Inspected prisma/schema.prisma — confirmed BlogPost model IS defined (along with AdminUser, Lead, SiteContent, User)
+- Inspected src/lib/db.ts — standard PrismaClient singleton pattern
+- Grepped all admin API routes for db.* calls — confirmed only lead, blogPost, adminUser models are referenced, all present in schema
+- Root cause: Vercel runs `bun install` then `next build`, but the Prisma client was never regenerated from the updated schema (which added BlogPost). The generated client in node_modules was stale.
+- Fixed package.json:
+  - Added "postinstall": "prisma generate" (runs automatically after dependency install on Vercel — official Prisma recommendation)
+  - Changed "build" from "next build" to "prisma generate && next build" (belt-and-suspenders guarantee the client is fresh before type-checking)
+- Ran `bun run db:generate` locally — Prisma Client v6.19.2 generated successfully
+- Ran `npx tsc --noEmit` — no more blogPost/prisma type errors
+- Ran `bun run lint` — 0 errors, only pre-existing <img> warnings
+
+Stage Summary:
+- Vercel build error FIXED. The deploy will now succeed because prisma generate runs both in postinstall (after install) and as the first step of build.
+- Key artifact changed: package.json (scripts section)
+- IMPORTANT for the user: On Vercel, make sure the environment variable DATABASE_URL is set in Project Settings → Environment Variables (pointing to the SQLite/Postgres connection string). prisma generate does NOT need DATABASE_URL, but runtime API calls (db.lead.create, etc.) WILL need it.
+- Note: SQLite on Vercel serverless has filesystem persistence limitations; if leads/quotations must persist permanently across cold starts, consider migrating to a hosted Postgres (e.g. Neon/Supabase) by changing the datasource provider in prisma/schema.prisma. This is a follow-up consideration, not part of this build fix.
