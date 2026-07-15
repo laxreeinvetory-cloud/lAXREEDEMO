@@ -10,9 +10,10 @@ import {
   AnimatePresence,
   type Variants,
 } from "framer-motion";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X, MessageCircle, ShoppingCart } from "lucide-react";
 import { NAV_LINKS, SITE } from "@/lib/laxree/site-data";
 import { useEnquiry } from "@/components/providers/enquiry-provider";
+import { useCart } from "@/components/providers/cart-provider";
 import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
 
 /**
@@ -54,6 +55,7 @@ const drawerItemVariants: Variants = {
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { openModal } = useEnquiry();
+  const { totalItems } = useCart();
   const reduced = usePrefersReducedMotion();
   const pathname = usePathname();
   const isActive = (href: string) =>
@@ -113,8 +115,21 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* Right — CTA + WhatsApp (desktop) */}
+          {/* Right — Cart + WhatsApp + CTA (desktop) */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Cart icon with badge */}
+            <Link
+              href="/cart"
+              aria-label={`Cart — ${totalItems} items`}
+              className="relative grid place-items-center w-8 h-8 rounded-full border border-brass/60 text-brass transition-all duration-300 hover:bg-brass hover:text-charcoal hover:border-brass"
+            >
+              <ShoppingCart className="w-4 h-4" strokeWidth={1.75} />
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-brass text-[9px] font-bold text-charcoal" style={{ minWidth: 18, height: 18 }}>
+                  {totalItems}
+                </span>
+              )}
+            </Link>
             <a
               href={`https://wa.me/${SITE.whatsapp}`}
               target="_blank"
@@ -204,6 +219,20 @@ export function Navbar() {
                 transition={{ delay: 0.08 + NAV_LINKS.length * 0.05, duration: 0.4 }}
                 className="py-8 flex items-center gap-3"
               >
+                {/* Cart link */}
+                <Link
+                  href="/cart"
+                  onClick={() => setOpen(false)}
+                  className="relative grid place-items-center w-11 h-11 rounded-full border border-brass/60 text-brass transition-all duration-300 hover:bg-brass hover:text-charcoal"
+                  aria-label={`Cart — ${totalItems} items`}
+                >
+                  <ShoppingCart className="w-5 h-5" strokeWidth={1.75} />
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 flex items-center justify-center rounded-full bg-brass text-[10px] font-bold text-charcoal" style={{ minWidth: 20, height: 20 }}>
+                      {totalItems}
+                    </span>
+                  )}
+                </Link>
                 <a
                   href={`https://wa.me/${SITE.whatsapp}`}
                   target="_blank"

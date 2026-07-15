@@ -13,12 +13,12 @@ import {
   FadeIn,
   GlassCard,
 } from "@/components/site/page-primitives";
+import { ProductCardWithCart } from "@/components/site/product-card-cart";
 
 /* ─────────────────────────────────────────────────────────────
    Pre-generate all [slug]/[itemSlug] combinations at build time.
    ───────────────────────────────────────────────────────────── */
 export function generateStaticParams() {
-  // Only amenities has item types for now
   return CATALOGUE_CATEGORIES.map((item) => ({
     slug: "amenities",
     itemSlug: item.slug,
@@ -34,68 +34,9 @@ export async function generateMetadata({
   const item = CATALOGUE_CATEGORIES.find((c) => c.slug === itemSlug);
   if (!item) return {};
   return {
-    title: `${item.name} — All Models | LaxRee Amenities`,
+    title: `${item.name} — All Models`,
     description: `All ${item.products.length} ${item.name} models with full specifications. ${item.products[0]?.description}`,
   };
-}
-
-/* ─────────────────────────────────────────────────────────────
-   ProductCard — individual product model with image + specs
-   ───────────────────────────────────────────────────────────── */
-function ProductCard({
-  product,
-  index,
-}: {
-  product: CatalogueProduct;
-  index: number;
-}) {
-  return (
-    <FadeIn delay={index * 0.04}>
-      <GlassCard
-        theme="ivory"
-        radius="20px"
-        className="flex h-full flex-col overflow-hidden"
-      >
-        {/* Product image */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
-          <img
-            src={product.image}
-            alt={`${product.name} — ${product.model}`}
-            loading="lazy"
-            className="h-full w-full object-contain"
-          />
-          {/* Model number badge */}
-          <span className="absolute left-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">
-            {product.model}
-          </span>
-        </div>
-
-        {/* Product info */}
-        <div className="flex flex-1 flex-col p-5">
-          <h3 className="font-display text-[18px] font-medium text-ink leading-tight">
-            {product.name}
-          </h3>
-          <p className="mt-2 font-body text-[13px] leading-relaxed text-ink-muted">
-            {product.description}
-          </p>
-
-          {/* Specifications */}
-          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2">
-            {product.specs.map((spec) => (
-              <div key={spec.label} className="flex flex-col">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-ink-muted/60">
-                  {spec.label}
-                </span>
-                <span className="font-body text-[12px] font-medium text-ink">
-                  {spec.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </GlassCard>
-    </FadeIn>
-  );
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -112,7 +53,6 @@ export default async function ItemTypePage({
 
   if (!item) notFound();
 
-  // Get other item types for navigation
   const otherItems = CATALOGUE_CATEGORIES.filter((c) => c.slug !== itemSlug);
 
   return (
@@ -127,7 +67,7 @@ export default async function ItemTypePage({
         ]}
         eyebrow={item.name.toUpperCase()}
         title={item.name}
-        subtitle={`${item.products.length} models available with full specifications, images, and model numbers.`}
+        subtitle={`${item.products.length} models available. Add your preferred models to cart and submit for quotation.`}
       >
         <div className="flex flex-wrap items-center gap-6 mt-2">
           <div className="flex items-center gap-2">
@@ -139,13 +79,13 @@ export default async function ItemTypePage({
           <div className="flex items-center gap-2">
             <Check className="h-4 w-4 text-brass" />
             <span className="data-label text-[11px] text-sand">
-              Full Specifications
+              Add to Cart
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Check className="h-4 w-4 text-brass" />
             <span className="data-label text-[11px] text-sand">
-              OEM Manufactured
+              Submit for Quotation
             </span>
           </div>
         </div>
@@ -169,26 +109,26 @@ export default async function ItemTypePage({
                 className="mt-2 font-display text-ivory"
                 style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)", fontWeight: 500 }}
               >
-                {item.products.length} Models with Full Specs
+                {item.products.length} Models — Add to Cart
               </h2>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Products grid ── */}
+      {/* ── Products grid with Add to Cart ── */}
       <section className="section section-ivory py-20 md:py-28">
         <div className="container-laxree">
           <SectionHeading
             theme="ivory"
             eyebrow="ALL MODELS"
             title={`All ${item.name} Models`}
-            body={`Browse all ${item.products.length} models below. Each product includes model number, specifications, and a real catalogue image.`}
+            body={`Browse all ${item.products.length} models. Click "Add to Cart" on any model to add it to your quotation request.`}
           />
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {item.products.map((prod, i) => (
-              <ProductCard key={prod.model} product={prod} index={i} />
+              <ProductCardWithCart key={prod.model} product={prod} index={i} />
             ))}
           </div>
         </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster as SiteToaster } from "@/components/ui/site-toaster";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
+import { CartProvider } from "@/components/providers/cart-provider";
 import { Navbar } from "@/components/site/navbar";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingRoot } from "@/components/floating/floating-root";
@@ -176,18 +177,20 @@ export default function RootLayout({
           }}
         />
 
-        <EnquiryProvider>
-          <SmoothScrollProvider>
-            <div className="relative flex min-h-screen flex-col bg-charcoal">
-              <ScrollProgress />
-              <Navbar />
-              <main className="flex-1 flex flex-col">{children}</main>
-              <SiteFooter />
-            </div>
-            <FloatingRoot />
-            <SiteToaster />
-          </SmoothScrollProvider>
-        </EnquiryProvider>
+        <CartProvider>
+          <EnquiryProvider>
+            <SmoothScrollProvider>
+              <div className="relative flex min-h-screen flex-col bg-charcoal">
+                <ScrollProgress />
+                <Navbar />
+                <main className="flex-1 flex flex-col">{children}</main>
+                <SiteFooter />
+              </div>
+              <FloatingRoot />
+              <SiteToaster />
+            </SmoothScrollProvider>
+          </EnquiryProvider>
+        </CartProvider>
       </body>
     </html>
   );
