@@ -1,14 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getStaticCategories } from "@/lib/admin/static-fallback";
 
 export const runtime = "nodejs";
 
 // GET — list all categories ordered by sortOrder asc
+// Falls back to static data when DB is empty (Vercel serverless).
 export async function GET() {
   try {
-    const categories = await db.category.findMany({
-      orderBy: { sortOrder: "asc" },
-    });
+    let categories: Awaited<ReturnType<typeof db.category.findMany>> = [];
+
+    try {
+      categories = await db.category.findMany({
+        orderBy: { sortOrder: "asc" },
+      });
+    } catch (dbErr) {
+      console.error("[ADMIN CATEGORIES GET DB ERROR]", dbErr);
+    }
+
+    if (categories.length === 0) {
+      categories = getStaticCategories() as unknown as typeof categories;
+    }
 
     return NextResponse.json({ ok: true, categories });
   } catch (err) {

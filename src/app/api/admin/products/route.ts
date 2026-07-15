@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import {
+  getStaticProducts,
+  getStaticCategories,
+} from "@/lib/admin/static-fallback";
 
 export const runtime = "nodejs";
 
 // GET — list products (optionally filtered by ?category=slug) + all categories
+// Falls back to static catalogue data when DB is empty (Vercel serverless).
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -12,15 +17,30 @@ export async function GET(req: NextRequest) {
     const productWhere: Record<string, unknown> = {};
     if (category && category !== "all") productWhere.category = category;
 
-    const [products, categories] = await Promise.all([
-      db.product.findMany({
-        where: productWhere,
-        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-      }),
-      db.category.findMany({
-        orderBy: { sortOrder: "asc" },
-      }),
-    ]);
+    let products: Awaited<ReturnType<typeof db.product.findMany>> = [];
+    let categories: Awaited<ReturnType<typeof db.category.findMany>> = [];
+
+    try {
+      [products, categories] = await Promise.all([
+        db.product.findMany({
+          where: productWhere,
+          orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+        }),
+        db.category.findMany({
+          orderBy: { sortOrder: "asc" },
+        }),
+      ]);
+    } catch (dbErr) {
+      console.error("[ADMIN PRODUCTS GET DB ERROR]", dbErr);
+    }
+
+    // Fallback to static data if DB is empty or unavailable
+    if (products.length === 0) {
+      products = getStaticProducts(category || undefined) as unknown as typeof products;
+    }
+    if (categories.length === 0) {
+      categories = getStaticCategories() as unknown as typeof categories;
+    }
 
     return NextResponse.json({ ok: true, products, categories });
   } catch (err) {

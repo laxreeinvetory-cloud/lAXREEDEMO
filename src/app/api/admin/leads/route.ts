@@ -15,15 +15,23 @@ export async function GET(req: NextRequest) {
     if (status) where.status = status;
     if (source) where.source = source;
 
-    const [leads, total] = await Promise.all([
-      db.lead.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      db.lead.count({ where }),
-    ]);
+    let leads: Array<Record<string, unknown>> = [];
+    let total = 0;
+
+    try {
+      [leads, total] = await Promise.all([
+        db.lead.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip: (page - 1) * limit,
+          take: limit,
+        }),
+        db.lead.count({ where }),
+      ]);
+    } catch (dbErr) {
+      // DB unavailable (Vercel serverless ephemeral FS) — return empty gracefully
+      console.error("[ADMIN LEADS DB ERROR]", dbErr);
+    }
 
     return NextResponse.json({
       ok: true,

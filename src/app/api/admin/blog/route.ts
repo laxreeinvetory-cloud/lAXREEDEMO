@@ -1,13 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getStaticBlogPosts } from "@/lib/admin/static-fallback";
 
 export const runtime = "nodejs";
 
+// GET — list all blog posts
+// Falls back to static BLOG_POSTS data when DB is empty (Vercel serverless).
 export async function GET() {
   try {
-    const posts = await db.blogPost.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    let posts: Awaited<ReturnType<typeof db.blogPost.findMany>> = [];
+
+    try {
+      posts = await db.blogPost.findMany({
+        orderBy: { createdAt: "desc" },
+      });
+    } catch (dbErr) {
+      console.error("[ADMIN BLOG GET DB ERROR]", dbErr);
+    }
+
+    if (posts.length === 0) {
+      posts = getStaticBlogPosts() as unknown as typeof posts;
+    }
 
     return NextResponse.json({ ok: true, posts });
   } catch (err) {
