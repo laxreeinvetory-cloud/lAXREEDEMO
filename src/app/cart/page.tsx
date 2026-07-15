@@ -77,7 +77,9 @@ export default function CartPage() {
 
   const downloadCSV = () => {
     if (!quotationResult) return;
-    const blob = new Blob([quotationResult.csv], { type: "text/csv;charset=utf-8;" });
+    // Generate professional Excel-compatible CSV
+    const csv = generateProfessionalCSV(form, items, quotationResult.refNo, quotationResult.date || "");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -88,13 +90,12 @@ export default function CartPage() {
 
   const downloadPDF = () => {
     if (!quotationResult) return;
-    // Generate a simple printable HTML and open in new window for PDF print
     const printWin = window.open("", "_blank");
     if (!printWin) return;
-    const html = generateQuotationHTML(form, items, quotationResult.refNo, quotationResult.date || "");
+    const html = generateProfessionalQuotationHTML(form, items, quotationResult.refNo, quotationResult.date || "");
     printWin.document.write(html);
     printWin.document.close();
-    setTimeout(() => printWin.print(), 500);
+    setTimeout(() => printWin.print(), 800);
   };
 
   // ─── Empty cart state ───
@@ -417,100 +418,247 @@ export default function CartPage() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Helper: Generate printable HTML quotation (for PDF via print)
+   Helper: Generate PROFESSIONAL printable HTML quotation (PDF)
    ───────────────────────────────────────────────────────────── */
-function generateQuotationHTML(
+function generateProfessionalQuotationHTML(
   form: { name: string; email: string; phone: string; hotel: string; message: string },
   items: { model: string; name: string; category: string; quantity: number; image: string }[],
   refNo: string,
   date: string
 ): string {
+  const totalUnits = items.reduce((s, i) => s + i.quantity, 0);
   const itemsHTML = items
     .map(
       (item, i) => `
       <tr>
-        <td style="text-align:center;padding:10px 8px;border-bottom:1px solid #e5e0d4;">${i + 1}</td>
-        <td style="padding:10px 8px;border-bottom:1px solid #e5e0d4;font-family:monospace;font-size:11px;color:#C6A15B;">${item.model}</td>
-        <td style="padding:10px 8px;border-bottom:1px solid #e5e0d4;font-size:13px;">${item.name}</td>
-        <td style="padding:10px 8px;border-bottom:1px solid #e5e0d4;font-size:12px;color:#6b6455;">${item.category}</td>
-        <td style="text-align:center;padding:10px 8px;border-bottom:1px solid #e5e0d4;font-size:14px;font-weight:600;">${item.quantity}</td>
-        <td style="text-align:center;padding:10px 8px;border-bottom:1px solid #e5e0d4;color:#6b6455;">—</td>
-        <td style="text-align:right;padding:10px 8px;border-bottom:1px solid #e5e0d4;color:#6b6455;">—</td>
+        <td style="text-align:center;padding:14px 10px;border-bottom:1px solid #ede7d8;font-size:12px;color:#6b6455;">${i + 1}</td>
+        <td style="padding:14px 10px;border-bottom:1px solid #ede7d8;font-family:'Courier New',monospace;font-size:11px;color:#C6A15B;font-weight:600;letter-spacing:0.5px;">${item.model}</td>
+        <td style="padding:14px 10px;border-bottom:1px solid #ede7d8;font-size:13px;color:#1a1712;font-weight:500;">${item.name}</td>
+        <td style="padding:14px 10px;border-bottom:1px solid #ede7d8;font-size:12px;color:#6b6455;">${item.category}</td>
+        <td style="text-align:center;padding:14px 10px;border-bottom:1px solid #ede7d8;font-size:14px;color:#1a1712;font-weight:700;">${item.quantity}</td>
+        <td style="text-align:center;padding:14px 10px;border-bottom:1px solid #ede7d8;color:#b7ac97;font-size:12px;">To be quoted</td>
+        <td style="text-align:right;padding:14px 10px;border-bottom:1px solid #ede7d8;color:#b7ac97;font-size:12px;">To be quoted</td>
       </tr>`
     )
     .join("");
 
   return `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>LaxRee Quotation ${refNo}</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaxRee Amenities — Quotation ${refNo}</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1712; padding: 40px; background: #fff; }
-  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #C6A15B; }
-  .logo { font-size: 28px; font-weight: 700; color: #C6A15B; letter-spacing: -0.5px; }
-  .logo span { font-size: 10px; color: #b7ac97; display: block; font-weight: 400; letter-spacing: 2px; margin-top: 2px; }
-  .ref { text-align: right; font-size: 12px; color: #6b6455; }
-  .ref strong { color: #1a1712; font-size: 14px; display: block; margin-bottom: 4px; }
-  .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #C6A15B; margin: 24px 0 12px; }
-  .customer { background: #f7f3ea; padding: 16px 20px; border-radius: 8px; margin-bottom: 24px; }
-  .customer div { display: flex; margin-bottom: 6px; font-size: 13px; }
-  .customer div:last-child { margin-bottom: 0; }
-  .customer label { width: 100px; color: #6b6455; font-weight: 600; }
-  .customer span { color: #1a1712; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-  th { background: #12100d; color: #f7f3ea; padding: 12px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-  th:first-child { border-radius: 6px 0 0 0; }
-  th:last-child { border-radius: 0 6px 0 0; }
-  .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e0d4; font-size: 11px; color: #6b6455; text-align: center; }
-  .footer strong { color: #C6A15B; }
-  .note { background: #fff8e7; border: 1px solid #C6A15B; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #1a1712; margin-bottom: 16px; }
-  @media print { body { padding: 20px; } .no-print { display: none; } }
+  body { font-family: 'Work Sans', 'Helvetica Neue', Arial, sans-serif; color: #1a1712; background: #f7f3ea; padding: 0; }
+  .page { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 0 40px rgba(18,16,13,0.08); }
+
+  /* ── Header ── */
+  .header { background: #12100d; padding: 36px 48px; display: flex; justify-content: space-between; align-items: center; }
+  .header-logo { display: flex; align-items: center; gap: 12px; }
+  .header-logo .diamond { width: 10px; height: 10px; background: #C6A15B; transform: rotate(45deg); }
+  .header-logo .brand { font-family: 'Fraunces', Georgia, serif; font-size: 30px; font-weight: 700; color: #C6A15B; letter-spacing: -0.5px; }
+  .header-logo .tagline { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: #b7ac97; text-transform: uppercase; letter-spacing: 3px; margin-top: 2px; }
+  .header-ref { text-align: right; }
+  .header-ref .label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #b7ac97; text-transform: uppercase; letter-spacing: 2px; }
+  .header-ref .ref-no { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: #C6A15B; font-weight: 600; margin-top: 4px; }
+  .header-ref .date { font-size: 11px; color: #b7ac97; margin-top: 2px; }
+
+  /* ── Title bar ── */
+  .title-bar { background: linear-gradient(90deg, #C6A15B, #E4C989); padding: 16px 48px; }
+  .title-bar h1 { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #12100d; }
+
+  /* ── Body ── */
+  .body { padding: 36px 48px; }
+
+  /* ── Customer section ── */
+  .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2.5px; color: #C6A15B; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #ede7d8; }
+  .customer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  .customer-field { display: flex; flex-direction: column; gap: 4px; }
+  .customer-field .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #b7ac97; }
+  .customer-field .field-value { font-size: 14px; color: #1a1712; font-weight: 500; }
+
+  /* ── Products table ── */
+  .table-wrap { margin-bottom: 24px; border-radius: 10px; overflow: hidden; border: 1px solid #ede7d8; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: #12100d; }
+  th { padding: 14px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #C6A15B; text-align: left; }
+  th.center { text-align: center; }
+  th.right { text-align: right; }
+  tbody tr:nth-child(even) { background: #faf8f2; }
+  tbody tr:hover { background: #f5f0e4; }
+
+  /* ── Summary ── */
+  .summary { display: flex; justify-content: flex-end; margin-bottom: 32px; }
+  .summary-box { min-width: 260px; }
+  .summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; }
+  .summary-row.total { border-top: 2px solid #C6A15B; margin-top: 8px; padding-top: 12px; font-weight: 700; font-size: 15px; color: #12100d; }
+  .summary-row .label { color: #6b6455; }
+  .summary-row .value { color: #1a1712; font-weight: 600; }
+
+  /* ── Note ── */
+  .note { background: #fffaf0; border-left: 4px solid #C6A15B; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 32px; }
+  .note p { font-size: 12px; color: #6b6455; line-height: 1.6; }
+  .note strong { color: #1a1712; }
+
+  /* ── Footer ── */
+  .footer { background: #12100d; padding: 28px 48px; text-align: center; }
+  .footer-brand { font-family: 'Fraunces', Georgia, serif; font-size: 18px; font-weight: 600; color: #C6A15B; margin-bottom: 6px; }
+  .footer-addr { font-size: 11px; color: #b7ac97; line-height: 1.7; }
+  .footer-certs { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #6b6455; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; }
+
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; max-width: 100%; }
+    @page { margin: 0; size: A4; }
+  }
 </style>
 </head>
 <body>
+<div class="page">
+  <!-- Header -->
   <div class="header">
-    <div class="logo">LaxRee<span>AMENITIES • HOTEL SUPPLIES REDEFINED</span></div>
-    <div class="ref">
-      <strong>Quotation Request</strong>
-      Ref: ${refNo}<br>
-      Date: ${date || new Date().toLocaleDateString("en-IN")}
+    <div class="header-logo">
+      <div class="diamond"></div>
+      <div>
+        <div class="brand">LaxRee</div>
+        <div class="tagline">Amenities • Hotel Supplies Redefined</div>
+      </div>
+    </div>
+    <div class="header-ref">
+      <div class="label">Quotation Request</div>
+      <div class="ref-no">${refNo}</div>
+      <div class="date">${date || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</div>
     </div>
   </div>
 
-  <div class="section-title">Customer Details</div>
-  <div class="customer">
-    <div><label>Name:</label><span>${form.name}</span></div>
-    <div><label>Phone:</label><span>${form.phone}</span></div>
-    <div><label>Email:</label><span>${form.email || "—"}</span></div>
-    <div><label>Hotel:</label><span>${form.hotel || "—"}</span></div>
-    ${form.message ? `<div><label>Message:</label><span>${form.message}</span></div>` : ""}
+  <!-- Title bar -->
+  <div class="title-bar">
+    <h1>Product Quotation Request</h1>
   </div>
 
-  <div class="section-title">Selected Products (${items.length} items, ${items.reduce((s, i) => s + i.quantity, 0)} units)</div>
-  <table>
-    <thead>
-      <tr>
-        <th style="width:40px;">S.No</th>
-        <th style="width:90px;">Model</th>
-        <th>Product Name</th>
-        <th style="width:100px;">Category</th>
-        <th style="width:60px;">Qty</th>
-        <th style="width:90px;">Rate (INR)</th>
-        <th style="width:100px;">Amount (INR)</th>
-      </tr>
-    </thead>
-    <tbody>${itemsHTML}</tbody>
-  </table>
+  <!-- Body -->
+  <div class="body">
+    <!-- Customer details -->
+    <div class="section-label">Customer Details</div>
+    <div class="customer-grid">
+      <div class="customer-field">
+        <div class="field-label">Name</div>
+        <div class="field-value">${form.name}</div>
+      </div>
+      <div class="customer-field">
+        <div class="field-label">Phone</div>
+        <div class="field-value">${form.phone}</div>
+      </div>
+      <div class="customer-field">
+        <div class="field-label">Email</div>
+        <div class="field-value">${form.email || "—"}</div>
+      </div>
+      <div class="customer-field">
+        <div class="field-label">Hotel / Company</div>
+        <div class="field-value">${form.hotel || "—"}</div>
+      </div>
+      ${form.message ? `<div class="customer-field" style="grid-column:1/3;"><div class="field-label">Message</div><div class="field-value">${form.message}</div></div>` : ""}
+    </div>
 
-  <div class="note">
-    <strong>Note:</strong> Rates will be provided by LaxRee sales team upon confirmation.
-    This is a quotation request, not a confirmed order.
+    <!-- Products table -->
+    <div class="section-label">Selected Products (${items.length} Items, ${totalUnits} Units)</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px;" class="center">#</th>
+            <th style="width:100px;">Model</th>
+            <th>Product Name</th>
+            <th style="width:110px;">Category</th>
+            <th style="width:60px;" class="center">Qty</th>
+            <th style="width:100px;" class="center">Rate (INR)</th>
+            <th style="width:110px;" class="right">Amount (INR)</th>
+          </tr>
+        </thead>
+        <tbody>${itemsHTML}</tbody>
+      </table>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-box">
+        <div class="summary-row"><span class="label">Total Items</span><span class="value">${items.length}</span></div>
+        <div class="summary-row"><span class="label">Total Units</span><span class="value">${totalUnits}</span></div>
+        <div class="summary-row"><span class="label">Estimated Total</span><span class="value">To be quoted</span></div>
+        <div class="summary-row total"><span>Grand Total</span><span>To be quoted</span></div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      <p><strong>Note:</strong> This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation. Prices may vary based on order quantity, customization, and delivery location.</p>
+    </div>
   </div>
 
+  <!-- Footer -->
   <div class="footer">
-    <strong>LaxRee Amenities</strong> — Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>
-    Phone: +91-92516 83662 | Toll Free: 1800 120 7001 | Email: contactus@laxree.com<br>
-    ISO 9001 • ISO 14001 • ISO 45001 • CE • RoHS Certified
+    <div class="footer-brand">LaxRee Amenities</div>
+    <div class="footer-addr">
+      Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>
+      Phone: +91-92516 83662 &nbsp;|&nbsp; Toll Free: 1800 120 7001 &nbsp;|&nbsp; Email: contactus@laxree.com
+    </div>
+    <div class="footer-certs">ISO 9001 • ISO 14001 • ISO 45001 • CE Certified • RoHS Compliant</div>
   </div>
+</div>
 </body>
 </html>`;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Helper: Generate PROFESSIONAL Excel CSV
+   ───────────────────────────────────────────────────────────── */
+function generateProfessionalCSV(
+  form: { name: string; email: string; phone: string; hotel: string; message: string },
+  items: { model: string; name: string; category: string; quantity: number; image: string }[],
+  refNo: string,
+  date: string
+): string {
+  const totalUnits = items.reduce((s, i) => s + i.quantity, 0);
+  const d = date || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+  const rows: string[][] = [
+    ["LaxRee Amenities — Quotation Request"],
+    ["Hotel Supplies Redefined"],
+    [],
+    ["Reference No.", refNo],
+    ["Date", d],
+    [],
+    ["CUSTOMER DETAILS"],
+    ["Name", form.name],
+    ["Phone", form.phone],
+    ["Email", form.email || "—"],
+    ["Hotel / Company", form.hotel || "—"],
+    ["Message", form.message || "—"],
+    [],
+    ["PRODUCT DETAILS"],
+    ["S.No", "Model", "Product Name", "Category", "Quantity", "Rate (INR)", "Amount (INR)"],
+    ...items.map((item, i) => [
+      String(i + 1),
+      item.model,
+      item.name,
+      item.category,
+      String(item.quantity),
+      "To be quoted",
+      "To be quoted",
+    ]),
+    [],
+    ["", "", "", "Total Items:", String(items.length), "", ""],
+    ["", "", "", "Total Units:", String(totalUnits), "", ""],
+    ["", "", "", "Grand Total:", "To be quoted", "", ""],
+    [],
+    ["Note: This is a quotation request, not a confirmed order. Rates will be provided by LaxRee sales team."],
+    ["Contact: +91-92516 83662 | Toll Free: 1800 120 7001 | Email: contactus@laxree.com"],
+    ["Address: Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001"],
+    ["Certifications: ISO 9001, ISO 14001, ISO 45001, CE Certified, RoHS Compliant"],
+  ];
+
+  return rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")).join("\n");
 }
