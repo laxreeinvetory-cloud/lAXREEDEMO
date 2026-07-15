@@ -568,7 +568,7 @@ function ProductEditor({
   product: Product | null;
   categories: Category[];
   onClose: () => void;
-  onSave: (data: Partial<Product> & { specs: Spec[] }) => void;
+  onSave: (data: Omit<Partial<Product>, "specs"> & { specs: Spec[] }) => void;
 }) {
   const parseSpecs = (raw: string): Spec[] => {
     try {
