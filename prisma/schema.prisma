@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema for LaxRee Amenities Admin Panel
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +9,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model AdminUser {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String
+  hotel     String?
+  message   String?
+  category  String?
+  source    String   @default("contact")
+  status    String   @default("new") // new, contacted, quoted, closed
+  refNo     String?
+  avgRoomRent  String?
+  timeline     String?
+  propertyType String?
+  projectStage String?
+  items     String?  // JSON string of items
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  category  String
+  excerpt   String
+  content   String   // JSON string of content sections
+  image     String
+  author    String   @default("LaxRee Editorial Team")
+  authorRole String  @default("Hospitality Procurement Insights")
+  date      String
+  readTime  String   @default("5 min")
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   // JSON string
+  updatedAt DateTime @updatedAt
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

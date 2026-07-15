@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -112,6 +113,24 @@ Please provide rates for the above items.`;
 
     // Log the quotation
     console.log(`[QUOTATION] ${refNo} — ${body.name} — ${body.items.length} items`);
+
+    // Save to database
+    await db.lead.create({
+      data: {
+        name: body.name,
+        phone: body.phone,
+        email: body.email || null,
+        hotel: body.hotel || null,
+        message: body.message || null,
+        source: "quotation",
+        refNo,
+        avgRoomRent: body.avgRoomRent || null,
+        timeline: body.timeline || null,
+        propertyType: body.propertyType || null,
+        projectStage: body.projectStage || null,
+        items: JSON.stringify(body.items),
+      },
+    });
 
     return NextResponse.json({
       ok: true,

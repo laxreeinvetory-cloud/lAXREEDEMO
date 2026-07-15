@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -11,12 +12,6 @@ type LeadBody = {
   source?: string;
 };
 
-/**
- * POST /api/lead
- * Accepts enquiry/catalogue form submissions. In a real deployment this
- * would persist to the database + notify the sales team. For this build
- * we log to server stdout and echo back a success payload.
- */
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as LeadBody;
@@ -39,13 +34,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Persist: log to stdout (would be db.lead.create({...}) in prod)
-    const lead = {
-      id: `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      receivedAt: new Date().toISOString(),
-      ...body,
-    };
-    console.log("[LEAD]", JSON.stringify(lead));
+    // Save to database
+    const lead = await db.lead.create({
+      data: {
+        name: body.name!,
+        phone: body.phone!,
+        email: body.email || null,
+        category: body.category || null,
+        message: body.message || null,
+        source: body.source || "contact-page",
+      },
+    });
 
     return NextResponse.json({
       ok: true,
@@ -54,11 +53,11 @@ export async function POST(req: NextRequest) {
         "Thank you for your enquiry. Our team will reach out within 24 hours.",
     });
   } catch (err) {
+    console.error("[LEAD ERROR]", err);
     return NextResponse.json(
       {
         ok: false,
         message: "Server error while processing your enquiry",
-        detail: err instanceof Error ? err.message : "Unknown error",
       },
       { status: 500 }
     );
