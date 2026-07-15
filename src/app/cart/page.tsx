@@ -51,6 +51,7 @@ export default function CartPage() {
     if (submitting || items.length === 0) return;
     setSubmitting(true);
     try {
+      // Step 1: Generate quotation via API
       const res = await fetch("/api/quotation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -69,14 +70,89 @@ export default function CartPage() {
         throw new Error(errorData.message || `Request failed (${res.status})`);
       }
       const data = await res.json();
-      setQuotationResult({
+
+      // Store quotation result
+      const result = {
         date: data.date,
         refNo: data.refNo,
         whatsappUrl: data.whatsappUrl,
         csv: data.csv,
-      });
+      };
+      setQuotationResult(result);
       setSubmitted(true);
-      notify("success", `Quotation ${data.refNo} generated! Sending to sales team...`);
+      notify("success", `Quotation ${data.refNo} generated! Downloading files & opening WhatsApp...`);
+
+      // Step 2: Auto-download Excel file
+      try {
+        const excelRes = await fetch("/api/generate-excel", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...form,
+            refNo: data.refNo,
+            date: data.date || "",
+            items: items.map((i) => ({
+              model: i.model,
+              name: i.name,
+              category: i.category,
+              quantity: i.quantity,
+            })),
+          }),
+        });
+        if (excelRes.ok) {
+          const blob = await excelRes.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `LaxRee_Quotation_${data.refNo}.xlsx`;
+          link.click();
+          URL.revokeObjectURL(url);
+        }
+      } catch {
+        // Excel download failed — not critical, continue
+      }
+
+      // Step 3: Auto-download PDF (via print)
+      setTimeout(() => {
+        const printWin = window.open("", "_blank");
+        if (printWin) {
+          const html = generateProfessionalQuotationHTML(form, items, data.refNo, data.date || "");
+          printWin.document.write(html);
+          printWin.document.close();
+          setTimeout(() => printWin.print(), 800);
+        }
+      }, 500);
+
+      // Step 4: Open WhatsApp to sales executive with pre-filled message
+      // WhatsApp doesn't support file attachments via URL, so we:
+      // - Open WhatsApp with the quotation details pre-filled
+      // - The user manually attaches the downloaded Excel file
+      setTimeout(() => {
+        // Simple WhatsApp message with instruction to attach file
+        const waMsg = `*New Quotation Request — LaxRee Amenities*
+━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 *Ref:* ${data.refNo}
+📅 *Date:* ${data.date}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 Name: ${form.name}
+📞 Phone: ${form.phone}
+📧 Email: ${form.email || "—"}
+🏨 Hotel: ${form.hotel || "—"}
+💰 Avg Room Rent: ${form.avgRoomRent || "—"}
+⏱ Timeline: ${form.timeline || "—"}
+🏗 Property: ${form.propertyType === "new" ? "New Property" : "Renovation"}
+${form.propertyType === "new" && form.projectStage ? `📊 Stage: ${form.projectStage}` : ""}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+*Selected Products (${items.length} items):*
+${items.map((item, i) => `${i + 1}. ${item.name} (${item.model}) — Qty: ${item.quantity}`).join("\n")}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+Here is my requirement, please share price of above items.
+
+📎 *Note:* Excel & PDF quotation files have been downloaded. Please attach them in this chat.`;
+        const waUrl = `https://wa.me/919251683660?text=${encodeURIComponent(waMsg)}`;
+        window.open(waUrl, "_blank");
+      }, 1500);
+
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Failed to generate quotation. Please try again.";
       notify("error", errorMsg);
@@ -186,12 +262,21 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <p className="font-body text-[14px] leading-relaxed text-ink-muted mb-8">
+                <p className="font-body text-[14px] leading-relaxed text-ink-muted mb-4">
                   Your quotation request has been generated with reference{" "}
-                  <strong className="text-ink">{quotationResult.refNo}</strong>. Download
-                  the PDF or Excel file for your records, and click below to send it
-                  directly to our sales executive.
+                  <strong className="text-ink">{quotationResult.refNo}</strong>.
+                  Excel & PDF files have been auto-downloaded, and WhatsApp has been opened
+                  to our sales executive.
                 </p>
+
+                {/* Instruction box */}
+                <div className="mb-8 rounded-2xl border border-brass/30 bg-brass/5 p-5">
+                  <p className="font-body text-[13px] leading-relaxed text-ink">
+                    <strong className="text-brass">📎 Next Step:</strong> In the WhatsApp chat that just opened,
+                    attach the downloaded <strong>Excel file</strong> ({quotationResult.refNo}.xlsx)
+                    and send the message. Our sales team will reply with pricing within 24 hours.
+                  </p>
+                </div>
 
                 {/* Download buttons */}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mb-8">
@@ -213,27 +298,24 @@ export default function CartPage() {
                   </button>
                 </div>
 
-                {/* WhatsApp send button — also downloads PDF + Excel */}
+                {/* WhatsApp button — re-open if user closed it */}
                 <button
                   type="button"
-                  onClick={async () => {
-                    if (!quotationResult) return;
-                    // Download PDF
-                    downloadPDF();
-                    // Small delay then download Excel
-                    setTimeout(() => downloadCSV(), 500);
-                    // Open WhatsApp after 1.5s
+                  onClick={() => {
+                    // Re-download Excel
+                    downloadCSV();
+                    // Re-open WhatsApp
                     setTimeout(() => {
                       window.open(quotationResult.whatsappUrl, "_blank");
-                    }, 1500);
+                    }, 800);
                   }}
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3.5 text-[14px] font-medium text-white transition-transform hover:scale-[1.02] cursor-pointer"
                 >
                   <Send className="h-4 w-4" />
-                  Send to Sales Executive via WhatsApp
+                  Re-open WhatsApp & Download Excel
                 </button>
                 <p className="mt-3 text-center text-[11px] text-ink-muted">
-                  Downloads PDF + Excel, then opens WhatsApp with quotation pre-filled → +91 92516 83660
+                  Click to re-download Excel file and open WhatsApp → +91 92516 83660
                 </p>
 
                 {/* Clear and start over */}
