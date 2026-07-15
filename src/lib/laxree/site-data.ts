@@ -452,6 +452,46 @@ export const BLOG_POSTS: BlogPost[] = [
     date: "Jul 2026",
     readTime: "8 min",
   },
+  {
+    slug: "electric-kettle-hotel-rooms-guide",
+    title: "Electric Kettle for Hotel Rooms: Complete Buying Guide with Specs & Pricing",
+    category: "Procurement Guide",
+    excerpt:
+      "SS304 vs SS202, 1.0L vs 1.2L, auto shut-off mechanisms — the definitive guide to choosing electric kettles for hotel rooms in bulk.",
+    image: "/images/blog/blog-9.jpg",
+    date: "Jul 2026",
+    readTime: "7 min",
+  },
+  {
+    slug: "automatic-soap-dispenser-guide",
+    title: "Automatic Soap Dispensers for Hotels: Sensor vs Manual, Specs & Bulk Pricing",
+    category: "Procurement Guide",
+    excerpt:
+      "Infrared sensor range, refill capacity, battery life, drip tray design — everything you need to specify when buying soap dispensers for hotels.",
+    image: "/images/blog/blog-10.jpg",
+    date: "Jul 2026",
+    readTime: "6 min",
+  },
+  {
+    slug: "hotel-trolley-complete-guide",
+    title: "Complete Guide to Hotel Trolleys: Types, Uses, Specs & Bulk Pricing in India",
+    category: "Procurement Guide",
+    excerpt:
+      "Luggage trolleys, housekeeping trolleys, linen trolleys — load capacity, wheel quality, frame materials, and fair pricing benchmarks for India.",
+    image: "/images/blog/blog-11.jpg",
+    date: "Jul 2026",
+    readTime: "8 min",
+  },
+  {
+    slug: "steam-iron-hotel-rooms-guide",
+    title: "Steam Iron for Hotel Rooms: Buying Guide with Specs, Safety & Pricing",
+    category: "Procurement Guide",
+    excerpt:
+      "Wattage, steam output, soleplate material, auto shut-off — the complete specification guide for procuring steam irons for hotel rooms in India.",
+    image: "/images/blog/blog-12.jpg",
+    date: "Jul 2026",
+    readTime: "7 min",
+  },
 ];
 
 export const WHATSAPP_EXECUTIVES = [
@@ -1359,6 +1399,200 @@ export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
           "6. What certifications do you hold? (Ask for copies, not claims)",
           "7. Can you provide references from 3+ hotels of similar star rating?",
           "8. What is your warranty period? (Should be 2+ years minimum)",
+        ],
+      },
+    ];
+  }
+
+  if (post.slug === "electric-kettle-hotel-rooms-guide") {
+    full.author = "Amit Verma";
+    full.authorRole = "Head of Sales (Pan-India)";
+    full.content = [
+      {
+        paragraphs: [
+          "The electric kettle is the most-used small appliance in a hotel room after the TV remote. A good kettle gets used 3-5 times per guest stay; a bad one generates maintenance calls, guest complaints, and even safety incidents. Yet many procurement teams treat it as an afterthought, buying the cheapest option available.",
+          "This guide covers every specification decision for bulk-buying hotel kettles in India: stainless steel grades, capacity, wattage, safety features, and fair pricing benchmarks.",
+        ],
+      },
+      {
+        heading: "Stainless Steel Grade: SS304 vs SS202",
+        paragraphs: [
+          "SS304 is food-grade stainless steel — corrosion-resistant, non-reactive, and safe for boiling water. SS202 is a cheaper alternative that rusts within 6-12 months in humid Indian climates. Always specify 'SS304 body and spout' in your tender.",
+          "At LaxRee, all our kettles use SS304 construction. The price difference between SS304 and SS202 is only ₹150-200 per unit — but the lifespan difference is 5x. Don't compromise here.",
+        ],
+      },
+      {
+        heading: "Capacity: 1.0L vs 1.2L",
+        paragraphs: [
+          "1.0L kettles are the budget standard — sufficient for 2 cups of tea/coffee. 1.2L kettles can serve 3-4 cups, which is better for family rooms and suites. The price difference is only ₹100-150 per unit.",
+          "Always order the kettle as a SET — kettle + 2 cups + tray. Individual kettles without cups look incomplete in a hotel room. LaxRee's kettle sets include matching SS304 cups and a brass-accented tray.",
+        ],
+      },
+      {
+        heading: "Wattage & Heating Speed",
+        paragraphs: [
+          "Hotel kettles range from 1350W to 1500W. Higher wattage = faster boiling. At 1500W, 1L water boils in ~3.5 minutes. At 1350W, it takes ~4.5 minutes. For guest satisfaction, always specify 1500W minimum.",
+          "Important: Check that your room's electrical circuit can handle 1500W. Most Indian hotel rooms have 6A/220V circuits (1320W max). If so, specify 1350W kettles to avoid tripping. For 15A circuits, 1500W is fine.",
+        ],
+      },
+      {
+        heading: "Safety Features: Non-Negotiable",
+        paragraphs: [
+          "Auto shut-off: The kettle must turn off automatically when water boils or when lifted from the base. This is a fire safety requirement — never buy a kettle without it.",
+          "Boil-dry protection: The kettle must not heat if empty. This prevents element burnout and fire hazards. Specify 'boil-dry protection with thermal fuse' in your tender.",
+          "Cool-touch body: Premium kettles have a double-wall design that keeps the outer surface cool. This prevents guest burns — critical for family hotels.",
+        ],
+      },
+      {
+        heading: "Bulk Pricing Benchmarks (India, 2026)",
+        paragraphs: [
+          "1.0L SS304 kettle only: ₹450-650. 1.0L SS304 kettle set (kettle + 2 cups + tray): ₹700-950. 1.2L SS304 kettle set: ₹800-1,100. Premium cordless 1.2L set with cool-touch body: ₹1,000-1,400.",
+          "At LaxRee, our KS-101 (1.0L set) starts at ₹680 for bulk orders of 100+ units. Our KS-102 (1.2L set with tray) starts at ₹780. These are factory-direct OEM prices — trading companies typically charge 20-30% more.",
+        ],
+      },
+    ];
+  }
+
+  if (post.slug === "automatic-soap-dispenser-guide") {
+    full.author = "Sunita Jain";
+    full.authorRole = "Head of Quality & Compliance";
+    full.content = [
+      {
+        paragraphs: [
+          "Automatic soap dispensers have replaced bar soap in most Indian hotels above 3★. They're more hygienic, reduce waste, and look premium. But the quality range between suppliers is enormous — a bad dispenser leaks, clogs, or dies within months.",
+          "This guide covers every specification for bulk-buying hotel soap dispensers: sensor types, capacity, battery life, refill mechanisms, and pricing.",
+        ],
+      },
+      {
+        heading: "Sensor Type: Infrared vs Capacitive",
+        paragraphs: [
+          "Infrared (IR) sensors are the industry standard. They detect hand proximity at 5-15cm and dispense a fixed amount. IR sensors are reliable, affordable, and work with all soap types. Specify 'IR sensor with 10cm detection range' in your tender.",
+          "Capacitive sensors are newer and more sensitive but cost 40% more. They're not worth the premium for most hotels — IR is perfectly adequate.",
+        ],
+      },
+      {
+        heading: "Capacity & Refill Design",
+        paragraphs: [
+          "Hotel dispensers should have 500-800ml capacity — enough for 200-300 dispenses between refills. Smaller capacities (300ml) require daily refilling in busy hotels; larger capacities (1L+) are bulky and look commercial.",
+          "Refill mechanism matters: Top-fill dispensers are easier for housekeeping (no removal needed). Bottom-fill dispensers look sleeker but require removal and inversion. For efficiency, specify top-fill.",
+        ],
+      },
+      {
+        heading: "Battery Life: The Hidden Cost",
+        paragraphs: [
+          "Most dispensers use 4×AA batteries. A quality dispenser delivers 10,000+ dispenses per battery set (3-4 months in a standard hotel). Cheap dispensers drain batteries in 4-6 weeks, costing ₹200-300 per room per year in batteries alone.",
+          "Always specify 'minimum 10,000 dispenses per battery set' and ask for the manufacturer's test certificate. At LaxRee, our dispensers deliver 15,000+ dispenses per set.",
+        ],
+      },
+      {
+        heading: "Soap Compatibility",
+        paragraphs: [
+          "Not all dispensers work with all soap types. Some only work with liquid soap (viscosity < 3000 cP); others handle lotion soap and sanitizer gel. Specify 'compatible with liquid soap, lotion soap, and hand sanitizer' for maximum flexibility.",
+          "Avoid foam dispensers unless you're committed to foam soap — they have specialized pumps that clog with regular liquid soap.",
+        ],
+      },
+      {
+        heading: "Pricing Benchmarks (India, 2026)",
+        paragraphs: [
+          "Manual soap dispenser (wall-mounted, SS304): ₹250-400. Automatic IR dispenser (500ml, plastic body): ₹450-700. Automatic IR dispenser (800ml, SS304 body): ₹700-1,100. Premium automatic dispenser (brass-finish, 800ml, top-fill): ₹900-1,400.",
+          "For a 100-room hotel, the difference between budget and premium is ₹45,000-₹95,000. The premium option saves ₹20,000-30,000 per year in battery costs and maintenance — so the payback period is 3-4 years.",
+        ],
+      },
+    ];
+  }
+
+  if (post.slug === "hotel-trolley-complete-guide") {
+    full.author = "Amit Verma";
+    full.authorRole = "Head of Sales (Pan-India)";
+    full.content = [
+      {
+        paragraphs: [
+          "Hotel trolleys are the workhorses of hospitality operations — luggage trolleys for guest arrivals, housekeeping trolleys for room service, and linen trolleys for laundry. A wrong trolley choice creates daily operational friction that compounds over years.",
+          "This guide covers all three trolley types with specifications, load capacities, wheel quality standards, and fair pricing benchmarks for the Indian market.",
+        ],
+      },
+      {
+        heading: "Luggage Trolleys: Guest-Facing",
+        paragraphs: [
+          "Luggage trolleys are the first physical interaction a guest has with your hotel's hardware. A sturdy, brass-framed trolley signals quality; a squeaky, wobbling trolley signals budget. Always specify brass-plated steel frame (not aluminum — it dents).",
+          "Key specs: Load capacity 200kg minimum, 4 silent castor wheels (2 swivel + 2 fixed), carpeted platform (removable for cleaning), frame height 950-1000mm. At LaxRee, our LT-801 model meets all these specs at ₹8,500 per unit (bulk pricing).",
+        ],
+      },
+      {
+        heading: "Housekeeping Trolleys: Staff-Facing",
+        paragraphs: [
+          "Housekeeping trolleys carry cleaning supplies, linens, and amenities between rooms. They're used 8+ hours daily, so durability is critical. Specify powder-coated steel frame (not chrome-plated — it chips), minimum 150kg load, and 4 swivel wheels for maneuverability in corridors.",
+          "Essential features: 3 shelves minimum, removable linen bag (washable), locking cabinet for cleaning chemicals, and a built-in trash bag holder. At LaxRee, our LT-803 model includes all features at ₹6,200 per unit.",
+        ],
+      },
+      {
+        heading: "Linen Trolleys: Laundry Operations",
+        paragraphs: [
+          "Linen trolleys transport dirty and clean linens between rooms and laundry. They need large capacity (minimum 120kg load) and separate compartments to prevent cross-contamination. Specify 2-compartment design (dirty/clean separator).",
+          "Key spec: The frame must be powder-coated (not bare steel) to prevent rust from damp linens. Wheels must be 125mm+ diameter for smooth rolling over corridor thresholds. Our LT-804 model is ₹4,800 per unit in bulk.",
+        ],
+      },
+      {
+        heading: "Wheel Quality: The #1 Failure Point",
+        paragraphs: [
+          "Trolley wheels fail before any other component. Cheap wheels squeak, wobble, and seize within 6 months. Always specify 'polyurethane-tread castor wheels with precision ball bearings' — these are silent, durable, and don't mark floors.",
+          "Wheel size matters: 100mm for luggage trolleys (guest areas), 125mm for housekeeping/linen trolleys (service areas). Larger wheels roll smoother over uneven surfaces.",
+        ],
+      },
+      {
+        heading: "Bulk Pricing Benchmarks (India, 2026)",
+        paragraphs: [
+          "Luggage trolley (brass frame, 200kg, carpeted): ₹7,500-12,000. Housekeeping trolley (3 shelves, linen bag, 150kg): ₹5,200-8,500. Linen trolley (2-compartment, 120kg): ₹4,000-6,500.",
+          "At LaxRee, we manufacture all three types in our Ajmer factory. Bulk pricing (20+ units): LT-801 luggage trolley ₹8,500, LT-803 housekeeping trolley ₹6,200, LT-804 linen trolley ₹4,800. All include 2-year warranty and 7-year spare-parts guarantee.",
+        ],
+      },
+    ];
+  }
+
+  if (post.slug === "steam-iron-hotel-rooms-guide") {
+    full.author = "Sunita Jain";
+    full.authorRole = "Head of Quality & Compliance";
+    full.content = [
+      {
+        paragraphs: [
+          "The steam iron is an essential in-room amenity for business hotels — guests iron their shirts before meetings, and a faulty iron is a guaranteed complaint. Yet many hotels buy the cheapest iron available, resulting in burned clothes, tripped circuits, and guest dissatisfaction.",
+          "This guide covers every specification for bulk-buying hotel steam irons: wattage, soleplate material, steam output, safety features, and fair pricing for India.",
+        ],
+      },
+      {
+        heading: "Wattage: Balance Power & Circuit Safety",
+        paragraphs: [
+          "Hotel steam irons range from 1200W to 1800W. Higher wattage means faster heating and better steam, but also higher circuit load. Most Indian hotel rooms have 6A circuits (1320W max), so specify 1200-1300W irons to avoid tripping.",
+          "For rooms with 15A circuits, 1500W irons are ideal — they heat in 60 seconds and produce consistent steam. Always verify the room's electrical capacity before specifying iron wattage.",
+        ],
+      },
+      {
+        heading: "Soleplate Material: Ceramic vs Stainless Steel",
+        paragraphs: [
+          "Ceramic soleplates are the 2026 standard — they glide smoothly, distribute heat evenly, and don't stick to fabrics. They're also scratch-resistant and easy to clean. Specify 'ceramic-coated soleplate with non-stick finish'.",
+          "Stainless steel soleplates are cheaper but scratch easily and can snag delicate fabrics. Avoid aluminum soleplates entirely — they stain and transfer marks to white shirts.",
+        ],
+      },
+      {
+        heading: "Steam Output & Vertical Steaming",
+        paragraphs: [
+          "Continuous steam output should be 15-25 g/min for adequate wrinkle removal. Steam burst (shot of extra steam) should be 50-80 g for stubborn wrinkles. Always specify both numbers in your tender.",
+          "Vertical steaming capability allows guests to steam hanging clothes — a premium feature that's increasingly expected in 4★+ hotels. Specify 'vertical steam function' if your property is above 3★.",
+        ],
+      },
+      {
+        heading: "Safety Features: Non-Negotiable for Hotels",
+        paragraphs: [
+          "Auto shut-off: The iron must turn off after 8 minutes horizontal or 30 seconds on its side/soleplate. This is a fire safety requirement — never buy an iron without it. The auto shut-off should have a visible indicator light.",
+          "Anti-calc function: Hard water in Indian cities clogs steam vents within months. Specify 'anti-calc system with self-cleaning function' to extend iron life from 1 year to 3+ years.",
+          "Swivel cord: 360° swivel cord prevents tangling and cord breakage — the #1 maintenance issue with hotel irons. Specify '360° swivel cord, 1.8m minimum length'.",
+        ],
+      },
+      {
+        heading: "Bulk Pricing Benchmarks (India, 2026)",
+        paragraphs: [
+          "1200W ceramic soleplate iron (basic, auto shut-off): ₹550-800. 1300W ceramic iron (anti-calc, vertical steam): ₹700-1,000. 1500W ceramic iron (all features, premium build): ₹900-1,300.",
+          "At LaxRee, our steam irons start at ₹620 for the 1200W model (bulk pricing, 50+ units). All include auto shut-off, ceramic soleplate, and 2-year warranty. We also provide ironing boards (₹1,200-1,800) as a matching set.",
         ],
       },
     ];
