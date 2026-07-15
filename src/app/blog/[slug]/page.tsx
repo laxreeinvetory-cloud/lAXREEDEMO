@@ -12,7 +12,8 @@ import {
   Share2,
 } from "lucide-react";
 import { PageCTA, GlassCard, FadeIn } from "@/components/site/page-primitives";
-import { BLOG_POSTS_FULL, SITE } from "@/lib/laxree/site-data";
+import { BLOG_POSTS_FULL } from "@/lib/laxree/blog-content";
+import { SITE } from "@/lib/laxree/site-data";
 
 /* Pre-generate the 3 known slugs */
 export function generateStaticParams() {
