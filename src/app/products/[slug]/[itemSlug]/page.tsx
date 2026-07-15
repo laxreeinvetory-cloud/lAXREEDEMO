@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import {
   CATALOGUE_CATEGORIES,
   type CatalogueProduct,
-} from "@/lib/laxree/site-data";
+} from "@/lib/laxree/catalogue-data";
 import {
   PageHero,
   SectionHeading,

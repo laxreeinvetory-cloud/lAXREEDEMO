@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Plus, Check, ShoppingBag } from "lucide-react";
 import { useCart } from "@/components/providers/cart-provider";
 import { useEnquiry } from "@/components/providers/enquiry-provider";
-import type { CatalogueProduct } from "@/lib/laxree/site-data";
+import type { CatalogueProduct } from "@/lib/laxree/catalogue-data";
 import { FadeIn, GlassCard } from "@/components/site/page-primitives";
 
 /**

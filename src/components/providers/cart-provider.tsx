@@ -7,7 +7,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import type { CatalogueProduct } from "@/lib/laxree/site-data";
+import type { CatalogueProduct } from "@/lib/laxree/catalogue-data";
 
 /* ─────────────────────────────────────────────────────────────
    Cart Item — product + quantity

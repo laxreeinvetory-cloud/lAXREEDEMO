@@ -11,9 +11,11 @@ import {
 } from "@/components/site/page-primitives";
 import {
   CATEGORIES,
+} from "@/lib/laxree/site-data";
+import {
   CATALOGUE_CATEGORIES,
   type CatalogueCategory,
-} from "@/lib/laxree/site-data";
+} from "@/lib/laxree/catalogue-data";
 
 /* ─────────────────────────────────────────────────────────────
    CategoryCard — large image card linking to category page

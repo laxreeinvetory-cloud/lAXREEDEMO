@@ -4,8 +4,10 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import {
   CATEGORIES,
-  CATALOGUE_CATEGORIES,
 } from "@/lib/laxree/site-data";
+import {
+  CATALOGUE_CATEGORIES,
+} from "@/lib/laxree/catalogue-data";
 import {
   PageHero,
   SectionHeading,
