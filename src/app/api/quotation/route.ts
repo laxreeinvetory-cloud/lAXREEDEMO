@@ -15,6 +15,10 @@ type QuotationBody = {
   phone: string;
   hotel: string;
   message: string;
+  avgRoomRent: string;
+  timeline: string;
+  propertyType: string;
+  projectStage: string;
   items: QuotationItem[];
 };
 
@@ -62,6 +66,11 @@ export async function POST(req: NextRequest) {
 📞 Phone: ${body.phone}
 📧 Email: ${body.email || "—"}
 🏨 Hotel: ${body.hotel || "—"}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+*Project Details:*
+💰 Avg Room Rent: ${body.avgRoomRent || "—"}
+⏱ Timeline: ${body.timeline || "—"}
+🏗 Property: ${body.propertyType === "new" ? "New Property" : "Renovation"}${body.propertyType === "new" && body.projectStage ? `\n📊 Stage: ${body.projectStage}` : ""}
 💬 Message: ${body.message || "—"}
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 *Selected Products (${body.items.length} items):*

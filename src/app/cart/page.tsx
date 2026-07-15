@@ -35,6 +35,10 @@ export default function CartPage() {
     phone: "",
     hotel: "",
     message: "",
+    avgRoomRent: "",
+    timeline: "",
+    propertyType: "renovation",
+    projectStage: "",
   });
 
   const inputClass =
@@ -214,7 +218,7 @@ export default function CartPage() {
                       clearCart();
                       setSubmitted(false);
                       setQuotationResult(null);
-                      setForm({ name: "", email: "", phone: "", hotel: "", message: "" });
+                      setForm({ name: "", email: "", phone: "", hotel: "", message: "", avgRoomRent: "", timeline: "", propertyType: "renovation", projectStage: "" });
                     }}
                     className="font-mono text-[11px] uppercase tracking-wider text-ink-muted hover:text-destructive transition-colors"
                   >
@@ -377,6 +381,87 @@ export default function CartPage() {
                       className={inputClass}
                     />
                   </div>
+
+                  {/* ─── Project Details Section ─── */}
+                  <div className="mt-2 pt-4 border-t border-ink/10">
+                    <p className="font-display text-[15px] font-medium text-ink mb-3">
+                      Project Details
+                    </p>
+                  </div>
+
+                  {/* Average room rent */}
+                  <div>
+                    <label className={labelClass}>Average Room Rent (per night)</label>
+                    <input
+                      type="text"
+                      value={form.avgRoomRent}
+                      onChange={(e) => setForm((p) => ({ ...p, avgRoomRent: e.target.value }))}
+                      placeholder="e.g. ₹4,000 - ₹6,000"
+                      className={inputClass}
+                    />
+                  </div>
+
+                  {/* Timeline / delivery required */}
+                  <div>
+                    <label className={labelClass}>Delivery Timeline Required</label>
+                    <input
+                      type="text"
+                      value={form.timeline}
+                      onChange={(e) => setForm((p) => ({ ...p, timeline: e.target.value }))}
+                      placeholder="e.g. 3 months / 45 days / ASAP"
+                      className={inputClass}
+                    />
+                  </div>
+
+                  {/* Property type: renovation or new */}
+                  <div>
+                    <label className={labelClass}>Property Type</label>
+                    <div className="flex gap-3 mt-1">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="propertyType"
+                          value="renovation"
+                          checked={form.propertyType === "renovation"}
+                          onChange={(e) => setForm((p) => ({ ...p, propertyType: e.target.value }))}
+                          className="accent-brass"
+                        />
+                        <span className="text-[13px] text-ink">Renovation</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="propertyType"
+                          value="new"
+                          checked={form.propertyType === "new"}
+                          onChange={(e) => setForm((p) => ({ ...p, propertyType: e.target.value }))}
+                          className="accent-brass"
+                        />
+                        <span className="text-[13px] text-ink">New Property</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* If new property: current stage */}
+                  {form.propertyType === "new" && (
+                    <div>
+                      <label className={labelClass}>Current Project Stage</label>
+                      <select
+                        value={form.projectStage}
+                        onChange={(e) => setForm((p) => ({ ...p, projectStage: e.target.value }))}
+                        className={inputClass}
+                      >
+                        <option value="">Select current stage</option>
+                        <option value="Under Foundation">Under Foundation</option>
+                        <option value="Structure / Civil Work">Structure / Civil Work</option>
+                        <option value="Furniture Stage">Furniture Stage</option>
+                        <option value="Interior Finishing">Interior Finishing</option>
+                        <option value="Final Stage (Handover)">Final Stage (Handover)</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Message */}
                   <div>
                     <label className={labelClass}>Message (optional)</label>
                     <textarea
@@ -421,7 +506,7 @@ export default function CartPage() {
    Helper: Generate PROFESSIONAL printable HTML quotation (PDF)
    ───────────────────────────────────────────────────────────── */
 function generateProfessionalQuotationHTML(
-  form: { name: string; email: string; phone: string; hotel: string; message: string },
+  form: { name: string; email: string; phone: string; hotel: string; message: string; avgRoomRent: string; timeline: string; propertyType: string; projectStage: string },
   items: { model: string; name: string; category: string; quantity: number; image: string }[],
   refNo: string,
   date: string
@@ -560,6 +645,24 @@ function generateProfessionalQuotationHTML(
         <div class="field-label">Hotel / Company</div>
         <div class="field-value">${form.hotel || "—"}</div>
       </div>
+    </div>
+
+    <!-- Project details -->
+    <div class="section-label">Project Details</div>
+    <div class="customer-grid">
+      <div class="customer-field">
+        <div class="field-label">Average Room Rent / Night</div>
+        <div class="field-value">${form.avgRoomRent || "—"}</div>
+      </div>
+      <div class="customer-field">
+        <div class="field-label">Delivery Timeline Required</div>
+        <div class="field-value">${form.timeline || "—"}</div>
+      </div>
+      <div class="customer-field">
+        <div class="field-label">Property Type</div>
+        <div class="field-value">${form.propertyType === "new" ? "New Property" : "Renovation"}</div>
+      </div>
+      ${form.propertyType === "new" ? `<div class="customer-field"><div class="field-label">Current Project Stage</div><div class="field-value">${form.projectStage || "—"}</div></div>` : ""}
       ${form.message ? `<div class="customer-field" style="grid-column:1/3;"><div class="field-label">Message</div><div class="field-value">${form.message}</div></div>` : ""}
     </div>
 
@@ -616,13 +719,14 @@ function generateProfessionalQuotationHTML(
    Helper: Generate PROFESSIONAL Excel CSV
    ───────────────────────────────────────────────────────────── */
 function generateProfessionalCSV(
-  form: { name: string; email: string; phone: string; hotel: string; message: string },
+  form: { name: string; email: string; phone: string; hotel: string; message: string; avgRoomRent: string; timeline: string; propertyType: string; projectStage: string },
   items: { model: string; name: string; category: string; quantity: number; image: string }[],
   refNo: string,
   date: string
 ): string {
   const totalUnits = items.reduce((s, i) => s + i.quantity, 0);
   const d = date || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  const propType = form.propertyType === "new" ? "New Property" : "Renovation";
 
   const rows: string[][] = [
     ["LaxRee Amenities — Quotation Request"],
@@ -636,6 +740,12 @@ function generateProfessionalCSV(
     ["Phone", form.phone],
     ["Email", form.email || "—"],
     ["Hotel / Company", form.hotel || "—"],
+    [],
+    ["PROJECT DETAILS"],
+    ["Average Room Rent / Night", form.avgRoomRent || "—"],
+    ["Delivery Timeline Required", form.timeline || "—"],
+    ["Property Type", propType],
+    ...(form.propertyType === "new" ? [["Current Project Stage", form.projectStage || "—"]] : []),
     ["Message", form.message || "—"],
     [],
     ["PRODUCT DETAILS"],
