@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/response";
+import { NextRequest, NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 
 export const runtime = "nodejs";
