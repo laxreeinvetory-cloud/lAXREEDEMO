@@ -1,241 +1,325 @@
-import { NextRequest, NextResponse } from "next/server";
-import { execSync } from "child_process";
-import fs from "fs";
-import path from "path";
-import os from "os";
+import { NextRequest, NextResponse } from "next/response";
+import ExcelJS from "exceljs";
 
 export const runtime = "nodejs";
 
-const PYTHON_SCRIPT = `/tmp/laxree_gen_xlsx.py`;
+type QuotationItem = {
+  model: string;
+  name: string;
+  category: string;
+  quantity: number;
+};
 
-// Write the Python script once (cached)
-function ensureScript() {
-  if (fs.existsSync(PYTHON_SCRIPT)) return;
-  fs.writeFileSync(PYTHON_SCRIPT, `import openpyxl, json, sys
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+type ExcelBody = {
+  name: string;
+  email: string;
+  phone: string;
+  hotel: string;
+  message: string;
+  avgRoomRent: string;
+  timeline: string;
+  propertyType: string;
+  projectStage: string;
+  refNo: string;
+  date: string;
+  items: QuotationItem[];
+};
 
-body = json.loads(sys.argv[1])
-out = sys.argv[2]
-
-wb = openpyxl.Workbook()
-ws = wb.active
-ws.title = "Quotation"
-ws.sheet_view.showGridLines = False
-
-C = "FF12100D"  # charcoal
-B = "FFC6A15B"  # brass
-I = "FFF7F3EA"  # ivory
-S = "FFB7AC97"  # sand
-K = "FF1A1712"  # ink
-M = "FF6B6455"  # muted
-A = "FFFAF8F2"  # alt row
-
-f_brand = Font(name="Georgia", size=22, bold=True, color=B)
-f_tag = Font(name="Calibri", size=8, color=S)
-f_ref_l = Font(name="Calibri", size=9, color=S)
-f_ref = Font(name="Courier New", size=14, bold=True, color=B)
-f_date = Font(name="Calibri", size=10, color=S)
-f_title = Font(name="Georgia", size=14, bold=True, color=C)
-f_sect = Font(name="Calibri", size=10, bold=True, color=C)
-f_label = Font(name="Calibri", size=10, bold=True, color=M)
-f_val = Font(name="Calibri", size=11, color=K)
-f_model = Font(name="Courier New", size=11, bold=True, color=B)
-f_hdr = Font(name="Calibri", size=9, bold=True, color=B)
-f_data = Font(name="Calibri", size=11, color=K)
-f_qty = Font(name="Calibri", size=12, bold=True, color=K)
-f_muted = Font(name="Calibri", size=11, color=S)
-f_sl = Font(name="Calibri", size=11, bold=True, color=M)
-f_sv = Font(name="Calibri", size=11, bold=True, color=K)
-f_total = Font(name="Calibri", size=13, bold=True, color=C)
-f_note = Font(name="Calibri", size=10, color=M)
-f_foot = Font(name="Calibri", size=10, color=S)
-f_foot_b = Font(name="Georgia", size=14, bold=True, color=B)
-f_foot_c = Font(name="Calibri", size=8, color=M)
-
-fc = PatternFill("solid", fgColor=C)
-fb = PatternFill("solid", fgColor=B)
-fi = PatternFill("solid", fgColor=I)
-fa = PatternFill("solid", fgColor=A)
-fn = PatternFill("solid", fgColor="FFFFFAF0")
-
-t = Side(style="thin", color="FFD4CDB8")
-bd = Border(left=t, right=t, top=t, bottom=t)
-al = Alignment(horizontal="left", vertical="center", wrap_text=True)
-ac = Alignment(horizontal="center", vertical="center")
-ar = Alignment(horizontal="right", vertical="center")
-
-for i, w in enumerate([6, 16, 35, 18, 8, 16, 18], 1):
-    ws.column_dimensions[get_column_letter(i)].width = w
-
-r = 1
-
-# Header
-ws.merge_cells(f"A{r}:D{r}")
-ws.merge_cells(f"E{r}:G{r}")
-c = ws.cell(row=r, column=1, value="LaxRee")
-c.font = f_brand; c.fill = fc; c.alignment = Alignment(horizontal="left", vertical="center", indent=1)
-for col in range(2, 8): ws.cell(row=r, column=col).fill = fc
-c = ws.cell(row=r, column=5, value="Quotation Request")
-c.font = f_ref_l; c.fill = fc; c.alignment = ar
-ws.row_dimensions[r].height = 36
-r += 1
-
-ws.merge_cells(f"A{r}:D{r}")
-ws.merge_cells(f"E{r}:G{r}")
-c = ws.cell(row=r, column=1, value="AMENITIES  \u2022  HOTEL SUPPLIES REDEFINED")
-c.font = f_tag; c.fill = fc; c.alignment = Alignment(horizontal="left", vertical="center", indent=1)
-for col in range(2, 5): ws.cell(row=r, column=col).fill = fc
-c = ws.cell(row=r, column=5, value=body["refNo"])
-c.font = f_ref; c.fill = fc; c.alignment = ar
-for col in range(6, 8): ws.cell(row=r, column=col).fill = fc
-ws.row_dimensions[r].height = 20
-r += 1
-
-ws.merge_cells(f"A{r}:D{r}")
-ws.merge_cells(f"E{r}:G{r}")
-for col in range(1, 5): ws.cell(row=r, column=col).fill = fc
-c = ws.cell(row=r, column=5, value=body["date"])
-c.font = f_date; c.fill = fc; c.alignment = ar
-for col in range(6, 8): ws.cell(row=r, column=col).fill = fc
-ws.row_dimensions[r].height = 18
-r += 2
-
-# Title
-ws.merge_cells(f"A{r}:G{r}")
-c = ws.cell(row=r, column=1, value="Product Quotation Request")
-c.font = f_title; c.fill = fb; c.alignment = Alignment(horizontal="left", vertical="center", indent=1)
-for col in range(2, 8): ws.cell(row=r, column=col).fill = fb
-ws.row_dimensions[r].height = 28
-r += 2
-
-def section(title):
-    global r
-    ws.merge_cells(f"A{r}:G{r}")
-    c = ws.cell(row=r, column=1, value=title)
-    c.font = f_sect; c.fill = fb; c.alignment = Alignment(horizontal="left", vertical="center", indent=1)
-    for col in range(2, 8): ws.cell(row=r, column=col).fill = fb
-    ws.row_dimensions[r].height = 22
-    r += 1
-
-def field_row(l1, v1, l2, v2):
-    global r
-    c = ws.cell(row=r, column=1, value=l1)
-    c.font = f_label; c.fill = fi; c.alignment = al; c.border = bd
-    ws.merge_cells(f"B{r}:C{r}")
-    c = ws.cell(row=r, column=2, value=v1)
-    c.font = f_val; c.alignment = al; c.border = bd
-    ws.cell(row=r, column=3).border = bd
-    c = ws.cell(row=r, column=4, value=l2)
-    c.font = f_label; c.fill = fi; c.alignment = al; c.border = bd
-    ws.merge_cells(f"E{r}:G{r}")
-    c = ws.cell(row=r, column=5, value=v2)
-    c.font = f_val; c.alignment = al; c.border = bd
-    ws.cell(row=r, column=6).border = bd
-    ws.cell(row=r, column=7).border = bd
-    ws.row_dimensions[r].height = 22
-    r += 1
-
-section("CUSTOMER DETAILS")
-field_row("Name", body["name"], "Phone", body["phone"])
-field_row("Email", body.get("email") or "\u2014", "Hotel / Company", body.get("hotel") or "\u2014")
-r += 1
-
-prop = "New Property" if body.get("propertyType") == "new" else "Renovation"
-section("PROJECT DETAILS")
-field_row("Avg Room Rent", body.get("avgRoomRent") or "\u2014", "Timeline", body.get("timeline") or "\u2014")
-field_row("Property Type", prop, "Project Stage" if body.get("propertyType") == "new" else "Message", body.get("projectStage") if body.get("propertyType") == "new" else (body.get("message") or "\u2014"))
-r += 1
-
-items = body["items"]
-tu = sum(i["quantity"] for i in items)
-section(f"SELECTED PRODUCTS ({len(items)} ITEMS, {tu} UNITS)")
-
-hdrs = ["S.No", "Model", "Product Name", "Category", "Qty", "Rate (INR)", "Amount (INR)"]
-for col, h in enumerate(hdrs, 1):
-    c = ws.cell(row=r, column=col, value=h)
-    c.font = f_hdr; c.fill = fc; c.alignment = ac if col in [1, 5] else al; c.border = bd
-ws.row_dimensions[r].height = 24
-r += 1
-
-for i, item in enumerate(items):
-    fill = fa if i % 2 == 1 else None
-    vals = [(1, str(i+1), ac, f_data), (2, item["model"], al, f_model),
-            (3, item["name"], al, f_data), (4, item["category"], al, Font(name="Calibri", size=11, color=M)),
-            (5, item["quantity"], ac, f_qty), (6, "To be quoted", ac, f_muted), (7, "To be quoted", ar, f_muted)]
-    for col, val, alg, fnt in vals:
-        c = ws.cell(row=r, column=col, value=val)
-        c.font = fnt; c.alignment = alg; c.border = bd
-        if fill: c.fill = fill
-    ws.row_dimensions[r].height = 24
-    r += 1
-r += 1
-
-for label, value in [("Total Items", str(len(items))), ("Total Units", str(tu)), ("Estimated Total", "To be quoted")]:
-    ws.merge_cells(f"E{r}:F{r}")
-    c = ws.cell(row=r, column=5, value=label)
-    c.font = f_sl; c.alignment = ar; c.border = bd
-    ws.cell(row=r, column=6).border = bd
-    c = ws.cell(row=r, column=7, value=value)
-    c.font = f_sv; c.alignment = ar; c.border = bd
-    ws.row_dimensions[r].height = 22
-    r += 1
-
-ws.merge_cells(f"E{r}:F{r}")
-c = ws.cell(row=r, column=5, value="Grand Total")
-c.font = f_total; c.fill = fb; c.alignment = ar; c.border = bd
-ws.cell(row=r, column=6).fill = fb; ws.cell(row=r, column=6).border = bd
-c = ws.cell(row=r, column=7, value="To be quoted")
-c.font = f_total; c.fill = fb; c.alignment = ar; c.border = bd
-ws.row_dimensions[r].height = 26
-r += 2
-
-ws.merge_cells(f"A{r}:G{r}")
-c = ws.cell(row=r, column=1, value="Note: This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation.")
-c.font = f_note; c.fill = fn; c.alignment = Alignment(horizontal="left", vertical="center", wrap_text=True, indent=1)
-for col in range(2, 8): ws.cell(row=r, column=col).fill = fn
-ws.row_dimensions[r].height = 36
-r += 2
-
-for text, fnt, h in [
-    ("LaxRee Amenities", f_foot_b, 24),
-    ("Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001", f_foot, 18),
-    ("Phone: +91-92516 83662  |  Toll Free: 1800 120 7001  |  Email: contactus@laxree.com", f_foot, 18),
-    ("ISO 9001  \u2022  ISO 14001  \u2022  ISO 45001  \u2022  CE CERTIFIED  \u2022  RoHS COMPLIANT", f_foot_c, 16),
-]:
-    ws.merge_cells(f"A{r}:G{r}")
-    c = ws.cell(row=r, column=1, value=text)
-    c.font = fnt; c.fill = fc; c.alignment = ac
-    for col in range(2, 8): ws.cell(row=r, column=col).fill = fc
-    ws.row_dimensions[r].height = h
-    r += 1
-
-ws.page_setup.orientation = "portrait"
-ws.page_setup.paperSize = 9
-ws.page_setup.fitToWidth = 1
-ws.page_setup.fitToHeight = 0
-ws.sheet_properties.pageSetUpPr.fitToPage = True
-
-wb.save(out)
-`);
-}
+// Brand colors (ARGB format for ExcelJS)
+const CHARCOAL = "FF12100D";
+const BRASS = "FFC6A15B";
+const IVORY = "FFF7F3EA";
+const SAND = "FFB7AC97";
+const INK = "FF1A1712";
+const INK_MUTED = "FF6B6455";
+const ALT_ROW = "FFFAF8F2";
+const NOTE_BG = "FFFFFAF0";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    ensureScript();
+    const body = (await req.json()) as ExcelBody;
+    const totalUnits = body.items.reduce((s, i) => s + i.quantity, 0);
+    const propType = body.propertyType === "new" ? "New Property" : "Renovation";
 
-    const outputPath = path.join(os.tmpdir(), `LaxRee_Quotation_${body.refNo}.xlsx`);
-    const bodyJson = JSON.stringify(body);
+    const wb = new ExcelJS.Workbook();
+    wb.creator = "LaxRee Amenities";
+    wb.created = new Date();
 
-    execSync(`/home/z/.venv/bin/python3 "${PYTHON_SCRIPT}" '${bodyJson.replace(/'/g, "'\\''")}' "${outputPath}"`, {
-      timeout: 30000,
+    const ws = wb.addWorksheet("Quotation", {
+      views: [{ showGridLines: false }],
+      pageSetup: {
+        orientation: "portrait",
+        paperSize: 9, // A4
+        fitToWidth: 1,
+        fitToHeight: 0,
+      },
     });
 
-    const fileBuffer = fs.readFileSync(outputPath);
-    fs.unlinkSync(outputPath);
+    // Column widths
+    ws.columns = [
+      { width: 6 },
+      { width: 16 },
+      { width: 35 },
+      { width: 18 },
+      { width: 8 },
+      { width: 16 },
+      { width: 18 },
+    ];
 
-    return new NextResponse(fileBuffer, {
+    let row = 1;
+
+    // ── Helper functions ──
+    function mergeAndStyle(r: number, startCol: number, endCol: number, value: string, opts: {
+      font?: Partial<ExcelJS.Font>;
+      fill?: ExcelJS.Fill;
+      alignment?: Partial<ExcelJS.Alignment>;
+      height?: number;
+    }) {
+      ws.mergeCells(r, startCol, r, endCol);
+      const cell = ws.getCell(r, startCol);
+      cell.value = value;
+      if (opts.font) cell.font = opts.font;
+      if (opts.fill) cell.fill = opts.fill;
+      if (opts.alignment) cell.alignment = opts.alignment;
+      for (let c = startCol + 1; c <= endCol; c++) {
+        if (opts.fill) ws.getCell(r, c).fill = opts.fill;
+      }
+      if (opts.height) ws.getRow(r).height = opts.height;
+    }
+
+    const charcoalFill = { type: "pattern", pattern: "solid", fgColor: { argb: CHARCOAL } } as ExcelJS.Fill;
+    const brassFill = { type: "pattern", pattern: "solid", fgColor: { argb: BRASS } } as ExcelJS.Fill;
+    const ivoryFill = { type: "pattern", pattern: "solid", fgColor: { argb: IVORY } } as ExcelJS.Fill;
+    const altFill = { type: "pattern", pattern: "solid", fgColor: { argb: ALT_ROW } } as ExcelJS.Fill;
+    const noteFill = { type: "pattern", pattern: "solid", fgColor: { argb: NOTE_BG } } as ExcelJS.Fill;
+
+    // ── Header ──
+    mergeAndStyle(row, 1, 4, "LaxRee", {
+      font: { name: "Georgia", size: 22, bold: true, color: { argb: BRASS } },
+      fill: charcoalFill,
+      alignment: { horizontal: "left", vertical: "middle", indent: 1 },
+      height: 36,
+    });
+    mergeAndStyle(row, 5, 7, "Quotation Request", {
+      font: { name: "Calibri", size: 9, color: { argb: SAND } },
+      fill: charcoalFill,
+      alignment: { horizontal: "right", vertical: "middle" },
+      height: 36,
+    });
+    row++;
+
+    // Tagline + Ref
+    mergeAndStyle(row, 1, 4, "AMENITIES  •  HOTEL SUPPLIES REDEFINED", {
+      font: { name: "Calibri", size: 8, color: { argb: SAND } },
+      fill: charcoalFill,
+      alignment: { horizontal: "left", vertical: "middle", indent: 1 },
+      height: 20,
+    });
+    mergeAndStyle(row, 5, 7, body.refNo, {
+      font: { name: "Courier New", size: 14, bold: true, color: { argb: BRASS } },
+      fill: charcoalFill,
+      alignment: { horizontal: "right", vertical: "middle" },
+      height: 20,
+    });
+    row++;
+
+    // Date
+    mergeAndStyle(row, 1, 4, "", { fill: charcoalFill, height: 18 });
+    mergeAndStyle(row, 5, 7, body.date, {
+      font: { name: "Calibri", size: 10, color: { argb: SAND } },
+      fill: charcoalFill,
+      alignment: { horizontal: "right", vertical: "middle" },
+      height: 18,
+    });
+    row++;
+
+    // Spacer
+    ws.getRow(row).height = 8;
+    row++;
+
+    // ── Title bar ──
+    mergeAndStyle(row, 1, 7, "Product Quotation Request", {
+      font: { name: "Georgia", size: 14, bold: true, color: { argb: CHARCOAL } },
+      fill: brassFill,
+      alignment: { horizontal: "left", vertical: "middle", indent: 1 },
+      height: 28,
+    });
+    row++;
+
+    // Spacer
+    ws.getRow(row).height = 8;
+    row++;
+
+    // ── Section helper ──
+    function section(title: string) {
+      mergeAndStyle(row, 1, 7, title, {
+        font: { name: "Calibri", size: 10, bold: true, color: { argb: CHARCOAL } },
+        fill: brassFill,
+        alignment: { horizontal: "left", vertical: "middle", indent: 1 },
+        height: 22,
+      });
+      row++;
+    }
+
+    function fieldRow(l1: string, v1: string, l2: string, v2: string) {
+      const labelFont = { name: "Calibri", size: 10, bold: true, color: { argb: INK_MUTED } };
+      const valueFont = { name: "Calibri", size: 11, color: { argb: INK } };
+      const border = { style: "thin" as const, color: { argb: "FFD4CDB8" } };
+
+      const c1 = ws.getCell(row, 1);
+      c1.value = l1; c1.font = labelFont; c1.fill = ivoryFill; c1.alignment = { horizontal: "left", vertical: "middle", wrapText: true }; c1.border = { top: border, bottom: border, left: border, right: border };
+
+      ws.mergeCells(row, 2, row, 3);
+      const c2 = ws.getCell(row, 2);
+      c2.value = v1; c2.font = valueFont; c2.alignment = { horizontal: "left", vertical: "middle", wrapText: true }; c2.border = { top: border, bottom: border, left: border, right: border };
+      ws.getCell(row, 3).border = { top: border, bottom: border, left: border, right: border };
+
+      const c4 = ws.getCell(row, 4);
+      c4.value = l2; c4.font = labelFont; c4.fill = ivoryFill; c4.alignment = { horizontal: "left", vertical: "middle", wrapText: true }; c4.border = { top: border, bottom: border, left: border, right: border };
+
+      ws.mergeCells(row, 5, row, 7);
+      const c5 = ws.getCell(row, 5);
+      c5.value = v2; c5.font = valueFont; c5.alignment = { horizontal: "left", vertical: "middle", wrapText: true }; c5.border = { top: border, bottom: border, left: border, right: border };
+      ws.getCell(row, 6).border = { top: border, bottom: border, left: border, right: border };
+      ws.getCell(row, 7).border = { top: border, bottom: border, left: border, right: border };
+
+      ws.getRow(row).height = 22;
+      row++;
+    }
+
+    // ── Customer Details ──
+    section("CUSTOMER DETAILS");
+    fieldRow("Name", body.name, "Phone", body.phone);
+    fieldRow("Email", body.email || "—", "Hotel / Company", body.hotel || "—");
+    ws.getRow(row).height = 8; row++;
+
+    // ── Project Details ──
+    section("PROJECT DETAILS");
+    fieldRow("Avg Room Rent", body.avgRoomRent || "—", "Timeline", body.timeline || "—");
+    fieldRow("Property Type", propType, body.propertyType === "new" ? "Project Stage" : "Message", body.propertyType === "new" ? (body.projectStage || "—") : (body.message || "—"));
+    ws.getRow(row).height = 8; row++;
+
+    // ── Products table ──
+    section(`SELECTED PRODUCTS (${body.items.length} ITEMS, ${totalUnits} UNITS)`);
+
+    // Table header
+    const headers = ["S.No", "Model", "Product Name", "Category", "Qty", "Rate (INR)", "Amount (INR)"];
+    const border = { style: "thin" as const, color: { argb: "FFD4CDB8" } };
+    headers.forEach((h, i) => {
+      const cell = ws.getCell(row, i + 1);
+      cell.value = h;
+      cell.font = { name: "Calibri", size: 9, bold: true, color: { argb: BRASS } };
+      cell.fill = charcoalFill;
+      cell.alignment = { horizontal: i === 0 || i === 4 ? "center" : "left", vertical: "middle" };
+      cell.border = { top: border, bottom: border, left: border, right: border };
+    });
+    ws.getRow(row).height = 24;
+    row++;
+
+    // Product rows
+    body.items.forEach((item, i) => {
+      const fill = i % 2 === 1 ? altFill : undefined;
+      const vals: [number, string | number, Partial<ExcelJS.Alignment>, Partial<ExcelJS.Font>][] = [
+        [1, String(i + 1), { horizontal: "center", vertical: "middle" }, { name: "Calibri", size: 11, color: { argb: INK_MUTED } }],
+        [2, item.model, { horizontal: "left", vertical: "middle" }, { name: "Courier New", size: 11, bold: true, color: { argb: BRASS } }],
+        [3, item.name, { horizontal: "left", vertical: "middle" }, { name: "Calibri", size: 11, color: { argb: INK } }],
+        [4, item.category, { horizontal: "left", vertical: "middle" }, { name: "Calibri", size: 11, color: { argb: INK_MUTED } }],
+        [5, item.quantity, { horizontal: "center", vertical: "middle" }, { name: "Calibri", size: 12, bold: true, color: { argb: INK } }],
+        [6, "To be quoted", { horizontal: "center", vertical: "middle" }, { name: "Calibri", size: 11, color: { argb: SAND } }],
+        [7, "To be quoted", { horizontal: "right", vertical: "middle" }, { name: "Calibri", size: 11, color: { argb: SAND } }],
+      ];
+      vals.forEach(([col, val, alg, fnt]) => {
+        const cell = ws.getCell(row, col);
+        cell.value = val;
+        cell.font = fnt;
+        cell.alignment = alg;
+        cell.border = { top: border, bottom: border, left: border, right: border };
+        if (fill) cell.fill = fill;
+      });
+      ws.getRow(row).height = 24;
+      row++;
+    });
+
+    ws.getRow(row).height = 8; row++;
+
+    // ── Summary ──
+    const summaryData: [string, string][] = [
+      ["Total Items", String(body.items.length)],
+      ["Total Units", String(totalUnits)],
+      ["Estimated Total", "To be quoted"],
+    ];
+    summaryData.forEach(([label, value]) => {
+      ws.mergeCells(row, 5, row, 6);
+      const c1 = ws.getCell(row, 5);
+      c1.value = label;
+      c1.font = { name: "Calibri", size: 11, bold: true, color: { argb: INK_MUTED } };
+      c1.alignment = { horizontal: "right", vertical: "middle" };
+      c1.border = { top: border, bottom: border, left: border, right: border };
+      ws.getCell(row, 6).border = { top: border, bottom: border, left: border, right: border };
+
+      const c2 = ws.getCell(row, 7);
+      c2.value = value;
+      c2.font = { name: "Calibri", size: 11, bold: true, color: { argb: INK } };
+      c2.alignment = { horizontal: "right", vertical: "middle" };
+      c2.border = { top: border, bottom: border, left: border, right: border };
+      ws.getRow(row).height = 22;
+      row++;
+    });
+
+    // Grand total
+    ws.mergeCells(row, 5, row, 6);
+    const gt1 = ws.getCell(row, 5);
+    gt1.value = "Grand Total";
+    gt1.font = { name: "Calibri", size: 13, bold: true, color: { argb: CHARCOAL } };
+    gt1.fill = brassFill;
+    gt1.alignment = { horizontal: "right", vertical: "middle" };
+    gt1.border = { top: border, bottom: border, left: border, right: border };
+    ws.getCell(row, 6).fill = brassFill;
+    ws.getCell(row, 6).border = { top: border, bottom: border, left: border, right: border };
+
+    const gt2 = ws.getCell(row, 7);
+    gt2.value = "To be quoted";
+    gt2.font = { name: "Calibri", size: 13, bold: true, color: { argb: CHARCOAL } };
+    gt2.fill = brassFill;
+    gt2.alignment = { horizontal: "right", vertical: "middle" };
+    gt2.border = { top: border, bottom: border, left: border, right: border };
+    ws.getRow(row).height = 26;
+    row++;
+
+    ws.getRow(row).height = 8; row++;
+
+    // ── Note ──
+    mergeAndStyle(row, 1, 7, "Note: This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation.", {
+      font: { name: "Calibri", size: 10, color: { argb: INK_MUTED } },
+      fill: noteFill,
+      alignment: { horizontal: "left", vertical: "middle", wrapText: true, indent: 1 },
+      height: 36,
+    });
+    row++;
+
+    ws.getRow(row).height = 8; row++;
+
+    // ── Footer ──
+    const footerLines: [string, Partial<ExcelJS.Font>, number][] = [
+      ["LaxRee Amenities", { name: "Georgia", size: 14, bold: true, color: { argb: BRASS } }, 24],
+      ["Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001", { name: "Calibri", size: 10, color: { argb: SAND } }, 18],
+      ["Phone: +91-92516 83662  |  Toll Free: 1800 120 7001  |  Email: contactus@laxree.com", { name: "Calibri", size: 10, color: { argb: SAND } }, 18],
+      ["ISO 9001  •  ISO 14001  •  ISO 45001  •  CE CERTIFIED  •  RoHS COMPLIANT", { name: "Calibri", size: 8, color: { argb: INK_MUTED } }, 16],
+    ];
+    footerLines.forEach(([text, font, height]) => {
+      mergeAndStyle(row, 1, 7, text, {
+        font,
+        fill: charcoalFill,
+        alignment: { horizontal: "center", vertical: "middle" },
+        height,
+      });
+      row++;
+    });
+
+    // Generate buffer
+    const buffer = await wb.xlsx.writeBuffer();
+
+    return new NextResponse(buffer, {
       status: 200,
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

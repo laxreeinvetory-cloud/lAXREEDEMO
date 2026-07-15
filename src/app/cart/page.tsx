@@ -208,18 +208,27 @@ export default function CartPage() {
                   </button>
                 </div>
 
-                {/* WhatsApp send button */}
-                <a
-                  href={quotationResult.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3.5 text-[14px] font-medium text-white transition-transform hover:scale-[1.02]"
+                {/* WhatsApp send button — also downloads PDF + Excel */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!quotationResult) return;
+                    // Download PDF
+                    downloadPDF();
+                    // Small delay then download Excel
+                    setTimeout(() => downloadCSV(), 500);
+                    // Open WhatsApp after 1.5s
+                    setTimeout(() => {
+                      window.open(quotationResult.whatsappUrl, "_blank");
+                    }, 1500);
+                  }}
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3.5 text-[14px] font-medium text-white transition-transform hover:scale-[1.02] cursor-pointer"
                 >
                   <Send className="h-4 w-4" />
                   Send to Sales Executive via WhatsApp
-                </a>
+                </button>
                 <p className="mt-3 text-center text-[11px] text-ink-muted">
-                  Opens WhatsApp with your quotation pre-filled → +91 92516 83660
+                  Downloads PDF + Excel, then opens WhatsApp with quotation pre-filled → +91 92516 83660
                 </p>
 
                 {/* Clear and start over */}
