@@ -67,6 +67,7 @@ export default function CartPage() {
       if (!res.ok) throw new Error("Request failed");
       const data = await res.json();
       setQuotationResult({
+        date: data.date,
         refNo: data.refNo,
         whatsappUrl: data.whatsappUrl,
         csv: data.csv,
