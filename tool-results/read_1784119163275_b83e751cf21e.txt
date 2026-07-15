@@ -1,0 +1,1088 @@
+     1→/**
+     2→ * LaxRee Amenities — site content.
+     3→ * All copy, products, categories, testimonials, blog posts, etc.
+     4→ * live here so the page composition stays clean.
+     5→ */
+     6→
+     7→export const SITE = {
+     8→  name: "LaxRee Amenities",
+     9→  tagline: "Hotel Supplies Redefined",
+    10→  phoneDisplay: "+91-92516 83662",
+    11→  phoneHref: "+919251683662",
+    12→  tollFreeDisplay: "1800 120 7001",
+    13→  tollFreeHref: "18001207001",
+    14→  whatsapp: "919251683662",
+    15→  email: "contactus@laxree.com",
+    16→  careersEmail: "hr@laxree.com",
+    17→  address:
+    18→    "Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001",
+    19→  socials: {
+    20→    facebook: "https://facebook.com",
+    21→    x: "https://x.com",
+    22→    youtube: "https://youtube.com",
+    23→    linkedin: "https://linkedin.com",
+    24→  },
+    25→};
+    26→
+    27→export const NAV_LINKS = [
+    28→  { label: "Home", href: "/" },
+    29→  { label: "About Us", href: "/about-us" },
+    30→  { label: "Products", href: "/products" },
+    31→  { label: "Clients", href: "/clients" },
+    32→  { label: "Catalogue", href: "/catalogue" },
+    33→  { label: "Dealers", href: "/dealers" },
+    34→  { label: "Career", href: "/career" },
+    35→  { label: "Contact Us", href: "/contact-us" },
+    36→];
+    37→
+    38→export const HERO_STATS = [
+    39→  { value: 1347, suffix: "+", label: "Projects" },
+    40→  { value: 11, suffix: "+", label: "Years" },
+    41→  { value: 700, suffix: "+", label: "SKUs" },
+    42→  { value: 7, suffix: "+", label: "Certifications" },
+    43→];
+    44→
+    45→export const CERTIFICATIONS_MARQUEE = [
+    46→  "ISO 9001 Certified",
+    47→  "ISO 14001 Certified",
+    48→  "ISO 45001 Certified",
+    49→  "CE Certified",
+    50→  "RoHS Compliant",
+    51→  "Pan-India Delivery",
+    52→  "700+ Product SKUs",
+    53→];
+    54→
+    55→export type Category = {
+    56→  slug: string;
+    57→  name: string;
+    58→  count: number;
+    59→  blurb: string;
+    60→  image: string;
+    61→  span?: "large" | "wide" | "tall" | "default";
+    62→};
+    63→
+    64→export const CATEGORIES: Category[] = [
+    65→  {
+    66→    slug: "amenities",
+    67→    name: "Amenities",
+    68→    count: 226,
+    69→    blurb: "Room, washroom & lobby essentials — minibars to magnifying mirrors.",
+    70→    image: "/images/categories/amenities.jpg",
+    71→    span: "large",
+    72→  },
+    73→  {
+    74→    slug: "furniture",
+    75→    name: "Furniture",
+    76→    count: 246,
+    77→    blurb: "Lobby, room & outdoor furniture engineered for high-traffic hospitality.",
+    78→    image: "/images/categories/furniture.jpg",
+    79→    span: "default",
+    80→  },
+    81→  {
+    82→    slug: "linen",
+    83→    name: "Linen",
+    84→    count: 20,
+    85→    blurb: "Bed, bath & F&B linen in long-staple cotton, custom-branded.",
+    86→    image: "/images/categories/linen.jpg",
+    87→    span: "default",
+    88→  },
+    89→  {
+    90→    slug: "roofing",
+    91→    name: "Roofing",
+    92→    count: 12,
+    93→    blurb: "Architectural metal roofing & cladding systems for resorts.",
+    94→    image: "/images/categories/roofing.jpg",
+    95→    span: "default",
+    96→  },
+    97→  {
+    98→    slug: "dome",
+    99→    name: "Dome",
+   100→    count: 2,
+   101→    blurb: "Geodesic dome structures for glamping & experiential stays.",
+   102→    image: "/images/categories/dome.jpg",
+   103→    span: "default",
+   104→  },
+   105→];
+   106→
+   107→export type Product = {
+   108→  slug: string;
+   109→  name: string;
+   110→  category: string;
+   111→  image: string;
+   112→};
+   113→
+   114→export const SPOTLIGHT_PRODUCTS: Product[] = [
+   115→  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.jpg" },
+   116→  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.jpg" },
+   117→  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.jpg" },
+   118→  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.jpg" },
+   119→  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.jpg" },
+   120→  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.jpg" },
+   121→  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.jpg" },
+   122→  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.jpg" },
+   123→  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.jpg" },
+   124→];
+   125→
+   126→export type RoomSolution = {
+   127→  slug: string;
+   128→  name: string;
+   129→  icon: string; // lucide icon name
+   130→  oneLine: string;
+   131→  items: string[];
+   132→};
+   133→
+   134→export const ROOM_SOLUTIONS: RoomSolution[] = [
+   135→  {
+   136→    slug: "room-amenities",
+   137→    name: "Room Amenities",
+   138→    icon: "BedDouble",
+   139→    oneLine: "Everything inside the guest room, from minibar to mattress.",
+   140→    items: [
+   141→      "Mini Bar",
+   142→      "Kettle Set",
+   143→      "Tray Set",
+   144→      "Safe Box",
+   145→      "Wooden Hanger",
+   146→      "Door Lock",
+   147→      "Docking Pod & Room Telephone",
+   148→      "Iron & Iron Board",
+   149→      "Dustbin",
+   150→      "Rollaway Bed & Baby Cot",
+   151→      "Mattress & Bed Base",
+   152→      "Desktop Accessories",
+   153→      "Emergency Torch",
+   154→    ],
+   155→  },
+   156→  {
+   157→    slug: "washroom-amenities",
+   158→    name: "Washroom Amenities",
+   159→    icon: "ShowerHead",
+   160→    oneLine: "Grooming, comfort and hygiene for the bathroom.",
+   161→    items: [
+   162→      "Hair Dryer",
+   163→      "Magnifying Mirror",
+   164→      "Electronic Weighing Scale",
+   165→      "Soap Dispenser",
+   166→      "Bath Tub",
+   167→      "Amenity Tray Set",
+   168→      "Hand Dryer",
+   169→      "Paper Dispenser",
+   170→    ],
+   171→  },
+   172→  {
+   173→    slug: "lobby-amenities",
+   174→    name: "Lobby Amenities",
+   175→    icon: "ConciergeBell",
+   176→    oneLine: "First-imression hardware for arrival and circulation.",
+   177→    items: [
+   178→      "Luggage Trolley",
+   179→      "Housekeeping & Linen Trolley",
+   180→      "Lobby Dustbin",
+   181→      "Queue Manager",
+   182→      "Digital Signage",
+   183→    ],
+   184→  },
+   185→  {
+   186→    slug: "furniture",
+   187→    name: "Furniture",
+   188→    icon: "Armchair",
+   189→    oneLine: "Custom-grade casegoods and seating for every room type.",
+   190→    items: [
+   191→      "Bed & Headboard",
+   192→      "Night Stand",
+   193→      "Work Desk & Chair",
+   194→      "Lounge Chair",
+   195→      "Wardrobe",
+   196→      "TV Console",
+   197→      "Lobby Seating",
+   198→      "Outdoor Furniture",
+   199→    ],
+   200→  },
+   201→  {
+   202→    slug: "linen",
+   203→    name: "Linen",
+   204→    icon: "Layers",
+   205→    oneLine: "Long-staple cotton bed, bath and F&B textiles.",
+   206→    items: [
+   207→      "Bed Sheets",
+   208→      "Pillow & Pillow Cases",
+   209→      "Duvet & Duvet Covers",
+   210→      "Bath Towels",
+   211→      "Bath Robes",
+   212→      "Table Linen",
+   213→      "Napkins",
+   214→      "Kitchen Linen",
+   215→    ],
+   216→  },
+   217→  {
+   218→    slug: "roofing",
+   219→    name: "Roofing",
+   220→    icon: "Warehouse",
+   221→    oneLine: "Standing seam & insulated metal roof systems.",
+   222→    items: [
+   223→      "Standing Seam Panels",
+   224→      "Insulated Roof Panels",
+   225→      "Polycarbonate Sheets",
+   226→      "Flashings & Trims",
+   227→      "Gutter Systems",
+   228→    ],
+   229→  },
+   230→  {
+   231→    slug: "dome",
+   232→    name: "Dome",
+   233→    icon: "Globe",
+   234→    oneLine: "Geodesic structures for glamping & experiential stays.",
+   235→    items: [
+   236→      "Glass Geodesic Dome",
+   237→      "PC Geodesic Dome",
+   238→      "Dome Accessories",
+   239→    ],
+   240→  },
+   241→];
+   242→
+   243→export type Testimonial = {
+   244→  quote: string;
+   245→  name: string;
+   246→  role: string;
+   247→  hotel: string;
+   248→};
+   249→
+   250→export const TESTIMONIALS: Testimonial[] = [
+   251→  {
+   252→    quote:
+   253→      "LaxRee's minibars have been on our floors for four years without a single compressor failure. The brass trim detail still gets guest photos.",
+   254→    name: "Rajiv Menon",
+   255→    role: "Director of Housekeeping",
+   256→    hotel: "The Imperial Crest, Jaipur",
+   257→  },
+   258→  {
+   259→    quote:
+   260→      "We renovated 142 rooms in 11 weeks. LaxRee delivered every amenity, locker and trolley on schedule, with documentation that satisfied our audit.",
+   261→    name: "Anjali Sharma",
+   262→    role: "Procurement Head",
+   263→    hotel: "Westmark Resorts, Udaipur",
+   264→  },
+   265→  {
+   266→    quote:
+   267→      "What sets them apart is the factory. We visited Ajmer, walked the lines, and saw the brass-finishing ourselves. That is rare in this industry.",
+   268→    name: "Vikas Rathore",
+   269→    role: "VP Operations",
+   270→    hotel: "Heritage Hotels Group",
+   271→  },
+   272→];
+   273→
+   274→export const CLIENT_LOGOS = [
+   275→  "The Imperial Crest",
+   276→  "Westmark Resorts",
+   277→  "Heritage Hotels",
+   278→  "Royal Palms",
+   279→  "Marina Bay Suites",
+   280→  "Citadel Hospitality",
+   281→  "Aravali Retreat",
+   282→  "Bluewater Resorts",
+   283→  "Grand Meridian",
+   284→  "Lakeside Manor",
+   285→];
+   286→
+   287→export type Exhibition = {
+   288→  image: string;
+   289→  caption: string;
+   290→  year: string;
+   291→};
+   292→
+   293→export const EXHIBITIONS: Exhibition[] = [
+   294→  { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
+   295→  { image: "/images/gallery/exhibition-2.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
+   296→  { image: "/images/gallery/exhibition-3.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
+   297→];
+   298→
+   299→export type Certification = {
+   300→  code: string;
+   301→  fullName: string;
+   302→};
+   303→
+   304→export const CERTIFICATIONS: Certification[] = [
+   305→  { code: "ISO 9001", fullName: "Quality Management System" },
+   306→  { code: "ISO 14001", fullName: "Environmental Management" },
+   307→  { code: "ISO 45001", fullName: "Occupational Health & Safety" },
+   308→  { code: "CE", fullName: "European Conformity Mark" },
+   309→  { code: "RoHS", fullName: "Restriction of Hazardous Substances" },
+   310→];
+   311→
+   312→export type USP = {
+   313→  icon: string;
+   314→  title: string;
+   315→  blurb: string;
+   316→  size: "default" | "wide" | "tall";
+   317→};
+   318→
+   319→export const USPS: USP[] = [
+   320→  {
+   321→    icon: "Leaf",
+   322→    title: "Sustainable Products",
+   323→    blurb: "Materials and processes chosen for lower lifecycle impact.",
+   324→    size: "default",
+   325→  },
+   326→  {
+   327→    icon: "BadgeIndianRupee",
+   328→    title: "Affordable",
+   329→    blurb: "Competitive pricing without compromising on quality.",
+   330→    size: "default",
+   331→  },
+   332→  {
+   333→    icon: "Headset",
+   334→    title: "Great After-Sales Service",
+   335→    blurb: "Dedicated engineers on-call across 28 states.",
+   336→    size: "wide",
+   337→  },
+   338→  {
+   339→    icon: "LayoutGrid",
+   340→    title: "Widest Product Range",
+   341→    blurb: "700+ SKUs across five categories — one PO, one invoice.",
+   342→    size: "default",
+   343→  },
+   344→  {
+   345→    icon: "ShieldCheck",
+   346→    title: "Durability",
+   347→    blurb: "Factory-tested for 24/7 hospitality duty cycles.",
+   348→    size: "default",
+   349→  },
+   350→  {
+   351→    icon: "Sparkles",
+   352→    title: "Trend Setters",
+   353→    blurb: "First in India to launch brass-rim minibars & smart safes.",
+   354→    size: "default",
+   355→  },
+   356→  {
+   357→    icon: "Gem",
+   358→    title: "Highly Affordable & Highly Durable",
+   359→    blurb: "OEM margins + factory QC = best price-to-life ratio.",
+   360→    size: "wide",
+   361→  },
+   362→];
+   363→
+   364→export type BlogPost = {
+   365→  slug: string;
+   366→  title: string;
+   367→  category: string;
+   368→  excerpt: string;
+   369→  image: string;
+   370→  date: string;
+   371→  readTime: string;
+   372→};
+   373→
+   374→export const BLOG_POSTS: BlogPost[] = [
+   375→  {
+   376→    slug: "sustainable-hospitality-2026",
+   377→    title: "Sustainable Hospitality: The 2026 Procurement Playbook",
+   378→    category: "Sustainability",
+   379→    excerpt:
+   380→      "Refillable dispensers, low-VOC finishes and lifecycle costing are no longer optional. Here is what to specify in your next tender.",
+   381→    image: "/images/blog/blog-1.jpg",
+   382→    date: "Jan 2026",
+   383→    readTime: "6 min",
+   384→  },
+   385→  {
+   386→    slug: "brass-details-guest-perception",
+   387→    title: "Why Brass Detailing Outperforms Chrome in Guest Perception",
+   388→    category: "Design",
+   389→    excerpt:
+   390→      "Eye-tracking studies show warm-metal accents increase perceived room value by 18%. A case for rethinking your hardware palette.",
+   391→    image: "/images/blog/blog-2.jpg",
+   392→    date: "Dec 2025",
+   393→    readTime: "4 min",
+   394→  },
+   395→  {
+   396→    slug: "amenity-trends-2026",
+   397→    title: "Five Amenity Trends Defining 2026 Hotel Renovations",
+   398→    category: "Trends",
+   399→    excerpt:
+   400→      "From in-room smart safes to weighted curtain hooks, the details that quietly move your TripAdvisor score.",
+   401→    image: "/images/blog/blog-3.jpg",
+   402→    date: "Dec 2025",
+   403→    readTime: "5 min",
+   404→  },
+   405→  {
+   406→    slug: "hotel-minibar-buyers-guide-india",
+   407→    title: "Hotel Minibar Buyer's Guide: Choosing the Right Model for Your Property",
+   408→    category: "Procurement Guide",
+   409→    excerpt:
+   410→      "Absorption vs compressor, 40L vs 60L, glass door vs solid — everything a hotel procurement manager needs to know before ordering minibars in bulk.",
+   411→    image: "/images/blog/blog-4.jpg",
+   412→    date: "Jul 2026",
+   413→    readTime: "8 min",
+   414→  },
+   415→  {
+   416→    slug: "hotel-safe-locker-buying-guide",
+   417→    title: "Hotel Safe Locker Buying Guide: Sizes, Locks & Bulk Pricing in India",
+   418→    category: "Procurement Guide",
+   419→    excerpt:
+   420→      "Digital keypad vs RFID, small vs large, steel thickness ratings — a complete specification checklist for procuring hotel safes at the best price.",
+   421→    image: "/images/blog/blog-5.jpg",
+   422→    date: "Jul 2026",
+   423→    readTime: "7 min",
+   424→  },
+   425→  {
+   426→    slug: "rfid-hotel-door-lock-guide",
+   427→    title: "RFID Hotel Door Locks: Complete Guide to Access Control Systems in India",
+   428→    category: "Procurement Guide",
+   429→    excerpt:
+   430→      "Mifare vs NFC, audit trails, PMS integration, battery life — the definitive guide to choosing RFID door locks for hotels and resorts.",
+   431→    image: "/images/blog/blog-6.jpg",
+   432→    date: "Jul 2026",
+   433→    readTime: "9 min",
+   434→  },
+   435→  {
+   436→    slug: "hotel-supplies-procurement-guide-india",
+   437→    title: "Hotel Supplies Procurement Guide for India: From Spec to Handover",
+   438→    category: "Procurement Guide",
+   439→    excerpt:
+   440→      "A step-by-step procurement framework for Indian hotels — supplier evaluation, specification writing, quality control, and delivery management.",
+   441→    image: "/images/blog/blog-7.jpg",
+   442→    date: "Jul 2026",
+   443→    readTime: "10 min",
+   444→  },
+   445→  {
+   446→    slug: "top-hotel-amenities-suppliers-india",
+   447→    title: "Top Hotel Amenities Suppliers in India: How to Choose the Right Partner",
+   448→    category: "Industry Insights",
+   449→    excerpt:
+   450→      "Not all hotel supplies vendors are equal. Here's how to evaluate manufacturers vs traders, OEM capabilities, and after-sales support across India.",
+   451→    image: "/images/blog/blog-8.jpg",
+   452→    date: "Jul 2026",
+   453→    readTime: "8 min",
+   454→  },
+   455→  {
+   456→    slug: "electric-kettle-hotel-rooms-guide",
+   457→    title: "Electric Kettle for Hotel Rooms: Complete Buying Guide with Specs & Pricing",
+   458→    category: "Procurement Guide",
+   459→    excerpt:
+   460→      "SS304 vs SS202, 1.0L vs 1.2L, auto shut-off mechanisms — the definitive guide to choosing electric kettles for hotel rooms in bulk.",
+   461→    image: "/images/blog/blog-9.jpg",
+   462→    date: "Jul 2026",
+   463→    readTime: "7 min",
+   464→  },
+   465→  {
+   466→    slug: "automatic-soap-dispenser-guide",
+   467→    title: "Automatic Soap Dispensers for Hotels: Sensor vs Manual, Specs & Bulk Pricing",
+   468→    category: "Procurement Guide",
+   469→    excerpt:
+   470→      "Infrared sensor range, refill capacity, battery life, drip tray design — everything you need to specify when buying soap dispensers for hotels.",
+   471→    image: "/images/blog/blog-10.jpg",
+   472→    date: "Jul 2026",
+   473→    readTime: "6 min",
+   474→  },
+   475→  {
+   476→    slug: "hotel-trolley-complete-guide",
+   477→    title: "Complete Guide to Hotel Trolleys: Types, Uses, Specs & Bulk Pricing in India",
+   478→    category: "Procurement Guide",
+   479→    excerpt:
+   480→      "Luggage trolleys, housekeeping trolleys, linen trolleys — load capacity, wheel quality, frame materials, and fair pricing benchmarks for India.",
+   481→    image: "/images/blog/blog-11.jpg",
+   482→    date: "Jul 2026",
+   483→    readTime: "8 min",
+   484→  },
+   485→  {
+   486→    slug: "steam-iron-hotel-rooms-guide",
+   487→    title: "Steam Iron for Hotel Rooms: Buying Guide with Specs, Safety & Pricing",
+   488→    category: "Procurement Guide",
+   489→    excerpt:
+   490→      "Wattage, steam output, soleplate material, auto shut-off — the complete specification guide for procuring steam irons for hotel rooms in India.",
+   491→    image: "/images/blog/blog-12.jpg",
+   492→    date: "Jul 2026",
+   493→    readTime: "7 min",
+   494→  },
+   495→];
+   496→
+   497→export const WHATSAPP_EXECUTIVES = [
+   498→  { name: "Sales — North India", phone: "919251683662" },
+   499→  { name: "Sales — South India", phone: "919251683662" },
+   500→  { name: "Catalogue & Pricing", phone: "919251683662" },
+   501→  { name: "After-Sales Support", phone: "919251683662" },
+   502→];
+   503→
+   504→export const ENQUIRY_CATEGORIES = [
+   505→  "Amenities",
+   506→  "Furniture",
+   507→  "Roofing",
+   508→  "Linen",
+   509→  "Dome",
+   510→];
+   511→
+   512→/* ─────────────────────────────────────────────────────────────
+   513→   Inner-page content
+   514→   ───────────────────────────────────────────────────────────── */
+   515→
+   516→/* About Us — timeline milestones */
+   517→export type Milestone = {
+   518→  year: string;
+   519→  title: string;
+   520→  description: string;
+   521→};
+   522→
+   523→export const TIMELINE: Milestone[] = [
+   524→  {
+   525→    year: "2015",
+   526→    title: "The First Factory",
+   527→    description:
+   528→      "LaxRee opens its first manufacturing line in Ajmer for absorption minibars — 200 units/month capacity.",
+   529→  },
+   530→  {
+   531→    year: "2017",
+   532→    title: "Safe Locker Division",
+   533→    description:
+   534→      "Electronic safe locker production line launched. First client: a 150-room heritage hotel in Udaipur.",
+   535→  },
+   536→  {
+   537→    year: "2019",
+   538→    title: "Exhibition Centre",
+   539→    description:
+   540→      "Ajmer's largest hospitality exhibition centre inaugurated — 12,000 sq ft of product displays and procurement consultation.",
+   541→  },
+   542→  {
+   543→    year: "2021",
+   544→    title: "Pan-India Network",
+   545→    description:
+   546→      "Dealer network expands to 22 states. ISO 9001 and ISO 14001 certifications achieved.",
+   547→  },
+   548→  {
+   549→    year: "2023",
+   550→    title: "700+ SKU Milestone",
+   551→    description:
+   552→      "Product catalogue crosses 700 SKUs across five categories. CE and RoHS compliance achieved for electronics.",
+   553→  },
+   554→  {
+   555→    year: "2026",
+   556→    title: "Smart Hospitality",
+   557→    description:
+   558→      "Launch of brass-rim smart minibar line and IoT-enabled safes. 1,347+ projects delivered.",
+   559→  },
+   560→];
+   561→
+   562→/* About Us — leadership team */
+   563→export type TeamMember = {
+   564→  name: string;
+   565→  role: string;
+   566→  bio: string;
+   567→  initials: string;
+   568→};
+   569→
+   570→export const LEADERSHIP: TeamMember[] = [
+   571→  {
+   572→    name: "Ashish Agarwal",
+   573→    role: "Founder & Managing Director",
+   574→    bio: "25 years in hospitality manufacturing. Started LaxRee with a single minibar line and a commitment to in-house quality control.",
+   575→    initials: "RS",
+   576→  },
+   577→  {
+   578→    name: "Priya Sharma",
+   579→    role: "Director, Operations",
+   580→    bio: "Leads the Ajmer factory and exhibition centre. Architects the 700+ SKU catalogue and custom-order workflow.",
+   581→    initials: "PS",
+   582→  },
+   583→  {
+   584→    name: "Amit Verma",
+   585→    role: "Head of Sales (Pan-India)",
+   586→    bio: "Manages the 22-state dealer network and direct procurement contracts with national hotel chains.",
+   587→    initials: "AV",
+   588→  },
+   589→  {
+   590→    name: "Sunita Jain",
+   591→    role: "Head of Quality & Compliance",
+   592→    bio: "Oversees ISO 9001/14001/45001, CE and RoHS testing. 15 years in industrial QC.",
+   593→    initials: "SJ",
+   594→  },
+   595→];
+   596→
+   597→/* About Us — values */
+   598→export type Value = {
+   599→  icon: string;
+   600→  title: string;
+   601→  description: string;
+   602→};
+   603→
+   604→export const COMPANY_VALUES: Value[] = [
+   605→  {
+   606→    icon: "ShieldCheck",
+   607→    title: "Quality Without Compromise",
+   608→    description:
+   609→      "Every product passes 14 quality checkpoints before it leaves the factory. ISO 9001-certified processes.",
+   610→  },
+   611→  {
+   612→    icon: "Factory",
+   613→    title: "OEM Manufacturing",
+   614→    description:
+   615→      "We own our factory lines — minibars, safes, furniture. No outsourcing means consistent quality and competitive pricing.",
+   616→  },
+   617→  {
+   618→    icon: "Leaf",
+   619→    title: "Sustainable by Design",
+   620→    description:
+   621→      "Low-VOC finishes, recyclable packaging, energy-efficient minibar compressors. ISO 14001 environmental management.",
+   622→  },
+   623→  {
+   624→    icon: "Clock",
+   625→    title: "On-Time Delivery",
+   626→    description:
+   627→      "11 years of delivering 97.4% of orders on or before the committed date. Project tracking from PO to handover.",
+   628→  },
+   629→  {
+   630→    icon: "Headset",
+   631→    title: "After-Sales First",
+   632→    description:
+   633→      "Dedicated service engineers in 14 cities. Average response time: 4 hours in metros, 24 hours in Tier-2/3.",
+   634→  },
+   635→  {
+   636→    icon: "Handshake",
+   637→    title: "Partnership, Not Transaction",
+   638→    description:
+   639→      "We work with procurement teams from spec to handover. Many clients have been with us 5+ years.",
+   640→  },
+   641→];
+   642→
+   643→/* Products page — all products with details */
+   644→export type ProductDetail = {
+   645→  slug: string;
+   646→  name: string;
+   647→  category: string;
+   648→  image: string;
+   649→  description: string;
+   650→  specs: { label: string; value: string }[];
+   651→};
+   652→
+   653→export const ALL_PRODUCTS: ProductDetail[] = [
+   654→  {
+   655→    slug: "mini-bar",
+   656→    name: "Mini Bar",
+   657→    category: "Amenities",
+   658→    image: "/images/products/mini-bar.jpg",
+   659→    description:
+   660→      "Absorption and compressor minibars with brass-trimmed glass doors. Silent operation, energy-efficient, available in 40L/60L/80L.",
+   661→    specs: [
+   662→      { label: "Capacity", value: "40L / 60L / 80L" },
+   663→      { label: "Cooling", value: "Absorption / Compressor" },
+   664→      { label: "Noise", value: "< 26 dB" },
+   665→      { label: "Power", value: "70W" },
+   666→    ],
+   667→  },
+   668→  {
+   669→    slug: "kettle-set",
+   670→    name: "Kettle Set",
+   671→    category: "Amenities",
+   672→    image: "/images/products/kettle-set.jpg",
+   673→    description:
+   674→      "Stainless steel electric kettle sets with matching cups and tray. Food-grade SS304, 1.2L capacity, auto shut-off.",
+   675→    specs: [
+   676→      { label: "Capacity", value: "1.2L" },
+   677→      { label: "Material", value: "SS304" },
+   678→      { label: "Power", value: "1500W" },
+   679→      { label: "Set includes", value: "Kettle + 2 cups + tray" },
+   680→    ],
+   681→  },
+   682→  {
+   683→    slug: "safe-box",
+   684→    name: "Safe Box",
+   685→    category: "Amenities",
+   686→    image: "/images/products/safe-box.jpg",
+   687→    description:
+   688→      "Electronic hotel safe boxes with digital keypad and emergency override. Brushed metal finish, brass accent trim.",
+   689→    specs: [
+   690→      { label: "Lock", value: "Digital keypad + override" },
+   691→      { label: "Size", value: "200×300×200 mm" },
+   692→      { label: "Material", value: "1.5mm steel" },
+   693→      { label: "Power", value: "4×AA + external backup" },
+   694→    ],
+   695→  },
+   696→  {
+   697→    slug: "door-lock",
+   698→    name: "Door Lock",
+   699→    category: "Amenities",
+   700→    image: "/images/products/door-lock.jpg",
+   701→    description:
+   702→      "RFID card door locks with brass accent trim. Battery-powered, audit trail, integrates with PMS systems.",
+   703→    specs: [
+   704→      { label: "Access", value: "RFID card + mechanical key" },
+   705→      { label: "Battery", value: "4×AA (10,000 unlocks)" },
+   706→      { label: "Finish", value: "Brass / Matte black" },
+   707→      { label: "Integration", value: "PMS-compatible" },
+   708→    ],
+   709→  },
+   710→  {
+   711→    slug: "luggage-trolley",
+   712→    name: "Luggage Trolley",
+   713→    category: "Lobby",
+   714→    image: "/images/products/luggage-trolley.jpg",
+   715→    description:
+   716→      "Brass-framed luggage trolleys with black leather straps and silent castors. Heavy-duty, 200kg load capacity.",
+   717→    specs: [
+   718→      { label: "Load", value: "200 kg" },
+   719→      { label: "Frame", value: "Brass-plated steel" },
+   720→      { label: "Wheels", value: "4× silent castor" },
+   721→      { label: "Size", value: "1100×600×950 mm" },
+   722→    ],
+   723→  },
+   724→  {
+   725→    slug: "bath-tub",
+   726→    name: "Bath Tub",
+   727→    category: "Washroom",
+   728→    image: "/images/products/bath-tub.jpg",
+   729→    description:
+   730→      "Freestanding acrylic bathtubs with brass faucet. Minimalist luxury design, 180L capacity, scratch-resistant.",
+   731→    specs: [
+   732→      { label: "Material", value: "Lucite acrylic" },
+   733→      { label: "Capacity", value: "180L" },
+   734→      { label: "Size", value: "1500×750×580 mm" },
+   735→      { label: "Finish", value: "Gloss white" },
+   736→    ],
+   737→  },
+   738→  {
+   739→    slug: "hair-dryer",
+   740→    name: "Hair Dryer",
+   741→    category: "Washroom",
+   742→    image: "/images/products/hair-dryer.jpg",
+   743→    description:
+   744→      "Wall-mounted hotel hair dryers with brass accents. 1600W, dual speed, auto shut-off on release.",
+   745→    specs: [
+   746→      { label: "Power", value: "1600W" },
+   747→      { label: "Speed", value: "2-speed" },
+   748→      { label: "Mount", value: "Wall bracket" },
+   749→      { label: "Cable", value: "Retractable" },
+   750→    ],
+   751→  },
+   752→  {
+   753→    slug: "magnifying-mirror",
+   754→    name: "Magnifying Mirror",
+   755→    category: "Washroom",
+   756→    image: "/images/products/magnifying-mirror.jpg",
+   757→    description:
+   758→      "Brass-framed magnifying vanity mirrors on extendable arm. 5× magnification, fog-free, 360° rotation.",
+   759→    specs: [
+   760→      { label: "Magnification", value: "5×" },
+   761→      { label: "Diameter", value: "180 mm" },
+   762→      { label: "Arm", value: "Extendable 300mm" },
+   763→      { label: "Finish", value: "Polished brass" },
+   764→    ],
+   765→  },
+   766→  {
+   767→    slug: "hand-dryer",
+   768→    name: "Hand Dryer",
+   769→    category: "Washroom",
+   770→    image: "/images/products/hand-dryer.jpg",
+   771→    description:
+   772→      "High-speed commercial hand dryers with brass accent. Dries in 10 seconds, HEPA filter, energy-efficient.",
+   773→    specs: [
+   774→      { label: "Dry time", value: "10 seconds" },
+   775→      { label: "Power", value: "1400W" },
+   776→      { label: "Filter", value: "HEPA H13" },
+   777→      { label: "Noise", value: "< 70 dB" },
+   778→    ],
+   779→  },
+   780→];
+   781→
+   782→/* Career — job openings */
+   783→export type JobOpening = {
+   784→  slug: string;
+   785→  title: string;
+   786→  department: string;
+   787→  location: string;
+   788→  type: string;
+   789→  experience: string;
+   790→  description: string;
+   791→};
+   792→
+   793→export const JOB_OPENINGS: JobOpening[] = [
+   794→  {
+   795→    slug: "regional-sales-manager",
+   796→    title: "Regional Sales Manager",
+   797→    department: "Sales",
+   798→    location: "Mumbai, Maharashtra",
+   799→    type: "Full-time",
+   800→    experience: "5-8 years",
+   801→    description:
+   802→      "Lead B2B sales for Maharashtra and Gujarat. Manage existing hotel-chain accounts, develop new procurement relationships, and coordinate with the factory on custom orders.",
+   803→  },
+   804→  {
+   805→    slug: "production-engineer",
+   806→    title: "Production Engineer — Safe Locker Line",
+   807→    department: "Manufacturing",
+   808→    location: "Ajmer, Rajasthan",
+   809→    type: "Full-time",
+   810→    experience: "3-6 years",
+   811→    description:
+   812→      "Oversee the electronic safe locker assembly line. Optimize throughput, maintain quality checkpoints, and lead the shift to IoT-enabled safes.",
+   813→  },
+   814→  {
+   815→    slug: "interior-designer",
+   816→    title: "Hospitality Interior Designer",
+   817→    department: "Design",
+   818→    location: "Ajmer / Remote",
+   819→    type: "Full-time",
+   820→    experience: "4-7 years",
+   821→    description:
+   822→      "Create room amenity layouts and furniture specifications for hotel renovation projects. Work directly with procurement teams and architects.",
+   823→  },
+   824→  {
+   825→    slug: "quality-inspector",
+   826→    title: "Quality Control Inspector",
+   827→    department: "Quality",
+   828→    location: "Ajmer, Rajasthan",
+   829→    type: "Full-time",
+   830→    experience: "2-5 years",
+   831→    description:
+   832→      "Execute the 14-point quality checkpoint process for minibars, safes, and furniture. ISO 9001 documentation and supplier audit.",
+   833→  },
+   834→  {
+   835→    slug: "field-service-engineer",
+   836→    title: "Field Service Engineer",
+   837→    department: "After-Sales",
+   838→    location: "Bengaluru, Karnataka",
+   839→    type: "Full-time",
+   840→    experience: "2-4 years",
+   841→    description:
+   842→      "Provide on-site installation and after-sales service for LaxRee products across South India. Training provided at the Ajmer factory.",
+   843→  },
+   844→  {
+   845→    slug: "digital-marketing-lead",
+   846→    title: "Digital Marketing Lead",
+   847→    department: "Marketing",
+   848→    location: "Ajmer / Remote",
+   849→    type: "Full-time",
+   850→    experience: "4-6 years",
+   851→    description:
+   852→      "Own the LaxRee digital presence — website, LinkedIn, SEO blog. Generate qualified leads from hospitality procurement managers.",
+   853→  },
+   854→];
+   855→
+   856→/* Career — life at LaxRee perks */
+   857→export type Perk = {
+   858→  icon: string;
+   859→  title: string;
+   860→  description: string;
+   861→};
+   862→
+   863→export const PERKS: Perk[] = [
+   864→  {
+   865→    icon: "GraduationCap",
+   866→    title: "Learning & Growth",
+   867→    description: "Annual training budget, factory certifications, and conference attendance.",
+   868→  },
+   869→  {
+   870→    icon: "HeartPulse",
+   871→    title: "Health Insurance",
+   872→    description: "Family floater medical coverage for all full-time employees and dependents.",
+   873→  },
+   874→  {
+   875→    icon: "Home",
+   876→    title: "Housing Assistance",
+   877→    description: "Relocation support and HRA for Ajmer-based manufacturing roles.",
+   878→  },
+   879→  {
+   880→    icon: "Plane",
+   881→    title: "Travel Opportunities",
+   882→    description: "Field roles include pan-India travel to hotel sites and exhibitions.",
+   883→  },
+   884→  {
+   885→    icon: "Award",
+   886→    title: "Performance Bonus",
+   887→    description: "Quarterly performance-linked bonuses and annual profit-sharing.",
+   888→  },
+   889→  {
+   890→    icon: "Coffee",
+   891→    title: "Factory Canteen",
+   892→    description: "Subsidised meals and tea/snacks throughout the day at the Ajmer campus.",
+   893→  },
+   894→];
+   895→
+   896→/* Dealers — benefits */
+   897→export type DealerBenefit = {
+   898→  icon: string;
+   899→  title: string;
+   900→  description: string;
+   901→};
+   902→
+   903→export const DEALER_BENEFITS: DealerBenefit[] = [
+   904→  {
+   905→    icon: "BadgePercent",
+   906→    title: "OEM Pricing",
+   907→    description: "Direct factory pricing with volume slabs. No middleman markup.",
+   908→  },
+   909→  {
+   910→    icon: "MapPin",
+   911→    title: "Exclusive Territory",
+   912→    description: "Protected geographic territory — we don't undercut our dealers.",
+   913→  },
+   914→  {
+   915→    icon: "PackageCheck",
+   916→    title: "Stock Support",
+   917→    description: "Min-min-max stock model with 7-day replenishment from Ajmer.",
+   918→  },
+   919→  {
+   920→    icon: "Megaphone",
+   921→    title: "Co-Marketing",
+   922→    description: "Co-branded collateral, exhibition participation, and digital lead routing.",
+   923→  },
+   924→  {
+   925→    icon: "Wrench",
+   926→    title: "Service Training",
+   927→    description: "Quarterly training at the Ajmer factory for your installation team.",
+   928→  },
+   929→  {
+   930→    icon: "FileText",
+   931→    title: "Credit Terms",
+   932→    description: "Flexible credit terms after 6-month track record. 30/45/60-day slabs.",
+   933→  },
+   934→];
+   935→
+   936→/* Dealers — existing dealer network cities */
+   937→export const DEALER_CITIES = [
+   938→  "New Delhi", "Mumbai", "Bengaluru", "Chennai", "Hyderabad", "Kolkata",
+   939→  "Pune", "Ahmedabad", "Jaipur", "Udaipur", "Lucknow", "Chandigarh",
+   940→  "Bhopal", "Patna", "Guwahati", "Visakhapatnam", "Cochin", "Coimbatore",
+   941→  "Nagpur", "Surat", "Indore", "Bhubaneswar",
+   942→];
+   943→
+   944→/* Clients — case studies */
+   945→export type CaseStudy = {
+   946→  slug: string;
+   947→  hotel: string;
+   948→  location: string;
+   949→  project: string;
+   950→  scope: string;
+   951→  outcome: string;
+   952→  metric: string;
+   953→  metricLabel: string;
+   954→};
+   955→
+   956→export const CASE_STUDIES: CaseStudy[] = [
+   957→  {
+   958→    slug: "imperial-crest-jaipur",
+   959→    hotel: "The Imperial Crest",
+   960→    location: "Jaipur, Rajasthan",
+   961→    project: "142-Room Renovation",
+   962→    scope:
+   963→      "Full room amenity fit-out — minibars, safes, door locks, kettles, washroom amenities, and furniture for 142 rooms plus 8 suites.",
+   964→    outcome:
+   965→      "Delivered in 11 weeks with zero procurement delays. Guest satisfaction scores for room amenities rose 23% post-renovation.",
+   966→    metric: "142",
+   967→    metricLabel: "Rooms delivered",
+   968→  },
+   969→  {
+   970→    slug: "westmark-resorts-udaipur",
+   971→    hotel: "Westmark Resorts",
+   972→    location: "Udaipur, Rajasthan",
+   973→    project: "New Resort Launch",
+   974→    scope:
+   975→      "Complete hospitality supply — amenities, furniture, linen, and roofing for a 220-key resort property on Lake Pichola.",
+   976→    outcome:
+   977→      "Project handed over 2 weeks ahead of opening. LaxRee's factory-direct model saved 18% vs. procurement through a trading company.",
+   978→    metric: "220",
+   979→    metricLabel: "Keys supplied",
+   980→  },
+   981→  {
+   982→    slug: "heritage-hotels-group",
+   983→    hotel: "Heritage Hotels Group",
+   984→    location: "Pan-India (9 properties)",
+   985→    project: "Group-Wide Amenity Standardisation",
+   986→    scope:
+   987→      "Standardised minibar and safe locker specifications across 9 heritage properties. Centralised procurement with property-wise delivery.",
+   988→    outcome:
+   989→      "Reduced procurement admin by 60%. Maintenance calls related to amenities dropped 34% due to consistent hardware across properties.",
+   990→    metric: "9",
+   991→    metricLabel: "Properties unified",
+   992→  },
+   993→];
+   994→
+   995→/* Blog — full post content (HTML-ish structured text) */
+   996→export type BlogPostFull = BlogPost & {
+   997→  author: string;
+   998→  authorRole: string;
+   999→  content: { heading?: string; paragraphs: string[] }[];
+  1000→};
+  1001→
+  1002→// Blog full content moved to blog-content.ts to reduce bundle size
+  1003→
+  1004→/* ─────────────────────────────────────────────────────────────
+  1005→   Catalogue — category-wise PDF downloads
+  1006→   Each category has its own downloadable catalogue PDF.
+  1007→   The master catalogue covers all categories in one file.
+  1008→   ───────────────────────────────────────────────────────────── */
+  1009→export type CatalogueFile = {
+  1010→  slug: string;
+  1011→  name: string;
+  1012→  description: string;
+  1013→  fileName: string;
+  1014→  fileSize: string;
+  1015→  category: string; // matches CATEGORIES slug, or "master" for the full catalogue
+  1016→  available: boolean; // whether the actual PDF is uploaded
+  1017→};
+  1018→
+  1019→export const CATALOGUES: CatalogueFile[] = [
+  1020→  {
+  1021→    slug: "master",
+  1022→    name: "Master Catalogue 2026",
+  1023→    description:
+  1024→      "The complete LaxRee product catalogue — all 700+ SKUs across Amenities, Furniture, Linen, Roofing and Dome in a single PDF. Full specifications, pricing tiers, and lead times.",
+  1025→    fileName: "master-catalogue.pdf",
+  1026→    fileSize: "18 MB",
+  1027→    category: "master",
+  1028→    available: true,
+  1029→  },
+  1030→  {
+  1031→    slug: "amenities",
+  1032→    name: "Amenities Catalogue",
+  1033→    description:
+  1034→      "226 SKUs — minibars, safe lockers, kettles, door locks, hair dryers, magnifying mirrors, hand dryers, amenity trays, and more. Room, washroom and lobby essentials.",
+  1035→    fileName: "amenities-catalogue.pdf",
+  1036→    fileSize: "Coming soon",
+  1037→    category: "amenities",
+  1038→    available: false,
+  1039→  },
+  1040→  {
+  1041→    slug: "furniture",
+  1042→    name: "Furniture Catalogue",
+  1043→    description:
+  1044→      "246 SKUs — beds, headboards, night stands, work desks, lounge chairs, wardrobes, TV consoles, lobby seating, and outdoor furniture. Custom-grade casegoods and seating.",
+  1045→    fileName: "furniture-catalogue.pdf",
+  1046→    fileSize: "Coming soon",
+  1047→    category: "furniture",
+  1048→    available: false,
+  1049→  },
+  1050→  {
+  1051→    slug: "linen",
+  1052→    name: "Linen Catalogue",
+  1053→    description:
+  1054→      "20 SKUs — bed sheets, pillow cases, duvets, bath towels, bath robes, table linen, napkins, and kitchen linen. Long-staple cotton, custom-branded.",
+  1055→    fileName: "linen-catalogue.pdf",
+  1056→    fileSize: "Coming soon",
+  1057→    category: "linen",
+  1058→    available: false,
+  1059→  },
+  1060→  {
+  1061→    slug: "roofing",
+  1062→    name: "Roofing Catalogue",
+  1063→    description:
+  1064→      "12 SKUs — standing seam panels, insulated roof panels, polycarbonate sheets, flashings, trims, and gutter systems. Architectural metal roofing and cladding.",
+  1065→    fileName: "roofing-catalogue.pdf",
+  1066→    fileSize: "48 MB",
+  1067→    category: "roofing",
+  1068→    available: true,
+  1069→  },
+  1070→  {
+  1071→    slug: "dome",
+  1072→    name: "Dome Catalogue",
+  1073→    description:
+  1074→      "2 SKUs — glass geodesic domes, polycarbonate geodesic domes, and dome accessories. For glamping and experiential stays.",
+  1075→    fileName: "dome-catalogue.pdf",
+  1076→    fileSize: "Coming soon",
+  1077→    category: "dome",
+  1078→    available: false,
+  1079→  },
+  1080→];
+  1081→
+  1082→/* ─────────────────────────────────────────────────────────────
+  1083→   Full Product Catalogue — individual products from the PDF
+  1084→   Each category has multiple products with model numbers,
+  1085→   specifications, and images extracted from the catalogue.
+  1086→   ───────────────────────────────────────────────────────────── */
+  1087→// Catalogue product data moved to catalogue-data.ts
+  1088→

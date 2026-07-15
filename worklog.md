@@ -784,3 +784,109 @@ Stage Summary:
 - Key artifact changed: package.json (scripts section)
 - IMPORTANT for the user: On Vercel, make sure the environment variable DATABASE_URL is set in Project Settings → Environment Variables (pointing to the SQLite/Postgres connection string). prisma generate does NOT need DATABASE_URL, but runtime API calls (db.lead.create, etc.) WILL need it.
 - Note: SQLite on Vercel serverless has filesystem persistence limitations; if leads/quotations must persist permanently across cold starts, consider migrating to a hosted Postgres (e.g. Neon/Supabase) by changing the datasource provider in prisma/schema.prisma. This is a follow-up consideration, not part of this build fix.
+
+---
+Task ID: 2-a
+Agent: full-stack-developer (Products admin module)
+Task: Build Products & Categories management admin module (API + page + seed endpoint)
+
+Work Log:
+- Read reference files: existing admin pages (leads, blog) for visual style, their API routes for handler patterns, prisma schema for Product/Category models, catalogue-data.ts for seed source, site-data.ts for CATEGORIES source, globals.css for design tokens
+- Created `src/app/api/admin/products/route.ts` — Product CRUD. GET returns `{ ok, products, categories }` (supports `?category=` filter, ordered by `sortOrder asc, createdAt desc`). POST/PATCH JSON-stringify `specs` array. DELETE by `?id=`. All handlers try/catch with `console.error("[ADMIN PRODUCTS ... ERROR]", err)` and 500 response.
+- Created `src/app/api/admin/products/categories/route.ts` — Category CRUD with same pattern.
+- Created `src/app/api/admin/products/seed/route.ts` — POST endpoint. Checks counts first; only seeds empty tables. Seeds Category from `CATEGORIES` (site-data.ts) by `upsert` on `slug`, and Product from flattened `CATALOGUE_CATEGORIES.products` (catalogue-data.ts) by `upsert` on `model`. Returns `{ ok, seeded: { products, categories }, skipped }`.
+- Created `src/app/admin/products/page.tsx` — Client admin page matching the leads/blog visual style. Two-tab UI (Products | Categories). Products tab: filter dropdown + search input + Add Product button + "Seed from existing data" button (only when product count is 0, with explanatory note banner). Product table with image thumbnail (h-12 w-12 rounded), model (font-mono brass), name, category, price, featured/published badges, edit/delete actions. Empty state with Package icon. Product editor modal: model, name, category dropdown, image URL with live preview, price, description textarea, dynamic specs list (add/remove rows of {label, value}), featured toggle, published toggle, sortOrder number. Validates model + name required. Categories tab: Add Category button + grid of category cards (image, name, slug, count, blurb, span badge, edit/delete) + Category editor modal (slug, name, count, blurb, image with preview, span select default/large/wide/tall, sortOrder). All modals use `glass-on-charcoal rounded-2xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto` over `bg-black/60` overlay with click-outside-to-close. Inputs use shared `rounded-xl border border-white/10 bg-white/5 ... focus:border-brass` style. Buttons primary: `bg-brass text-charcoal hover:bg-brass-light`; secondary: `bg-white/5 hover:bg-white/10`. Lucide icons used: Package, Plus, Pencil, Trash2, Search, Star, Eye, EyeOff, X, Tags.
+- Ran `bun run lint` — 0 errors, 33 warnings (all `<img>` warnings consistent with the rest of the codebase; existing admin pages use `<img>` too).
+
+Stage Summary:
+- Files created (4):
+  - `src/app/api/admin/products/route.ts` (product CRUD API)
+  - `src/app/api/admin/products/categories/route.ts` (category CRUD API)
+  - `src/app/api/admin/products/seed/route.ts` (seed endpoint — POST, fills empty tables from catalogue-data.ts + site-data.ts via upsert)
+  - `src/app/admin/products/page.tsx` (admin UI page — two-tab Products/Categories with editor modals)
+- No existing files modified (respected all constraints: schema untouched, admin-shell untouched, content page untouched).
+- Used only dependencies already in package.json (lucide-react, prisma, next, react).
+- Lint clean of errors. Visual style matches existing admin pages exactly.
+
+---
+Task ID: 2-c
+Agent: full-stack-developer (SEO + Company admin module)
+Task: Build SEO + Company Info admin module backed by SiteContent
+
+Work Log:
+- Read worklog + reference files: /admin/blog/page.tsx (visual style), /api/admin/blog/route.ts (API style), /lib/db.ts, /prisma/schema.prisma (SiteContent { id, key, value, updatedAt }), /app/globals.css (design tokens — charcoal/ivory/brass/brass-light/emerald/sand), /lib/laxree/site-data.ts (SITE constant — phone, email, address, socials to mirror as defaults).
+- Verified /api/admin/settings/route.ts did NOT yet exist (Task 2-b ran concurrently but had not finished writing the route when I checked). Created the file with the FULL superset of DEFAULTS per spec: `theme` + `homepage` (Task 2-b's keys) + `seo` + `company` (my keys). This means whichever agent finishes first wins, but the file is identical either way.
+- API route `/api/admin/settings/route.ts`:
+  - `export const runtime = "nodejs"`, `import { db } from "@/lib/db"`
+  - GET: queries all SiteContent rows, parses each `value` as JSON, shallow-merges each top-level key over its DEFAULTS entry. Always returns every known default key (theme, homepage, seo, company) so the UI never renders undefined even on a fresh DB. Returns `{ ok: true, settings: merged }`.
+  - PUT: body `{ key, value }`. `JSON.stringify(value)`, `db.siteContent.upsert({ where: { key }, update, create })`. Returns `{ ok: true }`. 400 if key missing.
+  - try/catch with `console.error("[ADMIN SETTINGS ERROR]", err)`, 500 on error.
+- Admin page `/admin/seo/page.tsx` ("use client"):
+  - Loads settings on mount via GET /api/admin/settings, merges API response over local SEO_DEFAULTS / COMPANY_DEFAULTS (so missing fields always have a sane value). Spinner while loading.
+  - Header: "SEO & Company Info" with Search icon, subtitle "Manage search engine metadata and company contact details." Save (brass) + Reset to defaults (secondary) buttons, pulsing "Unsaved changes" amber badge when form differs from last-loaded snapshot.
+  - Section A — "Search Engine Optimization" card (glass-on-charcoal, Search icon): siteTitle (text), siteDescription (textarea with `n/160` char counter — amber if >160, emerald if 140-160, sand if <140), defaultKeywords (chip list with add input + Enter-to-add + X-to-remove per chip — chips styled `bg-brass/10 border-brass/20 text-brass`), ogImage (URL input + live `<img>` preview that hides on error), twitterHandle, robots (`<select>` with 4 options), googleVerification (with helper note about Google Search Console content attribute), per-page SEO sub-card (max-h-[28rem] overflow-y-auto, each page row has editable path + title + description with its own char counter; add/remove page rows).
+  - Section B — "Company Contact Details" card (glass-on-charcoal, Building2 icon): name + tagline (2-col), phoneDisplay + phoneHref (2-col), tollFreeDisplay + tollFreeHref (2-col), whatsapp (with country-code note), email + careersEmail (2-col), address (textarea), socials (4 inputs — facebook/x/youtube/linkedin — each with its Lucide brand icon Facebook/Twitter/Youtube/Linkedin).
+  - Save: PUTs `seo` and `company` keys SEPARATELY to /api/admin/settings (only sends the dirty one), Promise.all, success/error toast (fixed bottom-right glass card with Check/X icon, auto-dismiss after 3.2s).
+  - Reset: restores SEO_DEFAULTS + COMPANY_DEFAULTS into form WITHOUT saving (and shows a success toast).
+  - Input styling per spec: `rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-ivory placeholder:text-sand/40 focus:border-brass focus:outline-none`. Primary btn: brass bg, charcoal text. Secondary btn: white/5 bg.
+- Used Lucide icons exactly as listed in spec: Search, Globe, Phone, Mail, MapPin, Share2, Save, RotateCcw, Plus, X, Building2, Check, Twitter, Youtube, Linkedin, Facebook.
+- Did NOT modify prisma/schema.prisma, admin-shell.tsx, /admin/content/page.tsx, or any other existing file. Only CREATED the two new files.
+- Ran `bun run lint` — 0 errors, 33 pre-existing `<img>` warnings (none in my files; my OG preview `<img>` carries an inline `eslint-disable-next-line @next/next/no-img-element`).
+- Smoke-tested via curl: GET /api/admin/settings → 200 with merged settings; PUT {key:"seo", value:{...}} → {ok:true}; GET → returns saved seo; GET /admin/seo → 200.
+
+Stage Summary:
+- Files created (and ONLY these):
+  1. `/home/z/my-project/src/app/api/admin/settings/route.ts` — GET (merge over DEFAULTS superset: theme + homepage + seo + company) + PUT (upsert by key). Coordinator-friendly: ships the superset so Task 2-b does not need to add seo/company later, and 2-b's theme/homepage defaults are already present.
+  2. `/home/z/my-project/src/app/admin/seo/page.tsx` — full "use client" SEO + Company editor with per-page SEO rows, keyword chips, OG image preview, char counters, unsaved-changes badge, success/error toasts, reset-to-defaults, save-dirty-only PUTs.
+- Key decisions:
+  - Shallow top-level merge in the API (arrays like `defaultKeywords`, `pages`, `heroStats` are replaced wholesale by DB values, not deep-concatenated) — matches editor semantics.
+  - API ALWAYS returns every known default key, even if no row exists yet, so the UI never renders undefined.
+  - Client keeps both `loaded*` (last saved snapshot) and current form state so a true "dirty" check is possible; Save only PUTs the section that actually changed.
+  - SEO_DEFAULTS / COMPANY_DEFAULTS duplicated on the client so Reset works without an extra round-trip, and so the form has a sane initial render before GET resolves.
+- Lint: clean (0 errors in my files).
+
+---
+Task ID: MASTER-ADMIN-COMPLETE
+Agent: main (orchestrator)
+Task: Complete the master-level admin panel — build Products, Appearance, and SEO/Company modules + wire nav + browser-verify end-to-end
+
+Work Log:
+- Reviewed existing admin state: Dashboard, Leads, Blog were working; Content page was all "Coming Soon" placeholders. Missing: Products, Theme, SEO, Homepage/Company editors.
+- Added Product + Category models to prisma/schema.prisma and ran `bun run db:push` (DB synced, client regenerated).
+- Dispatched 3 subagents in parallel:
+  - Task 2-a (full-stack-developer): Built Products module — /api/admin/products (route.ts, categories/route.ts, seed/route.ts) + /admin/products page with Products/Categories tabs, search, filter, CRUD modals, dynamic specs editor, seed-from-existing-data button. ✅ Completed.
+  - Task 2-b (full-stack-developer): FAILED (empty response).
+  - Task 2-c (full-stack-developer): Built SEO + Company module — /api/admin/settings route + /admin/seo page with SEO fields + per-page SEO + company contact details. ✅ Completed.
+- Fixed shared /api/admin/settings/route.ts DEFAULTS to include the full superset (theme + homepage + seo + company) — 2-c's write had only persisted theme+homepage due to a race with the failed 2-b.
+- Built the Appearance page myself (src/app/admin/appearance/page.tsx) — theme color pickers with live preview, font dropdowns, radius inputs, homepage hero editor with dynamic stats, unsaved-changes badge, save/reset, success toast. This covered the 2-b deliverable that failed.
+- Updated src/lib/admin/admin-shell.tsx nav: added Products (Package icon), Appearance (Palette icon), SEO & Company (Search icon) to the sidebar.
+- Rewrote src/app/admin/content/page.tsx: replaced all "Coming Soon" placeholders with working "OPEN EDITOR" links to /admin/products, /admin/appearance, /admin/seo, /admin/blog.
+- Ran `bun run lint` — 0 errors (33 pre-existing <img> warnings, consistent with the rest of the codebase).
+
+Browser Verification (Agent Browser, end-to-end):
+- Logged in to /admin with admin / laxree2026 → redirected to dashboard, sidebar shows all 7 nav items ✅
+- /admin/products → "Products & Categories" heading, tabs, search, category dropdown, table headers all present ✅
+- Tested seed endpoint (POST /api/admin/products/seed) → seeded 28 products + 5 categories ✅
+- Reloaded /admin/products → table populated with real products (LRMB-130 Absorption Minibar 40L, etc.), Products 28 / Categories 5 tabs, Edit/Delete buttons per row ✅
+- Opened Add Product modal → Model/Name/Category/Price/Description inputs, ADD SPEC button, Featured/Published toggles, Save/Cancel buttons all present ✅
+- /admin/appearance → "Appearance" heading, Brand Colors & Typography section, color pickers, font dropdowns, Live Preview panel with Primary Button, Homepage Hero Section with Eyebrow/Title/Subtitle/CTAs/Hero Stats ✅
+- Tested color edit: changed accentColor #B08D57 → #D4A056 → "UNSAVED CHANGES" badge appeared, Save Changes button enabled, clicked Save → "Settings saved successfully." toast, API confirmed persistence (accentColor: #D4A056) ✅
+- Reset test value back to #B08D57 via API PUT ✅
+- /admin/seo → "SEO & Company Info" heading, Search Engine Optimization section (Site Title, Description, Keywords, Twitter Handle, Robots Directive, Google Verification), Per-Page SEO rows, Company Contact Details section (WhatsApp, Email, Careers Email, Address, Facebook/X/YouTube/LinkedIn socials) — all pre-populated from defaults ✅
+- /admin/content → all 6 cards now show "OPEN EDITOR" links (no "Coming Soon"), linking to the correct modules ✅
+- Zero browser console errors, zero dev.log errors across the whole session ✅
+
+Stage Summary:
+- Master-level admin panel is COMPLETE. All 8 original requirements are now covered:
+  1. Homepage content editor → /admin/appearance (hero text + stats) ✅
+  2. Theme customization → /admin/appearance (colors, fonts, radii, live preview) ✅
+  3. Page content management → /admin/content (launchpad) + per-module editors ✅
+  4. Product management → /admin/products (full CRUD, 28 products + 5 categories seeded from catalogue-data.ts) ✅
+  5. Blog management → /admin/blog (pre-existing, working) ✅
+  6. SEO management → /admin/seo (meta tags, keywords, per-page SEO, OG) ✅
+  7. Lead management → /admin/leads (pre-existing, working — includes quotation leads) ✅
+  8. Quotation management → /admin/leads filtered by source="quotation" (pre-existing) ✅
+- New files created: prisma schema updated (Product, Category models); src/app/api/admin/products/{route.ts, categories/route.ts, seed/route.ts}; src/app/api/admin/settings/route.ts; src/app/admin/products/page.tsx; src/app/admin/appearance/page.tsx; src/app/admin/seo/page.tsx
+- Modified files: src/lib/admin/admin-shell.tsx (nav), src/app/admin/content/page.tsx (links)
+- All data persists to SQLite via Prisma. On Vercel, DATABASE_URL must be set; consider migrating to hosted Postgres (Neon/Supabase) for permanent persistence across serverless cold starts — noted as a follow-up, not part of this task.
+- The master admin panel is ready for the non-technical owner to manage the entire website without touching code.

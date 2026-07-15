@@ -9,6 +9,9 @@ import {
   Users,
   FileText,
   Settings,
+  Package,
+  Palette,
+  Search,
   LogOut,
   ExternalLink,
   Menu,
@@ -18,8 +21,11 @@ import {
 const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Leads", href: "/admin/leads", icon: Users },
+  { label: "Products", href: "/admin/products", icon: Package },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
-  { label: "Content", href: "/admin/content", icon: Settings },
+  { label: "Appearance", href: "/admin/appearance", icon: Palette },
+  { label: "SEO & Company", href: "/admin/seo", icon: Search },
+  { label: "Content Hub", href: "/admin/content", icon: Settings },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
