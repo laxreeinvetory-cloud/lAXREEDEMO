@@ -3,7 +3,7 @@ import { CATEGORIES } from "@/lib/laxree/site-data"
 import { CATALOGUE_CATEGORIES } from "@/lib/laxree/catalogue-data"
 import { BLOG_POSTS } from "@/lib/laxree/site-data";
 
-const BASE_URL = "https://laxree.com";
+const BASE_URL = "https://l-axreedemo.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

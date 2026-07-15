@@ -1,10 +1,19 @@
 # LaxRee Amenities — Hotel Supplies
 User-agent: *
 Allow: /
+Allow: /products/
+Allow: /blog/
+Allow: /about-us
+Allow: /catalogue
+Allow: /clients
+Allow: /dealers
+Allow: /career
+Allow: /contact-us
 Disallow: /api/
+Disallow: /cart
 
 # Sitemap
-Sitemap: https://laxree.com/sitemap.xml
+Sitemap: https://l-axreedemo.vercel.app/sitemap.xml
 
 # Crawl delay for server-friendly crawling
 Crawl-delay: 1

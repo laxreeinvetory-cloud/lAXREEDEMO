@@ -55,8 +55,49 @@ export default async function ItemTypePage({
 
   const otherItems = CATALOGUE_CATEGORIES.filter((c) => c.slug !== itemSlug);
 
+  // SEO: Breadcrumb + ProductCollection structured data
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://l-axreedemo.vercel.app" },
+      { "@type": "ListItem", position: 2, name: "Products", item: "https://l-axreedemo.vercel.app/products" },
+      { "@type": "ListItem", position: 3, name: "Amenities", item: "https://l-axreedemo.vercel.app/products/amenities" },
+      { "@type": "ListItem", position: 4, name: item.name, item: `https://l-axreedemo.vercel.app/products/amenities/${itemSlug}` },
+    ],
+  };
+
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${item.name} Collection`,
+    numberOfItems: item.products.length,
+    itemListElement: item.products.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Product",
+        name: p.name,
+        sku: p.model,
+        category: p.category,
+        brand: { "@type": "Brand", name: "LaxRee Amenities" },
+        manufacturer: { "@type": "Organization", name: "LaxRee Amenities" },
+      },
+    })),
+  };
+
   return (
     <>
+      {/* SEO: Breadcrumb + ItemList structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
+
       {/* ── PageHero ── */}
       <PageHero
         breadcrumbs={[

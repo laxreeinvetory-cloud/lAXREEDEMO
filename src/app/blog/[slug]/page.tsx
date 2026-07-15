@@ -63,8 +63,47 @@ export default async function BlogPostPage({
   // Related = the other posts (exclude current)
   const related = BLOG_POSTS_FULL.filter((p) => p.slug !== post.slug);
 
-  // Canonical share URL (LaxRee domain)
-  const shareUrl = `https://laxree.com/blog/${post.slug}`;
+  // SEO: Canonical + share URL
+  const shareUrl = `https://l-axreedemo.vercel.app/blog/${post.slug}`;
+
+  // SEO: Article structured data (JSON-LD)
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    image: `https://l-axreedemo.vercel.app${post.image}`,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author,
+      jobTitle: post.authorRole,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "LaxRee Amenities",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://l-axreedemo.vercel.app/images/laxree-logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": shareUrl,
+    },
+  };
+
+  // SEO: Breadcrumb structured data
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://l-axreedemo.vercel.app" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://l-axreedemo.vercel.app/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: shareUrl },
+    ],
+  };
   const shareLinks = [
     {
       label: "Share on Facebook",
@@ -90,6 +129,16 @@ export default async function BlogPostPage({
 
   return (
     <>
+      {/* SEO: Article + Breadcrumb structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
       {/* ─────────────────────────────────────────────────────
           Section 1 — Article hero (charcoal)
           ───────────────────────────────────────────────────── */}
