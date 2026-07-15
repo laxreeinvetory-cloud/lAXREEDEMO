@@ -1,4 +1,3 @@
-"use client";
 
 import { CERTIFICATIONS, type Certification } from "@/lib/laxree/site-data";
 

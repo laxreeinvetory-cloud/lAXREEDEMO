@@ -1,4 +1,3 @@
-"use client";
 
 import { CERTIFICATIONS_MARQUEE } from "@/lib/laxree/site-data";
 

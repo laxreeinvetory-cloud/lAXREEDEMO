@@ -1,57 +1,61 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/site/hero";
 import { TrustMarquee } from "@/components/site/trust-marquee";
 import { CategoryBento } from "@/components/site/category-bento";
-import { AboutUs } from "@/components/site/about-us";
-import { OwnerMessage } from "@/components/site/owner-message";
-import { ProductSpotlight } from "@/components/site/product-spotlight";
-import { CategoryExplorer } from "@/components/site/category-explorer";
-import ClientsTestimonials from "@/components/site/clients-testimonials";
-import OurPresence from "@/components/site/our-presence";
-import Certifications from "@/components/site/certifications";
-import { WhyChoose } from "@/components/site/why-choose";
-import { HospitalityTrends } from "@/components/site/hospitality-trends";
-import { LeadCtaBanner } from "@/components/site/lead-cta-banner";
+
+// Lazy-load below-the-fold sections to reduce initial JS payload
+// These sections are below the first viewport and don't need to load immediately
+const AboutUs = dynamic(() => import("@/components/site/about-us").then(m => m.AboutUs));
+const OwnerMessage = dynamic(() => import("@/components/site/owner-message").then(m => m.OwnerMessage));
+const ProductSpotlight = dynamic(() => import("@/components/site/product-spotlight").then(m => m.ProductSpotlight));
+const CategoryExplorer = dynamic(() => import("@/components/site/category-explorer").then(m => m.CategoryExplorer));
+const ClientsTestimonials = dynamic(() => import("@/components/site/clients-testimonials"));
+const OurPresence = dynamic(() => import("@/components/site/our-presence"));
+const Certifications = dynamic(() => import("@/components/site/certifications"));
+const WhyChoose = dynamic(() => import("@/components/site/why-choose").then(m => m.WhyChoose));
+const HospitalityTrends = dynamic(() => import("@/components/site/hospitality-trends").then(m => m.HospitalityTrends));
+const LeadCtaBanner = dynamic(() => import("@/components/site/lead-cta-banner").then(m => m.LeadCtaBanner));
 
 export default function Home() {
   return (
     <>
-      {/* 2. HERO — charcoal */}
+      {/* 2. HERO — charcoal (eager loaded) */}
       <Hero />
 
-      {/* 3. TRUST / CERTIFICATION MARQUEE — emerald */}
+      {/* 3. TRUST / CERTIFICATION MARQUEE — emerald (eager loaded, CSS only) */}
       <TrustMarquee />
 
-      {/* 4. CATEGORY BENTO GRID — ivory */}
+      {/* 4. CATEGORY BENTO GRID — ivory (eager loaded, above fold) */}
       <CategoryBento />
 
-      {/* 5. ABOUT US — charcoal split parallax */}
+      {/* 5. ABOUT US — charcoal split parallax (lazy) */}
       <AboutUs />
 
-      {/* 5b. OWNER'S MESSAGE — charcoal */}
+      {/* 5b. OWNER'S MESSAGE — charcoal (lazy) */}
       <OwnerMessage />
 
-      {/* 6. PRODUCT SPOTLIGHT — ivory coverflow */}
+      {/* 6. PRODUCT SPOTLIGHT — ivory coverflow (lazy) */}
       <ProductSpotlight />
 
-      {/* 7. DEEP CATEGORY EXPLORER — charcoal accordion */}
+      {/* 7. DEEP CATEGORY EXPLORER — charcoal accordion (lazy) */}
       <CategoryExplorer />
 
-      {/* 8. CLIENTS & TESTIMONIALS — ivory */}
+      {/* 8. CLIENTS & TESTIMONIALS — ivory (lazy, CSS only) */}
       <ClientsTestimonials />
 
-      {/* 9. OUR PRESENCE — charcoal coverflow gallery */}
+      {/* 9. OUR PRESENCE — charcoal coverflow gallery (lazy) */}
       <OurPresence />
 
-      {/* 10. CERTIFICATIONS — ivory badge wall */}
+      {/* 10. CERTIFICATIONS — ivory badge wall (lazy, CSS only) */}
       <Certifications />
 
-      {/* 11. WHY CHOOSE LAXREE — charcoal bento */}
+      {/* 11. WHY CHOOSE LAXREE — charcoal bento (lazy) */}
       <WhyChoose />
 
-      {/* 12. HOSPITALITY TRENDS — ivory blog grid */}
+      {/* 12. HOSPITALITY TRENDS — ivory blog grid (lazy, CSS only) */}
       <HospitalityTrends />
 
-      {/* 13. LEAD CAPTURE CTA — emerald */}
+      {/* 13. LEAD CAPTURE CTA — emerald (lazy) */}
       <LeadCtaBanner />
     </>
   );

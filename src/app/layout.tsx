@@ -8,6 +8,8 @@ import { CartProvider } from "@/components/providers/cart-provider";
 import { Navbar } from "@/components/site/navbar";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingRoot } from "@/components/floating/floating-root";
+
+// ScrollProgress uses framer-motion — keep it eager since it's tiny
 import { ScrollProgress } from "@/components/site/scroll-progress";
 
 /* ─────────────────────────────────────────────────────────────
