@@ -34,21 +34,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Save to database
-    const lead = await db.lead.create({
-      data: {
-        name: body.name!,
-        phone: body.phone!,
-        email: body.email || null,
-        category: body.category || null,
-        message: body.message || null,
-        source: body.source || "contact-page",
-      },
-    });
+    // Save to database (best-effort — don't fail the user-facing response
+    // if the DB is unavailable on Vercel. The enquiry is still logged.)
+    let leadId = `lead-${Date.now()}`;
+    let dbSaved = false;
+    try {
+      const lead = await db.lead.create({
+        data: {
+          name: body.name!,
+          phone: body.phone!,
+          email: body.email || null,
+          category: body.category || null,
+          message: body.message || null,
+          source: body.source || "contact-page",
+        },
+      });
+      leadId = lead.id;
+      dbSaved = true;
+    } catch (dbErr) {
+      // DB unavailable — log but still return success to the user.
+      console.error("[LEAD DB SAVE ERROR]", dbErr);
+    }
 
     return NextResponse.json({
       ok: true,
-      id: lead.id,
+      id: leadId,
+      dbSaved,
       message:
         "Thank you for your enquiry. Our team will reach out within 24 hours.",
     });

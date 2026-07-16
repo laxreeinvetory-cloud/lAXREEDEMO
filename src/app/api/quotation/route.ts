@@ -114,23 +114,34 @@ Please provide rates for the above items.`;
     // Log the quotation
     console.log(`[QUOTATION] ${refNo} — ${body.name} — ${body.items.length} items`);
 
-    // Save to database
-    await db.lead.create({
-      data: {
-        name: body.name,
-        phone: body.phone,
-        email: body.email || null,
-        hotel: body.hotel || null,
-        message: body.message || null,
-        source: "quotation",
-        refNo,
-        avgRoomRent: body.avgRoomRent || null,
-        timeline: body.timeline || null,
-        propertyType: body.propertyType || null,
-        projectStage: body.projectStage || null,
-        items: JSON.stringify(body.items),
-      },
-    });
+    // Save to database (best-effort — don't fail the user-facing response
+    // if the DB is unavailable on Vercel. The WhatsApp message + CSV are
+    // still generated so the customer can reach sales.)
+    let dbSaved = false;
+    try {
+      await db.lead.create({
+        data: {
+          name: body.name,
+          phone: body.phone,
+          email: body.email || null,
+          hotel: body.hotel || null,
+          message: body.message || null,
+          source: "quotation",
+          refNo,
+          avgRoomRent: body.avgRoomRent || null,
+          timeline: body.timeline || null,
+          propertyType: body.propertyType || null,
+          projectStage: body.projectStage || null,
+          items: JSON.stringify(body.items),
+        },
+      });
+      dbSaved = true;
+    } catch (dbErr) {
+      // DB unavailable (e.g. DATABASE_URL not set on Vercel, connection
+      // issue). Log it but still return success to the user — they get
+      // their WhatsApp link + CSV regardless.
+      console.error("[QUOTATION DB SAVE ERROR]", dbErr);
+    }
 
     return NextResponse.json({
       ok: true,
@@ -139,6 +150,7 @@ Please provide rates for the above items.`;
       whatsappUrl,
       csv,
       itemCount: body.items.length,
+      dbSaved,
       message: "Quotation request generated successfully.",
     });
   } catch (err) {
