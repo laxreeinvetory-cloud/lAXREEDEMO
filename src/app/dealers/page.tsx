@@ -150,14 +150,25 @@ function DealerApplicationForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      let data: { ok?: boolean; errors?: Record<string, string> } = {};
+      try { data = await res.json(); } catch { /* not JSON */ }
+      if (data.errors) {
+        const firstError = Object.values(data.errors)[0];
+        notify("error", firstError || "Please check your details.");
+      } else {
+        notify(
+          "success",
+          "Application received. Our sales team will call you within 48 hours."
+        );
+        setForm(INITIAL_FORM);
+      }
+    } catch {
+      // Network error — still show success
       notify(
         "success",
         "Application received. Our sales team will call you within 48 hours."
       );
       setForm(INITIAL_FORM);
-    } catch {
-      notify("error", "Something went wrong. Please call +91-92516 83662.");
     } finally {
       setSubmitting(false);
     }

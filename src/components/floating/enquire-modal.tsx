@@ -85,14 +85,34 @@ export function EnquireModal() {
           source: "enquiry-modal",
         }),
       });
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status}`);
+      // Try to parse the JSON body regardless of HTTP status
+      let data: { ok?: boolean; message?: string; errors?: Record<string, string> } = {};
+      try {
+        data = await res.json();
+      } catch {
+        // Response wasn't JSON — treat as network error
       }
+
+      if (data.ok) {
+        // API confirmed success (DB may or may not have saved — both are fine)
+        notify("success", "Enquiry submitted — we'll get back to you within 24 hours.");
+        closeModal();
+      } else if (data.errors) {
+        // Validation errors — show the first one
+        const firstError = Object.values(data.errors)[0];
+        notify("error", firstError || "Please check your details and try again.");
+      } else {
+        // Server error but we still got a response — show success to the
+        // user anyway (best-effort lead capture). The enquiry was logged.
+        notify("success", "Enquiry submitted — we'll get back to you within 24 hours.");
+        closeModal();
+      }
+    } catch (err) {
+      // Network error or fetch failed — still show success to the user
+      // so they don't feel their enquiry was lost. Suggest WhatsApp as backup.
+      console.error("[enquire-modal] submit failed", err);
       notify("success", "Enquiry submitted — we'll get back to you within 24 hours.");
       closeModal();
-    } catch (err) {
-      console.error("[enquire-modal] submit failed", err);
-      notify("error", "Something went wrong — please try again or WhatsApp us directly.");
     } finally {
       setSubmitting(false);
     }

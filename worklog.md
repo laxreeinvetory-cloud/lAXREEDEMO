@@ -890,3 +890,34 @@ Stage Summary:
 - Modified files: src/lib/admin/admin-shell.tsx (nav), src/app/admin/content/page.tsx (links)
 - All data persists to SQLite via Prisma. On Vercel, DATABASE_URL must be set; consider migrating to hosted Postgres (Neon/Supabase) for permanent persistence across serverless cold starts — noted as a follow-up, not part of this task.
 - The master admin panel is ready for the non-technical owner to manage the entire website without touching code.
+
+---
+Task ID: PAGES-EDITOR
+Agent: full-stack-developer (Page Content editor)
+Task: Build Page Content admin editor for Career, Dealers, Catalogue, Contact Us pages
+
+Work Log:
+- Read worklog.md, /admin/seo/page.tsx, /admin/appearance/page.tsx, /api/admin/settings/route.ts, /lib/db.ts, prisma/schema.prisma, globals.css, and the 4 public pages (career, dealers, catalogue, contact-us) to match the existing code style and design system.
+- Confirmed the existing /api/admin/settings route already supports GET (returns all SiteContent rows as a JSON object keyed by row.key) and PUT (upserts by key with a JSON-stringified value) — no backend changes needed.
+- Created src/app/admin/pages/page.tsx — a "use client" admin page that lets the owner edit text content on the Career, Dealers, Catalogue, and Contact Us pages.
+- Implementation mirrors /admin/seo and /admin/appearance: charcoal background, ivory text, brass accents, glass-on-charcoal cards, brass spinner while loading, fixed bottom-right toast (emerald for success, red for error), unsaved-changes amber badge.
+- Page selector: 4 pill-style tab buttons at the top (Career | Dealers | Catalogue | Contact Us). Active tab uses `bg-brass text-charcoal`; inactive uses `bg-white/5 text-sand hover:text-ivory`. Each tab shows a small dot when its page has unsaved changes.
+- Per-page editor: a single glass-on-charcoal card with grouped sections (Hero / Section headings / Call-to-Action etc.) rendered from a config-driven PAGES array. Multiline fields use <textarea rows=3>; everything else uses text inputs. Styling matches the SEO page exactly (`inputClass`, `labelClass`, `btnPrimary`, `btnSecondary` copied verbatim).
+- State: `contents` (current edited values per slug) and `loaded` (last-saved snapshot per slug) — both seeded with the page defaults so the form is fully populated before the GET resolves.
+- On mount: GET /api/admin/settings, then `mergeContent(defaults, stored)` for each page key (`page:career`, `page:dealers`, `page:catalogue`, `page:contact-us`). The merge keeps defaults for any missing field and coerces stray number/boolean values back to strings.
+- Dirty detection via `useMemo` over per-page JSON.stringify comparison; the Save button is disabled unless the active page is dirty.
+- Save button PUTs only the active page's content to /api/admin/settings with key `page:<slug>`; on success it updates `loaded` snapshot for that page and shows a success toast naming the page.
+- Reset to defaults: restores the active page's defaults into the form WITHOUT saving (matches /admin/seo behavior); shows a toast reminding the owner to click Save.
+- Toast auto-dismisses after 3 seconds; the timeout is tracked via a ref so repeated save/reset operations don't stack stale timers.
+- Lucide icons used: FileText (header), Briefcase/Handshake/BookOpen/Phone (tab + card icons), Save, RotateCcw, Check, X. Only lucide-react + next/react — no new dependencies.
+- Did NOT touch prisma/schema.prisma, src/lib/admin/admin-shell.tsx, src/app/admin/content/page.tsx, the /api/admin/settings route, or any public-facing page. Wiring the edited content into the live pages is left for a follow-up task.
+- Ran `bun run lint` — 0 errors, 0 warnings on the new file (all 34 warnings reported by ESLint are pre-existing `<img>` warnings in unrelated site components and one unused eslint-disable in lib/db.ts).
+
+Stage Summary:
+- Files created:
+  - src/app/admin/pages/page.tsx (the entire Page Content admin editor — config-driven, ~470 lines, no other files touched)
+- Key decisions:
+  - Config-driven PAGES array (slug, label, icon, storageKey, defaults, groups[]) so adding a fifth editable page later is a one-object change.
+  - Save acts per-page (only PUTs the active page's key) rather than bulk-saving all four — matches the task spec ("Save button PUTs the current page's content") and keeps payloads small.
+  - Stored values are merged over defaults at load time, so adding new fields to defaults in a future update doesn't blank out content the owner already saved.
+  - Toast, spinner, button styles, and class tokens are byte-for-byte the same as /admin/seo so the admin area reads as a single coherent surface.

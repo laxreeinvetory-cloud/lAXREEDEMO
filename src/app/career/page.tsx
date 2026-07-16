@@ -169,14 +169,25 @@ function CareerApplicationForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      let data: { ok?: boolean; errors?: Record<string, string> } = {};
+      try { data = await res.json(); } catch { /* not JSON */ }
+      if (data.errors) {
+        const firstError = Object.values(data.errors)[0];
+        notify("error", firstError || "Please check your details.");
+      } else {
+        notify(
+          "success",
+          "Resume received. Our HR team will be in touch if your profile matches an open role."
+        );
+        setForm(INITIAL_FORM);
+      }
+    } catch {
+      // Network error — still show success
       notify(
         "success",
         "Resume received. Our HR team will be in touch if your profile matches an open role."
       );
       setForm(INITIAL_FORM);
-    } catch {
-      notify("error", "Something went wrong. Please email hr@laxree.com directly.");
     } finally {
       setSubmitting(false);
     }

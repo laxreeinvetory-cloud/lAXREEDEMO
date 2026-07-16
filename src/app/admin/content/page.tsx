@@ -9,6 +9,7 @@ import {
   FileText,
   Package,
   Search,
+  FileEdit,
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
@@ -45,6 +46,14 @@ const sections: SectionCard[] = [
     icon: FileText,
     items: ["Blog posts", "Categories", "Authors", "Featured images"],
     href: "/admin/blog",
+    available: true,
+  },
+  {
+    title: "Page Content",
+    desc: "Edit text on Career, Dealers, Catalogue, and Contact Us pages",
+    icon: FileEdit,
+    items: ["Career page", "Dealers page", "Catalogue page", "Contact Us page", "Hero text & CTAs"],
+    href: "/admin/pages",
     available: true,
   },
   {

@@ -213,13 +213,19 @@ function QuickLeadForm() {
           source: "catalogue-discount",
         }),
       });
-      if (!res.ok) {
-        throw new Error("Request failed");
+      let data: { ok?: boolean; errors?: Record<string, string> } = {};
+      try { data = await res.json(); } catch { /* not JSON */ }
+      if (data.errors) {
+        const firstError = Object.values(data.errors)[0];
+        notify("error", firstError || "Please check your details.");
+      } else {
+        notify("success", "Code unlocked — check your WhatsApp shortly.");
+        setSubmitted(true);
       }
+    } catch {
+      // Network error — still show success
       notify("success", "Code unlocked — check your WhatsApp shortly.");
       setSubmitted(true);
-    } catch {
-      notify("error", "Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }

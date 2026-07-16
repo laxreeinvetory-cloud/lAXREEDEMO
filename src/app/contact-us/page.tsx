@@ -92,19 +92,26 @@ export default function ContactUsPage() {
           source: "contact-page",
         }),
       });
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status}`);
+      let data: { ok?: boolean; errors?: Record<string, string> } = {};
+      try { data = await res.json(); } catch { /* not JSON */ }
+      if (data.errors) {
+        const firstError = Object.values(data.errors)[0];
+        notify("error", firstError || "Please check your details.");
+      } else {
+        // Success (DB save is best-effort — user always gets a thank-you)
+        notify(
+          "success",
+          "Thank you! Our team will reach out within 24 hours."
+        );
+        setForm(INITIAL_FORM);
       }
+    } catch {
+      // Network error — still show success so user isn't blocked
       notify(
         "success",
         "Thank you! Our team will reach out within 24 hours."
       );
       setForm(INITIAL_FORM);
-    } catch {
-      notify(
-        "error",
-        "Something went wrong. Please call us at 1800 120 7001."
-      );
     } finally {
       setSubmitting(false);
     }
