@@ -32,6 +32,7 @@ export const NAV_LINKS = [
   { label: "Catalogue", href: "/catalogue" },
   { label: "Dealers", href: "/dealers" },
   { label: "Career", href: "/career" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact Us", href: "/contact-us" },
 ];
 
