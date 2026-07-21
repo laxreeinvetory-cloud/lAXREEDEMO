@@ -13,11 +13,8 @@ import {
   Palette,
   Search,
   FileEdit,
-<<<<<<< HEAD
-=======
   Home,
   HelpCircle,
->>>>>>> 71fba53 (feat: deep homepage editor + FAQ section + minibar Essential/Premium/Lux tiers)
   LogOut,
   ExternalLink,
   Menu,
@@ -29,13 +26,9 @@ const navItems = [
   { label: "Leads", href: "/admin/leads", icon: Users },
   { label: "Products", href: "/admin/products", icon: Package },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
-<<<<<<< HEAD
-  { label: "Page Content", href: "/admin/pages", icon: FileEdit },
-=======
   { label: "Homepage", href: "/admin/homepage", icon: Home },
   { label: "Page Content", href: "/admin/pages", icon: FileEdit },
   { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
->>>>>>> 71fba53 (feat: deep homepage editor + FAQ section + minibar Essential/Premium/Lux tiers)
   { label: "Appearance", href: "/admin/appearance", icon: Palette },
   { label: "SEO & Company", href: "/admin/seo", icon: Search },
   { label: "Content Hub", href: "/admin/content", icon: Settings },
