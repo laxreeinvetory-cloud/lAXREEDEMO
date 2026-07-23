@@ -109,8 +109,15 @@ export default async function ItemTypePage({
     tier?: string;
   }> = [];
   try {
+    // Build category filter — match exact name OR parent category
+    // e.g. "Guest Room Loose Furniture" should also match "Furniture"
+    const categoryFilters = [item.name];
+    if (item.name.includes("Furniture")) categoryFilters.push("Furniture");
+    if (item.name.includes("Bath Tub")) categoryFilters.push("Bath Tub", "Bath Tub Models");
+    if (item.name.includes("Dome") || item.name.includes("Space POD")) categoryFilters.push("Dome & Space POD", "Dome & Space POD Models");
+
     const dbItems = await db.product.findMany({
-      where: { category: item.name },
+      where: { category: { in: categoryFilters } },
       orderBy: { sortOrder: "asc" },
     });
     dbProducts = dbItems.map((p) => ({
