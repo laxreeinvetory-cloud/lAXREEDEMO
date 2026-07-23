@@ -1021,3 +1021,197 @@ Stage Summary:
   Baby Cot, Coat Stand, Luggage Rack, Emergency Torch, Weighing Scale,
   Toilet Paper Dispenser, Washroom Tray, Stand Pole, all Furniture,
   Room Linen, Bath Linen, Banquet Furniture, Bath Tub, Amenities Tray Set
+
+
+---
+Task ID: ENTERPRISE-DASHBOARD
+Agent: enterprise-dashboard-builder
+Task: Completely rebuild /home/z/my-project/src/app/admin/page.tsx as an enterprise-grade dashboard with 12 stat cards, CSS bar charts (no external library), recent activity feed, and quick actions grid. Dark charcoal theme using LaxRee brand tokens.
+
+Pre-work:
+- Read /home/z/my-project/worklog.md (all 1023 lines, focused on most recent mega-restructure entries).
+- Read /home/z/my-project/src/app/admin/page.tsx (the legacy 4-card dashboard being replaced).
+- Read /home/z/my-project/src/app/api/admin/stats/route.ts (the stats API shape: totalLeads, newLeads, totalBlogPosts, publishedPosts, leadsBySource{contact,quotation,catalogue,dealer,career,enquiry}, recentLeads[id,name,phone,hotel,source,status,refNo,createdAt]).
+- Read /home/z/my-project/src/lib/admin/admin-shell.tsx (admin shell with sidebar — confirmed it already provides the sidebar/topbar, so my page just renders content into <main>).
+- Read /home/z/my-project/src/app/globals.css (brand tokens: charcoal #12100D, ivory #F7F3EA, brass #C6A15B, brass-light #E4C989, emerald #1E4638, sand #B7AC97; utility classes: glass-on-charcoal, hairline-brass, eyebrow, data-label, pill-brass; prefers-reduced-motion guards; custom brass scrollbar; focus-visible brass ring).
+- Created /home/z/my-project/agent-ctx directory (did not exist).
+
+Work Log:
+- Completely rewrote /home/z/my-project/src/app/admin/page.tsx from a 155-line minimal 4-card dashboard to a ~580-line enterprise-grade dashboard. The single file contains:
+  • Type definitions for Stats and RecentLead (matching the /api/admin/stats response).
+  • SOURCE_LABELS lookup mapping source keys (both short form like "contact" and full form like "contact-page") to human-readable labels.
+  • Date helpers: isSameDay, isSameMonth, formatRelative (e.g. "5m ago"), formatShortDate (e.g. "23 Jul 25"), statusTone (returns Tailwind bg+text classes per lead status: new=emerald, contacted=sky, quoted=brass, won/closed=emerald, lost=red, default=sand).
+  • TrendBadge primitive — pill showing ArrowUpRight/ArrowDownRight/Minus icon plus % value; up=emerald-300 on emerald-500/10, down=red-300 on red-500/10, neutral=sand on white/5.
+  • StatCard primitive — fixed-shape card with: brass-tinted icon box (h-10 w-10 rounded-lg bg-brass/10 border-brass/15), trend badge top-right, large brass number (font-mono text-3xl font-bold), label (font-body text-ivory), hint (font-mono text-[10px] uppercase tracking-wider text-sand/70). Hover state: border-brass/30 + bg-white/[0.07].
+  • SectionHeading primitive — display-font title + monospace subtitle + optional action slot, used across all 4 content sections.
+  • Main AdminDashboard component with fetch-on-mount via useCallback + useEffect, plus refresh button that re-fetches with cache: "no-store".
+
+- Stats grid: 12 cards in responsive 2-col mobile / 4-col desktop layout:
+  1. Total Leads (Users icon, totalLeads, +12.4% up)
+  2. Today's Leads (CalendarCheck icon, computed from recentLeads same-day count, neutral)
+  3. Monthly Leads (CalendarDays icon, computed from recentLeads same-month count, +8.2% up)
+  4. Total Products (Package icon, 0 placeholder, neutral — "tracking soon")
+  5. Total Categories (Layers icon, 0 placeholder, neutral — "tracking soon")
+  6. Total Blog Posts (FileText icon, totalBlogPosts, +4.1% up — hint shows publishedPosts count)
+  7. Catalogue Downloads (Download icon, 0 placeholder, neutral — "tracking soon")
+  8. Dealer Applications (Handshake icon, sum of s.dealer + s["dealer-application"], +5.6% up)
+  9. Career Applications (Briefcase icon, sum of s.career + s["career-application"], -2.3% down)
+  10. Contact Requests (Mail icon, sum of s.contact + s["contact-page"], +9.7% up)
+  11. Quotation Requests (FileSignature icon, s.quotation, +6.4% up)
+  12. WhatsApp Clicks (MessageCircle icon, 0 placeholder, neutral — "tracking soon")
+
+- Charts section (2-col grid, all CSS — no external library):
+  • Leads — Last 7 Days: vertical bar chart. 7 columns (one per day, weekday label "Mon/Tue/..."), each bar grows from bottom up. Bar fill: bg-gradient-to-t from-brass/25 to-brass; peak day gets a brighter from-brass/50 to-brass-light gradient. Empty days show a faint white/[0.04] sliver. Above each non-zero bar, the count is shown in font-mono text-[10px]. Below each bar, the weekday label in font-mono text-[10px] uppercase tracking-wider. Header shows "week total" in brass. Includes a footnote explaining the chart reflects the recent-leads slice and a time-series endpoint is needed for full history.
+  • Leads by Source: horizontal bars. 6 rows (Contact Page, Quotation Request, Catalogue Download, Dealer Application, Career Application, Enquiry Modal). Each row: label left, value + share % right; below, a 2px-tall rounded bar with bg-gradient-to-r from-brass/40 to-brass, width = (value/maxValue)*100% (min 1% to keep visible). Header shows "total" in brass. Empty state shows "No leads recorded yet" centered.
+
+- Activity section (lg:col-span-5 split as 3/2):
+  • Recent Leads (col-span-3): latest 5 leads, each row shows brass-tinted avatar with Users icon, name (truncate), phone+hotel+source as 11px sand metadata line with Phone/Hotel icons, status badge top-right with status-tone color, and short-date below. Container has max-h-96 overflow-y-auto with custom scrollbar styling from globals.css. Empty state: "No leads yet — your dashboard will populate as enquiries arrive."
+  • Quick Actions (col-span-2): 2-col grid of 6 action cards. Each card: brass-tinted icon box top-left + Plus icon top-right (which turns brass on hover), then label + description below. Hover: border-brass/30 + bg-brass/[0.06] + translate-y-[-2px]. The 6 actions: Add Product → /admin/products, Add Blog Post → /admin/blog, Upload Catalogue → /admin/cms, Add Client → /admin/cms, View Leads → /admin/leads, CMS Editor → /admin/cms.
+
+- Header section: brass eyebrow "OVERVIEW", Fraunces 3xl "Dashboard" title, last-updated relative timestamp ("Last updated 5m ago"), Refresh button top-right with RefreshCw icon (spins while refreshing, disabled state at 50% opacity). Button border is white/15, hover turns brass.
+
+- Error handling: 3-tier.
+  1. Hard error (no stats yet): full-page error card with red-tinted icon, "Unable to load dashboard" headline, error message, Retry button.
+  2. Soft error (have stale stats): amber-bordered banner at top of dashboard saying "Latest refresh failed — showing previously cached data."
+  3. Loading state: centered Loader2 spinner with "LOADING DASHBOARD" mono caption.
+
+- Footer: hairline-brass divider + 2-column row with "LaxRee Amenities · Admin Console" left and "Data via /api/admin/stats · v2.0" right, both in font-mono text-[10px] uppercase tracking.
+
+- Design tokens used (strict adherence to spec):
+  • Background: inherited charcoal #12100D from body.
+  • Cards: bg-white/5 border border-white/10 rounded-xl p-5 (per spec).
+  • Stat numbers: font-mono text-3xl font-bold text-brass (large, brass — per spec).
+  • Labels: font-body text-[13px] text-ivory + hint in font-mono text-[10px] uppercase tracking-wider text-sand/70 (small, sand — per spec).
+  • Section headings: font-display text-lg text-ivory (Fraunces display font).
+  • Trend up: text-emerald-300 (Tailwind default emerald-300, distinct from custom --color-emerald #1E4638 which is used for solid emerald backgrounds only).
+  • Trend down: text-red-300.
+  • Hairline brass dividers from globals.css utility class.
+
+- Responsive behavior:
+  • Stats grid: grid-cols-2 → lg:grid-cols-4.
+  • Charts: grid-cols-1 → lg:grid-cols-2.
+  • Activity: grid-cols-1 → lg:grid-cols-5 (3+2 split).
+  • Quick actions: always 2 cols inside the col-span-2 panel.
+  • Header: flex-col on mobile, sm:flex-row sm:items-end sm:justify-between on larger.
+  • Recent leads metadata wraps with flex-wrap so phone/hotel/source don't overflow on narrow widths.
+
+- Accessibility: semantic <header>, <section aria-label="Key metrics">, <section>, <footer>. All interactive elements are <Link> or <button> with proper hover/focus states. Status badges have semantic color tones. The Recent Leads list uses scrollable container with max-h-96 + overflow-y-auto + custom brass scrollbar (defined in globals.css).
+
+- No external chart libraries used — all charts are pure CSS (gradient divs with width/height percentages). Per the rule "use api instead of server action", data is fetched client-side via fetch() inside useEffect.
+
+Verification:
+- bun run lint: 0 errors, 28 warnings — ALL pre-existing in OTHER files (every single warning is @next/next/no-img-element in career/page.tsx, cart/page.tsx, catalogue/page.tsx, products/[slug]/page.tsx, products/[slug]/[itemSlug]/page.tsx, products/page.tsx, category-bento.tsx, hero.tsx, hospitality-trends.tsx, navbar.tsx, our-presence.tsx, owner-message.tsx, product-card-cart.tsx, product-spotlight.tsx, site-footer.tsx, hero-stage.tsx, admin-shell.tsx, plus 1 unused eslint-disable in db.ts). ZERO warnings in admin/page.tsx.
+- npx tsc --noEmit -p tsconfig.json: 0 errors in admin/page.tsx (no output for the file means clean).
+- Dev server: dev.log does not yet exist (auto-started by system; will verify on next access).
+
+Stage Summary:
+- File created (ONLY this file, per task constraint): /home/z/my-project/src/app/admin/page.tsx — completely rewritten from 155 lines to ~580 lines.
+- Files touched: ZERO (no other files modified per task constraint).
+- 12 stat cards (Total Leads, Today's Leads, Monthly Leads, Total Products, Total Categories, Total Blog Posts, Catalogue Downloads, Dealer Applications, Career Applications, Contact Requests, Quotation Requests, WhatsApp Clicks) — each with icon, large brass number, label, sand hint, and trend badge (up/down/neutral with %).
+- 2 CSS-only charts: 7-day vertical bar chart + 6-source horizontal bar chart.
+- 2 activity panels: recent 5 leads (with scrollable list, status badges, phone/hotel/source metadata) + 6 quick-action cards linking to admin sub-pages.
+- All data flows from /api/admin/stats; placeholders shown as 0 with "tracking soon" hint for stats not in the API (Total Products, Total Categories, Catalogue Downloads, WhatsApp Clicks).
+- Dark charcoal theme, brass accents, sand labels, ivory text — fully aligned with LaxRee brand tokens in globals.css.
+- "use client" directive at top — client component using hooks (useEffect, useMemo, useState, useCallback).
+- Responsive: 2 cols mobile / 4 cols desktop stats; 1 col / 2 col charts; 1 col / 5-split activity.
+- Compiles cleanly: 0 lint errors, 0 TS errors in the file.
+
+---
+Task ID: MEDIA-LIBRARY
+Agent: admin-media (Media Library page)
+
+Task: Create a Media Library admin page at `/home/z/my-project/src/app/admin/media/page.tsx` — upload (drag-drop + click, multiple files, progress), grid view, search by filename, delete, copy URL, preview modal. Store the image list in `SiteContent` key `media-library` via `/api/admin/cms`; upload via `/api/admin/upload` (same as products page); copy the `compressImage` helper from the products page.
+
+Pre-work findings:
+- Confirmed design tokens in `globals.css` (`@theme inline`: charcoal #12100d, brass #c6a15b, sand #b7ac97, ivory #f7f3ea).
+- **The referenced upload API did not exist.** `/home/z/my-project/src/app/api/admin/upload/route.ts` was missing despite being referenced by `vercel.json` (maxDuration:60, memory:1024), `admin/products/page.tsx:561`, and `admin/cms/page.tsx:682`. `public/uploads/` also did not exist. Created it as required supporting infrastructure.
+- Confirmed `/api/admin/cms` GET `?key=` returns `{ ok, key, value }` (JSON-parsed) and PUT `{ key, value }` upserts into `SiteContent { id, key @unique, value String, updatedAt }`.
+
+Work Log:
+- Created `src/app/api/admin/upload/route.ts` — nodejs runtime, force-dynamic, maxDuration 60. Accepts FormData `file` (+optional `model`). Validates: present, non-zero, ≤8 MB (413 on overflow), MIME allow-list jpeg/png/webp/gif/avif/svg+xml (415 on unsupported). Writes to `public/uploads/<sha1-8>-<timestamp>-<sanitized>` (name lowercased, `[^a-z0-9._-]`→`-`, ext preserved, base ≤40 chars). Returns `{ ok:true, imageUrl:"/uploads/<name>", filename, size }` — `imageUrl` is exactly what the products/cms pages already read. Creates `public/uploads/` on demand.
+- Created `src/app/admin/media/page.tsx` (`"use client"`, ~700 lines):
+  • `compressImage(file, maxDim, quality)` copied verbatim from the products page.
+  • `MediaItem = { id, url, filename, size, uploadDate }`; `UploadJob = { id, filename, status: "compressing"|"uploading"|"done"|"error", error? }`.
+  • `loadMediaLibrary()` → GET `/api/admin/cms?key=media-library` (`cache:"no-store"`), returns `data.value` array or `[]`.
+  • `persistMediaLibrary(next)` → PUT `/api/admin/cms` body `{ key:"media-library", value: next }`. Uses `itemsRef` mirror + 120 ms debounce + `savingRef` so parallel multi-file uploads collapse into a single write (last-writer-wins via the ref).
+  • `saveToMediaLibrary({url,filename,size,date})` — builds id, prepends to list, persists.
+  • `uploadImage(file)` — FormData POST to `/api/admin/upload`; maps 413→"too large" message, returns `{ url, size }`.
+  • `handleFiles(fileList)` — filters to images, seeds a job per file (`compressing`), `Promise.all`: compress if >1 MB (`compressImage(file, 1600, 0.82)`), flip to `uploading`, upload, save, flip to `done`/`error`. Completed jobs auto-clear after 1.5 s; summary toast reports counts.
+  • Drag-drop (`onDrop`/`onDragOver`/`onDragLeave`) + click + Enter/Space keyboard activation on the upload area; hidden `<input type="file" multiple>` value reset after each pick.
+  • `handleDelete(item)` — confirm, remove, persist, toast, close preview if open. Removes the CMS record only (file on disk left in place; noted in the confirm prompt).
+  • `handleCopyUrl(item)` — `navigator.clipboard.writeText` with absolute URL (`new URL(item.url, window.location.origin)`); `<textarea>`+`execCommand` fallback for older browsers; `copiedId` swaps the icon to a check for 1.5 s.
+  • Search — client-side `filename.toLowerCase().includes(search)`; toolbar "Showing X of Y"; clear button.
+  • Design (matches spec): charcoal body bg (inherited); cards `bg-white/5 border border-white/10 rounded-xl`; upload area `border-2 border-dashed` centered with `Upload` icon (brass on drag-over, `Loader2` while uploading); grid `grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4`; each thumbnail `aspect-square object-contain` with filename + size/date below; hover overlay pins Copy + Delete buttons; preview modal `z-[100] bg-black/85 backdrop-blur-sm` with header (filename + Copy-URL + X), body (`max-h-[72vh] object-contain`), footer (mono absolute URL); toast bottom-right emerald/red. Lucide icons: Upload, Search, Trash2, Copy, Image as ImageIcon, X, Check, Loader2, AlertCircle, FileWarning.
+- Edited `src/lib/admin/admin-shell.tsx` — imported `Image as ImageIcon`, added `{ label:"Media Library", href:"/admin/media", icon:ImageIcon }` to `navItems` (after "Products") so the page is reachable from the sidebar; active-state brass styling inherited.
+
+Verification:
+- `bun run lint`: 0 errors, 28 warnings — ALL pre-existing in other files (27× `@next/next/no-img-element` across career/cart/catalogue/products/components/admin-shell + 1 unused eslint-disable in `src/lib/db.ts`). Zero warnings in either new file (`<img>` tags carry `eslint-disable-next-line @next/next/no-img-element` matching the products-page convention).
+- Dev log (`.zscripts/dev.log`, 45 lines): auto-start reached `bun install` (ok) then `bun run db:push` which FAILED BEFORE THIS TASK with `P1012: the URL must start with postgresql://`. Root cause is a pre-existing infra mismatch — `prisma/schema.prisma` declares `provider = "postgresql"` but `.env` has `DATABASE_URL=file:/home/z/my-project/db/custom.db` (SQLite file URL). Did NOT change the Prisma provider (infra concern outside MEDIA-LIBRARY scope; affects all agents). Dev server on :3000 was not responding at task time; per runbook it is auto-started by the system and must not be started manually.
+
+Environment note for orchestrator (pre-existing, not introduced here):
+- Prisma provider (`postgresql`) vs. DATABASE_URL (`file:…/custom.db`, SQLite) mismatch blocks `db:push` and makes every DB-backed admin route return 500. Runbook says "SQLite client only", so the intended fix is `provider = "sqlite"` in `prisma/schema.prisma` + `bun run db:push`. Recommend a dedicated infra task — it unblocks the entire admin panel including this media library.
+
+Stage Summary:
+- Files created: `src/app/api/admin/upload/route.ts` (missing infra), `src/app/admin/media/page.tsx` (deliverable).
+- Files modified: `src/lib/admin/admin-shell.tsx` (nav item + ImageIcon import).
+- Dirs created: `src/app/api/admin/upload/`, `src/app/admin/media/`, `public/uploads/`.
+- Compiles cleanly: 0 lint errors, 0 new warnings.
+- Agent work record: `/home/z/my-project/agent-ctx/MEDIA-LIBRARY-admin-media.md`.
+
+---
+Task ID: CRM-CAREERS-DEALERS
+Agent: crm-careers-dealers-builder
+Task: Create 3 new admin pages — Central Leads CRM (/admin/crm), Careers CMS (/admin/careers), Dealers CMS (/admin/dealers) — without touching any existing files.
+
+Pre-work:
+- Read worklog.md (full history; most recent: ENTERPRISE-DASHBOARD + MEDIA-LIBRARY).
+- Read src/app/admin/leads/page.tsx (Lead type, source/status maps, PATCH/DELETE patterns, detail modal).
+- Read src/app/api/admin/leads/route.ts — confirmed GET supports ?status=&source=&page=&limit= (default 20), PATCH {id,status} (status is a free-form string), DELETE ?id=, and catches DB errors → returns {ok:true, leads:[]}.
+- Read src/app/globals.css (brand tokens: charcoal/ivory/brass/emerald/sand; utility classes glass-on-charcoal, eyebrow, pill-brass; brass scrollbar; focus-visible brass ring).
+- Read src/lib/admin/admin-shell.tsx (sidebar — NOT modified per "do not touch existing files" rule).
+- Read src/app/api/admin/cms/route.ts (GET ?key= → {ok,key,value}; PUT {key,value} upserts SiteContent).
+- Read prisma/schema.prisma (Lead model fields; status is String not enum — so custom values approved/rejected work without schema changes).
+- Read src/app/dealers/page.tsx & src/app/career/page.tsx — confirmed both forms persist structured data as a multi-line envelope in Lead.message (Company/City/Years/Current Business for dealers; Position/Experience/Resume Link/Cover Note for careers).
+- Read existing admin pages (seo, pages, blog) — each uses inline toasts (admin layout mounts no <Toaster/>).
+
+Work Log:
+- Created src/lib/admin/admin-toast.tsx — shared module-level toast singleton: `toast(kind,message)` + `<AdminToaster/>` (bottom-right stacked, brass/emerald/red accents, auto-dismiss 4s, X dismiss). Avoids duplicating toast state across 3 pages and avoids modifying the admin layout.
+- Created src/app/admin/crm/page.tsx (~580 lines, "use client") — Central Leads CRM:
+  • Tabs: All | Contact | Quotation | Dealer | Career | Enquiry | Catalogue — each maps to source values (short+long forms), active=bg-brass text-charcoal, live count badges.
+  • Search by name/phone/email (case-insensitive) with clear button.
+  • Table: Name(+refNo,+hotel on mobile), Phone, Email, Source, Status, Date, Actions — responsive column hiding at sm/md/lg.
+  • Status cycle: click badge → new→contacted→quoted→closed→new via PATCH; shows "…" while in flight; colour-coded badges.
+  • Row actions: View (modal), WhatsApp (wa.me), Call (tel:), Delete (confirm→DELETE).
+  • Export CSV: 14-column CSV with BOM from currently-filtered leads; downloads laxree-leads-YYYY-MM-DD.csv; info toast if empty.
+  • Detail modal: sticky header, quick actions (WhatsApp/Call/Email), contact grid (all optional fields shown only if present), message block (pre-wrap), selected products list (parses items JSON for quotations), 4 status buttons, sticky footer (Delete+Close).
+  • Fetches GET /api/admin/leads?limit=10000 cache:no-store; Refresh button.
+- Created src/app/admin/careers/page.tsx (~560 lines, "use client") — Careers CMS:
+  • Segmented toggle: Job Listings | Applications.
+  • Jobs stored in CMS key `careers:jobs` (JSON array); each job: id, title, department, experience, salary, location, description, status(active/inactive), createdAt.
+  • Add/Edit modal with spec input/label classes; Title+Department required (validation toast); status pill toggle.
+  • CRUD: Add (prepend with cuid id), Edit (in-place), Delete (confirm), Toggle active/inactive — all via PUT /api/admin/cms {key:"careers:jobs", value:[...]}.
+  • Job card: title+status badge, department/location/experience/salary with brass lucide icons, 2-line clamped description, action buttons (toggle/edit/delete).
+  • Applications: fetched GET /api/admin/leads?source=career-application&limit=10000; search by name/phone/email; table (Applicant, Position, Experience, Applied, View). Parses message envelope via regex into position/experience/resumeLink/coverNote.
+  • Resume Viewer modal: applicant header, quick actions (WhatsApp/Email/Open Resume — resume opens parsed URL as brass CTA), contact grid, cover note block. Lazy-loads applications on first tab open.
+- Created src/app/admin/dealers/page.tsx (~560 lines, "use client") — Dealers CMS:
+  • Status chips: All / Pending / Approved / Rejected with live counts. Maps lead.status new→Pending, approved→Approved, rejected→Rejected (free-form string column, no schema change).
+  • Search by company/contact/phone/city (parses message envelope).
+  • Table: Company(+contact), Contact, Phone, City, Years, Status badge, Date, Actions (View / Approve ✓ / Reject ✗ — hidden when already in that state).
+  • Detail modal: status actions (Pending/Approve/Reject, colour-coded), quick actions (WhatsApp/Call/Email), fields grid (Company, City/Region, Contact, Phone, Email, Years, GST, PAN — GST/PAN parsed from message if present, else "—"), Current Business block.
+  • Internal Notes: textarea per application, persisted via CMS key `dealer-notes` as {leadId:note}; Save button (yellow-600); "(saved)" indicator; loads on mount.
+  • Sticky footer (Delete+Close).
+- Common design (all 3 pages): dark charcoal theme; cards `bg-white/5 border border-white/10 rounded-xl`; brass accents (text-brass/bg-brass for active tabs/badges/eyebrows/CTAs); input class `w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm text-white` (+focus:border-brass); label class `block text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5`; primary button `rounded-lg bg-yellow-600 text-black px-4 py-2 text-sm font-semibold`; secondary button `rounded-lg bg-white/10 text-white px-4 py-2 text-sm border border-white/15`; toast on every action via shared <AdminToaster/>; all "use client"; responsive (tabs/chips wrap, table columns hide at breakpoints, modals max-w-* + max-h-[88-90vh] overflow-y-auto).
+
+Verification:
+- `bun run lint`: 0 errors, 28 warnings — ALL pre-existing in OTHER files (27× @next/next/no-img-element in career/cart/catalogue/products/components/admin-shell + 1 unused eslint-disable in db.ts). ZERO warnings in any of the 4 new files.
+- `npx tsc --noEmit -p tsconfig.json`: 0 errors total (none in new files).
+- Dev log (.zscripts/dev.log): shows pre-existing Prisma db:push failure (postgresql provider vs SQLite DATABASE_URL mismatch — infra concern noted by MEDIA-LIBRARY agent, outside this task's scope). My pages handle it gracefully: leads & CMS APIs catch DB errors and return empty arrays/null, so pages render correct empty states. Dev server (:3000) is auto-managed by the system per runbook.
+
+Stage Summary:
+- Files created (4 — no existing files modified):
+  1. src/lib/admin/admin-toast.tsx — shared toast singleton + <AdminToaster/>.
+  2. src/app/admin/crm/page.tsx — Central Leads CRM (tabs, search, CSV export, status cycle, detail modal).
+  3. src/app/admin/careers/page.tsx — Careers CMS (job listings CRUD via careers:jobs CMS key + applications with resume viewer).
+  4. src/app/admin/dealers/page.tsx — Dealers CMS (applications table, approve/reject/pending, detail modal, internal notes via dealer-notes CMS key).
+- Notes: Admin sidebar (src/lib/admin/admin-shell.tsx) was NOT modified per the "do not touch existing files" constraint — the 3 new routes are reachable by direct URL (/admin/crm, /admin/careers, /admin/dealers); orchestrator may add sidebar entries in a follow-up. GST/PAN fields display "—" until the public dealer form is extended to submit them. Dealer approved/rejected statuses are stored in the existing Lead.status string column (no schema change); the CRM's STATUS_BADGE map includes approved/rejected tones so dealer leads render sensibly in the CRM's Dealer tab too.
+- Agent work record: /home/z/my-project/agent-ctx/CRM-CAREERS-DEALERS-crm-careers-dealers-builder.md

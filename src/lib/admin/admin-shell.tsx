@@ -19,18 +19,35 @@ import {
   ExternalLink,
   Menu,
   X,
+  Image as ImageIcon,
+  Briefcase,
+  Handshake,
+  Database,
+  Globe,
+  Shield,
+  TrendingUp,
 } from "lucide-react";
 
 const navItems = [
+  // ── OVERVIEW ──
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Leads", href: "/admin/leads", icon: Users },
+  // ── CRM ──
+  { label: "Leads CRM", href: "/admin/crm", icon: Database },
+  { label: "Leads (Legacy)", href: "/admin/leads", icon: Users },
+  // ── CATALOGUE ──
   { label: "Products", href: "/admin/products", icon: Package },
+  { label: "Media Library", href: "/admin/media", icon: ImageIcon },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
-  { label: "Homepage", href: "/admin/homepage", icon: Home },
-  { label: "Page Content", href: "/admin/pages", icon: FileEdit },
-  { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
-  { label: "Appearance", href: "/admin/appearance", icon: Palette },
+  // ── CONTENT ──
+  { label: "Homepage Builder", href: "/admin/homepage", icon: Home },
   { label: "Website CMS", href: "/admin/cms", icon: Settings },
+  { label: "Page Content", href: "/admin/pages", icon: FileEdit },
+  { label: "FAQ Manager", href: "/admin/faq", icon: HelpCircle },
+  // ── PEOPLE ──
+  { label: "Careers", href: "/admin/careers", icon: Briefcase },
+  { label: "Dealers", href: "/admin/dealers", icon: Handshake },
+  // ── CONFIGURATION ──
+  { label: "Appearance", href: "/admin/appearance", icon: Palette },
   { label: "SEO & Company", href: "/admin/seo", icon: Search },
   { label: "Content Hub", href: "/admin/content", icon: FileEdit },
 ];
