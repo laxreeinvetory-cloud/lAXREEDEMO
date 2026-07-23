@@ -114,10 +114,10 @@ export function ProductSpotlight() {
             className="font-display text-ink font-medium"
             style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
           >
-            Our Latest Offerings
+            Product Spotlight
           </h2>
           <p className="text-ink-muted mt-4 max-w-xl mx-auto text-base">
-            Nine flagship products from the LaxRee factory floor — drag, tap
+            Nine flagship products from across our catalogue.
             the arrows, or click any card to bring it center-stage.
           </p>
         </div>

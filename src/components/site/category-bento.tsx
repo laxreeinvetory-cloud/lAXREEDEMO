@@ -95,15 +95,15 @@ export function CategoryBento() {
       <div className="container-laxree">
         {/* Section header */}
         <div className="mb-12 max-w-3xl md:mb-16">
-          <span className="eyebrow text-ink-muted">What We Supply</span>
+          <span className="eyebrow text-ink-muted">Our Latest Offering</span>
           <h2
             className="mt-4 font-display text-ink leading-[1.05]"
             style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
           >
-            Five Categories. One Standard.
+            Nine Categories. One Standard.
           </h2>
           <p className="mt-5 max-w-xl font-sans text-[15px] leading-relaxed text-ink-muted">
-            From a single minibar to a full resort build-out — one supplier,
+            From room amenities to dome structures — one supplier,
             one quality bar, one invoice.
           </p>
         </div>
