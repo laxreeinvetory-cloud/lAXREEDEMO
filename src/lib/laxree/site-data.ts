@@ -31,8 +31,7 @@ export const NAV_LINKS = [
   { label: "Clients", href: "/clients" },
   { label: "Catalogue", href: "/catalogue" },
   { label: "Dealers", href: "/dealers" },
-  { label: "Career", href: "/career" },
-  { label: "FAQ", href: "/faq" },
+  { label: "Experience Center", href: "/experience-center" },
   { label: "Contact Us", href: "/contact-us" },
 ];
 

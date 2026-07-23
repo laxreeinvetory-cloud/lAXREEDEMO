@@ -25,7 +25,9 @@ const COMPANY_LINKS: LinkItem[] = [
   { label: "Career", href: "/career" },
   { label: "Contact", href: "/contact-us" },
   { label: "Blogs", href: "/blog" },
-  { label: "Privacy Policy", href: "/" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Experience Center", href: "/experience-center" },
 ];
 
 const CATEGORY_LINKS: LinkItem[] = [
