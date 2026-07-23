@@ -1,106 +1,103 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import crypto from "crypto";
+import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
-const PUBLIC_PREFIX = "/uploads";
-const MAX_BYTES = 8 * 1024 * 1024; // 8MB hard cap (images should be compressed client-side first)
-
-const ALLOWED_MIME = new Set([
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/avif",
-  "image/svg+xml",
-]);
-
-function sanitizeName(name: string): string {
-  // Keep the extension, strip anything unsafe from the base name
-  const ext = path.extname(name).toLowerCase().replace(/[^a-z0-9.]/g, "");
-  const base = path.basename(name, path.extname(name));
-  const safeBase = base
-    .toLowerCase()
-    .replace(/[^a-z0-9-_]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 40);
-  return `${safeBase || "image"}${ext}`;
-}
-
+// POST — upload a product image
+// Saves image as base64 in SiteContent table (persists on Vercel)
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file");
+    const file = formData.get("file") as File | null;
+    const model = (formData.get("model") as string) || "product";
 
-    if (!file || !(file instanceof File)) {
+    if (!file) {
       return NextResponse.json(
         { ok: false, message: "No file provided" },
         { status: 400 }
       );
     }
 
-    if (file.size === 0) {
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg", "image/gif", "image/svg+xml"];
+    const mime = file.type || "";
+    if (mime && !allowedTypes.includes(mime)) {
       return NextResponse.json(
-        { ok: false, message: "File is empty" },
+        { ok: false, message: `Unsupported file type: ${mime}. Use JPEG, PNG, or WebP.` },
         { status: 400 }
       );
     }
 
-    if (file.size > MAX_BYTES) {
+    // Validate file size (max 5MB — base64 in DB)
+    if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        {
-          ok: false,
-          message: `File too large (${(file.size / (1024 * 1024)).toFixed(1)}MB). Max ${MAX_BYTES / (1024 * 1024)}MB.`,
-        },
-        { status: 413 }
+        { ok: false, message: "File too large. Max 5MB. Please compress before uploading." },
+        { status: 400 }
       );
     }
 
-    // Validate MIME type when known; SVG may arrive as image/svg+xml
-    const mime = file.type || "";
-    if (mime && !ALLOWED_MIME.has(mime)) {
-      return NextResponse.json(
-        { ok: false, message: `Unsupported file type: ${mime}` },
-        { status: 415 }
-      );
+    // Read file buffer and convert to base64
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const base64 = buffer.toString("base64");
+    const mimeType = mime || "image/jpeg";
+    const dataUrl = `data:${mimeType};base64,${base64}`;
+
+    // Determine extension for filename
+    const ext = mimeType === "image/png" ? "png" : mimeType === "image/webp" ? "webp" : mimeType === "image/gif" ? "gif" : mimeType === "image/svg+xml" ? "svg" : "jpg";
+    const safeModel = (model || "product").replace(/[^a-zA-Z0-9-_]/g, "-");
+    const filename = `${safeModel}.${ext}`;
+
+    // Save to database (SiteContent table) — persists on Vercel
+    const key = `image:${filename}`;
+    let savedToDb = false;
+
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        await db.siteContent.upsert({
+          where: { key },
+          update: { value: dataUrl },
+          create: { key, value: dataUrl },
+        });
+        savedToDb = true;
+        console.log(`[UPLOAD] Saved to DB (attempt ${attempt}):`, key, "size:", file.size);
+        break;
+      } catch (dbErr) {
+        console.error(`[UPLOAD DB ERROR attempt ${attempt}]`, dbErr);
+        if (attempt < 3) {
+          await new Promise((r) => setTimeout(r, 1000 * attempt));
+        }
+      }
     }
 
-    // Ensure upload directory exists
-    await mkdir(UPLOAD_DIR, { recursive: true });
+    if (!savedToDb) {
+      // If DB fails, return the data URL directly — image still displays
+      console.error("[UPLOAD] All DB attempts failed, returning data URL directly");
+      return NextResponse.json({
+        ok: true,
+        imageUrl: dataUrl,
+        filename,
+        size: file.size,
+        savedToDb: false,
+      });
+    }
 
-    // Build a unique filename: <short-hash>-<timestamp>-<sanitized>
-    const buf = Buffer.from(await file.arrayBuffer());
-    const hash = crypto.createHash("sha1").update(buf).digest("hex").slice(0, 8);
-    const stamp = Date.now();
-    const safeName = sanitizeName(file.name || "image");
-    const uniqueName = `${hash}-${stamp}-${safeName}`;
-
-    const dest = path.join(UPLOAD_DIR, uniqueName);
-    await writeFile(dest, buf);
-
-    const imageUrl = `${PUBLIC_PREFIX}/${uniqueName}`;
+    // Return the serve URL
+    const imageUrl = `/api/admin/upload/${filename}`;
 
     return NextResponse.json({
       ok: true,
       imageUrl,
-      filename: file.name || uniqueName,
+      filename,
       size: file.size,
+      savedToDb: true,
     });
   } catch (err) {
     console.error("[UPLOAD ERROR]", err);
     return NextResponse.json(
-      {
-        ok: false,
-        message:
-          err instanceof Error ? err.message : "Upload failed — server error",
-      },
+      { ok: false, message: err instanceof Error ? err.message : "Upload failed" },
       { status: 500 }
     );
   }
