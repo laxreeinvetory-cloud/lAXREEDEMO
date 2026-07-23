@@ -130,13 +130,13 @@ export function Navbar() {
           {/* Center — nav links (desktop) */}
           <nav
             aria-label="Primary"
-            className="hidden lg:flex items-center gap-7 group"
+            className="hidden lg:flex items-center gap-5 group"
           >
             {navLinks.map((link: any) => (
               <Link
                 key={link.link || link.href}
                 href={link.link || link.href}
-                className={`font-body text-[15px] font-medium transition-colors duration-200 hover:text-brass group-hover:text-sand/60 hover:!text-brass ${
+                className={`font-body text-[14px] font-medium transition-colors duration-200 hover:text-brass group-hover:text-sand/60 hover:!text-brass ${
                   isActive(link.link || link.href) ? "text-brass" : "text-ivory"
                 }`}
               >

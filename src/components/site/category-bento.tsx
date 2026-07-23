@@ -100,7 +100,7 @@ export function CategoryBento() {
             className="mt-4 font-display text-ink leading-[1.05]"
             style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
           >
-            Nine Categories. One Standard.
+            Eight Categories. One Standard.
           </h2>
           <p className="mt-5 max-w-xl font-sans text-[15px] leading-relaxed text-ink-muted">
             From room amenities to dome structures — one supplier,

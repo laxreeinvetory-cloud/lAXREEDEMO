@@ -17,10 +17,10 @@ export const SITE = {
   address:
     "Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001",
   socials: {
-    facebook: "https://facebook.com",
-    x: "https://x.com",
-    youtube: "https://youtube.com",
-    linkedin: "https://linkedin.com",
+    facebook: "https://facebook.com/laxreeamenities",
+    x: "https://x.com/laxreeamenities",
+    youtube: "https://youtube.com/@laxreeamenities",
+    linkedin: "https://linkedin.com/company/laxree-amenities",
   },
 };
 
@@ -134,18 +134,19 @@ export type Product = {
   name: string;
   category: string;
   image: string;
+  link?: string;
 };
 
 export const SPOTLIGHT_PRODUCTS: Product[] = [
-  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.jpg" },
-  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.jpg" },
-  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.jpg" },
-  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.jpg" },
-  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.jpg" },
-  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.jpg" },
-  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.jpg" },
-  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.jpg" },
-  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.jpg" },
+  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.jpg", link: "/products/room-amenities/mini-bar" },
+  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.jpg", link: "/products/room-amenities/tea-kettle" },
+  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.jpg", link: "/products/room-amenities/safe-box" },
+  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.jpg", link: "/products/room-amenities/rfid-locks" },
+  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.jpg", link: "/products/lobby-items/luggage-trolley" },
+  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.jpg", link: "/products/bath-tub/bath-tub-models" },
+  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.jpg", link: "/products/washroom-amenities/hair-dryer" },
+  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.jpg", link: "/products/washroom-amenities/magnifying-mirror" },
+  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.jpg", link: "/products/washroom-amenities/hand-dryer" },
 ];
 
 export type RoomSolution = {
@@ -198,7 +199,7 @@ export const ROOM_SOLUTIONS: RoomSolution[] = [
     slug: "lobby-amenities",
     name: "Lobby Amenities",
     icon: "ConciergeBell",
-    oneLine: "First-imression hardware for arrival and circulation.",
+    oneLine: "First-impression hardware for arrival and circulation.",
     items: [
       "Luggage Trolley",
       "Housekeeping & Linen Trolley",

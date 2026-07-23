@@ -35,7 +35,7 @@ function useIsMobile(breakpoint = 768) {
 function ProductCard({ product, active }: { product: Product; active: boolean }) {
   return (
     <Link
-      href="/products/amenities"
+      href={product.link || "/products/room-amenities"}
       aria-label={`${product.name} — view category`}
       className={`group card-20 overflow-hidden bg-white h-full w-full flex flex-col border-2 transition-shadow duration-300 ${
         active ? "border-brass shadow-2xl" : "border-transparent shadow-md"
@@ -118,7 +118,7 @@ export function ProductSpotlight() {
           </h2>
           <p className="text-ink-muted mt-4 max-w-xl mx-auto text-base">
             Nine flagship products from across our catalogue.
-            the arrows, or click any card to bring it center-stage.
+            Use the arrows, or click any card to bring it center-stage.
           </p>
         </div>
 

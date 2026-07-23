@@ -31,11 +31,13 @@ const COMPANY_LINKS: LinkItem[] = [
 ];
 
 const CATEGORY_LINKS: LinkItem[] = [
-  { label: "Amenities", href: "/products/amenities" },
+  { label: "Room Amenities", href: "/products/room-amenities" },
+  { label: "Washroom Amenities", href: "/products/washroom-amenities" },
+  { label: "Lobby Items", href: "/products/lobby-items" },
   { label: "Furniture", href: "/products/furniture" },
   { label: "Linen", href: "/products/linen" },
-  { label: "Roofing", href: "/products/roofing" },
-  { label: "Dome", href: "/products/dome" },
+  { label: "Bath Tub", href: "/products/bath-tub" },
+  { label: "Dome & Space POD", href: "/products/dome-space-pod" },
 ];
 
 export function SiteFooter() {
