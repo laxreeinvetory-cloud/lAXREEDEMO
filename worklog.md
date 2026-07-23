@@ -892,3 +892,132 @@ Stage Summary:
 - The master admin panel is ready for the non-technical owner to manage the entire website without touching code.
 
 ---
+
+---
+
+Task ID: MEGA-RESTRUCTURE
+Agent: full-stack-developer (Mega restructure)
+Task: Restructure ALL product categories into Room Amenities, Washroom Amenities, Lobby Items, Furniture, Linen + 3 new categories
+
+Work Log:
+- Read pre-work context: worklog.md (last 200 lines), full catalogue-data.ts (1051 lines), SSP pages 4-10 raw text, product detail page [slug]/[itemSlug]/page.tsx, amenities listing page [slug]/page.tsx, and grepped all 12 consumers of catalogue-data.ts (sitemap.ts, admin/products/seed/route.ts, products/page.tsx, cart-provider.tsx, product-card-cart.tsx, static-fallback.ts, etc.)
+- Confirmed all consumers use `CATALOGUE_CATEGORIES` as a flat array of CatalogueCategory items and `CatalogueProduct` type — so the flat array shape MUST be preserved for backward compatibility.
+- Designed the new structure to be ADDITIVE: kept CatalogueProduct and CatalogueCategory types UNCHANGED, added a new CatalogueParent type + CATALOGUE_PARENTS export + getCategoriesByParent() helper, and made CATALOGUE_CATEGORIES a flat array of 50 sub-categories.
+
+- REWROTE /home/z/my-project/src/lib/laxree/catalogue-data.ts completely. New file structure:
+  1. CatalogueProduct type (unchanged — model, name, category, image, specs, description, tier?, price?)
+  2. CatalogueCategory type (unchanged — slug, name, products[])
+  3. NEW: CatalogueParent type (slug, name, description, children[])
+  4. NEW: CATALOGUE_PARENTS — 6 parent groups (room-amenities, washroom-amenities, lobby-items, furniture, linen, more-categories)
+  5. NEW: comingSoon(categoryName) helper — returns single TBD/Coming Soon placeholder product
+  6. NEW: getCategoriesByParent(parentSlug) helper — filters CATALOGUE_CATEGORIES by parent
+  7. CATALOGUE_CATEGORIES — flat array of 50 sub-categories, grouped by parent in source code via banner comments
+
+- Existing products KEPT as-is with original image paths:
+  - Mini Bar (7): LRMB-132/126/127/128/129/130/131 — minibars-fixed/LRMB-*.jpg
+  - Tea Kettle (4): LRWT-155/146/150/156 — moved out of old "kettle-set" into its own sub-category — ssp-kettles/kettle-LRWT-*.jpg
+  - Kettle Tray (13): LRWT-160/158/161/168/171/167/166/170/163/159/164/165/162 — moved out of old "kettle-set" — ssp-trays/tray-LRWT-*.jpg
+  - Safe Box (11): LRSB-201/206/211/212/214/202/213/203/216/204/209 — ssp-safes/LRSB-*.jpg
+  - RFID Locks (6): LRFD-608/609/610/611/607/606 — renamed category from "door-lock" to "rfid-locks" per spec — ssp-locks/LRFD-*.jpg
+  - Hair Dryer (1): LRHD-280 — ssp-hair-dryer/LRHD-280.jpg
+  - Magnifying Mirror (6): LRMM-305S/305R/305B/302S/302R/302B — ssp-mirrors/LRMM-*.jpg
+  - Hand Dryer (8): LRWA-397/376/398/399/396/393/394/395 — ssp-hand-dryers/LRWA-*.jpg
+  - Luggage Trolley (3): LRLT-401/402/403 — ssp-trolleys/LRLT-*.jpg
+  - Housekeeping Trolley (3): LRHT-430/426/427 — moved out of old "luggage-trolley" into its own sub-category — ssp-trolleys/LRHT-*.jpg (kept existing tiers as Essential/Premium/Lux)
+
+- NEW products added from SSP pages 4-10 (using /images/product-catalogue/ssp-<category>/<model>.jpg pattern — images to be extracted later):
+  - Wooden Hangers (11): LRWH-229B/227B/231B/226B (Essential, B-grade lotus wood) + LRWH-229/234/227/231/233 (Premium, A-grade lotus wood) + LRWH-228/232 (Lux, satin shawl + coat hanger). All with wood grade, hook type, features, 44.5cm size, Natural Wood/Walnut color specs.
+  - Room Telephone (7): LRDR-191/192 (Essential, basic + bathroom) + LRDR-181/183/190 (Premium, large panel / message light / wall mountable bathroom) + LRDR-182/189 (Lux, lobby house + telephone unit). All Black.
+  - Docking Pod (1): LRDR-177 — Electronic FM Radio with Bluetooth, dual USB charging, AC 100-240V/50-60Hz, DC 5V/2A, L150×W110×H13.8mm, Black.
+  - Room Dustbin (11): LRRA-658/656/659/667 (Essential, perforated SS / peddle SS 5L / double-layer PP leather / SS 5L swing lid) + LRRA-669/670/668/657 (Premium, double-layer wooden finish / ABS brown&orange / marble finish / SS matt) + LRRA-665/660/671 (Lux, peddle SS soft close / square leatherette / ABS with partition).
+  - Desktop Accessories (13): LRDA-805/806/814/811/817/824 (Essential, ABS+PU tissue boxes / remote holder / resin notepad / accessory tray / coaster) + LRDA-812/812A/815/801/804/818/LRAT-370 (Premium, leatherette notepad / A3 compedium / leatherette remote holder / leatherette tissue boxes square+rectangle / leatherette accessory tray large / resin wood-finish notepad).
+  - Soap Dispenser (9): LRWA-382/383/385 (Essential, manual ABS 350ml / 3-liquid 400ml / silicone vacuum 300ml) + LRWA-362-1pc/362-2pc/364/362-wooden (Premium, manual pump ABS bracket / 2 bottles / set of 3 SS anti-theft / wooden finish 2 bottles) + LRWA-365/373 (Lux, SS bracket PET bottle 400ml×2 / automatic ABS).
+  - Lobby Soap Dispenser (4): LRWA-358 (Essential, manual SS 800ml) + LRWA-375/384 (Premium, manual 304 SS 1200ml Black / automatic 3-liquid 1200ml White) + LRWA-372 (Lux, automatic ABS large capacity).
+  - Paper Dispenser (7): LRWA-390/378/391 (Essential, N-Fold ABS / JTR jagged outlet / C-Fold N-Fold ABS) + LRWA-389/405 (Premium, N-Fold SS body / recessed tissue 304 SS mirror) + LRWA-404/398 (Lux, multi-purpose 304 SS / recessed multi-purpose 304 SS satin).
+  - Shower Mat (1): LRWA-346 — anti-skid shower mat, White, Coming Soon with basic info (real product, not TBD placeholder).
+  - Cloth Line (1): LRWA-350 — SS clothesline with retractable nylon rope, 90×90×55mm, SS finish.
+  - Towel Rack (1): LRWA-347 — SS finish, basic info.
+  - Towel Rod (1): LRWA-348 — SS finish, basic info.
+  - Handicap Grab Bar (1): LRWA-349 — 202 SS grade, SS finish.
+  - Lobby Dustbin (8): LRLI-453/449/450 (Essential, MS powder coated round D250×H600 / SS push lid 14×28" / SS swing lid 14×28") + LRLI-452/445 (Premium, MS powder coated rectangle L310×W250×H600 / SS square L250×W250×H600) + LRLI-447/448/446 (Lux, SS+synthetic stone L300×W300×H680 / SS+natural stone L300×W300×H680 / SS+natural stone compact L280×W280×H620).
+  - Q Manager (7): LRLI-457S/458B (Essential, SS stanchion retractable belt 2m / ball top Black) + LRLI-457G/458S (Premium, SS gold / ball top SS) + LRLI-458G/458-Velvet/458-Twisted (Lux, ball top gold / velvet rope 1.5m Red / twisted rope 1.5m Red). All stanchions 320×51×950mm.
+  - Sign Board (6): LRLI-459-A4 (Essential, A4 Gold/SS/Black) + LRLI-459-A3 (Essential, A3 Gold/SS/Black) + LRLI-460/463 (Premium, A4 with pole SS / wet floor SS) + LRLI-469/472 (Lux, foldable SS 400×400×580 / foldable wooden 590×380×570).
+  - Digital Signage (3): LRDS-43 (Essential, 43" FHD 1920×1080 350cd/m² Android v9.0 61"×24" Black) + LRDS-50 (Premium, 50" UHD 3840×2160 300cd/m² Android v9.0 72"×28" Black) + LRDS-55 (Lux, 55" UHD 3840×2160 350cd/m² Android v9.0 72"×30" Black).
+
+- Coming Soon categories (22 total) — each has ONE TBD placeholder product via comingSoon() helper:
+  - Room Amenities: rollaway-bed, mattress, iron-iron-board, baby-cot, coat-stand, luggage-rack, emergency-torch (7)
+  - Washroom Amenities: weighing-scale, toilet-paper-dispenser, washroom-tray (3)
+  - Lobby Items: stand-pole (1, since Q Manager covers the same family per task note "merge or Coming Soon")
+  - Furniture: outdoor-furniture, guest-room-furniture, restaurant-furniture, pool-lounger, garden-umbrella, frp-flower-pots, room-furniture (7)
+  - Linen: room-linen, bath-linen (2 — these have custom Coming Soon descriptions listing the linen items: bed sheet / pillow / duvet / bath towel / bath robe etc.)
+  - More Categories: banquet-furniture, bath-tub, amenities-tray-set (3)
+
+- Verification (bun runtime):
+  - 6 parent groups, 50 sub-categories, 177 total products (153 real + 24 Coming Soon incl. the LRWA-346 shower-mat which has real basic info but Coming Soon in description).
+  - 0 orphan categories, 0 orphan parent-children, 0 duplicate sub-category slugs.
+  - All 50 sub-category slugs are unique and findable via CATALOGUE_CATEGORIES.find(slug) (existing product detail page contract).
+  - Per-parent breakdown: room-amenities 20/107, washroom-amenities 11/27, lobby-items 7/31, furniture 7/7, linen 2/2, more-categories 3/3.
+
+- Type-check: ran `cd /home/z/my-project && npx tsc --noEmit -p tsconfig.json 2>&1 | grep -iE "error TS" | head -10` → ZERO errors. The new CatalogueParent type, CATALOGUE_PARENTS export, comingSoon() helper, and getCategoriesByParent() helper all type-check cleanly. Existing consumers (sitemap.ts, admin/products/seed/route.ts, products/page.tsx, products/[slug]/page.tsx, products/[slug]/[itemSlug]/page.tsx, cart-provider.tsx, product-card-cart.tsx, static-fallback.ts) remain compilable without modification.
+
+- Lint: ran `bun run lint` → 0 errors, 34 warnings (all pre-existing <img> warnings in OTHER files + 1 unused eslint-disable in db.ts; NONE in catalogue-data.ts since it's a pure data module with no JSX).
+
+- Known data conflict (documented, not fixed per task constraints): model LRWA-398 appears in TWO sub-categories — Hand Dryer (Essential tier, ABS 1200W Automatic Hand Dryer — KEPT from existing catalogue per task rule #5) AND Paper Dispenser (Lux tier, Recessed Multi-Purpose 304 SS Satin 435×108×1420mm — ADDED per task rule #4 explicit list). This is a real conflict in the source SSP data (the same model number is used on SSP page 10 for a hand dryer and SSP page 13 for a paper dispenser). Per task instructions I am NOT allowed to touch other files, and renaming would violate the literal "use the model numbers from the SSP data" rule. Future task: the admin seed endpoint uses upsert-by-model, so the second LRWA-398 will overwrite the first — needs disambiguation (e.g. prefix with category: "hand-dryer/LRWA-398" vs "paper-dispenser/LRWA-398") in a follow-up.
+
+Stage Summary:
+- Files MODIFIED (only): /home/z/my-project/src/lib/laxree/catalogue-data.ts (completely rewritten from 1051 lines to a larger mega-structure with 6 parent groups, 50 sub-categories, 177 products, plus new CatalogueParent type + CATALOGUE_PARENTS export + getCategoriesByParent() helper + comingSoon() helper).
+- Files touched: ZERO (no other files modified per task constraint).
+- Total parent groups: 6 (room-amenities, washroom-amenities, lobby-items, furniture, linen, more-categories).
+- Total sub-categories: 50 (matches task spec exactly).
+- Total products: 177 (153 real + 24 Coming Soon placeholders incl. 1 real-but-coming-soon shower mat).
+- Existing image paths PRESERVED for all 60 kept products (minibars-fixed/, ssp-kettles/, ssp-trays/, ssp-safes/, ssp-locks/, ssp-hair-dryer/, ssp-mirrors/, ssp-hand-dryers/, ssp-trolleys/).
+- NEW image paths use /images/product-catalogue/ssp-<category>/<model>.jpg pattern for 88 new SSP products (images to be extracted from SSP PDF in a future task).
+- Coming Soon products use /images/product-catalogue/coming-soon.jpg placeholder.
+- NO SSP prices stored anywhere (rule #7 compliant).
+- Tier grouping (Essential/Premium/Lux) applied wherever the SSP data supports it (wooden hangers, room telephone, room dustbin, desktop accessories, soap dispensers, lobby soap dispensers, paper dispensers, lobby dustbins, q-manager, sign-board, digital-signage, plus all existing tiered categories).
+- TypeScript: 0 errors. Lint: 0 errors (34 pre-existing warnings, none in catalogue-data.ts).
+- Backward compatible: CatalogueProduct and CatalogueCategory types unchanged; CATALOGUE_CATEGORIES remains a flat array findable by slug — all existing consumers (sitemap, admin seed, products listing, product detail, cart, product card, static fallback) continue to work without modification.
+
+
+---
+Task ID: MEGA-RESTRUCTURE-VERIFY
+Agent: main (orchestrator)
+Task: Verify mega restructure — 6 parent groups, 50 categories, 177 products
+
+Work Log:
+- Fixed duplicate LRWA-398 model (renamed paper dispenser to LRWA-398P)
+- Created 18 new image directories for new product categories
+- Created coming-soon.jpg placeholder image for Coming Soon categories
+- Extracted and processed 94 new product images from SSP PDF pages 4-18
+  covering: wooden hangers, room telephones, docking pod, room dustbins,
+  desktop accessories, soap dispensers, lobby soap dispensers, paper
+  dispensers, shower mat, cloth line, towel rack, towel rod, grab bar,
+  lobby dustbins, Q managers, sign boards, digital signage
+- Updated /products/[slug]/page.tsx to show parent-grouped layout:
+  Each parent group (Room Amenities, Washroom Amenities, Lobby Items,
+  Furniture, Linen, More Categories) has its own section with heading,
+  description, and alternating ivory/charcoal backgrounds
+- Re-seeded database: 177 products across 50 categories
+- All images processed with LANCZOS3 upscaling + aggressive sharpening
+
+Browser Verification:
+- /products/amenities: Shows all 6 parent groups with item cards
+  (Room Amenities, Washroom Amenities, Lobby Items, Furniture, Linen, More)
+- Tea Kettle and Kettle Tray are now SEPARATE categories ✓
+- All 20 key pages return 200 (homepage, products, 18 category pages, admin, faq)
+- tsc: 0 errors, lint: 0 errors, build: SUCCESS
+- Pushed to GitHub → Vercel auto-deploy
+
+Stage Summary:
+- 6 parent groups, 50 sub-categories, 177 products (153 real + 24 Coming Soon)
+- 94 new images extracted and enhanced from SSP PDF
+- Amenities page now shows parent-grouped layout
+- Tea Kettle and Kettle Tray separated as requested
+- All new categories added: Wooden Hangers, Room Telephone, Docking Pod,
+  Room Dustbin, Desktop Accessories, Soap Dispenser, Lobby Soap Dispenser,
+  Paper Dispenser, Shower Mat, Cloth Line, Towel Rack, Towel Rod,
+  Handicap Grab Bar, Lobby Dustbin, Q Manager, Sign Board, Digital Signage
+- Coming Soon categories: Rollaway Bed, Mattress, Iron & Iron Board,
+  Baby Cot, Coat Stand, Luggage Rack, Emergency Torch, Weighing Scale,
+  Toilet Paper Dispenser, Washroom Tray, Stand Pole, all Furniture,
+  Room Linen, Bath Linen, Banquet Furniture, Bath Tub, Amenities Tray Set

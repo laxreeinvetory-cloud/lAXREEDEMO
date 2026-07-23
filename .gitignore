@@ -60,3 +60,6 @@ server.log
 # Agent scratch / tool output (local only)
 /tool-results/
 /agent-ctx/
+# Dev scripts and uploads (not needed in production)
+/.zscripts/
+/upload/

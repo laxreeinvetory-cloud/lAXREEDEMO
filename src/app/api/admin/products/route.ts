@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PATCH — update a product by id
+// PATCH — update a product by id (or by model if id not found)
 export async function PATCH(req: NextRequest) {
   try {
     const { id, ...data } = await req.json();
@@ -99,10 +99,43 @@ export async function PATCH(req: NextRequest) {
     if (data.featured !== undefined) data.featured = !!data.featured;
     if (data.published !== undefined) data.published = !!data.published;
 
-    const product = await db.product.update({
-      where: { id },
-      data,
-    });
+    // Try update by ID first
+    let product;
+    try {
+      product = await db.product.update({
+        where: { id },
+        data,
+      });
+    } catch {
+      // ID not found — try to find by model number and update
+      if (data.model) {
+        const existing = await db.product.findUnique({ where: { model: data.model } });
+        if (existing) {
+          product = await db.product.update({
+            where: { id: existing.id },
+            data,
+          });
+        } else {
+          // Product doesn't exist in DB — create it
+          product = await db.product.create({
+            data: {
+              model: data.model,
+              name: data.name || data.model,
+              category: data.category || "",
+              image: data.image || "/images/product-catalogue/coming-soon.jpg",
+              description: data.description || "",
+              specs: data.specs || "[]",
+              price: data.price || "",
+              featured: !!data.featured,
+              published: data.published !== false,
+              sortOrder: Number.isFinite(Number(data.sortOrder)) ? Number(data.sortOrder) : 0,
+            },
+          });
+        }
+      } else {
+        return NextResponse.json({ ok: false, message: "Product not found" }, { status: 404 });
+      }
+    }
 
     return NextResponse.json({ ok: true, product });
   } catch (err) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -16,11 +16,20 @@ import { useEnquiry } from "@/components/providers/enquiry-provider";
 import { useCart } from "@/components/providers/cart-provider";
 import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
 
+// CMS types — allows override from admin panel
+type CMSNavItem = { id: string; label: string; link: string; order: number; visible: boolean; dropdown: any[] };
+type CMSNavConfig = {
+  logo: string;
+  topBar: string;
+  menus: CMSNavItem[];
+  ctaButton: { text: string; visible: boolean };
+};
+
 /**
  * LaxRee logo — uses the official LaxRee logo image.
  * Horizontal logo with gold "LAXREE" text + "Hotel Supplies Redefined" tagline.
  */
-function LaxReeLogo({ compact = false }: { compact?: boolean }) {
+function LaxReeLogo({ compact = false, logoSrc }: { compact?: boolean; logoSrc?: string }) {
   return (
     <Link
       href="/"
@@ -28,7 +37,7 @@ function LaxReeLogo({ compact = false }: { compact?: boolean }) {
       className="group flex items-center select-none"
     >
       <img
-        src="/images/laxree-logo.png"
+        src={logoSrc || "/images/laxree-logo.png"}
         alt="LaxRee Amenities — Hotel Supplies Redefined"
         width={compact ? 120 : 150}
         height={compact ? 29 : 36}
@@ -54,12 +63,33 @@ const drawerItemVariants: Variants = {
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [cmsNav, setCmsNav] = useState<CMSNavConfig | null>(null);
   const { openModal } = useEnquiry();
   const { totalItems } = useCart();
   const reduced = usePrefersReducedMotion();
   const pathname = usePathname();
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // Fetch CMS nav config on mount
+  useEffect(() => {
+    fetch("/api/admin/cms?key=header:nav")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.value) {
+          setCmsNav(data.value);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Use CMS menus if available, otherwise static NAV_LINKS
+  const navLinks = cmsNav?.menus
+    ? cmsNav.menus.filter((m) => m.visible).sort((a, b) => a.order - b.order)
+    : NAV_LINKS;
+  const logoUrl = cmsNav?.logo || "/images/laxree-logo.png";
+  const ctaText = cmsNav?.ctaButton?.text || "Enquire Now";
+  const ctaVisible = cmsNav?.ctaButton?.visible ?? true;
 
   const { scrollY } = useScroll();
   // 88px → 64px after 40px of scroll
@@ -95,19 +125,19 @@ export function Navbar() {
 
         <div className="container-laxree h-full flex items-center justify-between gap-4">
           {/* Left — logo */}
-          <LaxReeLogo />
+          <LaxReeLogo logoSrc={logoUrl} />
 
           {/* Center — nav links (desktop) */}
           <nav
             aria-label="Primary"
             className="hidden lg:flex items-center gap-7 group"
           >
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link: any) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.link || link.href}
+                href={link.link || link.href}
                 className={`font-body text-[15px] font-medium transition-colors duration-200 hover:text-brass group-hover:text-sand/60 hover:!text-brass ${
-                  isActive(link.href) ? "text-brass" : "text-ivory"
+                  isActive(link.link || link.href) ? "text-brass" : "text-ivory"
                 }`}
               >
                 {link.label}
@@ -144,7 +174,7 @@ export function Navbar() {
               onClick={handleEnquire}
               className="pill pill-brass text-[14px] px-6 py-2.5 cursor-pointer"
             >
-              Enquire Now
+              {ctaText}
             </button>
           </div>
 
@@ -175,7 +205,7 @@ export function Navbar() {
             <div className="container-laxree h-full flex flex-col">
               {/* Top bar */}
               <div className="flex items-center justify-between h-[64px]">
-                <LaxReeLogo compact />
+                <LaxReeLogo compact logoSrc={logoUrl} />
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
@@ -191,19 +221,19 @@ export function Navbar() {
                 aria-label="Mobile"
                 className="flex-1 flex flex-col justify-center gap-1"
               >
-                {NAV_LINKS.map((link, i) => (
+                {navLinks.map((link: any, i: number) => (
                   <motion.div
-                    key={link.href}
+                    key={link.link || link.href}
                     custom={i}
                     variants={drawerItemVariants}
                     initial="hidden"
                     animate="visible"
                   >
                     <Link
-                      href={link.href}
+                      href={link.link || link.href}
                       onClick={() => setOpen(false)}
                       className={`block font-display text-3xl sm:text-4xl py-2 border-b border-white/5 transition-colors ${
-                        isActive(link.href) ? "text-brass" : "text-ivory hover:text-brass"
+                        isActive(link.link || link.href) ? "text-brass" : "text-ivory hover:text-brass"
                       }`}
                     >
                       {link.label}
@@ -216,7 +246,7 @@ export function Navbar() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.08 + NAV_LINKS.length * 0.05, duration: 0.4 }}
+                transition={{ delay: 0.08 + navLinks.length * 0.05, duration: 0.4 }}
                 className="py-8 flex items-center gap-3"
               >
                 {/* Cart link */}
@@ -247,7 +277,7 @@ export function Navbar() {
                   onClick={handleEnquire}
                   className="pill pill-brass text-[14px] px-6 py-3 flex-1 cursor-pointer"
                 >
-                  Enquire Now
+                  {ctaText}
                 </button>
               </motion.div>
             </div>

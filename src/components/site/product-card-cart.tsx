@@ -1,16 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Check, ShoppingBag } from "lucide-react";
+import { Plus, Check, ShoppingBag, Crown, Star, Gem } from "lucide-react";
 import { useCart } from "@/components/providers/cart-provider";
 import { useEnquiry } from "@/components/providers/enquiry-provider";
 import type { CatalogueProduct } from "@/lib/laxree/catalogue-data";
 import { FadeIn, GlassCard } from "@/components/site/page-primitives";
 
+const TIER_STYLES: Record<string, { icon: typeof Crown; label: string; bg: string; text: string; border: string }> = {
+  Essential: { icon: Check, label: "Essential", bg: "bg-emerald-600", text: "text-white", border: "border-emerald-600" },
+  Premium: { icon: Star, label: "Premium", bg: "bg-amber-600", text: "text-white", border: "border-amber-600" },
+  Lux: { icon: Gem, label: "Lux", bg: "bg-purple-700", text: "text-white", border: "border-purple-700" },
+};
+
 /**
  * ProductCardWithCart — product card with "Add to Cart" button.
- * Shows product image, model number, name, specs, and an add-to-cart button.
- * When clicked, adds the product to the cart and shows a success state.
+ * Shows LARGE product image, tier badge, model number, name, specs,
+ * and an add-to-cart button.
  */
 export function ProductCardWithCart({
   product,
@@ -23,6 +29,8 @@ export function ProductCardWithCart({
   const [justAdded, setJustAdded] = useState(false);
 
   const inCart = items.some((i) => i.model === product.model);
+  const tierStyle = product.tier ? TIER_STYLES[product.tier] : null;
+  const TierIcon = tierStyle?.icon;
 
   const handleAdd = () => {
     addItem(product);
@@ -37,19 +45,31 @@ export function ProductCardWithCart({
         radius="20px"
         className="flex h-full flex-col overflow-hidden"
       >
-        {/* Product image */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
+        {/* LARGE Product image — aspect-square for maximum visibility */}
+        <div className="relative aspect-square w-full overflow-hidden bg-charcoal">
           <img
             src={product.image}
             alt={`${product.name} — ${product.model}`}
             loading="lazy"
-            className="h-full w-full object-contain"
+            className="h-full w-full object-contain p-4"
           />
-          {/* Model number badge */}
-          <span className="absolute left-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">
+
+          {/* Tier badge (top-left) */}
+          {tierStyle && TierIcon && (
+            <span
+              className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full ${tierStyle.bg} ${tierStyle.text} px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm`}
+            >
+              <TierIcon size={11} strokeWidth={2.5} />
+              {tierStyle.label}
+            </span>
+          )}
+
+          {/* Model number badge (bottom-left) */}
+          <span className="absolute bottom-3 left-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">
             {product.model}
           </span>
-          {/* In-cart indicator */}
+
+          {/* In-cart indicator (top-right) */}
           {inCart && (
             <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald/90 px-2.5 py-1 font-mono text-[9px] text-ivory backdrop-blur-sm">
               <Check size={10} strokeWidth={2.5} />

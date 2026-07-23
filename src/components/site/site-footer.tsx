@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Facebook,
@@ -33,14 +36,41 @@ const CATEGORY_LINKS: LinkItem[] = [
   { label: "Dome", href: "/products/dome" },
 ];
 
-const SOCIALS: { label: string; href: string; Icon: LucideIcon }[] = [
-  { label: "Facebook", href: SITE.socials.facebook, Icon: Facebook },
-  { label: "X", href: SITE.socials.x, Icon: Twitter },
-  { label: "YouTube", href: SITE.socials.youtube, Icon: Youtube },
-  { label: "LinkedIn", href: SITE.socials.linkedin, Icon: Linkedin },
-];
-
 export function SiteFooter() {
+  const [cmsFooter, setCmsFooter] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/cms?key=footer:config")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.value) {
+          setCmsFooter(data.value);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Use CMS data if available, otherwise static SITE data
+  const phoneDisplay = cmsFooter?.contact?.phone || SITE.phoneDisplay;
+  const email = cmsFooter?.contact?.email || SITE.email;
+  const address = cmsFooter?.contact?.address || SITE.address;
+  const copyright = cmsFooter?.copyright || "LaxRee Amenities © 2026 — All Rights Reserved";
+  const socialLinks = cmsFooter?.social || {
+    facebook: SITE.socials.facebook,
+    x: SITE.socials.x,
+    youtube: SITE.socials.youtube,
+    linkedin: SITE.socials.linkedin,
+  };
+  const SOCIALS: { label: string; href: string; Icon: LucideIcon }[] = [
+    { label: "Facebook", href: socialLinks.facebook, Icon: Facebook },
+    { label: "X", href: socialLinks.x, Icon: Twitter },
+    { label: "YouTube", href: socialLinks.youtube, Icon: Youtube },
+    { label: "LinkedIn", href: socialLinks.linkedin, Icon: Linkedin },
+  ];
+  const companyLinks = cmsFooter?.companyLinks
+    ? cmsFooter.companyLinks.filter((l: any) => l.visible).sort((a: any, b: any) => a.order - b.order).map((l: any) => ({ label: l.label, href: l.link }))
+    : COMPANY_LINKS;
+
   return (
     <footer className="section section-charcoal py-16 md:py-20">
       <div className="container-laxree">
@@ -58,7 +88,7 @@ export function SiteFooter() {
               />
             </Link>
             <p className="font-body text-[13px] leading-relaxed text-sand max-w-xs">
-              {SITE.address}
+              {address}
             </p>
             <div className="flex items-center gap-3">
               {SOCIALS.map(({ label, href, Icon }) => (
@@ -91,7 +121,7 @@ export function SiteFooter() {
               <ContactRow
                 href={`tel:${SITE.phoneHref}`}
                 Icon={Phone}
-                label={SITE.phoneDisplay}
+                label={phoneDisplay}
               />
               <ContactRow
                 href={`https://wa.me/${SITE.whatsapp}`}
@@ -99,9 +129,9 @@ export function SiteFooter() {
                 label="WhatsApp Us"
               />
               <ContactRow
-                href={`mailto:${SITE.email}`}
+                href={`mailto:${email}`}
                 Icon={Mail}
-                label={SITE.email}
+                label={email}
               />
               <ContactRow
                 href={`mailto:${SITE.careersEmail}`}
@@ -116,7 +146,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <p className="font-mono text-xs text-sand">
-            LaxRee Amenities © 2026 — All Rights Reserved
+            {copyright}
           </p>
           <p className="font-mono text-xs text-sand">{SITE.tagline}</p>
         </div>

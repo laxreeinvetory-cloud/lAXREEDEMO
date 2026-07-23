@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Package,
   Plus,
@@ -12,7 +12,58 @@ import {
   EyeOff,
   X,
   Tags,
+  Upload,
+  Check,
+  ChevronRight,
+  ChevronLeft,
+  Image as ImageIcon,
 } from "lucide-react";
+
+// ─────────────────────────────────────────────────────────────
+// Image compression utility — compresses before upload to avoid Vercel 413
+// ─────────────────────────────────────────────────────────────
+async function compressImage(file: File, maxDim: number, quality: number): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) { resolve(file); return; }
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const compressed = new File([blob], file.name, { type: "image/jpeg" });
+              resolve(compressed);
+            } else {
+              resolve(file);
+            }
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      img.onerror = () => resolve(file);
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = () => resolve(file);
+    reader.readAsDataURL(file);
+  });
+}
 
 // ─────────────────────────────────────────────────────────────
 // Types
@@ -26,7 +77,7 @@ type Product = {
   category: string;
   image: string;
   description: string;
-  specs: string; // JSON string of Spec[]
+  specs: string;
   price: string;
   featured: boolean;
   published: boolean;
@@ -46,580 +97,503 @@ type Category = {
   createdAt: string;
 };
 
-type TabKey = "products" | "categories";
+// Parent category structure (matches catalogue-data.ts)
+type ParentCat = {
+  slug: string;
+  name: string;
+  description: string;
+};
+
+const PARENT_CATEGORIES: ParentCat[] = [
+  { slug: "room-amenities", name: "Room Amenities", description: "Mini bars, kettles, trays, safes, locks, hangers, phones, dustbins, desktop accessories" },
+  { slug: "washroom-amenities", name: "Washroom Amenities", description: "Hair dryers, soap dispensers, mirrors, paper dispensers, hand dryers, grab bars" },
+  { slug: "lobby-items", name: "Lobby Amenities", description: "Luggage trolleys, housekeeping trolleys, lobby dustbins, Q managers, signage" },
+  { slug: "bath-tub", name: "Bath Tub", description: "Freestanding bath tubs in multiple sizes" },
+  { slug: "furniture", name: "Furniture", description: "Outdoor, guest room, restaurant, pool, garden" },
+  { slug: "linen", name: "Linen", description: "Room linen, bath linen" },
+  { slug: "amenities-tray-set", name: "Amenities Tray Set", description: "Premium tray sets for guest rooms" },
+  { slug: "dome-space-pod", name: "Dome & Space POD", description: "Geodesic domes and space pods" },
+];
 
 // ─────────────────────────────────────────────────────────────
-// Shared input styles (match existing admin pages)
+// Styles — high contrast, readable
 // ─────────────────────────────────────────────────────────────
 const inputClass =
-  "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-ivory placeholder:text-sand/40 focus:border-brass focus:outline-none";
-const labelClass = "data-label mb-1.5 block text-[11px] text-sand";
+  "w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:border-yellow-500 focus:outline-none focus:ring-1 focus:ring-yellow-500/50";
+const labelClass = "block text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5";
+const btnPrimary =
+  "rounded-lg bg-yellow-600 text-black px-4 py-2 text-sm font-semibold hover:bg-yellow-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
+const btnSecondary =
+  "rounded-lg bg-white/10 text-white px-4 py-2 text-sm hover:bg-white/20 transition-colors border border-white/15";
 
 // ─────────────────────────────────────────────────────────────
-// Page
+// Main Page
 // ─────────────────────────────────────────────────────────────
 export default function AdminProductsPage() {
-  const [tab, setTab] = useState<TabKey>("products");
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [selectedParent, setSelectedParent] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [creatingProduct, setCreatingProduct] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [creatingCategory, setCreatingCategory] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
 
-  const [seeding, setSeeding] = useState(false);
-
-  const fetchAll = async () => {
-    const params = new URLSearchParams();
-    if (categoryFilter !== "all") params.set("category", categoryFilter);
-    const res = await fetch(`/api/admin/products?${params}`);
-    const data = await res.json();
-    if (data.ok) {
-      setProducts(data.products);
-      setCategories(data.categories);
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch("/api/admin/products");
+      const data = await res.json();
+      if (data.ok) {
+        setProducts(data.products);
+        setCategories(data.categories);
+      }
+    } catch {
+      // ignore
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchAll();
-  }, [categoryFilter]);
+    fetchProducts();
+  }, []);
 
-  const filteredProducts = products.filter(
-    (p) =>
+  // Get item type names for selected parent from products table
+  const getCategoriesForParent = (parentSlug: string): { name: string; count: number }[] => {
+    const parentMap: Record<string, string[]> = {
+      "room-amenities": ["Mini Bar", "Tea Kettle", "Kettle Tray", "Safe Box", "Wooden Hangers", "RFID Locks", "RFID Door Lock", "Door Lock", "Room Telephone", "Docking Pod", "Room Dustbin", "Desktop Accessories", "Rollaway Bed", "Mattress", "Iron & Iron Board", "Baby Cot", "Coat Stand", "Luggage Rack", "Emergency Torch"],
+      "washroom-amenities": ["Hair Dryer", "Soap Dispenser", "Magnifying Mirror", "Lobby Soap Dispenser", "Weighing Scale", "Paper Dispenser", "Hand Dryer", "Shower Mat", "Cloth Line", "Towel Rack", "Toilet Paper Dispenser", "Towel Rod", "Washroom Tray", "Handicap Grab Bar"],
+      "lobby-items": ["Luggage Trolley", "Housekeeping Trolley", "Lobby Dustbin", "Q Manager", "Sign Board", "Stand Pole", "Digital Signage"],
+      "bath-tub": ["Bath Tub", "Bath Tub Models"],
+      "furniture": ["Outdoor Furniture", "Guest Room Furniture", "Guest Room Loose Furniture", "Restaurant Furniture", "Pool Lounger", "Garden Umbrella", "FRP Flower Pots", "Room Furniture"],
+      "linen": ["Room Linen", "Bath Linen"],
+      "amenities-tray-set": ["Amenities Tray Set", "Amenities Tray Sets"],
+      "dome-space-pod": ["Dome & Space POD", "Dome & Space POD Models"],
+    };
+    const catNames = parentMap[parentSlug] || [];
+    // Get unique categories from products that match the parent mapping
+    const productCats = new Set(products.map((p) => p.category));
+    return catNames
+      .filter((name) => productCats.has(name))
+      .map((name) => ({
+        name,
+        count: products.filter((p) => p.category === name).length,
+      }));
+  };
+
+  // Filter products by selected category
+  const filteredProducts = products.filter((p) => {
+    const matchSearch =
       !search ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.model.toLowerCase().includes(search.toLowerCase())
-  );
+      p.model.toLowerCase().includes(search.toLowerCase());
+    const matchCat = !selectedCategory || p.category === selectedCategory;
+    return matchSearch && matchCat;
+  });
 
-  const deleteProduct = async (id: string) => {
-    if (!confirm("Delete this product? This cannot be undone.")) return;
-    await fetch(`/api/admin/products?id=${id}`, { method: "DELETE" });
-    fetchAll();
+  const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
+
+  const showToast = (kind: "ok" | "err", msg: string) => {
+    setToast({ kind, msg });
+    setTimeout(() => setToast(null), 4000);
   };
 
-  const deleteCategory = async (id: string) => {
-    if (
-      !confirm(
-        "Delete this category? Products assigned to it will keep their category string but will no longer match a dropdown option."
-      )
-    )
-      return;
-    await fetch(`/api/admin/products/categories?id=${id}`, {
-      method: "DELETE",
-    });
-    fetchAll();
-  };
+  const handleSaveProduct = async (data: Omit<Partial<Product>, "specs"> & { specs: Spec[] }) => {
+    const method = editingProduct ? "PATCH" : "POST";
+    const body = editingProduct
+      ? { id: editingProduct.id, ...data, specs: data.specs }
+      : data;
 
-  const seedData = async () => {
-    if (
-      !confirm(
-        "Seed the catalogue from existing static data? This only fills empty tables — existing rows are left untouched."
-      )
-    )
-      return;
-    setSeeding(true);
     try {
-      const res = await fetch("/api/admin/products/seed", { method: "POST" });
-      const data = await res.json();
-      if (data.ok) {
-        alert(
-          `Seeded ${data.seeded.products} products and ${data.seeded.categories} categories.`
-        );
-        setCategoryFilter("all");
-        fetchAll();
+      const res = await fetch("/api/admin/products", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const result = await res.json();
+      if (result.ok) {
+        showToast("ok", `Product ${editingProduct ? "updated" : "created"} successfully! Image is now live.`);
+        fetchProducts();
+        setShowProductModal(false);
+        setEditingProduct(null);
       } else {
-        alert("Seed failed: " + (data.message || "Unknown error"));
+        showToast("err", result.message || "Failed to save product");
       }
-    } finally {
-      setSeeding(false);
+    } catch {
+      showToast("err", "Network error — could not save product");
     }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm("Delete this product?")) return;
+    await fetch(`/api/admin/products?id=${id}`, { method: "DELETE" });
+    fetchProducts();
+  };
+
+  const handleSeed = async () => {
+    if (!confirm("Seed products from catalogue data? This will add all catalogue products to the database.")) return;
+    const res = await fetch("/api/admin/products/seed", { method: "POST" });
+    const data = await res.json();
+    alert(`Seeded ${data.seeded?.products || 0} products and ${data.seeded?.categories || 0} categories`);
+    fetchProducts();
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brass/30 border-t-brass" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-yellow-600/30 border-t-yellow-600" />
       </div>
     );
   }
 
+  const parentCategories = selectedParent ? getCategoriesForParent(selectedParent) : [];
+
   return (
-    <div>
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+      <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
         <div>
-          <h1 className="font-display text-3xl text-ivory mb-2">
-            Products &amp; Categories
-          </h1>
-          <p className="font-body text-sm text-sand">
-            Manage your catalogue — {products.length} products,{" "}
-            {categories.length} categories
+          <h1 className="text-2xl font-bold text-white mb-1">Products & Categories</h1>
+          <p className="text-sm text-gray-400">
+            Manage all products with images, specifications, and descriptions.
           </p>
         </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          {products.length === 0 && (
+            <button onClick={handleSeed} className={btnSecondary}>
+              Seed from catalogue
+            </button>
+          )}
+          <button
+            onClick={() => { setEditingProduct(null); setShowProductModal(true); }}
+            className={btnPrimary}
+          >
+            <Plus className="inline h-4 w-4 mr-1" /> Add Product
+          </button>
+        </div>
+      </div>
 
-        {tab === "products" && (
-          <div className="flex items-center gap-2">
-            {products.length === 0 && (
-              <button
-                onClick={seedData}
-                disabled={seeding}
-                className="rounded-full bg-white/5 text-ivory px-5 py-2.5 text-sm hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                title="Populate the database from the existing static catalogue data"
-              >
-                {seeding ? "Seeding…" : "Seed from existing data"}
-              </button>
-            )}
+      {/* Breadcrumb navigation */}
+      <div className="flex items-center gap-2 mb-4 text-sm flex-wrap">
+        <button
+          onClick={() => { setSelectedParent(null); setSelectedCategory(null); }}
+          className={`px-3 py-1.5 rounded-lg transition-colors ${
+            !selectedParent ? "bg-yellow-600 text-black font-semibold" : "bg-white/10 text-gray-300 hover:bg-white/20"
+          }`}
+        >
+          All Categories
+        </button>
+        {selectedParent && (
+          <>
+            <ChevronRight className="h-4 w-4 text-gray-500" />
             <button
-              onClick={() => setCreatingProduct(true)}
-              className="rounded-full bg-brass text-charcoal px-5 py-2.5 text-sm font-medium hover:bg-brass-light transition-colors flex items-center gap-2"
+              onClick={() => setSelectedCategory(null)}
+              className={`px-3 py-1.5 rounded-lg transition-colors ${
+                !selectedCategory ? "bg-yellow-600 text-black font-semibold" : "bg-white/10 text-gray-300 hover:bg-white/20"
+              }`}
             >
-              <Plus className="h-4 w-4" /> Add Product
+              {PARENT_CATEGORIES.find((p) => p.slug === selectedParent)?.name}
+            </button>
+          </>
+        )}
+        {selectedCategory && (
+          <>
+            <ChevronRight className="h-4 w-4 text-gray-500" />
+            <span className="px-3 py-1.5 rounded-lg bg-white/10 text-gray-300">
+              {selectedCategory}
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Step 1: Show 8 parent categories */}
+      {!selectedParent && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {PARENT_CATEGORIES.map((parent) => {
+            const parentCats = getCategoriesForParent(parent.slug);
+            const productCount = products.filter((p) =>
+              parentCats.some((c) => c.name === p.category)
+            ).length;
+            return (
+              <button
+                key={parent.slug}
+                onClick={() => setSelectedParent(parent.slug)}
+                className="text-left bg-white/5 hover:bg-white/10 border border-white/10 hover:border-yellow-500/40 rounded-xl p-5 transition-all"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-base font-semibold text-white">{parent.name}</h3>
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
+                </div>
+                <p className="text-xs text-gray-400 line-clamp-2 mb-3">{parent.description}</p>
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="text-yellow-500 font-mono">{parentCats.length} items</span>
+                  <span className="text-gray-500">·</span>
+                  <span className="text-gray-400 font-mono">{productCount} products</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Step 2: Show item types within selected parent */}
+      {selectedParent && !selectedCategory && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white">
+              {PARENT_CATEGORIES.find((p) => p.slug === selectedParent)?.name} — Item Types
+            </h2>
+            <button
+              onClick={() => setSelectedParent(null)}
+              className="text-sm text-gray-400 hover:text-white flex items-center gap-1"
+            >
+              <ChevronLeft className="h-4 w-4" /> Back to Categories
             </button>
           </div>
-        )}
-        {tab === "categories" && (
-          <button
-            onClick={() => setCreatingCategory(true)}
-            className="rounded-full bg-brass text-charcoal px-5 py-2.5 text-sm font-medium hover:bg-brass-light transition-colors flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" /> Add Category
-          </button>
-        )}
-      </div>
-
-      {products.length === 0 && categories.length === 0 && (
-        <div className="glass-on-charcoal rounded-2xl p-4 mb-6">
-          <p className="font-body text-xs text-sand">
-            <span className="font-mono text-brass uppercase tracking-wider mr-2">
-              Note
-            </span>
-            Your catalogue is empty. Click{" "}
-            <span className="text-ivory font-medium">Seed from existing data</span>{" "}
-            to populate products and categories from the static site data with one
-            click — then edit them here.
-          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {parentCategories.length > 0 ? (
+              parentCategories.map((cat) => {
+                return (
+                  <button
+                    key={cat.name}
+                    onClick={() => setSelectedCategory(cat.name)}
+                    className="text-left bg-white/5 hover:bg-white/10 border border-white/10 hover:border-yellow-500/40 rounded-xl p-4 transition-all"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-sm font-semibold text-white">{cat.name}</h3>
+                      <ChevronRight className="h-4 w-4 text-gray-500" />
+                    </div>
+                    <span className="text-xs text-yellow-500 font-mono">{cat.count} products</span>
+                  </button>
+                );
+              })
+            ) : (
+              <p className="text-sm text-gray-400 col-span-full py-8 text-center">
+                No item types found. Use "Add Product" to create products in this category.
+              </p>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 mb-6 border-b border-white/10">
-        <TabButton
-          active={tab === "products"}
-          onClick={() => setTab("products")}
-          icon={<Package className="h-4 w-4" />}
-          label="Products"
-          count={products.length}
-        />
-        <TabButton
-          active={tab === "categories"}
-          onClick={() => setTab("categories")}
-          icon={<Tags className="h-4 w-4" />}
-          label="Categories"
-          count={categories.length}
-        />
-      </div>
-
-      {/* ─── Products tab ─── */}
-      {tab === "products" && (
-        <>
-          {/* Filter bar */}
-          <div className="flex flex-wrap gap-3 mb-6">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-sand/50" />
-              <input
-                type="text"
-                placeholder="Search by name or model..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 px-10 py-2.5 text-sm text-ivory placeholder:text-sand/40 focus:border-brass focus:outline-none"
-              />
-            </div>
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-ivory focus:border-brass focus:outline-none min-w-[180px]"
-            >
-              <option value="all">All Categories</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Products table */}
-          <div className="glass-on-charcoal rounded-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-sand">
-                      Product
-                    </th>
-                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-sand hidden md:table-cell">
-                      Model
-                    </th>
-                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-sand hidden lg:table-cell">
-                      Category
-                    </th>
-                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-sand hidden md:table-cell">
-                      Price
-                    </th>
-                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-wider text-sand">
-                      Flags
-                    </th>
-                    <th className="px-4 py-3"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProducts.map((p) => (
-                    <tr
-                      key={p.id}
-                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                    >
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={p.image}
-                            alt={p.name}
-                            className="h-12 w-12 rounded-lg object-cover shrink-0 bg-white/5"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src =
-                                "/images/product-catalogue/placeholder.jpg";
-                            }}
-                          />
-                          <div className="min-w-0">
-                            <p className="font-body text-sm text-ivory font-medium truncate max-w-[220px]">
-                              {p.name}
-                            </p>
-                            <p className="font-mono text-[10px] text-sand md:hidden">
-                              {p.model}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 hidden md:table-cell">
-                        <span className="font-mono text-xs text-brass">
-                          {p.model}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 hidden lg:table-cell">
-                        <span className="font-body text-sm text-sand">
-                          {p.category || "—"}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 hidden md:table-cell">
-                        <span className="font-mono text-xs text-sand">
-                          {p.price || "—"}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-1.5">
-                          {p.featured && (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full border border-brass/30 bg-brass/20 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-brass"
-                              title="Featured"
-                            >
-                              <Star className="h-2.5 w-2.5 fill-brass" /> Feat
-                            </span>
-                          )}
-                          {p.published ? (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full border border-emerald/30 bg-emerald/20 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-emerald-400"
-                              title="Published"
-                            >
-                              <Eye className="h-2.5 w-2.5" /> Live
-                            </span>
-                          ) : (
-                            <span
-                              className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-sand"
-                              title="Hidden"
-                            >
-                              <EyeOff className="h-2.5 w-2.5" /> Hide
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <button
-                            onClick={() => setEditingProduct(p)}
-                            className="p-2 rounded-lg text-sand hover:bg-white/5 hover:text-brass transition-colors"
-                            title="Edit"
-                            aria-label={`Edit ${p.name}`}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={() => deleteProduct(p.id)}
-                            className="p-2 rounded-lg text-sand hover:bg-red-500/10 hover:text-red-400 transition-colors"
-                            title="Delete"
-                            aria-label={`Delete ${p.name}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {filteredProducts.length === 0 && (
-              <div className="py-12 text-center">
-                <Package className="h-10 w-10 text-sand/30 mx-auto mb-3" />
-                <p className="font-body text-sm text-sand">
-                  No products found.{" "}
-                  {products.length === 0
-                    ? "Add one or seed from existing data."
-                    : "Try a different search or filter."}
-                </p>
-              </div>
-            )}
-          </div>
-        </>
-      )}
-
-      {/* ─── Categories tab ─── */}
-      {tab === "categories" && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((c) => (
-            <div
-              key={c.id}
-              className="glass-on-charcoal rounded-2xl overflow-hidden flex flex-col"
-            >
-              <div className="relative h-32 bg-white/5">
-                <img
-                  src={c.image}
-                  alt={c.name}
-                  className="h-full w-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "/images/categories/placeholder.jpg";
-                  }}
+      {/* Step 3: Show products within selected item type */}
+      {selectedParent && selectedCategory && (
+        <div>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h2 className="text-lg font-semibold text-white">{selectedCategory} — Products</h2>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="rounded-lg border border-white/15 bg-white/10 pl-9 pr-3 py-1.5 text-sm text-white placeholder:text-gray-500 focus:border-yellow-500 focus:outline-none w-48"
                 />
-                <span className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider text-brass">
-                  {c.span}
-                </span>
               </div>
-              <div className="p-4 flex-1 flex flex-col">
-                <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="font-display text-base text-ivory">{c.name}</h3>
-                  <span className="font-mono text-[10px] text-brass shrink-0">
-                    {c.count} pcs
-                  </span>
-                </div>
-                <p className="font-mono text-[10px] text-sand mb-2">/{c.slug}</p>
-                <p className="font-body text-xs text-sand line-clamp-2 mb-4">
-                  {c.blurb || "—"}
-                </p>
-                <div className="flex items-center gap-1 mt-auto">
-                  <button
-                    onClick={() => setEditingCategory(c)}
-                    className="flex-1 rounded-full bg-white/5 text-ivory px-4 py-2 text-xs hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5"
-                  >
-                    <Pencil className="h-3.5 w-3.5" /> Edit
-                  </button>
-                  <button
-                    onClick={() => deleteCategory(c.id)}
-                    className="rounded-full bg-red-500/10 text-red-400 px-3 py-2 text-xs hover:bg-red-500/20 transition-colors"
-                    aria-label={`Delete ${c.name}`}
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {categories.length === 0 && (
-            <div className="glass-on-charcoal rounded-2xl p-12 text-center col-span-full">
-              <Tags className="h-10 w-10 text-sand/30 mx-auto mb-3" />
-              <p className="font-body text-sm text-sand mb-4">
-                No categories yet
-              </p>
               <button
-                onClick={() => setCreatingCategory(true)}
-                className="rounded-full bg-brass text-charcoal px-6 py-3 text-sm font-medium hover:bg-brass-light transition-colors"
+                onClick={() => setSelectedCategory(null)}
+                className="text-sm text-gray-400 hover:text-white flex items-center gap-1"
               >
-                Create First Category
+                <ChevronLeft className="h-4 w-4" /> Back
+              </button>
+            </div>
+          </div>
+
+          {/* Product grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredProducts.map((p) => (
+              <div
+                key={p.id}
+                className="bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-yellow-500/40 transition-all"
+              >
+                {/* Image */}
+                <div className="aspect-square w-full bg-gray-900 flex items-center justify-center overflow-hidden">
+                  {p.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="h-full w-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <ImageIcon className="h-10 w-10 text-gray-700" />
+                  )}
+                </div>
+                {/* Info */}
+                <div className="p-3">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-mono text-xs text-yellow-500">{p.model}</span>
+                    {p.featured && <Star className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />}
+                  </div>
+                  <h3 className="text-sm font-medium text-white line-clamp-2 mb-1">{p.name}</h3>
+                  <p className="text-xs text-gray-400 line-clamp-2 mb-2">{p.description || "No description"}</p>
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                      p.published ? "bg-green-500/20 text-green-400" : "bg-gray-500/20 text-gray-400"
+                    }`}>
+                      {p.published ? "Published" : "Hidden"}
+                    </span>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => { setEditingProduct(p); setShowProductModal(true); }}
+                        className="p-1.5 text-gray-400 hover:text-yellow-500 transition-colors"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(p.id)}
+                        className="p-1.5 text-gray-400 hover:text-red-400 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12">
+              <Package className="h-12 w-12 text-gray-700 mx-auto mb-3" />
+              <p className="text-sm text-gray-400 mb-4">No products in this category yet.</p>
+              <button
+                onClick={() => { setEditingProduct(null); setShowProductModal(true); }}
+                className={btnPrimary}
+              >
+                <Plus className="inline h-4 w-4 mr-1" /> Add First Product
               </button>
             </div>
           )}
         </div>
       )}
 
-      {/* ─── Product editor modal ─── */}
-      {(editingProduct || creatingProduct) && (
+      {/* Product Editor Modal */}
+      {showProductModal && (
         <ProductEditor
           product={editingProduct}
           categories={categories}
-          onClose={() => {
-            setEditingProduct(null);
-            setCreatingProduct(false);
-          }}
-          onSave={async (data) => {
-            if (editingProduct) {
-              await fetch("/api/admin/products", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: editingProduct.id, ...data }),
-              });
-            } else {
-              await fetch("/api/admin/products", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-              });
-            }
-            setEditingProduct(null);
-            setCreatingProduct(false);
-            fetchAll();
-          }}
+          defaultCategory={selectedCategory || undefined}
+          onClose={() => { setShowProductModal(false); setEditingProduct(null); }}
+          onSave={handleSaveProduct}
         />
       )}
 
-      {/* ─── Category editor modal ─── */}
-      {(editingCategory || creatingCategory) && (
-        <CategoryEditor
-          category={editingCategory}
-          onClose={() => {
-            setEditingCategory(null);
-            setCreatingCategory(false);
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className="fixed bottom-6 right-6 z-[200] flex items-center gap-3 rounded-lg px-5 py-3 shadow-2xl border"
+          style={{
+            backgroundColor: toast.kind === "ok" ? "#1a4d3a" : "#5c1d1d",
+            borderColor: toast.kind === "ok" ? "#22c55e" : "#ef4444",
           }}
-          onSave={async (data) => {
-            if (editingCategory) {
-              await fetch("/api/admin/products/categories", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: editingCategory.id, ...data }),
-              });
-            } else {
-              await fetch("/api/admin/products/categories", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-              });
-            }
-            setEditingCategory(null);
-            setCreatingCategory(false);
-            fetchAll();
-          }}
-        />
+        >
+          {toast.kind === "ok" ? (
+            <Check className="h-5 w-5 text-green-400" strokeWidth={2.5} />
+          ) : (
+            <X className="h-5 w-5 text-red-400" strokeWidth={2.5} />
+          )}
+          <span className="text-sm text-white font-medium">{toast.msg}</span>
+        </div>
       )}
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
-// Tab button
-// ─────────────────────────────────────────────────────────────
-function TabButton({
-  active,
-  onClick,
-  icon,
-  label,
-  count,
-}: {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-  count: number;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
-        active
-          ? "text-brass border-brass"
-          : "text-sand border-transparent hover:text-ivory"
-      }`}
-    >
-      {icon}
-      {label}
-      <span
-        className={`rounded-full px-2 py-0.5 text-[10px] font-mono ${
-          active ? "bg-brass/20 text-brass" : "bg-white/5 text-sand"
-        }`}
-      >
-        {count}
-      </span>
-    </button>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// Product editor
+// Product Editor Modal — FIXED: proper scroll, no overlap, readable text
 // ─────────────────────────────────────────────────────────────
 function ProductEditor({
   product,
   categories,
+  defaultCategory,
   onClose,
   onSave,
 }: {
   product: Product | null;
   categories: Category[];
+  defaultCategory?: string;
   onClose: () => void;
   onSave: (data: Omit<Partial<Product>, "specs"> & { specs: Spec[] }) => void;
 }) {
-  const parseSpecs = (raw: string): Spec[] => {
-    try {
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  };
-
   const [model, setModel] = useState(product?.model || "");
   const [name, setName] = useState(product?.name || "");
-  const [category, setCategory] = useState(
-    product?.category || (categories[0]?.name ?? "")
-  );
-  const [image, setImage] = useState(
-    product?.image || "/images/product-catalogue/placeholder.jpg"
-  );
-  const [price, setPrice] = useState(product?.price || "");
+  const [category, setCategory] = useState(product?.category || defaultCategory || "");
+  const [image, setImage] = useState(product?.image || "");
   const [description, setDescription] = useState(product?.description || "");
-  const [specs, setSpecs] = useState<Spec[]>(
-    product ? parseSpecs(product.specs) : []
-  );
+  const [price, setPrice] = useState(product?.price || "");
+  const [specs, setSpecs] = useState<Spec[]>(() => {
+    if (!product?.specs) return [];
+    try { return JSON.parse(product.specs); } catch { return []; }
+  });
   const [featured, setFeatured] = useState(product?.featured ?? false);
   const [published, setPublished] = useState(product?.published ?? true);
   const [sortOrder, setSortOrder] = useState(product?.sortOrder ?? 0);
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const addSpec = () =>
-    setSpecs([...specs, { label: "", value: "" }]);
+  const addSpec = () => setSpecs([...specs, { label: "", value: "" }]);
   const updateSpec = (i: number, key: keyof Spec, val: string) =>
     setSpecs(specs.map((s, idx) => (idx === i ? { ...s, [key]: val } : s)));
-  const removeSpec = (i: number) =>
-    setSpecs(specs.filter((_, idx) => idx !== i));
+  const removeSpec = (i: number) => setSpecs(specs.filter((_, idx) => idx !== i));
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      // Compress image client-side before upload (Vercel limits body to ~4.5MB)
+      let uploadFile = file;
+      if (file.size > 1 * 1024 * 1024) {
+        // Image is over 1MB — compress it
+        const compressed = await compressImage(file, 1024, 0.85);
+        uploadFile = compressed;
+      }
+
+      const formData = new FormData();
+      formData.append("file", uploadFile);
+      formData.append("model", model || "product");
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "Server error");
+        if (res.status === 413) {
+          setError("Image too large even after compression. Please use a smaller image (max 4MB).");
+        } else {
+          setError(`Upload failed (${res.status}): ${text.substring(0, 100)}`);
+        }
+        setUploading(false);
+        return;
+      }
+      const data = await res.json();
+      if (data.ok) {
+        setImage(data.imageUrl);
+      } else {
+        setError(data.message || "Upload failed — please try again");
+      }
+    } catch (err) {
+      setError("Network error: " + (err instanceof Error ? err.message : "unknown"));
+    }
+    setUploading(false);
+  };
 
   const handleSave = () => {
-    if (!model.trim()) {
-      setError("Model code is required.");
-      return;
-    }
-    if (!name.trim()) {
-      setError("Product name is required.");
-      return;
-    }
+    if (!model.trim()) { setError("Model number is required."); return; }
+    if (!name.trim()) { setError("Product name is required."); return; }
     onSave({
       model: model.trim(),
       name: name.trim(),
       category,
       image,
-      price,
       description,
+      price,
       specs: specs.filter((s) => s.label.trim() || s.value.trim()),
       featured,
       published,
@@ -628,383 +602,205 @@ function ProductEditor({
   };
 
   return (
+    // FIXED: proper fixed overlay, centered, scrollable, high z-index
     <div
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] bg-black/80 flex items-start justify-center p-4 overflow-y-auto"
       onClick={onClose}
+      style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
     >
       <div
-        className="glass-on-charcoal rounded-2xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto"
+        className="bg-gray-900 border border-white/15 rounded-xl w-full max-w-2xl my-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-ivory">
+        {/* Header — sticky at top of modal */}
+        <div className="sticky top-0 bg-gray-900 border-b border-white/10 px-6 py-4 flex items-center justify-between rounded-t-xl z-10">
+          <h2 className="text-lg font-bold text-white">
             {product ? "Edit Product" : "New Product"}
           </h2>
-          <button
-            onClick={onClose}
-            className="text-sand hover:text-ivory transition-colors"
-            aria-label="Close"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-white p-1" aria-label="Close">
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        {/* Body — scrollable content */}
+        <div className="px-6 py-4 space-y-4 max-h-[calc(90vh-120px)] overflow-y-auto">
+          {error && (
+            <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
+          {/* IMAGE UPLOAD SECTION */}
           <div>
-            <label className={labelClass}>Model Code *</label>
-            <input
-              className={inputClass}
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="LRMB-130"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Name *</label>
-            <input
-              className={inputClass}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Absorption Minibar 40L"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Category</label>
-            <select
-              className={inputClass}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="">— No category —</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className={labelClass}>Price</label>
-            <input
-              className={inputClass}
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="₹12,000 — ₹18,000"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className={labelClass}>Image URL</label>
-            <input
-              className={inputClass}
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              placeholder="/images/product-catalogue/..."
-            />
-            {image && (
-              <div className="mt-2 flex items-center gap-3">
-                <img
-                  src={image}
-                  alt="Preview"
-                  className="h-16 w-16 rounded-lg object-cover bg-white/5"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "/images/product-catalogue/placeholder.jpg";
-                  }}
+            <label className={labelClass}>Product Image</label>
+            <div className="flex items-start gap-4">
+              {/* Preview */}
+              <div className="h-24 w-24 shrink-0 rounded-lg border border-white/15 bg-gray-800 overflow-hidden flex items-center justify-center">
+                {image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="h-full w-full object-contain"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                  />
+                ) : (
+                  <ImageIcon className="h-8 w-8 text-gray-600" />
+                )}
+              </div>
+              {/* Upload controls */}
+              <div className="flex-1 space-y-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageUpload}
+                  className="hidden"
                 />
-                <p className="font-mono text-[10px] text-sand truncate flex-1">
-                  {image}
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="inline-flex items-center gap-2 rounded-lg bg-white/10 text-white px-4 py-2 text-sm hover:bg-white/20 transition-colors disabled:opacity-50 border border-white/15"
+                >
+                  {uploading ? (
+                    <>
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4" />
+                      Upload from Computer
+                    </>
+                  )}
+                </button>
+                <input
+                  type="text"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="/images/product-catalogue/... or uploaded URL"
+                  className={inputClass + " text-xs"}
+                />
+                <p className="text-[10px] text-gray-500">
+                  Upload JPEG/PNG/WebP (max 10MB) or paste image URL
                 </p>
               </div>
-            )}
-          </div>
-          <div className="col-span-2">
-            <label className={labelClass}>Description</label>
-            <textarea
-              className={inputClass}
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Short product description..."
-            />
+            </div>
           </div>
 
-          {/* Specs editor */}
-          <div className="col-span-2">
+          {/* Model + Category */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={labelClass}>Model Number *</label>
+              <input type="text" value={model} onChange={(e) => setModel(e.target.value)} className={inputClass} placeholder="LRMB-132" />
+            </div>
+            <div>
+              <label className={labelClass}>Category</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value)} className={inputClass}>
+                <option value="">Select category</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.name} className="bg-gray-900">{c.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Name */}
+          <div>
+            <label className={labelClass}>Product Name *</label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="45L Solid Door Compressor Mini Bar" />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className={labelClass}>Description</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className={inputClass + " resize-none"} placeholder="Product description..." />
+          </div>
+
+          {/* Price + Sort Order */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={labelClass}>Price (optional)</label>
+              <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} className={inputClass} placeholder="₹6,700" />
+            </div>
+            <div>
+              <label className={labelClass}>Sort Order</label>
+              <input type="number" value={sortOrder} onChange={(e) => setSortOrder(Number(e.target.value))} className={inputClass} />
+            </div>
+          </div>
+
+          {/* Specifications */}
+          <div>
             <div className="flex items-center justify-between mb-2">
-              <label className={labelClass}>Specifications</label>
-              <button
-                type="button"
-                onClick={addSpec}
-                className="rounded-full bg-white/5 px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-brass hover:bg-white/10 transition-colors flex items-center gap-1"
-              >
+              <label className={labelClass + " mb-0"}>Specifications</label>
+              <button type="button" onClick={addSpec} className="inline-flex items-center gap-1 rounded-lg bg-white/10 text-white px-3 py-1 text-xs hover:bg-white/20 border border-white/15">
                 <Plus className="h-3 w-3" /> Add Spec
               </button>
             </div>
             <div className="space-y-2">
-              {specs.length === 0 && (
-                <p className="font-body text-xs text-sand/60 italic">
-                  No specs yet — add rows for capacity, power, material, etc.
-                </p>
-              )}
-              {specs.map((s, i) => (
-                <div key={i} className="flex items-center gap-2">
+              {specs.map((spec, i) => (
+                <div key={i} className="flex gap-2 items-center">
                   <input
-                    className={inputClass}
-                    value={s.label}
+                    type="text"
+                    value={spec.label}
                     onChange={(e) => updateSpec(i, "label", e.target.value)}
+                    className={inputClass + " flex-1"}
                     placeholder="Label (e.g. Capacity)"
                   />
                   <input
-                    className={inputClass}
-                    value={s.value}
+                    type="text"
+                    value={spec.value}
                     onChange={(e) => updateSpec(i, "value", e.target.value)}
+                    className={inputClass + " flex-1"}
                     placeholder="Value (e.g. 40 Litres)"
                   />
                   <button
                     type="button"
                     onClick={() => removeSpec(i)}
-                    className="shrink-0 p-2 rounded-lg text-sand hover:bg-red-500/10 hover:text-red-400 transition-colors"
-                    aria-label="Remove spec"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-500/10"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
               ))}
+              {specs.length === 0 && (
+                <p className="text-xs text-gray-500 py-2">No specs yet. Click "Add Spec" to add specifications.</p>
+              )}
             </div>
           </div>
 
-          <div>
-            <label className={labelClass}>Sort Order</label>
-            <input
-              type="number"
-              className={inputClass}
-              value={sortOrder}
-              onChange={(e) => setSortOrder(Number(e.target.value))}
-              placeholder="0"
-            />
-          </div>
-          <div className="flex items-end gap-4 pb-1">
+          {/* Toggles */}
+          <div className="flex gap-6 pt-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={featured}
                 onChange={(e) => setFeatured(e.target.checked)}
-                className="accent-brass h-4 w-4"
+                className="h-4 w-4 accent-yellow-500"
               />
-              <span className="text-sm text-ivory flex items-center gap-1">
-                <Star className="h-3.5 w-3.5 text-brass" /> Featured
-              </span>
+              <span className="text-sm text-white">Featured</span>
+              <Star className={`h-3.5 w-3.5 ${featured ? "text-yellow-500 fill-yellow-500" : "text-gray-600"}`} />
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={published}
                 onChange={(e) => setPublished(e.target.checked)}
-                className="accent-brass h-4 w-4"
+                className="h-4 w-4 accent-yellow-500"
               />
-              <span className="text-sm text-ivory flex items-center gap-1">
-                <Eye className="h-3.5 w-3.5 text-emerald-400" /> Published
-              </span>
+              <span className="text-sm text-white">Published</span>
+              {published ? <Eye className="h-3.5 w-3.5 text-green-400" /> : <EyeOff className="h-3.5 w-3.5 text-gray-600" />}
             </label>
           </div>
         </div>
 
-        {error && (
-          <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs text-red-400">
-            {error}
-          </p>
-        )}
-
-        <div className="flex gap-3 mt-6">
-          <button
-            onClick={handleSave}
-            className="rounded-full bg-brass text-charcoal flex-1 py-3 text-sm font-medium hover:bg-brass-light transition-colors"
-          >
-            Save Product
+        {/* Footer — sticky at bottom of modal */}
+        <div className="sticky bottom-0 bg-gray-900 border-t border-white/10 px-6 py-4 flex gap-3 rounded-b-xl">
+          <button type="button" onClick={handleSave} className={btnPrimary + " flex-1"}>
+            <Check className="inline h-4 w-4 mr-1" /> Save Product
           </button>
-          <button
-            onClick={onClose}
-            className="rounded-full bg-white/5 text-ivory px-6 py-3 text-sm hover:bg-white/10 transition-colors"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// Category editor
-// ─────────────────────────────────────────────────────────────
-function CategoryEditor({
-  category,
-  onClose,
-  onSave,
-}: {
-  category: Category | null;
-  onClose: () => void;
-  onSave: (data: Partial<Category>) => void;
-}) {
-  const [slug, setSlug] = useState(category?.slug || "");
-  const [name, setName] = useState(category?.name || "");
-  const [count, setCount] = useState(category?.count ?? 0);
-  const [blurb, setBlurb] = useState(category?.blurb || "");
-  const [image, setImage] = useState(
-    category?.image || "/images/categories/placeholder.jpg"
-  );
-  const [span, setSpan] = useState(category?.span || "default");
-  const [sortOrder, setSortOrder] = useState(category?.sortOrder ?? 0);
-  const [error, setError] = useState("");
-
-  const handleSave = () => {
-    if (!slug.trim()) {
-      setError("Slug is required.");
-      return;
-    }
-    if (!name.trim()) {
-      setError("Category name is required.");
-      return;
-    }
-    onSave({
-      slug: slug.trim(),
-      name: name.trim(),
-      count: Number(count) || 0,
-      blurb,
-      image,
-      span,
-      sortOrder: Number(sortOrder) || 0,
-    });
-  };
-
-  return (
-    <div
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <div
-        className="glass-on-charcoal rounded-2xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-ivory">
-            {category ? "Edit Category" : "New Category"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-sand hover:text-ivory transition-colors"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className={labelClass}>Slug *</label>
-            <input
-              className={inputClass}
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              placeholder="amenities"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Name *</label>
-            <input
-              className={inputClass}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Amenities"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Product Count</label>
-            <input
-              type="number"
-              className={inputClass}
-              value={count}
-              onChange={(e) => setCount(Number(e.target.value))}
-              placeholder="0"
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Sort Order</label>
-            <input
-              type="number"
-              className={inputClass}
-              value={sortOrder}
-              onChange={(e) => setSortOrder(Number(e.target.value))}
-              placeholder="0"
-            />
-          </div>
-          <div className="col-span-2">
-            <label className={labelClass}>Image URL</label>
-            <input
-              className={inputClass}
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              placeholder="/images/categories/amenities.jpg"
-            />
-            {image && (
-              <div className="mt-2 flex items-center gap-3">
-                <img
-                  src={image}
-                  alt="Preview"
-                  className="h-16 w-16 rounded-lg object-cover bg-white/5"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "/images/categories/placeholder.jpg";
-                  }}
-                />
-                <p className="font-mono text-[10px] text-sand truncate flex-1">
-                  {image}
-                </p>
-              </div>
-            )}
-          </div>
-          <div className="col-span-2">
-            <label className={labelClass}>Blurb</label>
-            <textarea
-              className={inputClass}
-              rows={2}
-              value={blurb}
-              onChange={(e) => setBlurb(e.target.value)}
-              placeholder="Short description shown on the homepage category grid..."
-            />
-          </div>
-          <div className="col-span-2">
-            <label className={labelClass}>Grid Span</label>
-            <select
-              className={inputClass}
-              value={span}
-              onChange={(e) => setSpan(e.target.value)}
-            >
-              <option value="default">Default</option>
-              <option value="large">Large</option>
-              <option value="wide">Wide</option>
-              <option value="tall">Tall</option>
-            </select>
-          </div>
-        </div>
-
-        {error && (
-          <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs text-red-400">
-            {error}
-          </p>
-        )}
-
-        <div className="flex gap-3 mt-6">
-          <button
-            onClick={handleSave}
-            className="rounded-full bg-brass text-charcoal flex-1 py-3 text-sm font-medium hover:bg-brass-light transition-colors"
-          >
-            Save Category
-          </button>
-          <button
-            onClick={onClose}
-            className="rounded-full bg-white/5 text-ivory px-6 py-3 text-sm hover:bg-white/10 transition-colors"
-          >
+          <button type="button" onClick={onClose} className={btnSecondary}>
             Cancel
           </button>
         </div>

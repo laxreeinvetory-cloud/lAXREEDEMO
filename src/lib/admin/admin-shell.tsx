@@ -30,8 +30,9 @@ const navItems = [
   { label: "Page Content", href: "/admin/pages", icon: FileEdit },
   { label: "FAQ", href: "/admin/faq", icon: HelpCircle },
   { label: "Appearance", href: "/admin/appearance", icon: Palette },
+  { label: "Website CMS", href: "/admin/cms", icon: Settings },
   { label: "SEO & Company", href: "/admin/seo", icon: Search },
-  { label: "Content Hub", href: "/admin/content", icon: Settings },
+  { label: "Content Hub", href: "/admin/content", icon: FileEdit },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
