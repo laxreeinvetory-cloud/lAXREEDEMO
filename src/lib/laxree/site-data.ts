@@ -64,46 +64,71 @@ export type Category = {
 
 export const CATEGORIES: Category[] = [
   {
-    slug: "amenities",
-    name: "Amenities",
-    count: 226,
-    blurb: "Room, washroom & lobby essentials — minibars to magnifying mirrors.",
+    slug: "room-amenities",
+    name: "Room Amenities",
+    count: 91,
+    blurb: "Mini bars, kettles, safes, locks, hangers, phones, dustbins, desktop accessories.",
     image: "/images/categories/amenities.jpg",
     span: "large",
   },
   {
+    slug: "washroom-amenities",
+    name: "Washroom Amenities",
+    count: 43,
+    blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
+    image: "/images/categories/furniture.jpg",
+    span: "default",
+  },
+  {
+    slug: "lobby-items",
+    name: "Lobby Items",
+    count: 31,
+    blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
+    image: "/images/categories/linen.jpg",
+    span: "default",
+  },
+  {
     slug: "furniture",
     name: "Furniture",
-    count: 246,
-    blurb: "Lobby, room & outdoor furniture engineered for high-traffic hospitality.",
-    image: "/images/categories/furniture.jpg",
+    count: 399,
+    blurb: "Outdoor, guest room, restaurant, banquet furniture.",
+    image: "/images/categories/roofing.jpg",
     span: "default",
   },
   {
     slug: "linen",
     name: "Linen",
-    count: 20,
-    blurb: "Bed, bath & F&B linen in long-staple cotton, custom-branded.",
-    image: "/images/categories/linen.jpg",
-    span: "default",
-  },
-  {
-    slug: "roofing",
-    name: "Roofing",
-    count: 12,
-    blurb: "Architectural metal roofing & cladding systems for resorts.",
-    image: "/images/categories/roofing.jpg",
-    span: "default",
-  },
-  {
-    slug: "dome",
-    name: "Dome",
     count: 2,
-    blurb: "Geodesic dome structures for glamping & experiential stays.",
+    blurb: "Room linen and bath linen.",
+    image: "/images/categories/dome.jpg",
+    span: "tall",
+  },
+  {
+    slug: "bath-tub",
+    name: "Bath Tub",
+    count: 22,
+    blurb: "Freestanding bath tubs in multiple sizes.",
+    image: "/images/categories/amenities.jpg",
+    span: "default",
+  },
+  {
+    slug: "amenities-tray-set",
+    name: "Amenities Tray Set",
+    count: 1,
+    blurb: "Premium tray sets for guest rooms.",
+    image: "/images/categories/furniture.jpg",
+    span: "default",
+  },
+  {
+    slug: "dome-space-pod",
+    name: "Dome & Space POD",
+    count: 4,
+    blurb: "Geodesic domes and space pods for resorts and events.",
     image: "/images/categories/dome.jpg",
     span: "default",
   },
 ];
+
 
 export type Product = {
   slug: string;
@@ -273,16 +298,19 @@ export const TESTIMONIALS: Testimonial[] = [
 ];
 
 export const CLIENT_LOGOS = [
-  "The Imperial Crest",
-  "Westmark Resorts",
-  "Heritage Hotels",
-  "Royal Palms",
-  "Marina Bay Suites",
-  "Citadel Hospitality",
-  "Aravali Retreat",
-  "Bluewater Resorts",
-  "Grand Meridian",
-  "Lakeside Manor",
+  "Radisson",
+  "Holiday Inn",
+  "Fairmont",
+  "Sayaji Hotels",
+  "Ramada Group",
+  "Sunday Hotels",
+  "7 Apple Hotels",
+  "Club Mahindra",
+  "Taj",
+  "Ananta Hotels",
+  "The Lords Inn",
+  "The Derns Hotels & Resorts",
+  "Swosti Group",
 ];
 
 export type Exhibition = {
