@@ -7,6 +7,7 @@ import { Navbar } from "@/components/site/navbar";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingRoot } from "@/components/floating/floating-root";
 import { ScrollProgress } from "@/components/site/scroll-progress";
+import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
 import { Toaster as SiteToaster } from "@/components/ui/site-toaster";
 
 /**
@@ -39,6 +40,7 @@ export function ConditionalChrome({ children }: { children: ReactNode }) {
         <SiteFooter />
       </div>
       <FloatingRoot />
+      <FloatingWhatsApp />
       <SiteToaster />
     </SmoothScrollProvider>
   );

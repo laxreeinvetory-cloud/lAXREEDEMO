@@ -15,6 +15,7 @@ import { NAV_LINKS, SITE } from "@/lib/laxree/site-data";
 import { useEnquiry } from "@/components/providers/enquiry-provider";
 import { useCart } from "@/components/providers/cart-provider";
 import { usePrefersReducedMotion } from "@/hooks/laxree/use-laxree-motion";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 // CMS types — allows override from admin panel
 type CMSNavItem = { id: string; label: string; link: string; order: number; visible: boolean; dropdown: any[] };
@@ -68,6 +69,7 @@ export function Navbar() {
   const { totalItems } = useCart();
   const reduced = usePrefersReducedMotion();
   const pathname = usePathname();
+  const { settings } = useSiteSettings();
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -87,9 +89,11 @@ export function Navbar() {
   const navLinks = cmsNav?.menus
     ? cmsNav.menus.filter((m) => m.visible).sort((a, b) => a.order - b.order)
     : NAV_LINKS;
-  const logoUrl = cmsNav?.logo || "/images/laxree-logo.png";
+  // Logo: admin Site Settings > CMS nav > static default
+  const logoUrl = settings.logo || cmsNav?.logo || "/images/laxree-logo.png";
   const ctaText = cmsNav?.ctaButton?.text || "Enquire Now";
   const ctaVisible = cmsNav?.ctaButton?.visible ?? true;
+  const whatsapp = settings.whatsapp || SITE.whatsapp;
 
   const { scrollY } = useScroll();
   // 88px → 64px after 40px of scroll
@@ -161,7 +165,7 @@ export function Navbar() {
               )}
             </Link>
             <a
-              href={`https://wa.me/${SITE.whatsapp}`}
+              href={`https://wa.me/${whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat on WhatsApp"
@@ -264,7 +268,7 @@ export function Navbar() {
                   )}
                 </Link>
                 <a
-                  href={`https://wa.me/${SITE.whatsapp}`}
+                  href={`https://wa.me/${whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Chat on WhatsApp"

@@ -14,6 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { SITE } from "@/lib/laxree/site-data";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 type LinkItem = { label: string; href: string };
 
@@ -41,10 +42,12 @@ const CATEGORY_LINKS: LinkItem[] = [
 ];
 
 export function SiteFooter() {
+  // Live site settings from admin (phone/email/address/logo/socials etc.)
+  const { settings } = useSiteSettings();
   const [cmsFooter, setCmsFooter] = useState<any>(null);
 
   useEffect(() => {
-    fetch("/api/admin/cms?key=footer:config")
+    fetch("/api/admin/cms?key=footer:config", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
         if (data.ok && data.value) {
@@ -54,16 +57,18 @@ export function SiteFooter() {
       .catch(() => {});
   }, []);
 
-  // Use CMS data if available, otherwise static SITE data
-  const phoneDisplay = cmsFooter?.contact?.phone || SITE.phoneDisplay;
-  const email = cmsFooter?.contact?.email || SITE.email;
-  const address = cmsFooter?.contact?.address || SITE.address;
-  const copyright = cmsFooter?.copyright || "LaxRee Amenities © 2026 — All Rights Reserved";
-  const socialLinks = cmsFooter?.social || {
-    facebook: SITE.socials.facebook,
-    x: SITE.socials.x,
-    youtube: SITE.socials.youtube,
-    linkedin: SITE.socials.linkedin,
+  // Live values: admin Site Settings > footer:config > static SITE
+  const phoneDisplay = settings.phoneDisplay;
+  const email = settings.email;
+  const address = settings.address;
+  const copyright = settings.copyright;
+  const tagline = settings.tagline;
+  const logoUrl = settings.logo || "/images/laxree-logo.png";
+  const socialLinks = {
+    facebook: settings.facebook,
+    x: settings.x,
+    youtube: settings.youtube,
+    linkedin: settings.linkedin,
   };
   const SOCIALS: { label: string; href: string; Icon: LucideIcon }[] = [
     { label: "Facebook", href: socialLinks.facebook, Icon: Facebook },
@@ -83,7 +88,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-5">
             <Link href="/" className="group">
               <img
-                src="/images/laxree-logo.png"
+                src={logoUrl}
                 alt="LaxRee Amenities — Hotel Supplies Redefined"
                 width={160}
                 height={38}
@@ -111,7 +116,7 @@ export function SiteFooter() {
           </div>
 
           {/* Company */}
-          <FooterLinkColumn heading="Company" links={COMPANY_LINKS} />
+          <FooterLinkColumn heading="Company" links={companyLinks} />
 
           {/* Categories */}
           <FooterLinkColumn heading="Categories" links={CATEGORY_LINKS} />
@@ -123,12 +128,12 @@ export function SiteFooter() {
             </h3>
             <ul className="flex flex-col gap-3">
               <ContactRow
-                href={`tel:${SITE.phoneHref}`}
+                href={`tel:${settings.phoneHref}`}
                 Icon={Phone}
                 label={phoneDisplay}
               />
               <ContactRow
-                href={`https://wa.me/${SITE.whatsapp}`}
+                href={`https://wa.me/${settings.whatsapp}`}
                 Icon={MessageCircle}
                 label="WhatsApp Us"
               />
@@ -138,9 +143,9 @@ export function SiteFooter() {
                 label={email}
               />
               <ContactRow
-                href={`mailto:${SITE.careersEmail}`}
+                href={`mailto:${settings.careersEmail}`}
                 Icon={Briefcase}
-                label={SITE.careersEmail}
+                label={settings.careersEmail}
               />
             </ul>
           </div>
@@ -152,7 +157,7 @@ export function SiteFooter() {
           <p className="font-mono text-xs text-sand">
             {copyright}
           </p>
-          <p className="font-mono text-xs text-sand">{SITE.tagline}</p>
+          <p className="font-mono text-xs text-sand">{tagline}</p>
         </div>
       </div>
     </footer>

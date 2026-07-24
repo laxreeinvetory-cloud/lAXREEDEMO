@@ -524,10 +524,68 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 export const WHATSAPP_EXECUTIVES = [
-  { name: "Sales — North India", phone: "919251683662" },
-  { name: "Sales — South India", phone: "919251683662" },
-  { name: "Catalogue & Pricing", phone: "919251683662" },
-  { name: "After-Sales Support", phone: "919251683662" },
+  { name: "Sales — North India", phone: "919251683658" },
+  { name: "Sales — South India", phone: "919251683658" },
+  { name: "Sales — East India", phone: "919251683658" },
+  { name: "Sales — West India", phone: "919251683658" },
+  { name: "After-Sales Support", phone: "919982286667" },
+  { name: "Catalogue & Pricing", phone: "919352054400" },
+];
+
+// Floating WhatsApp selector groups — powers the global floating button.
+// `sales` shares one number across all four regions; `support` and
+// `catalogue` have their own dedicated lines.
+export type WhatsAppGroup = {
+  id: string;
+  label: string;
+  icon: string; // lucide icon name
+  phone: string; // E.164 without "+"
+  blurb: string;
+};
+
+export const WHATSAPP_GROUPS: WhatsAppGroup[] = [
+  {
+    id: "sales-north",
+    label: "Sales — North India",
+    icon: "Compass",
+    phone: "919251683658",
+    blurb: "Delhi, Punjab, Haryana, UP, Uttarakhand, J&K, HP",
+  },
+  {
+    id: "sales-south",
+    label: "Sales — South India",
+    icon: "Compass",
+    phone: "919251683658",
+    blurb: "Karnataka, Tamil Nadu, Kerala, AP, Telangana",
+  },
+  {
+    id: "sales-east",
+    label: "Sales — East India",
+    icon: "Compass",
+    phone: "919251683658",
+    blurb: "West Bengal, Odisha, Bihar, Jharkhand, Assam",
+  },
+  {
+    id: "sales-west",
+    label: "Sales — West India",
+    icon: "Compass",
+    phone: "919251683658",
+    blurb: "Rajasthan, Gujarat, Maharashtra, Goa, MP",
+  },
+  {
+    id: "after-sales",
+    label: "After-Sales Support",
+    icon: "Headphones",
+    phone: "919982286667",
+    blurb: "Service, warranty & installation help",
+  },
+  {
+    id: "catalogue",
+    label: "Catalogue & Pricing",
+    icon: "BookOpen",
+    phone: "919352054400",
+    blurb: "Quotes, price lists & product catalogues",
+  },
 ];
 
 export const ENQUIRY_CATEGORIES = [

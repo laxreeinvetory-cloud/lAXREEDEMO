@@ -27,6 +27,7 @@ import {
   ENQUIRY_CATEGORIES,
   WHATSAPP_EXECUTIVES,
 } from "@/lib/laxree/site-data";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 /* ─────────────────────────────────────────────────────────────
    Form types & helpers
@@ -68,11 +69,33 @@ const inputClass =
    ───────────────────────────────────────────────────────────── */
 export default function ContactUsPage() {
   const { notify } = useEnquiry();
+  const { settings } = useSiteSettings();
   const [form, setForm] = useState<ContactForm>(INITIAL_FORM);
   const [submitting, setSubmitting] = useState(false);
 
   const update = (key: keyof ContactForm, value: string) =>
     setForm((prev) => ({ ...prev, [key]: value }));
+
+  // Live contact details from admin Site Settings (fall back to static SITE)
+  const phoneDisplay = settings.phoneDisplay;
+  const phoneHref = settings.phoneHref;
+  const tollFreeDisplay = settings.tollFreeDisplay;
+  const tollFreeHref = settings.tollFreeHref;
+  const email = settings.email;
+  const careersEmail = settings.careersEmail;
+  const address = settings.address;
+  const whatsapp = settings.whatsapp;
+  const socials = {
+    facebook: settings.facebook,
+    x: settings.x,
+    youtube: settings.youtube,
+    linkedin: settings.linkedin,
+  };
+  // Admin can paste a custom Google Maps embed URL; otherwise use the
+  // default Ajmer campus query embed.
+  const mapSrc =
+    settings.mapEmbed ||
+    "https://www.google.com/maps?q=LaxRee+Amenities,+Harbilas+Sharda+Marg,+Civil+Lines,+Ajmer,+Rajasthan+305001&output=embed&z=15";
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -272,16 +295,16 @@ export default function ContactUsPage() {
                       Phone
                     </p>
                     <a
-                      href={`tel:${SITE.tollFreeHref}`}
+                      href={`tel:${tollFreeHref}`}
                       className="block font-mono text-brass text-[22px] leading-tight tracking-tight hover:text-brass-light transition-colors"
                     >
-                      {SITE.tollFreeDisplay}
+                      {tollFreeDisplay}
                     </a>
                     <a
-                      href={`tel:${SITE.phoneHref}`}
+                      href={`tel:${phoneHref}`}
                       className="mt-1 block font-mono text-[14px] text-sand hover:text-brass-light transition-colors"
                     >
-                      {SITE.phoneDisplay}
+                      {phoneDisplay}
                     </a>
                   </div>
                 </div>
@@ -300,7 +323,7 @@ export default function ContactUsPage() {
                       WhatsApp
                     </p>
                     <a
-                      href={`https://wa.me/${SITE.whatsapp}`}
+                      href={`https://wa.me/${whatsapp}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 font-body text-ivory text-base hover:text-brass-light transition-colors"
@@ -328,18 +351,18 @@ export default function ContactUsPage() {
                       Email
                     </p>
                     <a
-                      href={`mailto:${SITE.email}`}
+                      href={`mailto:${email}`}
                       className="block font-mono text-[14px] text-ivory hover:text-brass-light transition-colors break-all"
                     >
-                      {SITE.email}
+                      {email}
                     </a>
                     <p className="mt-1 font-mono text-[12px] text-sand/80">
                       Careers:{" "}
                       <a
-                        href={`mailto:${SITE.careersEmail}`}
+                        href={`mailto:${careersEmail}`}
                         className="hover:text-brass-light transition-colors"
                       >
-                        {SITE.careersEmail}
+                        {careersEmail}
                       </a>
                     </p>
                   </div>
@@ -359,7 +382,7 @@ export default function ContactUsPage() {
                       Address
                     </p>
                     <p className="font-body text-[14px] text-sand leading-relaxed">
-                      {SITE.address}
+                      {address}
                     </p>
                   </div>
                 </div>
@@ -388,7 +411,7 @@ export default function ContactUsPage() {
         </div>
       </section>
 
-      {/* ───────── Section 3 — Map placeholder (charcoal) ───────── */}
+      {/* ───────── Section 3 — Google Map (charcoal) ───────── */}
       <section className="section section-charcoal py-20 md:py-28">
         <div className="container-laxree">
           <SectionHeading
@@ -398,54 +421,51 @@ export default function ContactUsPage() {
           />
 
           <FadeIn className="mt-10">
-            <div
-              className="relative w-full rounded-[24px] overflow-hidden border border-white/10"
-              style={{
-                aspectRatio: "21 / 9",
-                backgroundColor: "#0e0c0a",
-                backgroundImage: `
-                  linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
-                  radial-gradient(circle at 50% 50%, rgba(198,161,91,0.10), transparent 55%)
-                `,
-                backgroundSize: "44px 44px, 44px 44px, 100% 100%",
-              }}
-              role="img"
-              aria-label={`Map placeholder showing the location of LaxRee Amenities at ${SITE.address}`}
-            >
-              {/* Center pin */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6">
-                <div className="relative flex flex-col items-center">
-                  <span
-                    aria-hidden
-                    className="absolute -inset-6 rounded-full bg-brass/20 blur-2xl animate-pulse-glow"
-                  />
-                  <MapPin
-                    size={48}
-                    strokeWidth={1.5}
-                    className="text-brass relative drop-shadow-[0_4px_12px_rgba(198,161,91,0.6)]"
-                  />
-                </div>
-                <div className="glass-on-charcoal rounded-2xl px-5 py-3 text-center max-w-2xl">
-                  <p className="font-mono text-[11px] uppercase tracking-wider text-brass mb-1">
+            <div className="relative w-full overflow-hidden rounded-[24px] border border-white/10 bg-charcoal">
+              {/* Real Google Maps embed — fully interactive (zoom in/out, pan,
+                  see nearby locality). No API key required for the embed URL. */}
+              <iframe
+                title="LaxRee Amenities — Ajmer campus location map"
+                src={mapSrc}
+                className="block w-full"
+                style={{
+                  height: "clamp(360px, 56vw, 560px)",
+                  border: 0,
+                  filter: "grayscale(0.2) contrast(1.05)",
+                }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              {/* Address overlay (bottom-left) so the pin context is always visible */}
+              <div className="pointer-events-none absolute bottom-4 left-4 max-w-xs">
+                <div className="glass-on-charcoal rounded-2xl px-4 py-3">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-brass mb-0.5">
                     LaxRee Amenities
                   </p>
-                  <p className="font-mono text-[13px] text-ivory leading-relaxed">
-                    {SITE.address}
+                  <p className="font-mono text-[12px] text-ivory leading-relaxed">
+                    {address}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 flex justify-center">
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
               <a
-                href="https://maps.google.com/?q=LaxRee+Amenities+Ajmer"
+                href="https://www.google.com/maps/dir/?api=1&destination=LaxRee+Amenities,+Harbilas+Sharda+Marg,+Civil+Lines,+Ajmer,+Rajasthan+305001"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pill pill-ghost-brass text-[13px] px-7 py-3.5 inline-flex items-center gap-2"
+                className="pill pill-brass text-[13px] px-7 py-3.5 inline-flex items-center gap-2"
               >
                 Get Directions
                 <ExternalLink size={14} strokeWidth={1.5} />
+              </a>
+              <a
+                href={`tel:${phoneHref}`}
+                className="pill pill-ghost-brass text-[13px] px-7 py-3.5 inline-flex items-center gap-2"
+              >
+                <Phone size={14} strokeWidth={1.5} />
+                Call Before Visiting
               </a>
             </div>
           </FadeIn>
@@ -469,22 +489,22 @@ export default function ContactUsPage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <SocialButton
-                  href={SITE.socials.facebook}
+                  href={socials.facebook}
                   label="Facebook"
                   Icon={Facebook}
                 />
                 <SocialButton
-                  href={SITE.socials.x}
+                  href={socials.x}
                   label="X (Twitter)"
                   Icon={Twitter}
                 />
                 <SocialButton
-                  href={SITE.socials.youtube}
+                  href={socials.youtube}
                   label="YouTube"
                   Icon={Youtube}
                 />
                 <SocialButton
-                  href={SITE.socials.linkedin}
+                  href={socials.linkedin}
                   label="LinkedIn"
                   Icon={Linkedin}
                 />
@@ -543,7 +563,7 @@ export default function ContactUsPage() {
                 We respond to all enquiries within 24 hours. For urgent matters,
                 call{" "}
                 <a
-                  href={`tel:${SITE.tollFreeHref}`}
+                  href={`tel:${tollFreeHref}`}
                   className="text-brass hover:text-brass-light transition-colors"
                 >
                   1800 120 7001
@@ -552,7 +572,7 @@ export default function ContactUsPage() {
               </p>
               <p className="font-mono text-[12px] text-sand tracking-wider uppercase">
                 Or call us now:{" "}
-                <span className="text-brass">{SITE.tollFreeDisplay}</span>
+                <span className="text-brass">{tollFreeDisplay}</span>
               </p>
             </div>
           </FadeIn>

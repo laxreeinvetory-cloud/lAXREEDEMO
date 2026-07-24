@@ -10,7 +10,9 @@ import {
   EyeOff,
   X,
   HelpCircle,
+  Loader2,
 } from "lucide-react";
+import { toast, AdminToaster } from "@/lib/admin/admin-toast";
 
 /* ─────────────────────────────────────────────────────────────
    Types & constants
@@ -76,18 +78,49 @@ export default function AdminFaqPage() {
   }, [faqs, search, categoryFilter]);
 
   const togglePublish = async (item: FaqItem) => {
-    await fetch("/api/admin/faq", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: item.id, published: !item.published }),
-    });
-    fetchFaqs();
+    const nextPublished = !item.published;
+    // Optimistic update
+    setFaqs((prev) =>
+      prev.map((f) => (f.id === item.id ? { ...f, published: nextPublished } : f))
+    );
+    try {
+      const res = await fetch("/api/admin/faq", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: item.id, published: nextPublished }),
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        // Roll back
+        setFaqs((prev) =>
+          prev.map((f) => (f.id === item.id ? { ...f, published: item.published } : f))
+        );
+        toast("error", data.message || "Failed to update FAQ.");
+      } else {
+        toast("success", nextPublished ? "FAQ published." : "FAQ hidden.");
+      }
+    } catch {
+      setFaqs((prev) =>
+        prev.map((f) => (f.id === item.id ? { ...f, published: item.published } : f))
+      );
+      toast("error", "Network error — could not update FAQ.");
+    }
   };
 
   const deleteFaq = async (id: string) => {
     if (!confirm("Delete this FAQ item? This cannot be undone.")) return;
-    await fetch(`/api/admin/faq?id=${id}`, { method: "DELETE" });
-    fetchFaqs();
+    try {
+      const res = await fetch(`/api/admin/faq?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.ok) {
+        setFaqs((prev) => prev.filter((f) => f.id !== id));
+        toast("success", "FAQ deleted.");
+      } else {
+        toast("error", data.message || "Failed to delete FAQ.");
+      }
+    } catch {
+      toast("error", "Network error — could not delete FAQ.");
+    }
   };
 
   if (loading) {
@@ -269,25 +302,43 @@ export default function AdminFaqPage() {
             setCreating(false);
           }}
           onSave={async (data) => {
-            if (editing) {
-              await fetch("/api/admin/faq", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: editing.id, ...data }),
-              });
-            } else {
-              await fetch("/api/admin/faq", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-              });
+            try {
+              if (editing) {
+                const res = await fetch("/api/admin/faq", {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ id: editing.id, ...data }),
+                });
+                const json = await res.json();
+                if (!json.ok) {
+                  toast("error", json.message || "Failed to save changes.");
+                  return;
+                }
+                toast("success", "FAQ updated.");
+              } else {
+                const res = await fetch("/api/admin/faq", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(data),
+                });
+                const json = await res.json();
+                if (!json.ok) {
+                  toast("error", json.message || "Failed to create FAQ.");
+                  return;
+                }
+                toast("success", "FAQ created.");
+              }
+              setEditing(null);
+              setCreating(false);
+              fetchFaqs();
+            } catch {
+              toast("error", "Network error — could not save FAQ.");
             }
-            setEditing(null);
-            setCreating(false);
-            fetchFaqs();
           }}
         />
       )}
+
+      <AdminToaster />
     </div>
   );
 }
@@ -302,7 +353,7 @@ function FaqEditor({
 }: {
   item: FaqItem | null;
   onClose: () => void;
-  onSave: (data: Partial<FaqItem>) => void;
+  onSave: (data: Partial<FaqItem>) => Promise<void>;
 }) {
   const [form, setForm] = useState({
     question: item?.question || "",
@@ -311,6 +362,8 @@ function FaqEditor({
     sortOrder: item?.sortOrder ?? 0,
     published: item?.published ?? true,
   });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const inputClass =
     "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-ivory placeholder:text-sand/40 focus:border-brass focus:outline-none";
@@ -319,28 +372,51 @@ function FaqEditor({
   const canSave =
     form.question.trim().length > 0 && form.answer.trim().length > 0;
 
+  const handleSubmit = async () => {
+    if (!canSave) {
+      setError("Question and Answer are required.");
+      return;
+    }
+    setSaving(true);
+    setError("");
+    try {
+      await onSave(form);
+    } catch {
+      setError("Could not save — please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[80] bg-black/70 backdrop-blur-sm flex items-start sm:items-center justify-center p-4 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="glass-on-charcoal rounded-2xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto"
+        className="bg-charcoal border border-white/10 rounded-[24px] w-full max-w-2xl my-4 sm:my-8 max-h-[90vh] flex flex-col shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-ivory">
+        <div className="flex items-center justify-between gap-3 px-6 py-4 border-b border-white/10 shrink-0">
+          <h2 className="font-display text-xl text-ivory truncate">
             {item ? "Edit FAQ" : "New FAQ"}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-sand hover:text-ivory"
+            className="shrink-0 rounded-md p-1.5 text-sand hover:bg-white/10 hover:text-ivory transition-colors"
             aria-label="Close"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
+
+        <div className="px-6 py-5 overflow-y-auto flex-1">
+          {error && (
+            <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
+              {error}
+            </div>
+          )}
 
         <div className="grid grid-cols-2 gap-4">
           {/* Question */}
@@ -424,21 +500,29 @@ function FaqEditor({
             </label>
           </div>
         </div>
+        </div>
 
         {/* Actions */}
-        <div className="flex gap-3 mt-6">
+        <div className="flex gap-3 px-6 py-4 border-t border-white/10 shrink-0 bg-charcoal/95 backdrop-blur-xl rounded-b-[24px]">
           <button
             type="button"
-            onClick={() => canSave && onSave(form)}
-            disabled={!canSave}
-            className="pill pill-brass flex-1 py-3 text-[13px] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            onClick={handleSubmit}
+            disabled={!canSave || saving}
+            className="pill pill-brass flex-1 py-3 text-[13px] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
           >
-            {item ? "Save Changes" : "Create FAQ"}
+            {saving ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> Saving…
+              </>
+            ) : (
+              <>{item ? "Save Changes" : "Create FAQ"}</>
+            )}
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full bg-white/5 px-6 py-3 text-[13px] text-sand hover:bg-white/10 cursor-pointer"
+            disabled={saving}
+            className="rounded-full bg-white/5 px-6 py-3 text-[13px] text-sand hover:bg-white/10 cursor-pointer disabled:opacity-50"
           >
             Cancel
           </button>

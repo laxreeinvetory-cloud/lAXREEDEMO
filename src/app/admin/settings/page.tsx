@@ -8,19 +8,60 @@ import {
   Search,
   BarChart3,
   CreditCard,
-  Globe,
   Save,
   Check,
   X,
   Upload,
   Building2,
-  MapPin,
-  MessageCircle,
 } from "lucide-react";
 
 const inputClass = "w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:border-yellow-500 focus:outline-none";
 const labelClass = "block text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5";
-const btnPrimary = "rounded-lg bg-yellow-600 text-black px-4 py-2 text-sm font-semibold hover:bg-yellow-500 transition-colors";
+const btnPrimary = "rounded-lg bg-yellow-600 text-black px-4 py-2 text-sm font-semibold hover:bg-yellow-500 transition-colors cursor-pointer";
+
+// Compress images client-side before upload (Vercel body limit ~4.5MB).
+// Falls back to the original file on any error.
+function compressLogo(file: File, maxDim: number, quality: number): Promise<File> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(new File([blob], file.name, { type: "image/jpeg" }));
+            else resolve(file);
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      img.onerror = () => resolve(file);
+      img.src = e.target?.result as string;
+    };
+    reader.onerror = () => resolve(file);
+    reader.readAsDataURL(file);
+  });
+}
 
 const TABS = [
   { id: "general", label: "General", icon: Settings },
@@ -74,17 +115,34 @@ export default function SiteSettingsPage() {
     if (!file) return;
     setUploading(true);
     try {
+      // Compress large images client-side before upload (Vercel body limit ~4.5MB)
+      let uploadFile = file;
+      if (file.size > 1 * 1024 * 1024) {
+        uploadFile = await compressLogo(file, 1024, 0.85);
+      }
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", uploadFile);
       formData.append("model", "site-logo");
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "Server error");
+        if (res.status === 413) {
+          showToast("err", "Image too large. Please use a smaller image (max 4MB).");
+        } else {
+          showToast("err", `Upload failed (${res.status}): ${text.slice(0, 100)}`);
+        }
+        setUploading(false);
+        return;
+      }
       const data = await res.json();
       if (data.ok) {
         setSettings({ ...settings, logo: data.imageUrl });
         showToast("ok", "Logo uploaded — appears in navbar + footer + admin within seconds.");
+      } else {
+        showToast("err", data.message || "Upload failed — please try again.");
       }
-    } catch {
-      showToast("err", "Upload failed");
+    } catch (err) {
+      showToast("err", "Network error: " + (err instanceof Error ? err.message : "unknown"));
     }
     setUploading(false);
   };

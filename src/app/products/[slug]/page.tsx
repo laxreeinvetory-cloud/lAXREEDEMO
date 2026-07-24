@@ -47,18 +47,25 @@ function ItemTypeCard({
   parentSlug,
   index,
   dbImage,
+  parentImage,
 }: {
   item: (typeof CATALOGUE_CATEGORIES)[0];
   parentSlug: string;
   index: number;
   dbImage?: string;
+  parentImage?: string;
 }) {
-  const image = dbImage || item.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
+  // Smart fallback chain: DB image → static product image → parent category
+  // overview image → coming-soon. This ensures every card shows a relevant
+  // image even when the item type has no product photos yet.
+  const rawImage = dbImage || item.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
+  const isPlaceholder = rawImage.includes("coming-soon");
+  const image = isPlaceholder && parentImage ? parentImage : rawImage;
   return (
     <FadeIn delay={index * 0.06}>
       <Link
         href={`/products/${parentSlug}/${item.slug}`}
-        className="group glass-on-ivory rounded-24px overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full"
+        className="group glass-on-ivory rounded-[24px] overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full"
       >
         {/* Product image */}
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
@@ -68,6 +75,12 @@ function ItemTypeCard({
             loading="lazy"
             className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
           />
+          {/* "Coming Soon" ribbon for items without real photos */}
+          {isPlaceholder && (
+            <span className="absolute left-3 top-3 rounded-full bg-brass/90 px-2.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-charcoal">
+              Coming Soon
+            </span>
+          )}
           {/* Model count badge */}
           <span className="absolute right-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">
             {item.products.length} Models
@@ -107,6 +120,20 @@ export default async function CategoryPage({
   const children = getCategoriesByParent(parent.slug);
   const totalProducts = children.reduce((sum, c) => sum + c.products.length, 0);
   const otherParents = CATALOGUE_PARENTS.filter((p) => p.slug !== slug);
+
+  // Parent category overview image (used as smart fallback for items
+  // that don't yet have their own product photos).
+  const parentImageMap: Record<string, string> = {
+    "room-amenities": "/images/categories/room-amenities.jpg",
+    "washroom-amenities": "/images/categories/washroom-amenities.jpg",
+    "lobby-items": "/images/categories/lobby-items.jpg",
+    "furniture": "/images/categories/furniture.jpg",
+    "linen": "/images/categories/linen.jpg",
+    "bath-tub": "/images/categories/bath-tub.jpg",
+    "amenities-tray-set": "/images/categories/amenities-tray-set.jpg",
+    "dome-space-pod": "/images/categories/dome-space-pod.jpg",
+  };
+  const parentImage = parentImageMap[parent.slug];
 
   // Fetch first product image from DB for each item type
   const itemImages: Record<string, string> = {};
@@ -181,6 +208,7 @@ export default async function CategoryPage({
                   parentSlug={parent.slug}
                   index={i}
                   dbImage={itemImages[item.slug]}
+                  parentImage={parentImage}
                 />
               ))}
             </div>
@@ -218,12 +246,15 @@ export default async function CategoryPage({
           <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
             {otherParents.map((p) => {
               const pChildren = getCategoriesByParent(p.slug);
-              const img = pChildren[0]?.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
+              const rawImg = pChildren[0]?.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
+              const img = rawImg.includes("coming-soon")
+                ? (parentImageMap[p.slug] || rawImg)
+                : rawImg;
               return (
                 <Link
                   key={p.slug}
                   href={`/products/${p.slug}`}
-                  className="group glass-on-charcoal rounded-20px overflow-hidden transition-all duration-300 hover:border-brass/40"
+                  className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
                     <img

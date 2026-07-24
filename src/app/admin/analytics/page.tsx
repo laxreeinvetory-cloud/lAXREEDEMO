@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   TrendingUp,
-  TrendingDown,
   Eye,
   MousePointerClick,
   Users,
@@ -11,7 +10,6 @@ import {
   Search,
   Smartphone,
   Monitor,
-  Chrome,
   MapPin,
   FileText,
   ArrowUpRight,
@@ -19,8 +17,6 @@ import {
 } from "lucide-react";
 
 const inputClass = "w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm text-white";
-const labelClass = "block text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5";
-const btnPrimary = "rounded-lg bg-yellow-600 text-black px-4 py-2 text-sm font-semibold hover:bg-yellow-500 transition-colors";
 
 export default function AnalyticsPage() {
   const [stats, setStats] = useState<any>(null);
