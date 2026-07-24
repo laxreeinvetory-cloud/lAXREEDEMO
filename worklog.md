@@ -1432,3 +1432,44 @@ Stage Summary:
 - All SESSION3 features deployed: floating WhatsApp, Google Maps, product image serve, live admin→website settings, admin panel fixes.
 - Shared Neon PostgreSQL DB means demo leads created locally are visible on Vercel too.
 - TypeScript error (Buffer → Uint8Array) was the only build blocker — fixed and redeployed successfully.
+
+---
+Task ID: SESSION4-FIX-IMAGES
+Agent: main (Z.ai Code)
+Task: Fix wrong images on Rollaway Bed/Coat Stand/Mattress (showed kettle), add missing Housekeeping Trolley models from Excel, verify order.
+
+Work Log:
+- Investigated "Browse Room Amenities by Type" wrong images: Rollaway Bed, Mattress, Coat Stand, Iron & Iron Board, Baby Cot, Luggage Rack, Emergency Torch all showed the parent category fallback image (room-amenities.jpg) because they had only TBD placeholder products with coming-soon.jpg in the DB.
+- Parsed SSP Excel (upload/SSP Final OLD (12).xlsx) — found 26 real products across 4 categories:
+  • Housekeeping Trolley: 9 models (LRHT 426-434 + LRHT 433) — DB had only 3
+  • Mattress: 12 models (LRMR 251-254, Bonnell/Pocket, 8/10/12 inch)
+  • Rollaway Bed: 3 models (LRMR 255 4", LRMR 257 Bonded Foam 6", LRMR 257 Pocket Spring 6")
+  • Coat Stand: 2 models (LRRA 651, 652)
+- Extracted 26 embedded images from Excel xl/media/ by parsing drawing1.xml anchor→row mapping + rels rId→image file mapping. Path normalization: "../media/imageN.jpeg" → "xl/media/imageN.jpeg". All 26 images saved to public/images/product-catalogue/{housekeeping-trolley,mattress,rollaway-bed,coat-stand}/.
+- Updated DB: deleted 3 TBD placeholders + 3 old HT products, then upserted all 26 products with correct model, name, description, price (SSP), specs, and image paths. Verified final counts: HT=9, Mattress=12, Rollaway Bed=3, Coat Stand=2.
+- Updated catalogue-data.ts static fallback:
+  • Rollaway Bed: comingSoon → 3 real products
+  • Mattress: comingSoon → 12 real products
+  • Coat Stand: comingSoon → 2 real products
+  • Housekeeping Trolley: 3 models (coming-soon.jpg) → 9 models with real images
+- Verified locally: room-amenities page now shows:
+  • Rollaway Bed → LRMR-255.png ✅ (was room-amenities.jpg fallback)
+  • Mattress → LRMR-251-Bonnel-8.jpg ✅ (was fallback)
+  • Coat Stand → LRRA-651.png ✅ (was fallback)
+  • Items still showing category fallback (genuinely coming-soon, no Excel data): Iron & Iron Board, Baby Cot, Luggage Rack, Emergency Torch, Room Telephone — these correctly show "Coming Soon" ribbon.
+- Verified Housekeeping Trolley page: all 9 models in correct order (LRHT 433, 426, 427, 428, 429, 430, 431, 432, 434) with real images.
+- Verified lobby-items "Browse by Type" card: Housekeeping Trolley now shows LRHT--433.jpg (real image) instead of coming-soon.
+- Committed + pushed to GitHub → Vercel auto-deploy succeeded.
+- Verified on Vercel (https://l-axreedemo.vercel.app):
+  • Housekeeping Trolley page: 200, all 9 models with 9 correct images
+  • Rollaway Bed card: LRMR-255.png ✅
+  • Mattress card: LRMR-251-Bonnel-8.jpg ✅
+  • Coat Stand card: LRRA-651.png ✅
+  • Lint: 0 errors, tsc: 0 errors
+
+Stage Summary:
+- 26 real products added to DB + catalogue-data.ts with images extracted from Excel.
+- Rollaway Bed, Mattress, Coat Stand no longer show wrong/kettle images — they show their actual product photos.
+- Housekeeping Trolley expanded from 3 to 9 models (was missing LRHT 428, 429, 431, 432, 434, 433).
+- All items verified in correct order — no wrong information, each card shows the right item.
+- Deployed to Vercel successfully.
