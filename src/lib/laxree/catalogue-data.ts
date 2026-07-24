@@ -1707,18 +1707,173 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
     ],
   },
 
-  /* ── 1.11 Rollaway Bed — Coming Soon ─────────────────────────────── */
+  /* ── 1.11 Rollaway Bed — 3 models (from SSP) ─────────────────────── */
   {
     slug: "rollaway-bed",
     name: "Rollaway Bed",
-    products: [comingSoon("Rollaway Bed")],
+    products: [
+      {
+        model: "LRMR 255",
+        name: "Rollaway Bed — 4 inch",
+        category: "Rollaway Bed",
+        image: "/images/product-catalogue/rollaway-bed/LRMR-255.png",
+        description:
+          "Foldable rollaway bed with 4 inch mattress. MS powder coated frame with castor wheels for easy mobility.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRMR 255" },
+          { label: "Mattress", value: '4 inch' },
+          { label: "Frame", value: "MS Powder Coated" },
+          { label: "Wheels", value: "Castor" },
+        ],
+      },
+      {
+        model: "LRMR 257 ( Bonded Foam )",
+        name: "Rollaway Bed — 6 inch, Bonded Foam",
+        category: "Rollaway Bed",
+        image: "/images/product-catalogue/rollaway-bed/LRMR-257-Bonded-Foam.png",
+        description:
+          "Foldable rollaway bed with 6 inch bonded foam mattress. MS powder coated frame with castor wheels.",
+        tier: "Premium",
+        specs: [
+          { label: "Model", value: "LRMR 257 (Bonded Foam)" },
+          { label: "Mattress", value: '6 inch Bonded Foam' },
+          { label: "Frame", value: "MS Powder Coated" },
+          { label: "Wheels", value: "Castor" },
+        ],
+      },
+      {
+        model: "LRMR 257 ( Pocket Spring )",
+        name: "Rollaway Bed — 6 inch, Pocket Spring",
+        category: "Rollaway Bed",
+        image: "/images/product-catalogue/rollaway-bed/LRMR-257-Pocket-Spring.png",
+        description:
+          "Foldable rollaway bed with 6 inch pocket spring mattress. MS powder coated frame with castor wheels.",
+        tier: "Lux",
+        specs: [
+          { label: "Model", value: "LRMR 257 (Pocket Spring)" },
+          { label: "Mattress", value: '6 inch Pocket Spring' },
+          { label: "Frame", value: "MS Powder Coated" },
+          { label: "Wheels", value: "Castor" },
+        ],
+      },
+    ],
   },
 
-  /* ── 1.12 Mattress — Coming Soon ─────────────────────────────────── */
+  /* ── 1.12 Mattress — 12 models (Bonnell & Pocket Spring, 8/10/12 inch) ─ */
   {
     slug: "mattress",
     name: "Mattress",
-    products: [comingSoon("Mattress")],
+    products: [
+      {
+        model: "LRMR 251 ( Bonnel 8\" )",
+        name: 'Bonnell Spring Mattress — 8 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-251-Bonnel-8.jpg",
+        description: "Bonnell spring mattress, 8 inch thickness. Hotel-grade comfort.",
+        tier: "Essential",
+        specs: [{ label: "Type", value: "Bonnell Spring" }, { label: "Thickness", value: '8 inch' }],
+      },
+      {
+        model: "LRMR 251 ( Bonnel 10\" )",
+        name: 'Bonnell Spring Mattress — 10 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-251-Bonnel-10.jpg",
+        description: "Bonnell spring mattress, 10 inch thickness. Hotel-grade comfort.",
+        tier: "Essential",
+        specs: [{ label: "Type", value: "Bonnell Spring" }, { label: "Thickness", value: '10 inch' }],
+      },
+      {
+        model: "LRMR 251 ( Bonnel 12\" )",
+        name: 'Bonnell Spring Mattress — 12 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-251-Bonnel-12.jpg",
+        description: "Bonnell spring mattress, 12 inch thickness. Hotel-grade comfort.",
+        tier: "Essential",
+        specs: [{ label: "Type", value: "Bonnell Spring" }, { label: "Thickness", value: '12 inch' }],
+      },
+      {
+        model: "LRMR 252 ( Eurotop Bonnel 8\" )",
+        name: 'Eurotop Bonnell Spring Mattress — 8 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-252-Eurotop-Bonnel-8.jpg",
+        description: "Eurotop bonnell spring mattress, 8 inch thickness. Plush eurotop layer.",
+        tier: "Premium",
+        specs: [{ label: "Type", value: "Eurotop Bonnell" }, { label: "Thickness", value: '8 inch' }],
+      },
+      {
+        model: "LRMR 252 ( Eurotop Bonnel 10\" )",
+        name: 'Eurotop Bonnell Spring Mattress — 10 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-252-Eurotop-Bonnel-10.jpg",
+        description: "Eurotop bonnell spring mattress, 10 inch thickness. Plush eurotop layer.",
+        tier: "Premium",
+        specs: [{ label: "Type", value: "Eurotop Bonnell" }, { label: "Thickness", value: '10 inch' }],
+      },
+      {
+        model: "LRMR 252 ( Eurotop Bonnel 12\" )",
+        name: 'Eurotop Bonnell Spring Mattress — 12 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-252-Eurotop-Bonnel-12.jpg",
+        description: "Eurotop bonnell spring mattress, 12 inch thickness. Plush eurotop layer.",
+        tier: "Premium",
+        specs: [{ label: "Type", value: "Eurotop Bonnell" }, { label: "Thickness", value: '12 inch' }],
+      },
+      {
+        model: 'LRMR 253 (Pocket 8")',
+        name: 'Pocket Spring Mattress — 8 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-253-Pocket-8.jpg",
+        description: "Pocket spring mattress, 8 inch thickness. Individually wrapped coils for motion isolation.",
+        tier: "Premium",
+        specs: [{ label: "Type", value: "Pocket Spring" }, { label: "Thickness", value: '8 inch' }],
+      },
+      {
+        model: 'LRMR 253 ( Pocket 10")',
+        name: 'Pocket Spring Mattress — 10 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-253-Pocket-10.jpg",
+        description: "Pocket spring mattress, 10 inch thickness. Individually wrapped coils for motion isolation.",
+        tier: "Lux",
+        specs: [{ label: "Type", value: "Pocket Spring" }, { label: "Thickness", value: '10 inch' }],
+      },
+      {
+        model: 'LRMR 253 ( Pocket 12")',
+        name: 'Pocket Spring Mattress — 12 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-253-Pocket-12.jpg",
+        description: "Pocket spring mattress, 12 inch thickness. Individually wrapped coils for motion isolation.",
+        tier: "Lux",
+        specs: [{ label: "Type", value: "Pocket Spring" }, { label: "Thickness", value: '12 inch' }],
+      },
+      {
+        model: 'LRMR 254 ( Eurotop Pocket 8" )',
+        name: 'Eurotop Pocket Spring Mattress — 8 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-254-Eurotop-Pocket-8.jpg",
+        description: "Eurotop pocket spring mattress, 8 inch thickness. Premium eurotop over pocket springs.",
+        tier: "Lux",
+        specs: [{ label: "Type", value: "Eurotop Pocket" }, { label: "Thickness", value: '8 inch' }],
+      },
+      {
+        model: 'LRMR 254 ( Eurotop Pocket 10" )',
+        name: 'Eurotop Pocket Spring Mattress — 10 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-254-Eurotop-Pocket-10.jpg",
+        description: "Eurotop pocket spring mattress, 10 inch thickness. Premium eurotop over pocket springs.",
+        tier: "Lux",
+        specs: [{ label: "Type", value: "Eurotop Pocket" }, { label: "Thickness", value: '10 inch' }],
+      },
+      {
+        model: 'LRMR 254 ( Eurotop Pocket 12" )',
+        name: 'Eurotop Pocket Spring Mattress — 12 inch',
+        category: "Mattress",
+        image: "/images/product-catalogue/mattress/LRMR-254-Eurotop-Pocket-12.jpg",
+        description: "Eurotop pocket spring mattress, 12 inch thickness. Premium eurotop over pocket springs.",
+        tier: "Lux",
+        specs: [{ label: "Type", value: "Eurotop Pocket" }, { label: "Thickness", value: '12 inch' }],
+      },
+    ],
   },
 
   /* ── 1.13 Iron & Iron Board — Coming Soon ────────────────────────── */
@@ -1735,11 +1890,36 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
     products: [comingSoon("Baby Cot")],
   },
 
-  /* ── 1.15 Coat Stand — Coming Soon ───────────────────────────────── */
+  /* ── 1.15 Coat Stand — 2 models (from SSP) ───────────────────────── */
   {
     slug: "coat-stand",
     name: "Coat Stand",
-    products: [comingSoon("Coat Stand")],
+    products: [
+      {
+        model: "LRRA 651",
+        name: "Coat Stand — LRRA 651",
+        category: "Coat Stand",
+        image: "/images/product-catalogue/coat-stand/LRRA-651.png",
+        description:
+          "Freestanding coat stand for guest rooms and lobby areas.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRRA 651" },
+        ],
+      },
+      {
+        model: "LRRA 652",
+        name: "Coat Stand — LRRA 652",
+        category: "Coat Stand",
+        image: "/images/product-catalogue/coat-stand/LRRA-652.png",
+        description:
+          "Premium freestanding coat stand for guest rooms and lobby areas.",
+        tier: "Premium",
+        specs: [
+          { label: "Model", value: "LRRA 652" },
+        ],
+      },
+    ],
   },
 
   /* ── 1.16 Luggage Rack — Coming Soon ─────────────────────────────── */
@@ -2576,58 +2756,136 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
     ],
   },
 
-  /* ── 3.2 Housekeeping Trolley — 3 models (moved from luggage-trolley) ─ */
+  /* ── 3.2 Housekeeping Trolley — 9 models (from SSP) ──────────────── */
   {
     slug: "housekeeping-trolley",
     name: "Housekeeping Trolley",
     products: [
       {
-        model: "LRHT-430",
+        model: "LRHT 433",
+        name: "Linen Trolley — ABS Body",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT--433.jpg",
+        description:
+          "Linen trolley made in ABS body. Size: 710 × 660 × 950mm.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRHT 433" },
+          { label: "Body", value: "ABS" },
+          { label: "Size", value: "710 × 660 × 950mm" },
+        ],
+      },
+      {
+        model: "LRHT 426 (ABS Body)",
+        name: "Housekeeping Trolley — ABS Body, 3 Shelves",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-426-ABS-Body.jpg",
+        description:
+          "Housekeeping trolley made in MS powder coated with ABS body. Waterproof fabric. 3 shelves with one soil bag.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRHT 426 (ABS Body)" },
+          { label: "Body", value: "MS Powder Coated + ABS" },
+          { label: "Shelves", value: "3 + 1 Soil Bag" },
+        ],
+      },
+      {
+        model: "LRHT 427",
+        name: "Housekeeping Trolley — MS Powder Coated, 3 Shelves",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-427.jpg",
+        description:
+          "Housekeeping trolley made in MS powder coated. Waterproof fabric. 3 shelves with one soil bag.",
+        tier: "Premium",
+        specs: [
+          { label: "Model", value: "LRHT 427" },
+          { label: "Body", value: "MS Powder Coated" },
+          { label: "Shelves", value: "3 + 1 Soil Bag" },
+        ],
+      },
+      {
+        model: "LRHT 428 (SS Body)",
+        name: "Housekeeping Trolley — SS Body, 3 Shelves",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-428-SS-Body.jpg",
+        description:
+          "Housekeeping trolley made in SS. Waterproof fabric. 3 shelves with one soil bag.",
+        tier: "Lux",
+        specs: [
+          { label: "Model", value: "LRHT 428 (SS Body)" },
+          { label: "Body", value: "Stainless Steel" },
+          { label: "Shelves", value: "3 + 1 Soil Bag" },
+        ],
+      },
+      {
+        model: "LRHT 429",
+        name: "Housekeeping Trolley — ABS Body, 3 Shelves",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-429.jpg",
+        description:
+          "Housekeeping trolley made in ABS. Waterproof fabric. 3 shelves with one soil bag.",
+        tier: "Premium",
+        specs: [
+          { label: "Model", value: "LRHT 429" },
+          { label: "Body", value: "ABS" },
+          { label: "Shelves", value: "3 + 1 Soil Bag" },
+        ],
+      },
+      {
+        model: "LRHT 430 (Linen Trolley)",
         name: "Linen Trolley — SS with Soil Bag",
         category: "Housekeeping Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-430-Linen-Trolley.jpg",
         description:
           "Linen trolley made in SS with soil linen waterproof bag. Size: L900 × D660 × H810mm.",
         tier: "Essential",
         specs: [
+          { label: "Model", value: "LRHT 430 (Linen Trolley)" },
           { label: "Body", value: "Stainless Steel" },
           { label: "Features", value: "Soil Linen Waterproof Bag" },
           { label: "Size", value: "L900 × D660 × H810mm" },
-          { label: "Color", value: "Blue" },
         ],
       },
       {
-        model: "LRHT-426",
-        name: "Housekeeping Trolley — 3 Shelves",
+        model: "LRHT 431 (With Lid And Door)",
+        name: "Housekeeping Trolley — MS, Lid & Door",
         category: "Housekeeping Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-431-With-Lid-And-Door.jpg",
         description:
-          "Housekeeping trolley made in MS powder coated. Waterproof fabric. 3 shelves with one soil bag. Heavy duty wheels. Size: L900 × D460 × H1060mm.",
-        tier: "Premium",
-        specs: [
-          { label: "Body", value: "MS Powder Coated" },
-          { label: "Shelves", value: "3 + 1 Soil Bag" },
-          { label: "Features", value: "Waterproof Fabric" },
-          { label: "Wheels", value: "Heavy Duty" },
-          { label: "Size", value: "L900 × D460 × H1060mm" },
-          { label: "Color", value: "Brown" },
-        ],
-      },
-      {
-        model: "LRHT-427",
-        name: "Housekeeping Trolley — 3 Shelves, 2 Soil Bags",
-        category: "Housekeeping Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
-        description:
-          "Housekeeping trolley made in MS powder coated. Waterproof fabric. 3 shelves with two soil bags. Heavy duty wheels. Size: L1370 × D460 × H1070mm.",
+          "Housekeeping trolley made in MS powder coated with two lockable front doors and lid.",
         tier: "Lux",
         specs: [
+          { label: "Model", value: "LRHT 431 (With Lid And Door)" },
           { label: "Body", value: "MS Powder Coated" },
-          { label: "Shelves", value: "3 + 2 Soil Bags" },
-          { label: "Features", value: "Waterproof Fabric" },
-          { label: "Wheels", value: "Heavy Duty" },
-          { label: "Size", value: "L1370 × D460 × H1070mm" },
-          { label: "Color", value: "Brown" },
+          { label: "Features", value: "Two Lockable Front Doors + Lid" },
+        ],
+      },
+      {
+        model: "LRHT 432",
+        name: "Linen Trolley — SS with Soil Bag",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-432.jpg",
+        description:
+          "Linen trolley made in SS with soil linen waterproof bag.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRHT 432" },
+          { label: "Body", value: "Stainless Steel" },
+          { label: "Features", value: "Soil Linen Waterproof Bag" },
+        ],
+      },
+      {
+        model: "LRHT 434 (SS Body With Lid And Door)",
+        name: "Housekeeping Trolley — SS, Lid & Door",
+        category: "Housekeeping Trolley",
+        image: "/images/product-catalogue/housekeeping-trolley/LRHT-434-SS-Body-With-Lid-And-Door.jpg",
+        description:
+          "Housekeeping trolley made in SS with front door and lid. Waterproof fabric.",
+        tier: "Lux",
+        specs: [
+          { label: "Model", value: "LRHT 434 (SS Body With Lid And Door)" },
+          { label: "Body", value: "Stainless Steel" },
+          { label: "Features", value: "Front Door + Lid" },
         ],
       },
     ],
