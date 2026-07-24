@@ -33,7 +33,18 @@ function ParentCategoryCard({
   );
   // Get a representative image from the first sub-category's first product
   const firstProduct = children[0]?.products[0];
-  const image = firstProduct?.image || "/images/product-catalogue/coming-soon.jpg";
+  // Use category overview image if available, otherwise product image
+  const categoryImageMap: Record<string, string> = {
+    "room-amenities": "/images/categories/room-amenities.jpg",
+    "washroom-amenities": "/images/categories/washroom-amenities.jpg",
+    "lobby-items": "/images/categories/lobby-items.jpg",
+    "furniture": "/images/categories/furniture.jpg",
+    "linen": "/images/categories/linen.jpg",
+    "bath-tub": "/images/categories/bath-tub.jpg",
+    "amenities-tray-set": "/images/categories/amenities-tray-set.jpg",
+    "dome-space-pod": "/images/categories/dome-space-pod.jpg",
+  };
+  const image = categoryImageMap[parent.slug] || firstProduct?.image || "/images/product-catalogue/coming-soon.jpg";
 
   return (
     <FadeIn delay={index * 0.06}>

@@ -13,6 +13,9 @@ import {
   PageCTA,
   FadeIn,
 } from "@/components/site/page-primitives";
+import { db } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 /* ─────────────────────────────────────────────────────────────
    Pre-generate the parent slugs at build time.
@@ -43,11 +46,14 @@ function ItemTypeCard({
   item,
   parentSlug,
   index,
+  dbImage,
 }: {
   item: (typeof CATALOGUE_CATEGORIES)[0];
   parentSlug: string;
   index: number;
+  dbImage?: string;
 }) {
+  const image = dbImage || item.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
   return (
     <FadeIn delay={index * 0.06}>
       <Link
@@ -57,7 +63,7 @@ function ItemTypeCard({
         {/* Product image */}
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
           <img
-            src={item.products[0]?.image}
+            src={image}
             alt={item.name}
             loading="lazy"
             className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
@@ -101,6 +107,23 @@ export default async function CategoryPage({
   const children = getCategoriesByParent(parent.slug);
   const totalProducts = children.reduce((sum, c) => sum + c.products.length, 0);
   const otherParents = CATALOGUE_PARENTS.filter((p) => p.slug !== slug);
+
+  // Fetch first product image from DB for each item type
+  const itemImages: Record<string, string> = {};
+  try {
+    for (const child of children) {
+      const dbProduct = await db.product.findFirst({
+        where: { category: child.name },
+        orderBy: { sortOrder: "asc" },
+        select: { image: true },
+      });
+      if (dbProduct && !dbProduct.image.includes("coming-soon")) {
+        itemImages[child.slug] = dbProduct.image;
+      }
+    }
+  } catch {
+    // DB unavailable — use static images
+  }
 
   return (
     <>
@@ -157,6 +180,7 @@ export default async function CategoryPage({
                   item={item}
                   parentSlug={parent.slug}
                   index={i}
+                  dbImage={itemImages[item.slug]}
                 />
               ))}
             </div>
