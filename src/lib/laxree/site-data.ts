@@ -67,7 +67,7 @@ export const CATEGORIES: Category[] = [
     name: "Room Amenities",
     count: 91,
     blurb: "Mini bars, kettles, safes, locks, hangers, phones, dustbins, desktop accessories.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/categories/room-amenities.jpg",
     span: "large",
   },
   {
@@ -75,7 +75,7 @@ export const CATEGORIES: Category[] = [
     name: "Washroom Amenities",
     count: 43,
     blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/washroom-amenities.jpg",
     span: "default",
   },
   {
@@ -83,7 +83,7 @@ export const CATEGORIES: Category[] = [
     name: "Lobby Items",
     count: 31,
     blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
-    image: "/images/categories/linen.jpg",
+    image: "/images/categories/lobby-items.jpg",
     span: "default",
   },
   {
@@ -91,7 +91,7 @@ export const CATEGORIES: Category[] = [
     name: "Furniture",
     count: 399,
     blurb: "Outdoor, guest room, restaurant, banquet furniture.",
-    image: "/images/categories/roofing.jpg",
+    image: "/images/categories/furniture.jpg",
     span: "default",
   },
   {
@@ -99,7 +99,7 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 2,
     blurb: "Room linen and bath linen.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/linen.jpg",
     span: "tall",
   },
   {
@@ -107,7 +107,7 @@ export const CATEGORIES: Category[] = [
     name: "Bath Tub",
     count: 22,
     blurb: "Freestanding bath tubs in multiple sizes.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/categories/bath-tub.jpg",
     span: "default",
   },
   {
@@ -115,7 +115,7 @@ export const CATEGORIES: Category[] = [
     name: "Amenities Tray Set",
     count: 1,
     blurb: "Premium tray sets for guest rooms.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/amenities-tray-set.jpg",
     span: "default",
   },
   {
@@ -123,7 +123,7 @@ export const CATEGORIES: Category[] = [
     name: "Dome & Space POD",
     count: 4,
     blurb: "Geodesic domes and space pods for resorts and events.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/dome-space-pod.jpg",
     span: "default",
   },
 ];

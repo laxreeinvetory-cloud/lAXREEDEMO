@@ -398,43 +398,6 @@ export default async function ItemTypePage({
         </section>
       )}
 
-      {/* ── Other item types ── */}
-      <section className="section section-charcoal py-20 md:py-28">
-        <div className="container-laxree">
-          <SectionHeading
-            theme="charcoal"
-            eyebrow="EXPLORE MORE"
-            title="Other Item Types"
-          />
-          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {siblingItems.map((other) => (
-              <Link
-                key={other.slug}
-                href={`/products/${parent.slug}/${other.slug}`}
-                className="group glass-on-charcoal rounded-20px overflow-hidden transition-all duration-300 hover:border-brass/40"
-              >
-                <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
-                  <img
-                    src={other.products[0]?.image}
-                    alt={other.name}
-                    loading="lazy"
-                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-display text-[16px] text-ivory">
-                    {other.name}
-                  </h3>
-                  <p className="mt-1 font-mono text-[11px] text-brass">
-                    {other.products.length} Models
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Back to Amenities link ── */}
       <section className="section section-ivory py-12">
         <div className="container-laxree text-center">

@@ -47,6 +47,7 @@ const navItems = [
   { label: "Careers", href: "/admin/careers", icon: Briefcase },
   { label: "Dealers", href: "/admin/dealers", icon: Handshake },
   // ── CONFIGURATION ──
+  { label: "Site Settings", href: "/admin/settings", icon: Settings },
   { label: "Appearance", href: "/admin/appearance", icon: Palette },
   { label: "SEO & Company", href: "/admin/seo", icon: Search },
   { label: "Content Hub", href: "/admin/content", icon: FileEdit },
