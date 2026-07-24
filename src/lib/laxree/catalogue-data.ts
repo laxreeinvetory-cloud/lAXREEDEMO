@@ -1230,7 +1230,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-181",
         name: "Telephone Unit — Large Panel, 8 Speed Dialing",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/room-amenities/LRDR-181.jpg",
         description:
           "Telephone unit with large panel cardboard, 8 speed dialing keys, dual tone electric ringing, hands-free function, mute key, auto dynamic redial key, flash key, dual tone dialing, hold key.",
         tier: "Premium",
@@ -1249,7 +1249,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-183",
         name: "Telephone Unit — Large Message Light, 6 Speed Dialing",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/room-amenities/LRDR-183.jpg",
         description:
           "Telephone unit with large panel cardboard, large message light, message extraction one-touch to talk, 6 speed dialing keys, automatic line take-up function, long earphone cable, power-off memory, hands-free function.",
         tier: "Premium",
@@ -1288,7 +1288,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-182",
         name: "Lobby House Telephone — Panel Indicator",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/room-amenities/LRDR-182.jpg",
         description:
           "Lobby house telephone unit with panel indicator for call connect. Designed for lobby and house use.",
         tier: "Lux",
