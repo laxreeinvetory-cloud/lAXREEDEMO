@@ -3248,7 +3248,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-457S",
         name: "Q Manager Stanchion — SS, Retractable Belt 2m",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--457-S.jpg",
         description:
           "Stainless-steel stanchion with retractable belt (2m). Size: 320 × 51 × 950mm. Crowd-control post for lobbies and queues.",
         tier: "Essential",
@@ -3264,7 +3264,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458B",
         name: "Q Manager Stanchion — Ball Top, Black",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--458-B.jpg",
         description:
           "Ball-top stanchion in black finish. Size: 320 × 51 × 950mm. Crowd-control post with classic ball-top design.",
         tier: "Essential",
@@ -3279,7 +3279,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-457G",
         name: "Q Manager Stanchion — SS Gold",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--457-S.jpg",
         description:
           "Stainless-steel stanchion in gold finish. Size: 320 × 51 × 950mm. Premium crowd-control post for upscale lobbies.",
         tier: "Premium",
@@ -3294,7 +3294,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458S",
         name: "Q Manager Stanchion — Ball Top, SS",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--458-B.jpg",
         description:
           "Ball-top stanchion in stainless-steel finish. Size: 320 × 51 × 950mm. Premium ball-top crowd-control post.",
         tier: "Premium",
@@ -3310,7 +3310,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458G",
         name: "Q Manager Stanchion — Ball Top, Gold",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--457-G.jpg",
         description:
           "Ball-top stanchion in gold finish. Size: 320 × 51 × 950mm. Luxury ball-top crowd-control post.",
         tier: "Lux",
@@ -3324,7 +3324,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458-Velvet",
         name: "Q Manager Rope — Velvet, 1.5m, Red",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--458-S.jpg",
         description:
           "Velvet rope for Q Manager stanchions. Length: 1.5m. Red colour. Luxury crowd-control rope for premium venues.",
         tier: "Lux",
@@ -3338,7 +3338,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458-Twisted",
         name: "Q Manager Rope — Twisted, 1.5m, Red",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-items/LRLI--458-G.jpg",
         description:
           "Twisted rope for Q Manager stanchions. Length: 1.5m. Red colour. Classic twisted-rope look for luxury venues.",
         tier: "Lux",
