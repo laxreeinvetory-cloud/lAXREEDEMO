@@ -1500,3 +1500,42 @@ Stage Summary:
 - Complete Excel audit done. Only 4 models were missing — all added.
 - Every Excel model now exists in the DB. Items without Excel images use coming-soon.jpg; admin can upload from panel.
 - No wrong information — each product is in its correct category with correct model/description/price.
+
+---
+Task ID: SESSION6-100PCT-FIX
+Agent: main (Z.ai Code)
+Task: Fix ALL wrong images on Browse Room Amenities by Type — 100% correct on Vercel.
+
+Work Log:
+- Verified Vercel state: 5 of 17 items showed wrong category fallback image (room-amenities.jpg) instead of real product photos: Room Telephone, Iron & Iron Board, Baby Cot, Luggage Rack, Emergency Torch.
+- Root cause 1: Category page query used `orderBy: sortOrder asc` which returned products with coming-soon.jpg first. Fixed query to prefer products with real (non-coming-soon) images: `where: { category, image: { not: { contains: "coming-soon" } } }`.
+- Root cause 2: 5 categories had only TBD placeholder products in DB — no real products from Excel.
+- Extracted 15 more images from Excel:
+  • Iron & Iron Board: 4 models (LRWS 332 Steam Iron, LRWS 333 Steam Iron, LRWS 326 Ironing Board, LRWS 334 Ironing Board Holder) — discovered LRWS prefix is used for BOTH irons AND weighing scales
+  • Weighing Scale: 4 models (LRWS 327/329/330/331 Electronic Weighing Scales)
+  • Baby Cot: 1 model (LRMR 259)
+  • Luggage Rack: 2 models (LRRA 655 Rubber Wood, LRGF-673 Canadian Ash Wood)
+  • Emergency Torch: 4 models (LRET 351/352/353/354)
+- Added all 15 to DB (replacing TBD placeholders) + catalogue-data.ts static fallback.
+- Root cause 3: Room Telephone had real images in DB (LRDR-181/182/183) but static fallback still had coming-soon.jpg. On Vercel serverless, DB query may fail on cold start → falls back to static → shows wrong image. Fixed by updating static data with real image paths.
+- Washroom Amenities: 7 items (Shower Mat, Cloth Line, Towel Rack, Towel Rod, Toilet Paper Dispenser, Washroom Tray, Handicap Grab Bar) verified as genuinely 0 in Excel — correctly show "Coming Soon" ribbon.
+
+Final Result on Vercel (https://l-axreedemo.vercel.app/products/room-amenities):
+  ALL 17 items show correct real product images — 0 wrong, 0 coming-soon.
+  1. mini-bar → LRMB-132.jpg ✅
+  2. tea-kettle → LRWT-155.jpg ✅
+  3. kettle-tray → LRWT-160.jpg ✅
+  4. safe-box → LRSB-201-Black.jpg ✅
+  5. wooden-hangers → LRWH-229-B.jpg ✅
+  6. rfid-locks → LRFD-608.jpg ✅
+  7. room-telephone → LRDR-181.jpg ✅
+  8. docking-pod → LRDR-177.jpg ✅
+  9. room-dustbin → LRRA-658.jpg ✅
+  10. desktop-accessories → LRDA-805.jpg ✅
+  11. rollaway-bed → LRMR-255.png ✅
+  12. mattress → LRMR-251-Bonnel-8.jpg ✅
+  13. iron-iron-board → LRWS-332.png ✅
+  14. baby-cot → LRMR-259.png ✅
+  15. coat-stand → LRRA-651.png ✅
+  16. luggage-rack → LRRA-655.png ✅
+  17. emergency-torch → LRET-351.jpg ✅
