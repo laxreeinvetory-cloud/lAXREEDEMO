@@ -1933,18 +1933,68 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
     ],
   },
 
-  /* ── 1.13 Iron & Iron Board — Coming Soon ────────────────────────── */
+  /* ── 1.13 Iron & Iron Board — 4 models (from SSP) ────────────────── */
   {
     slug: "iron-iron-board",
     name: "Iron & Iron Board",
-    products: [comingSoon("Iron & Iron Board")],
+    products: [
+      {
+        model: "LRWS 332",
+        name: "Steam Iron — LRWS 332",
+        category: "Iron & Iron Board",
+        image: "/images/product-catalogue/iron-iron-board/LRWS-332.png",
+        description: "Steam iron for hotel guest rooms.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRWS 332" }, { label: "Color", value: "Black" }],
+      },
+      {
+        model: "LRWS 333",
+        name: "Steam Iron — Adjustable Temperature",
+        category: "Iron & Iron Board",
+        image: "/images/product-catalogue/iron-iron-board/LRWS-333.png",
+        description: "Steam iron, 220V, 1250W, adjustable temperature for different fabrics.",
+        tier: "Premium",
+        specs: [{ label: "Model", value: "LRWS 333" }, { label: "Power", value: "1250W, 220V" }, { label: "Color", value: "Purple" }],
+      },
+      {
+        model: "LRWS 326",
+        name: "Ironing Board — LRWS 326",
+        category: "Iron & Iron Board",
+        image: "/images/product-catalogue/iron-iron-board/LRWS-326.png",
+        description: "Ironing board for hotel guest rooms.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRWS 326" }, { label: "Color", value: "Black" }],
+      },
+      {
+        model: "LRWS 334",
+        name: "Ironing Board Holder — LRWS 334",
+        category: "Iron & Iron Board",
+        image: "/images/product-catalogue/iron-iron-board/LRWS-334.png",
+        description: "Wall-mounted ironing board holder.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRWS 334" }, { label: "Color", value: "Silver" }],
+      },
+    ],
   },
 
-  /* ── 1.14 Baby Cot — Coming Soon ─────────────────────────────────── */
+  /* ── 1.14 Baby Cot — 1 model (from SSP) ──────────────────────────── */
   {
     slug: "baby-cot",
     name: "Baby Cot",
-    products: [comingSoon("Baby Cot")],
+    products: [
+      {
+        model: "LRMR 259",
+        name: "Baby Cot — LRMR 259",
+        category: "Baby Cot",
+        image: "/images/product-catalogue/baby-cot/LRMR-259.png",
+        description:
+          "Portable baby cot for hotel guest rooms. Foldable design for easy storage.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRMR 259" },
+        ],
+      },
+    ],
   },
 
   /* ── 1.15 Coat Stand — 2 models (from SSP) ───────────────────────── */
@@ -1979,18 +2029,87 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
     ],
   },
 
-  /* ── 1.16 Luggage Rack — Coming Soon ─────────────────────────────── */
+  /* ── 1.16 Luggage Rack — 2 models (from SSP) ─────────────────────── */
   {
     slug: "luggage-rack",
     name: "Luggage Rack",
-    products: [comingSoon("Luggage Rack")],
+    products: [
+      {
+        model: "LRRA 655",
+        name: "Luggage Rack — Rubber Wood",
+        category: "Luggage Rack",
+        image: "/images/product-catalogue/luggage-rack/LRRA-655.png",
+        description:
+          "Luggage rack made in rubber wood. Size: 600 × 460mm. Folding legs for easy storage.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRRA 655" },
+          { label: "Material", value: "Rubber Wood" },
+          { label: "Size", value: "600 × 460mm" },
+        ],
+      },
+      {
+        model: "LRGF-673 (Luggage Rack)",
+        name: "Luggage Rack — Canadian Ash Wood",
+        category: "Luggage Rack",
+        image: "/images/product-catalogue/luggage-rack/LRGF--673-Luggage-Rack.jpg",
+        description:
+          "Luggage rack made in Canadian ash wood with plywood base. Premium finish.",
+        tier: "Lux",
+        specs: [
+          { label: "Model", value: "LRGF-673 (Luggage Rack)" },
+          { label: "Material", value: "Canadian Ash Wood + Plywood" },
+        ],
+      },
+    ],
   },
 
-  /* ── 1.17 Emergency Torch — Coming Soon ──────────────────────────── */
+  /* ── 1.17 Emergency Torch — 4 models (from SSP) ──────────────────── */
   {
     slug: "emergency-torch",
     name: "Emergency Torch",
-    products: [comingSoon("Emergency Torch")],
+    products: [
+      {
+        model: "LRET 351",
+        name: "Wall Mounted Emergency Torch — Aluminium",
+        category: "Emergency Torch",
+        image: "/images/product-catalogue/emergency-torch/LRET-351.jpg",
+        description:
+          "Wall mounted emergency torch made in aluminium alloy body.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRET 351" }, { label: "Body", value: "Aluminium Alloy" }, { label: "Mount", value: "Wall Mounted" }],
+      },
+      {
+        model: "LRET 352",
+        name: "Wall Mounted Anti-Fall Emergency Torch — ABS",
+        category: "Emergency Torch",
+        image: "/images/product-catalogue/emergency-torch/LRET-352.png",
+        description:
+          "Wall mounted anti-fall emergency torch made in ABS body.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRET 352" }, { label: "Body", value: "ABS" }, { label: "Mount", value: "Wall Mounted, Anti-Fall" }],
+      },
+      {
+        model: "LRET 353",
+        name: "Wall Mounted Anti-Fall Emergency Torch — ABS",
+        category: "Emergency Torch",
+        image: "/images/product-catalogue/emergency-torch/LRET-353.png",
+        description:
+          "Wall mounted anti-fall emergency torch made in ABS body.",
+        tier: "Premium",
+        specs: [{ label: "Model", value: "LRET 353" }, { label: "Body", value: "ABS" }, { label: "Mount", value: "Wall Mounted, Anti-Fall" }],
+      },
+      {
+        model: "LRET 354",
+        name: "Flashlight with Sensor Switch",
+        category: "Emergency Torch",
+        image: "/images/product-catalogue/emergency-torch/LRET-354.png",
+        description:
+          "Flashlight with sensor switch. Hold to light on, USB rechargeable.",
+        tier: "Premium",
+        specs: [{ label: "Model", value: "LRET 354" }, { label: "Switch", value: "Sensor (Hold to Light On)" }, { label: "Charging", value: "USB" }],
+      },
+    ],
   },
 
   /* ── 1.18 Hair Dryer — 1 model (existing, kept as-is) ────────────── */
@@ -2363,11 +2482,48 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
     ],
   },
 
-  /* ── 2.2 Weighing Scale — Coming Soon ────────────────────────────── */
+  /* ── 2.2 Weighing Scale — 4 models (from SSP) ────────────────────── */
   {
     slug: "weighing-scale",
     name: "Weighing Scale",
-    products: [comingSoon("Weighing Scale")],
+    products: [
+      {
+        model: "LRWS 327",
+        name: "Electronic Weighing Scale — ABS & Tempered Glass",
+        category: "Weighing Scale",
+        image: "/images/product-catalogue/weighing-scale/LRWS-327.jpg",
+        description: "Electronic weighing scale, ABS & tempered glass platform, high precision sensor.",
+        tier: "Premium",
+        specs: [{ label: "Model", value: "LRWS 327" }, { label: "Platform", value: "ABS & Tempered Glass" }, { label: "Color", value: "Transparent Glass" }],
+      },
+      {
+        model: "LRWS 329",
+        name: "Electronic Weighing Scale — ABS & Tempered Glass",
+        category: "Weighing Scale",
+        image: "/images/product-catalogue/weighing-scale/LRWS-329.png",
+        description: "Electronic weighing scale, ABS & tempered glass platform, high precision sensor.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRWS 329" }, { label: "Platform", value: "ABS & Tempered Glass" }, { label: "Color", value: "Cream" }],
+      },
+      {
+        model: "LRWS 330",
+        name: "Electronic Weighing Scale — LMPC Approved",
+        category: "Weighing Scale",
+        image: "/images/product-catalogue/weighing-scale/LRWS-330.png",
+        description: "Electronic weighing scale, LMPC approved model, ABS & 5mm tempered glass platform.",
+        tier: "Lux",
+        specs: [{ label: "Model", value: "LRWS 330" }, { label: "Platform", value: "ABS & 5mm Tempered Glass" }, { label: "Certified", value: "LMPC Approved" }, { label: "Color", value: "Transparent Glass" }],
+      },
+      {
+        model: "LRWS 331",
+        name: "Electronic Weighing Scale — ABS & Tempered Glass",
+        category: "Weighing Scale",
+        image: "/images/product-catalogue/weighing-scale/LRWS-331.jpg",
+        description: "Electronic weighing scale, ABS & tempered glass platform, high precision sensor.",
+        tier: "Essential",
+        specs: [{ label: "Model", value: "LRWS 331" }, { label: "Platform", value: "ABS & Tempered Glass" }, { label: "Color", value: "Black" }],
+      },
+    ],
   },
 
   /* ── 2.3 Paper Dispenser — 7 models (NEW from SSP page 13) ───────── */

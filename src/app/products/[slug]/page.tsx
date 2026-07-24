@@ -135,15 +135,29 @@ export default async function CategoryPage({
   };
   const parentImage = parentImageMap[parent.slug];
 
-  // Fetch first product image from DB for each item type
+  // Fetch first product image from DB for each item type.
+  // Strategy: prefer products whose image is NOT coming-soon.jpg so the
+  // card always shows a real photo when one exists anywhere in the category.
   const itemImages: Record<string, string> = {};
   try {
     for (const child of children) {
-      const dbProduct = await db.product.findFirst({
-        where: { category: child.name },
+      // First try: find a product with a real (non-placeholder) image
+      let dbProduct = await db.product.findFirst({
+        where: {
+          category: child.name,
+          image: { not: { contains: "coming-soon" } },
+        },
         orderBy: { sortOrder: "asc" },
         select: { image: true },
       });
+      // Fallback: any product in this category
+      if (!dbProduct) {
+        dbProduct = await db.product.findFirst({
+          where: { category: child.name },
+          orderBy: { sortOrder: "asc" },
+          select: { image: true },
+        });
+      }
       if (dbProduct && !dbProduct.image.includes("coming-soon")) {
         itemImages[child.slug] = dbProduct.image;
       }
