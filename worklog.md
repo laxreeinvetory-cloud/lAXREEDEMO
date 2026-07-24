@@ -1403,3 +1403,32 @@ Stage Summary:
 - 8 demo leads in CRM for testing.
 - Files created: src/app/api/admin/upload/[filename]/route.ts, src/app/api/admin/upload/route.ts, src/components/site/floating-whatsapp.tsx, src/hooks/use-site-settings.ts
 - Files modified: .zscripts/dev.sh, .env, src/lib/laxree/site-data.ts, src/components/providers/conditional-chrome.tsx, src/app/contact-us/page.tsx, src/components/site/site-footer.tsx, src/components/site/navbar.tsx, src/app/products/[slug]/page.tsx, src/app/admin/blog/page.tsx (subagent), src/app/admin/faq/page.tsx (subagent), src/app/admin/leads/page.tsx (subagent), src/app/admin/login/page.tsx (subagent), src/app/admin/settings/page.tsx (subagent), src/app/admin/analytics/page.tsx (subagent), src/app/admin/cms/page.tsx (subagent)
+
+---
+Task ID: SESSION3-VERCEL-DEPLOY
+Agent: main (Z.ai Code)
+Task: Deploy all changes to Vercel.
+
+Work Log:
+- Committed all SESSION3 changes (upload routes, floating WhatsApp, Google Maps, useSiteSettings, admin fixes) to git.
+- Updated vercel.json to include both upload routes (POST + GET serve) with maxDuration/memory config.
+- Pushed to GitHub (origin/main) — triggers Vercel auto-deploy.
+- First push (commit 2f471b0 + 09fada8): Vercel build FAILED due to TypeScript error in upload serve route — Buffer not assignable to NextResponse body type.
+- Fixed: converted `Buffer` → `new Uint8Array(buffer)` in /api/admin/upload/[filename]/route.ts.
+- Verified `npx tsc --noEmit` — 0 errors.
+- Second push (commit 316b251): Vercel build SUCCEEDED.
+- Verified live deployment at https://l-axreedemo.vercel.app:
+  • All 6 public pages return 200
+  • Admin pages return 200
+  • Stats API: 8 leads, 13 blog posts (DB connected)
+  • Upload serve route: 200, Content-Type: image/jpeg
+  • Floating WhatsApp: 6 departments in popup (Sales N/S/E/W, After-Sales, Catalogue)
+  • Google Maps iframe: present and loading
+  • Product images: 26 on room-amenities page, 20 loaded, 0 coming-soon
+  • No console errors
+
+Stage Summary:
+- Vercel deployment is LIVE and fully functional at https://l-axreedemo.vercel.app
+- All SESSION3 features deployed: floating WhatsApp, Google Maps, product image serve, live admin→website settings, admin panel fixes.
+- Shared Neon PostgreSQL DB means demo leads created locally are visible on Vercel too.
+- TypeScript error (Buffer → Uint8Array) was the only build blocker — fixed and redeployed successfully.
