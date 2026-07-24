@@ -421,6 +421,21 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
           { label: "Color", value: "Black" },
         ],
       },
+      {
+        model: "LRWT 151",
+        name: "0.8L Electric Kettle — Single Layer",
+        category: "Tea Kettle",
+        image: "/images/product-catalogue/coming-soon.jpg",
+        description:
+          "0.8L electric kettle, single layer. Power supply: 220V, 50Hz, 1000W. Automatic shut-off.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRWT 151" },
+          { label: "Capacity", value: "0.8 Litre" },
+          { label: "Power", value: "1000W, 220V 50Hz" },
+          { label: "Body", value: "Single Layer" },
+        ],
+      },
     ],
   },
 
@@ -864,6 +879,20 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
           { label: "Color", value: "Black" },
         ],
       },
+      {
+        model: "LRSB-210",
+        name: "Laptop Size Safe Box — Top Open Lid",
+        category: "Safe Box",
+        image: "/images/product-catalogue/coming-soon.jpg",
+        description:
+          "Laptop size safe box with top open lid. Size: 410 × 350 × 200mm. Electronic keypad with override key.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRSB-210" },
+          { label: "Type", value: "Top Open Lid" },
+          { label: "Size", value: "410 × 350 × 200mm" },
+        ],
+      },
     ],
   },
 
@@ -1284,6 +1313,20 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
           { label: "Color", value: "Black" },
         ],
       },
+      {
+        model: "LRDR-184",
+        name: "Wall Mountable Bathroom Telephone",
+        category: "Room Telephone",
+        image: "/images/product-catalogue/coming-soon.jpg",
+        description:
+          "Wall mountable bathroom telephone unit with soft humanized design. Moisture-resistant build for washroom installation.",
+        tier: "Essential",
+        specs: [
+          { label: "Model", value: "LRDR-184" },
+          { label: "Type", value: "Wall Mountable Bathroom Telephone" },
+          { label: "Features", value: "Moisture-Resistant" },
+        ],
+      },
     ],
   },
 
@@ -1497,6 +1540,20 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
           { label: "Body", value: "ABS" },
           { label: "Features", value: "Partition in Middle (Waste Segregation)" },
           { label: "Color", value: "Grey" },
+        ],
+      },
+      {
+        model: "LRRA-666 SP+PP",
+        name: "Double Layer Dustbin — SS Outer, SP+PP Inner",
+        category: "Room Dustbin",
+        image: "/images/product-catalogue/coming-soon.jpg",
+        description:
+          "Double layer dustbin made in SS outer body with SP+PP inner. Durable and hygienic.",
+        tier: "Premium",
+        specs: [
+          { label: "Model", value: "LRRA-666 SP+PP" },
+          { label: "Body", value: "SS Outer, SP+PP Inner" },
+          { label: "Type", value: "Double Layer" },
         ],
       },
     ],
