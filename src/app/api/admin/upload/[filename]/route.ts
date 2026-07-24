@@ -65,7 +65,11 @@ export async function GET(
       return new NextResponse("Invalid image data", { status: 500 });
     }
 
-    return new NextResponse(buffer, {
+    // Convert Buffer to Uint8Array — NextResponse's body type accepts
+    // Uint8Array but not Node's Buffer directly (TS strict mode).
+    const body = new Uint8Array(buffer);
+
+    return new NextResponse(body, {
       status: 200,
       headers: {
         "Content-Type": mime,
