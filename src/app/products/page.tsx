@@ -79,7 +79,7 @@ export default function ProductsPage() {
       <PageHero
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Products" }]}
         eyebrow="WHAT WE SUPPLY"
-        title="700+ SKUs. Eight Categories. One Standard."
+        title="700+ SKUs. 8 Categories. One Standard."
         subtitle="From minibars to bath tubs, geodesic domes to amenities tray sets — manufactured and supplied pan-India. Explore our full hospitality product range."
       />
 
