@@ -1,24 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-
-/**
- * Image upload endpoint — accepts a multipart/form-data POST with a `file`
- * field (and optional `model` field used only to namespace the filename).
- *
- * Writes the file to `public/uploads/<sanitised-name>` and returns:
- *   { ok: true, imageUrl: "/uploads/<name>", filename, size }
- *
- * The `imageUrl` is what admin pages read and store in CMS / product rows.
- *
- * Constraints:
- *   - Max 8 MB (413 on overflow)
- *   - MIME allow-list: jpeg / png / webp / gif / avif / svg+xml (415 otherwise)
- *   - Filenames are lower-cased and stripped of any non [a-z0-9._-] char
- *     so they're safe to serve from the static folder on any OS.
- */
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
 const ALLOWED_TYPES = new Set([
@@ -32,13 +17,9 @@ const ALLOWED_TYPES = new Set([
 
 function sanitiseFilename(raw: string): string {
   const lower = raw.toLowerCase();
-  // Take last path segment if a full path is sent
   const base = lower.split(/[\\/]/).pop() || lower;
-  // Replace any char that isn't a-z, 0-9, ., _, - with a dash
   const cleaned = base.replace(/[^a-z0-9._-]+/g, "-");
-  // Trim leading/trailing dashes
   const trimmed = cleaned.replace(/^-+|-+$/g, "");
-  // Cap length to keep filesystem happy
   return (trimmed || "upload").slice(0, 60);
 }
 
@@ -51,68 +32,85 @@ function uniqueName(filename: string): string {
   return `${stem}-${ts}-${rand}${ext}`;
 }
 
+/**
+ * POST /api/admin/upload
+ * Accepts FormData with `file` (Blob) and optional `model` (string).
+ * Stores the image as a base64 data URL in SiteContent under
+ * key `image:<filename>` and returns the serve URL.
+ *
+ * Vercel's filesystem is READ-ONLY, so we cannot write to public/uploads/.
+ * Instead, images are stored in the DB and served via /api/admin/upload/[filename].
+ */
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file");
+    const model = (formData.get("model") as string | null) || "";
 
-    if (!(file instanceof File)) {
+    if (!file || !(file instanceof File)) {
       return NextResponse.json(
-        { ok: false, message: "No file provided (expected 'file' field)" },
-        { status: 400 }
+        { ok: false, message: "No file provided" },
+        { status: 400 },
       );
     }
 
     if (file.size === 0) {
       return NextResponse.json(
-        { ok: false, message: "Empty file" },
-        { status: 400 }
+        { ok: false, message: "File is empty" },
+        { status: 400 },
       );
     }
 
     if (file.size > MAX_BYTES) {
       return NextResponse.json(
-        {
-          ok: false,
-          message: `File too large (${file.size} bytes). Max ${MAX_BYTES} bytes.`,
-        },
-        { status: 413 }
+        { ok: false, message: "File too large (max 8 MB)" },
+        { status: 413 },
       );
     }
 
     if (!ALLOWED_TYPES.has(file.type)) {
       return NextResponse.json(
-        {
-          ok: false,
-          message: `Unsupported file type: ${file.type || "unknown"}`,
-        },
-        { status: 415 }
+        { ok: false, message: `Unsupported file type: ${file.type}` },
+        { status: 415 },
       );
     }
 
-    const { writeFile, mkdir } = await import("node:fs/promises");
-    const path = await import("node:path");
+    // Build a clean, unique filename
+    const ext = file.type.split("/")[1]?.replace("svg+xml", "svg") || "jpg";
+    const base = (model || file.name || "upload")
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 40) || "upload";
+    const filename = uniqueName(`${base}.${ext}`);
 
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadsDir, { recursive: true });
+    // Read file bytes → base64 data URL
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const base64 = buffer.toString("base64");
+    const dataUrl = `data:${file.type};base64,${base64}`;
 
-    const safeName = uniqueName(sanitiseFilename(file.name || "upload"));
-    const filePath = path.join(uploadsDir, safeName);
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
+    // Persist to SiteContent (upsert by key)
+    const key = `image:${filename}`;
+    await db.siteContent.upsert({
+      where: { key },
+      create: { key, value: dataUrl },
+      update: { value: dataUrl },
+    });
 
-    const imageUrl = `/uploads/${safeName}`;
     return NextResponse.json({
       ok: true,
-      imageUrl,
-      filename: safeName,
+      imageUrl: `/api/admin/upload/${filename}`,
+      filename,
       size: file.size,
     });
   } catch (err) {
-    console.error("[ADMIN UPLOAD ERROR]", err);
+    console.error("[UPLOAD POST ERROR]", err);
+    const message = err instanceof Error ? err.message : "Server error";
     return NextResponse.json(
-      { ok: false, message: "Server error during upload" },
-      { status: 500 }
+      { ok: false, message: `Upload failed: ${message}` },
+      { status: 500 },
     );
   }
 }
