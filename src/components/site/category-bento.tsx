@@ -57,7 +57,7 @@ function CategoryCard({ category, large = false, index, imageOverride }: Categor
       <Link
         href={`/products/${category.slug}`}
         aria-label={`${category.name} — ${category.count} products`}
-        className="group relative block h-full w-full overflow-hidden rounded-24px border border-brass/0 transition-colors duration-500 hover:border-brass/40 focus-visible:border-brass/60"
+        className="group relative block h-full w-full overflow-hidden rounded-[24px] border border-brass/0 transition-colors duration-500 hover:border-brass/40 focus-visible:border-brass/60"
       >
         {/* Background image */}
         <img

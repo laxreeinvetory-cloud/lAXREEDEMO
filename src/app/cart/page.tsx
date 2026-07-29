@@ -173,7 +173,7 @@ export default function CartPage() {
         <section className="section section-ivory py-20 md:py-28">
           <div className="container-laxree max-w-2xl mx-auto">
             <FadeIn>
-              <div className="glass-on-ivory rounded-24px p-8 md:p-10">
+              <div className="glass-on-ivory rounded-[24px] p-8 md:p-10">
                 {/* Success icon */}
                 <div className="mb-6 flex items-center gap-3">
                   <span className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald/10 text-emerald">
@@ -281,7 +281,7 @@ export default function CartPage() {
               <div className="flex flex-col gap-3">
                 {items.map((item, i) => (
                   <FadeIn key={item.model} delay={i * 0.03}>
-                    <div className="glass-on-ivory rounded-20px p-4 flex items-center gap-4">
+                    <div className="glass-on-ivory rounded-[20px] p-4 flex items-center gap-4">
                       {/* Product image */}
                       <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-charcoal">
                         <img
@@ -356,7 +356,7 @@ export default function CartPage() {
 
             {/* ─── Quotation form ─── */}
             <div className="lg:sticky lg:top-24">
-              <div className="glass-on-ivory rounded-24px p-6 md:p-8">
+              <div className="glass-on-ivory rounded-[24px] p-6 md:p-8">
                 <h3 className="font-display text-[22px] font-medium text-ink mb-2">
                   Your Details
                 </h3>

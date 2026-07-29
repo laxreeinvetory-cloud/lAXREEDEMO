@@ -190,7 +190,7 @@ export default function AdminLeadsPage() {
           onClick={() => setSelectedLead(null)}
         >
           <div
-            className="glass-on-charcoal rounded-24px p-8 max-w-lg w-full max-h-[80vh] overflow-y-auto"
+            className="glass-on-charcoal rounded-[24px] p-8 max-w-lg w-full max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">

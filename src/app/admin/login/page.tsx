@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
           <img src="/images/laxree-logo.png" alt="LaxRee" className="h-12 mx-auto" />
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.3em] text-sand">Admin Panel</p>
         </div>
-        <div className="glass-on-charcoal rounded-24px p-8">
+        <div className="glass-on-charcoal rounded-[24px] p-8">
           <h1 className="font-display text-2xl text-ivory mb-2">Welcome Back</h1>
           <p className="font-body text-sm text-sand mb-6">Sign in to manage your website</p>
           {error && <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>}

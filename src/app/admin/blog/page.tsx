@@ -184,7 +184,7 @@ function BlogEditor({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="glass-on-charcoal rounded-24px p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="glass-on-charcoal rounded-[24px] p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-display text-xl text-ivory">{post ? "Edit Post" : "New Blog Post"}</h2>
           <button onClick={onClose} className="text-sand hover:text-ivory"><X className="h-5 w-5" /></button>

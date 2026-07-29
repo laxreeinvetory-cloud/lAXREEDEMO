@@ -275,7 +275,7 @@ export default async function ItemTypePage({
       {/* ── Category hero banner ── */}
       <section className="section section-charcoal pb-8">
         <div className="container-laxree">
-          <div className="relative overflow-hidden rounded-24px aspect-[21/9]">
+          <div className="relative overflow-hidden rounded-[24px] aspect-[21/9]">
             <img
               src={item.products[0]?.image}
               alt={item.name}
@@ -315,7 +315,7 @@ export default async function ItemTypePage({
                   {/* Tier header */}
                   <FadeIn>
                     <div
-                      className={`mb-10 rounded-24px border-2 ${config.borderColor} ${config.bgColor} p-6 md:p-8`}
+                      className={`mb-10 rounded-[24px] border-2 ${config.borderColor} ${config.bgColor} p-6 md:p-8`}
                     >
                       <div className="flex items-center gap-4 mb-3">
                         <div
@@ -411,7 +411,7 @@ export default async function ItemTypePage({
               <Link
                 key={other.slug}
                 href={`/products/${parent.slug}/${other.slug}`}
-                className="group glass-on-charcoal rounded-20px overflow-hidden transition-all duration-300 hover:border-brass/40"
+                className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40"
               >
                 <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
                   <img

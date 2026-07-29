@@ -86,14 +86,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <aside
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 h-screen w-64 bg-charcoal border-r border-white/10 transition-transform`}
+        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 h-screen w-64 bg-charcoal border-r border-white/10 transition-transform flex flex-col`}
       >
-        <div className="p-6 border-b border-white/10">
+        <div className="shrink-0 p-6 border-b border-white/10">
           <img src="/images/laxree-logo.png" alt="LaxRee" className="h-8" />
           <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.3em] text-sand">Admin Panel</p>
         </div>
 
-        <nav className="p-4 flex flex-col gap-1">
+        <nav className="flex-1 overflow-y-auto p-4 flex flex-col gap-1 scrollbar-thin">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -102,25 +102,25 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-[14px] font-medium transition-colors ${
+                className={`flex items-center gap-3 rounded-xl px-4 py-2.5 text-[13px] font-medium transition-colors ${
                   isActive
                     ? "bg-brass/10 text-brass border border-brass/20"
                     : "text-sand hover:bg-white/5 hover:text-ivory"
                 }`}
               >
-                <Icon className="h-4 w-4" strokeWidth={1.75} />
+                <Icon className="h-4 w-4 shrink-0" strokeWidth={1.75} />
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+        <div className="shrink-0 p-4 border-t border-white/10">
           <a
             href="https://l-axreedemo.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-[13px] text-sand hover:bg-white/5 hover:text-ivory transition-colors mb-1"
+            className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-[13px] text-sand hover:bg-white/5 hover:text-ivory transition-colors mb-1"
           >
             <ExternalLink className="h-4 w-4" strokeWidth={1.75} />
             View Website
@@ -130,7 +130,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               logout();
               router.push("/admin/login");
             }}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-[13px] text-sand hover:bg-red-500/10 hover:text-red-400 transition-colors"
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-[13px] text-sand hover:bg-red-500/10 hover:text-red-400 transition-colors"
           >
             <LogOut className="h-4 w-4" strokeWidth={1.75} />
             Logout

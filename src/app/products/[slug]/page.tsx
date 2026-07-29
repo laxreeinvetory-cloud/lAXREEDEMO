@@ -52,7 +52,7 @@ function ItemTypeCard({
     <FadeIn delay={index * 0.06}>
       <Link
         href={`/products/${parentSlug}/${item.slug}`}
-        className="group glass-on-ivory rounded-24px overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full"
+        className="group glass-on-ivory rounded-[24px] overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full"
       >
         {/* Product image */}
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
@@ -199,7 +199,7 @@ export default async function CategoryPage({
                 <Link
                   key={p.slug}
                   href={`/products/${p.slug}`}
-                  className="group glass-on-charcoal rounded-20px overflow-hidden transition-all duration-300 hover:border-brass/40"
+                  className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
                     <img

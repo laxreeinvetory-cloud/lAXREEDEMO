@@ -120,7 +120,7 @@ export function AboutUs() {
           >
             <div
               ref={imageWrapRef}
-              className="relative h-[480px] w-full overflow-hidden rounded-24px sm:h-[560px] md:h-[640px]"
+              className="relative h-[480px] w-full overflow-hidden rounded-[24px] sm:h-[560px] md:h-[640px]"
             >
               {/* Parallax image — scaled 1.1 so the ±8% translate never reveals edges */}
               <motion.img

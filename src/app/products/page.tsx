@@ -39,7 +39,7 @@ function ParentCategoryCard({
     <FadeIn delay={index * 0.06}>
       <Link
         href={`/products/${parent.slug}`}
-        className="group relative block h-full w-full overflow-hidden rounded-24px border border-ink/0 transition-colors duration-500 hover:border-brass/40"
+        className="group relative block h-full w-full overflow-hidden rounded-[24px] border border-ink/0 transition-colors duration-500 hover:border-brass/40"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
           <img
