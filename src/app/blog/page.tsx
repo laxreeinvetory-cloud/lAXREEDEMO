@@ -303,6 +303,22 @@ export default function BlogListingPage() {
   const featured = posts[0] || null;
   const rest = posts.slice(1);
 
+  if (loading) {
+    return (
+      <>
+        <PageHero
+          breadcrumbs={[{ label: "Home", href: "/" }, { label: "Blog" }]}
+          eyebrow="HOSPITALITY TRENDS"
+          title="Insights for Hospitality Procurement"
+          subtitle="Sustainability, design psychology, amenity trends — practical insights for hotel procurement teams, from the LaxRee factory floor."
+        />
+        <div className="flex items-center justify-center py-20">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-brass/30 border-t-brass" />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <PageHero

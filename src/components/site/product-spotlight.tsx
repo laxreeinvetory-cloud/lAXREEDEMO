@@ -88,10 +88,28 @@ function ProductCard({ product, active }: { product: Product; active: boolean })
 
 export function ProductSpotlight() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [products, setProducts] = useState(SPOTLIGHT_PRODUCTS);
   const reduced = usePrefersReducedMotion();
   const isMobile = useIsMobile();
   const useFallback = reduced || isMobile;
-  const total = SPOTLIGHT_PRODUCTS.length;
+
+  useEffect(() => {
+    fetch("/api/admin/cms?key=homepage:spotlight", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.value && data.value.images) {
+          // Override spotlight images from CMS
+          const overrides = data.value.images as Record<string, string>;
+          setProducts(products.map((p) => ({
+            ...p,
+            image: overrides[p.slug] || p.image,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const total = products.length;
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -DRAG_THRESHOLD) {
@@ -125,7 +143,7 @@ export function ProductSpotlight() {
         {useFallback ? (
           /* ── Mobile / reduced-motion fallback: horizontal snap-scroll ── */
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 no-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0">
-            {SPOTLIGHT_PRODUCTS.map((product, i) => (
+            {products.map((product, i) => (
               <div
                 key={product.slug}
                 className="snap-center shrink-0"
@@ -153,7 +171,7 @@ export function ProductSpotlight() {
                 dragMomentum={false}
                 onDragEnd={handleDragEnd}
               >
-                {SPOTLIGHT_PRODUCTS.map((product, i) => {
+                {products.map((product, i) => {
                   const offset = i - activeIndex;
                   const absOffset = Math.abs(offset);
                   const isActive = absOffset === 0;
@@ -250,7 +268,7 @@ export function ProductSpotlight() {
 
             {/* Dot rail */}
             <div className="flex items-center justify-center gap-2 mt-4">
-              {SPOTLIGHT_PRODUCTS.map((p, i) => (
+              {products.map((p, i) => (
                 <button
                   key={p.slug}
                   type="button"

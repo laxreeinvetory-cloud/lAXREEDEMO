@@ -1,9 +1,34 @@
+"use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BLOG_POSTS, type BlogPost } from "@/lib/laxree/site-data";
 
 export function HospitalityTrends() {
+  const [posts, setPosts] = useState<BlogPost[]>(BLOG_POSTS);
+
+  useEffect(() => {
+    fetch("/api/admin/blog", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.posts && data.posts.length > 0) {
+          // Show up to 3 posts from DB
+          const dbPosts = data.posts.slice(0, 3).map((p: any) => ({
+            slug: p.slug,
+            title: p.title,
+            category: p.category || "Blog",
+            excerpt: p.excerpt || "",
+            image: p.image || "/images/blog/blog-1.jpg",
+            date: p.date || "",
+            readTime: p.readTime || "5 min",
+          }));
+          setPosts(dbPosts);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section id="blog" className="section section-ivory py-28 md:py-36">
       <div className="container-laxree">
@@ -18,7 +43,7 @@ export function HospitalityTrends() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {BLOG_POSTS.map((post: BlogPost) => (
+          {posts.slice(0, 3).map((post: BlogPost) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
