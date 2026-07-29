@@ -26,8 +26,29 @@ const AUTO_ADVANCE_MS = 5000;
 export default function OurPresence() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [exhibitions, setExhibitions] = useState<Exhibition[]>(EXHIBITIONS);
   const reduced = usePrefersReducedMotion();
-  const total = EXHIBITIONS.length;
+  const total = exhibitions.length;
+
+  useEffect(() => {
+    fetch("/api/admin/settings", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.settings) {
+          const op = data.settings.homepage?.ourPresence;
+          if (op) {
+            const updated = [...EXHIBITIONS];
+            if (op.image1 && updated[0]) updated[0] = { ...updated[0], image: op.image1 };
+            if (op.image2 && updated[1]) updated[1] = { ...updated[1], image: op.image2 };
+            if (op.image3 && updated[2]) updated[2] = { ...updated[2], image: op.image3 };
+            if (op.image4 && updated[3]) updated[3] = { ...updated[3], image: op.image4 };
+            if (op.image5 && updated[4]) updated[4] = { ...updated[4], image: op.image5 };
+            setExhibitions(updated);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const goTo = useCallback((i: number) => {
     setActiveIndex(((i % total) + total) % total);
@@ -88,7 +109,7 @@ export default function OurPresence() {
               onDragStart={() => setIsPaused(true)}
               onDragEnd={handleDragEnd}
             >
-              {EXHIBITIONS.map((ex: Exhibition, i: number) => {
+              {exhibitions.map((ex: Exhibition, i: number) => {
                 const offset = i - activeIndex;
                 // Shortest signed offset for the carousel
                 const norm = ((offset + total + Math.floor(total / 2)) % total) - Math.floor(total / 2);
@@ -182,7 +203,7 @@ export default function OurPresence() {
 
           {/* Pagination dots */}
           <div className="mt-8 flex justify-center gap-2">
-            {EXHIBITIONS.map((ex, i) => {
+            {exhibitions.map((ex, i) => {
               const isCurrent = i === activeIndex;
               return (
                 <button

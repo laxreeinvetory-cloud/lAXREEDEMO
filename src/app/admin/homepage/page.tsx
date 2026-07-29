@@ -261,10 +261,40 @@ function ImageField({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("model", "homepage-image");
+      const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "Server error");
+        alert(`Upload failed (${res.status}): ${text.substring(0, 100)}`);
+        setUploading(false);
+        return;
+      }
+      const data = await res.json();
+      if (data.ok) {
+        onChange(data.imageUrl);
+      } else {
+        alert(data.message || "Upload failed");
+      }
+    } catch {
+      alert("Network error");
+    }
+    setUploading(false);
+  };
+
   return (
     <div>
       <label className={labelClass}>{label}</label>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <div className="h-16 w-16 shrink-0 rounded-lg border border-white/10 bg-white/5 overflow-hidden flex items-center justify-center">
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -285,8 +315,28 @@ function ImageField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="/images/path/to/image.jpg"
-          className={inputClass}
+          className={inputClass + " flex-1 min-w-[200px]"}
         />
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          onChange={handleUpload}
+          className="hidden"
+        />
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-white/10 text-white px-3 py-2 text-xs hover:bg-white/20 border border-white/15 disabled:opacity-50"
+        >
+          {uploading ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Upload className="h-3.5 w-3.5" />
+          )}
+          {uploading ? "Uploading..." : "Upload"}
+        </button>
       </div>
     </div>
   );
@@ -677,7 +727,6 @@ function SectionEditor({
     case "productSpotlight":
     case "categoryExplorer":
     case "clientsTestimonials":
-    case "ourPresence":
     case "certifications":
     case "whyChoose":
     case "hospitalityTrends":
@@ -686,6 +735,20 @@ function SectionEditor({
           <TextField label="Eyebrow" value={section.eyebrow as string} onChange={(v) => set("eyebrow", v)} />
           <TextField label="Title" value={section.title as string} onChange={(v) => set("title", v)} />
           <TextAreaField label="Subtitle" value={section.subtitle as string} onChange={(v) => set("subtitle", v)} />
+        </div>
+      );
+
+    case "ourPresence":
+      return (
+        <div className="space-y-3">
+          <TextField label="Eyebrow" value={section.eyebrow as string} onChange={(v) => set("eyebrow", v)} />
+          <TextField label="Title" value={section.title as string} onChange={(v) => set("title", v)} />
+          <TextAreaField label="Subtitle" value={section.subtitle as string} onChange={(v) => set("subtitle", v)} />
+          <ImageField label="Gallery Image 1" value={(section as any).image1 || "/images/gallery/exhibition-1.jpg"} onChange={(v) => set("image1", v)} />
+          <ImageField label="Gallery Image 2" value={(section as any).image2 || "/images/gallery/exhibition-2.jpg"} onChange={(v) => set("image2", v)} />
+          <ImageField label="Gallery Image 3" value={(section as any).image3 || "/images/gallery/exhibition-3.jpg"} onChange={(v) => set("image3", v)} />
+          <ImageField label="Gallery Image 4" value={(section as any).image4 || "/images/gallery/exhibition-4.jpg"} onChange={(v) => set("image4", v)} />
+          <ImageField label="Gallery Image 5" value={(section as any).image5 || "/images/gallery/exhibition-5.jpg"} onChange={(v) => set("image5", v)} />
         </div>
       );
 
