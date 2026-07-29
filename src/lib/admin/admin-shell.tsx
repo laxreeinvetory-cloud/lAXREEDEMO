@@ -20,7 +20,6 @@ import {
   ExternalLink,
   Menu,
   X,
-  Image as ImageIcon,
   Briefcase,
   Handshake,
   Database,
