@@ -13,6 +13,7 @@ import {
   Palette,
   Search,
   FileEdit,
+  Image as ImageIcon,
   Home,
   HelpCircle,
   LogOut,
@@ -36,7 +37,8 @@ const navItems = [
   { label: "Leads (Legacy)", href: "/admin/leads", icon: Users },
   // ── CATALOGUE ──
   { label: "Products", href: "/admin/products", icon: Package },
-  { label: "Media Library", href: "/admin/media", icon: ImageIcon },
+  { label: "Image Manager", href: "/admin/images", icon: ImageIcon },
+  { label: "Media Library", href: "/admin/media", icon: FileEdit },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
   // ── CONTENT ──
   { label: "Homepage Builder", href: "/admin/homepage", icon: Home },
