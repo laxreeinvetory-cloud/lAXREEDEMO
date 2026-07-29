@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -27,6 +27,9 @@ const HeroStage = dynamic(
     loading: () => <HeroStageSkeleton />,
   }
 );
+
+// Static fallback hero image — used when the CMS has no override.
+const DEFAULT_HERO_IMAGE = "/images/products/mini-bar.jpg";
 
 function HeroStageSkeleton() {
   return (
@@ -171,6 +174,32 @@ export function Hero() {
     () => true, // client snapshot
     () => false // server snapshot
   );
+
+  // CMS-driven hero image override (key "homepage:hero" field "heroImage").
+  // Falls back to the static /images/products/mini-bar.jpg image when the
+  // CMS has no value or the fetch fails.
+  const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/cms?key=homepage:hero", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        const override =
+          data?.value && typeof data.value === "object"
+            ? (data.value as { heroImage?: unknown }).heroImage
+            : undefined;
+        if (typeof override === "string" && override.trim()) {
+          setHeroImage(override.trim());
+        }
+      })
+      .catch(() => {
+        /* keep fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Decide whether to render the live 3D stage, the static fallback,
   // or a skeleton (during SSR / before hydration).
@@ -346,7 +375,7 @@ export function Hero() {
               ) : show3D ? (
                 <HeroStage />
               ) : (
-                <HeroFallback />
+                <HeroFallback src={heroImage} />
               )}
             </div>
           </div>
@@ -360,13 +389,14 @@ export function Hero() {
    Static fallback for mobile / reduced-motion
    ─────────────────────────────────────────────────────────── */
 
-function HeroFallback() {
+function HeroFallback({ src }: { src: string }) {
   // Subtle scroll parallax (4° max) — safe for reduced-motion:CSS media query
   // already zeroes our transforms, but we keep the markup static regardless.
+  // `src` is the CMS-driven hero image (defaults to the static minibar).
   return (
     <div className="w-full h-full rounded-[24px] overflow-hidden border border-brass/15 bg-charcoal/60 grid place-items-center">
       <img
-        src="/images/products/mini-bar.jpg"
+        src={src}
         alt="LaxRee Minibar — flagship product"
         className="w-full h-full object-contain p-8"
         onError={(e) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -11,6 +11,8 @@ import {
   Image as ImageIcon,
   Check,
   Type,
+  Upload,
+  Loader2,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────
@@ -421,6 +423,221 @@ function StringListEditor({
 }
 
 // ─────────────────────────────────────────────────────────────
+// Hero image uploader — uploads via /api/admin/upload and persists
+// the resulting URL to CMS key "homepage:hero" field "heroImage".
+// Operates independently from the homepage:full content above.
+// ─────────────────────────────────────────────────────────────
+function HeroImageUploader({
+  value,
+  onPersist,
+}: {
+  value: string;
+  onPersist: (url: string) => Promise<boolean>;
+}) {
+  const [draft, setDraft] = useState<string>(value);
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Keep the local draft in sync when the persisted value changes
+  // (e.g. after the initial CMS load completes).
+  useEffect(() => {
+    setDraft(value);
+  }, [value]);
+
+  const showToast = (kind: "ok" | "err", msg: string) => {
+    setToast({ kind, msg });
+    setTimeout(() => setToast(null), 2500);
+  };
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("model", "homepage-hero");
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "Server error");
+        if (res.status === 413) {
+          setError("Image too large. Please use a smaller image (max 8MB).");
+        } else {
+          setError(`Upload failed (${res.status}): ${text.slice(0, 120)}`);
+        }
+        setUploading(false);
+        // Reset the file input so the same file can be picked again later.
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
+      const data = await res.json();
+      if (data.ok && typeof data.imageUrl === "string") {
+        setDraft(data.imageUrl);
+        showToast("ok", "Image uploaded. Click Save Hero Image to apply.");
+      } else {
+        setError(data.message || "Upload failed — please try again.");
+      }
+    } catch (err) {
+      setError("Network error: " + (err instanceof Error ? err.message : "unknown"));
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError("");
+    const ok = await onPersist(draft.trim());
+    setSaving(false);
+    if (ok) {
+      showToast("ok", "Hero image saved — live on the homepage.");
+    } else {
+      setError("Failed to save hero image. Please try again.");
+    }
+  };
+
+  const handleClear = () => {
+    setDraft("");
+    showToast("ok", "Cleared locally. Click Save Hero Image to remove from the homepage.");
+  };
+
+  return (
+    <div className="glass-on-charcoal rounded-2xl p-5">
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div>
+          <h2 className="font-display text-lg text-ivory flex items-center gap-2">
+            <ImageIcon className="h-4 w-4 text-brass" />
+            Hero Image
+          </h2>
+          <p className="font-body text-[12px] text-sand mt-0.5">
+            Upload or paste a hero image URL. Stored under CMS key{" "}
+            <code className="font-mono text-brass/80">homepage:hero</code> →
+            field <code className="font-mono text-brass/80">heroImage</code>.
+            Overrides the static minibar fallback shown on mobile / reduced-motion.
+          </p>
+        </div>
+      </div>
+
+      {error && (
+        <div className="mb-3 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+          {error}
+        </div>
+      )}
+
+      <div className="flex items-start gap-4">
+        {/* Preview */}
+        <div className="h-28 w-28 shrink-0 rounded-lg border border-white/10 bg-white/5 overflow-hidden flex items-center justify-center">
+          {draft ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={draft}
+              alt="Hero preview"
+              className="h-full w-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          ) : (
+            <ImageIcon className="h-7 w-7 text-sand/30" />
+          )}
+        </div>
+
+        <div className="flex-1 space-y-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/svg+xml"
+            onChange={handleFile}
+            className="hidden"
+          />
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="inline-flex items-center gap-2 rounded-full bg-white/5 text-ivory px-4 py-2 text-sm hover:bg-white/10 transition-colors disabled:opacity-50 border border-white/10"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Uploading…
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4" />
+                  Upload Hero Image
+                </>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={uploading || saving || !draft}
+              className="inline-flex items-center gap-2 rounded-full bg-white/5 text-sand px-4 py-2 text-sm hover:bg-white/10 hover:text-ivory transition-colors disabled:opacity-40 border border-white/10"
+            >
+              <X className="h-4 w-4" />
+              Clear
+            </button>
+          </div>
+          <input
+            type="text"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder="/images/path/to/image.jpg or paste an uploaded URL"
+            className={inputClass}
+          />
+          <p className="font-body text-[10px] text-sand/60">
+            Upload JPEG / PNG / WebP / GIF / AVIF / SVG (max 8 MB), or paste an image
+            URL directly. Click <span className="text-brass">Save Hero Image</span> to
+            publish.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <button
+          type="button"
+          onClick={handleSave}
+          disabled={saving || draft === value}
+          className="inline-flex items-center gap-2 rounded-full bg-brass text-charcoal px-6 py-2.5 text-sm font-medium hover:bg-brass-light transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {saving ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Save className="h-4 w-4" />
+          )}
+          Save Hero Image
+        </button>
+      </div>
+
+      {toast && (
+        <div
+          className="fixed bottom-24 right-6 z-50 flex items-center gap-2.5 rounded-xl border px-4 py-3 shadow-2xl"
+          style={{
+            backgroundColor: toast.kind === "ok" ? "rgba(30,70,56,0.95)" : "rgba(127,29,29,0.95)",
+            borderColor: toast.kind === "ok" ? "rgba(176,141,87,0.4)" : "rgba(248,113,113,0.4)",
+          }}
+        >
+          {toast.kind === "ok" ? (
+            <Check className="h-4 w-4 text-brass" strokeWidth={2} />
+          ) : (
+            <X className="h-4 w-4 text-red-300" strokeWidth={2} />
+          )}
+          <span className="font-body text-sm text-ivory">{toast.msg}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // Section renderer
 // ─────────────────────────────────────────────────────────────
 function SectionEditor({
@@ -526,6 +743,12 @@ export default function AdminHomepagePage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(["hero"]));
   const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
 
+  // CMS-driven hero image override (key "homepage:hero" → field "heroImage").
+  // Loaded from /api/admin/cms (not /settings) so it stays decoupled from
+  // the homepage:full block above. Empty string means "no override — use
+  // the static /images/products/mini-bar.jpg fallback on the live site".
+  const [heroImage, setHeroImage] = useState<string>("");
+
   useEffect(() => {
     fetch("/api/admin/settings")
       .then((r) => r.json())
@@ -547,7 +770,44 @@ export default function AdminHomepagePage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+
+    // Parallel fetch for the hero image override.
+    fetch("/api/admin/cms?key=homepage:hero", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const v =
+          data?.value && typeof data.value === "object"
+            ? (data.value as { heroImage?: unknown }).heroImage
+            : undefined;
+        if (typeof v === "string") setHeroImage(v);
+      })
+      .catch(() => {
+        /* keep empty fallback */
+      });
   }, []);
+
+  const handlePersistHeroImage = useCallback(
+    async (url: string): Promise<boolean> => {
+      try {
+        const res = await fetch("/api/admin/cms", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            key: "homepage:hero",
+            value: { heroImage: url },
+          }),
+        });
+        if (res.ok) {
+          setHeroImage(url);
+          return true;
+        }
+        return false;
+      } catch {
+        return false;
+      }
+    },
+    []
+  );
 
   const dirty = useMemo(() => {
     if (!loaded) return false;
@@ -637,6 +897,11 @@ export default function AdminHomepagePage() {
 
       {/* Sections accordion */}
       <div className="flex flex-col gap-3">
+        {/* Hero image uploader — sits above the section accordion so it's
+            reachable in one click. Persists independently of homepage:full
+            under CMS key "homepage:hero" → field "heroImage". */}
+        <HeroImageUploader value={heroImage} onPersist={handlePersistHeroImage} />
+
         {SECTIONS.map((sec) => {
           const isOpen = openSections.has(sec.key);
           const Icon = sec.icon;

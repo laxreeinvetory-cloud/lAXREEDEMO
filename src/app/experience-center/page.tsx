@@ -1,13 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, MapPin, Play, Building2, Award } from "lucide-react";
 import { PageHero, SectionHeading, PageCTA, FadeIn } from "@/components/site/page-primitives";
-
-export const metadata: Metadata = {
-  title: "Experience Center — LaxRee Amenities",
-  description:
-    "Visit India's largest hospitality supply experience centers in Ajmer, Jaipur, and Gurugram. See, touch, and experience our full product range in person.",
-};
 
 const CENTERS = [
   {
@@ -55,6 +51,32 @@ const CENTERS = [
 ];
 
 export default function ExperienceCenterPage() {
+  // CMS-driven demo video override (key "page:experience-center"
+  // field "demoVideoUrl"). When unset, the placeholder shown below is
+  // preserved exactly as the static fallback.
+  const [demoVideoUrl, setDemoVideoUrl] = useState<string>("");
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/cms?key=page:experience-center", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        const override =
+          data?.value && typeof data.value === "object"
+            ? (data.value as { demoVideoUrl?: unknown }).demoVideoUrl
+            : undefined;
+        if (typeof override === "string" && override.trim()) {
+          setDemoVideoUrl(override.trim());
+        }
+      })
+      .catch(() => {
+        /* keep placeholder */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <>
       <PageHero
@@ -78,15 +100,24 @@ export default function ExperienceCenterPage() {
           />
           <FadeIn>
             <div className="mt-12 relative overflow-hidden rounded-[24px] aspect-video bg-charcoal border border-white/10">
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brass/20 border-2 border-brass/40 cursor-pointer hover:bg-brass/30 transition-colors">
-                  <Play className="h-8 w-8 text-brass ml-1" fill="currentColor" />
+              {demoVideoUrl ? (
+                <video
+                  src={demoVideoUrl}
+                  controls
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brass/20 border-2 border-brass/40 cursor-pointer hover:bg-brass/30 transition-colors">
+                    <Play className="h-8 w-8 text-brass ml-1" fill="currentColor" />
+                  </div>
+                  <p className="font-body text-sm text-sand text-center max-w-md">
+                    Demo video will be placed here. Admin can upload the actual video
+                    through the CMS panel.
+                  </p>
                 </div>
-                <p className="font-body text-sm text-sand text-center max-w-md">
-                  Demo video will be placed here. Admin can upload the actual video
-                  through the CMS panel.
-                </p>
-              </div>
+              )}
             </div>
           </FadeIn>
         </div>

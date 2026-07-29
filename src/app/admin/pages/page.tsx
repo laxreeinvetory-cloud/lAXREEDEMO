@@ -11,6 +11,7 @@ import {
   Handshake,
   BookOpen,
   Phone,
+  Building2,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────
@@ -127,6 +128,10 @@ const CONTACT_DEFAULTS: PageContent = {
   ctaTitle: "Prefer to Talk?",
   ctaSubtitle:
     "Call us directly or send a WhatsApp message for immediate assistance.",
+};
+
+const EXPERIENCE_CENTER_DEFAULTS: PageContent = {
+  demoVideoUrl: "",
 };
 
 /* ─────────────────────────────────────────────────────────────
@@ -337,6 +342,27 @@ const PAGES: PageDef[] = [
         fields: [
           { key: "ctaTitle", label: "Title" },
           { key: "ctaSubtitle", label: "Subtitle", multiline: true },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "experience-center",
+    label: "Experience Center",
+    icon: Building2,
+    storageKey: "page:experience-center",
+    defaults: EXPERIENCE_CENTER_DEFAULTS,
+    groups: [
+      {
+        title: "Demo Video",
+        subtitle:
+          "Optional video URL for the virtual tour section. When set, the homepage renders an HTML5 <video> player; when empty, the static placeholder is shown. Paste a direct link to an MP4 / WebM file (e.g. /uploads/my-tour.mp4 or https://…).",
+        fields: [
+          {
+            key: "demoVideoUrl",
+            label: "Demo Video URL",
+            placeholder: "/uploads/experience-center-tour.mp4",
+          },
         ],
       },
     ],

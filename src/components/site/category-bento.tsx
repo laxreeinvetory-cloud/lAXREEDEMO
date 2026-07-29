@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CATEGORIES, type Category } from "@/lib/laxree/site-data";
@@ -8,19 +9,35 @@ import {
   usePrefersReducedMotion,
 } from "@/hooks/laxree/use-laxree-motion";
 
+// Shape returned by /api/admin/products for a category row.
+type DbCategory = {
+  id?: string;
+  slug: string;
+  name?: string;
+  image?: string;
+  count?: number;
+  blurb?: string;
+  span?: string;
+};
+
 type CategoryCardProps = {
   category: Category;
   large?: boolean;
   index: number;
+  /** Optional DB-driven image override; falls back to category.image. */
+  imageOverride?: string;
 };
 
-function CategoryCard({ category, large = false, index }: CategoryCardProps) {
+function CategoryCard({ category, large = false, index, imageOverride }: CategoryCardProps) {
   const reduced = usePrefersReducedMotion();
   const tilt = useTilt(6);
 
   const spanClasses = large
     ? "md:col-span-2 lg:col-span-6 lg:row-span-2"
     : "lg:col-span-3";
+
+  // DB image wins when present, otherwise fall back to the static image.
+  const resolvedImage = imageOverride || category.image;
 
   return (
     <motion.div
@@ -44,7 +61,7 @@ function CategoryCard({ category, large = false, index }: CategoryCardProps) {
       >
         {/* Background image */}
         <img
-          src={category.image}
+          src={resolvedImage}
           alt={category.name}
           width={large ? 1200 : 800}
           height={large ? 1200 : 560}
@@ -87,6 +104,35 @@ function CategoryCard({ category, large = false, index }: CategoryCardProps) {
 }
 
 export function CategoryBento() {
+  // CMS / DB-driven category image overrides keyed by slug. Empty until the
+  // /api/admin/products fetch resolves; static category.image is the fallback.
+  const [imageMap, setImageMap] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/products", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.ok) return;
+        const cats: DbCategory[] = Array.isArray(data.categories) ? data.categories : [];
+        const next: Record<string, string> = {};
+        for (const c of cats) {
+          if (c && typeof c.slug === "string" && typeof c.image === "string" && c.image) {
+            next[c.slug] = c.image;
+          }
+        }
+        if (Object.keys(next).length > 0) {
+          setImageMap(next);
+        }
+      })
+      .catch(() => {
+        /* keep static fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section
       id="categories"
@@ -119,6 +165,7 @@ export function CategoryBento() {
               category={category}
               large={category.span === "large"}
               index={i}
+              imageOverride={imageMap[category.slug]}
             />
           ))}
         </div>

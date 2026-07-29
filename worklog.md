@@ -1215,3 +1215,101 @@ Stage Summary:
   4. src/app/admin/dealers/page.tsx — Dealers CMS (applications table, approve/reject/pending, detail modal, internal notes via dealer-notes CMS key).
 - Notes: Admin sidebar (src/lib/admin/admin-shell.tsx) was NOT modified per the "do not touch existing files" constraint — the 3 new routes are reachable by direct URL (/admin/crm, /admin/careers, /admin/dealers); orchestrator may add sidebar entries in a follow-up. GST/PAN fields display "—" until the public dealer form is extended to submit them. Dealer approved/rejected statuses are stored in the existing Lead.status string column (no schema change); the CRM's STATUS_BADGE map includes approved/rejected tones so dealer leads render sensibly in the CRM's Dealer tab too.
 - Agent work record: /home/z/my-project/agent-ctx/CRM-CAREERS-DEALERS-crm-careers-dealers-builder.md
+
+---
+Task ID: HOMEPAGE-IMAGE-EDIT
+Agent: homepage-image-editor
+Task: Add CMS-driven image/video override capability to the homepage Hero, Category Bento, and Experience Center page — plus admin UI to upload the hero image and paste a demo video URL. Keep all current static fallbacks and styling intact.
+
+Pre-work:
+- Read /home/z/my-project/worklog.md (full history; most recent: ENTERPRISE-DASHBOARD + MEDIA-LIBRARY + CRM-CAREERS-DEALERS).
+- Read src/components/site/hero.tsx — confirmed "use client" already present; HeroFallback uses static `/images/products/mini-bar.jpg`; right column renders HeroStage (R3F canvas) on desktop, HeroFallback on mobile / reduced-motion.
+- Read src/app/experience-center/page.tsx — server component exporting `metadata`, contains a "Demo Video Section" with a static placeholder (Play icon + caption).
+- Read src/app/admin/homepage/page.tsx (714 lines) — accordion editor that loads/saves `homepage:full` via `/api/admin/settings`; reusable TextField / TextAreaField / ImageField / StatListEditor / StringListEditor primitives; sticky save bar.
+- Read src/app/admin/pages/page.tsx (711 lines) — PageDef-driven tab editor (career, dealers, catalogue, contact-us) using `page:<slug>` storage keys via `/api/admin/settings`; mergeContent() merges stored values over defaults per key.
+- Read src/components/site/category-bento.tsx — "use client" already present; maps over CATEGORIES from site-data.ts and renders `<img src={category.image}>` for each card.
+- Read src/app/api/admin/cms/route.ts — GET ?key= returns `{ ok, key, value }` (JSON-parsed); PUT `{ key, value }` upserts SiteContent.
+- Read src/app/api/admin/settings/route.ts — same SiteContent table; supports arbitrary keys beyond DEFAULTS (any stored key not in DEFAULTS is returned via second loop).
+- Read src/app/api/admin/products/route.ts — returns `{ ok, products, categories }`; categories have `{ id, slug, name, count, blurb, image, span, sortOrder, createdAt, updatedAt }`; falls back to static data if DB empty.
+- Read src/app/admin/products/page.tsx + src/app/admin/media/page.tsx + src/app/admin/cms/page.tsx — all reference `/api/admin/upload` (POST FormData) but the route file did NOT exist on disk (MEDIA-LIBRARY worklog note claimed it was created but `find` confirmed absence). Created it as required supporting infrastructure.
+
+Work Log:
+
+1) Created src/app/api/admin/upload/route.ts (NEW FILE — required infrastructure).
+   - runtime = "nodejs", dynamic = "force-dynamic", maxDuration = 60.
+   - Accepts multipart/form-data POST with required `file` field and optional `model` field.
+   - Validates: present File instance, non-zero size, ≤ 8 MB (413 on overflow), MIME allow-list jpeg/png/webp/gif/avif/svg+xml (415 otherwise).
+   - Filename sanitisation: lowercase, take last path segment, replace `[^a-z0-9._-]` with `-`, trim, cap 60 chars, append timestamp+random suffix for uniqueness.
+   - Writes via `node:fs/promises.writeFile` (Buffer) to `public/uploads/<sanitised-name>`; mkdir -p the directory first.
+   - Returns `{ ok: true, imageUrl: "/uploads/<name>", filename, size }` — matches what admin/products + admin/media + admin/cms already read.
+
+2) Modified src/components/site/hero.tsx (CHANGED).
+   - Added `useEffect`, `useState` to React imports; added `DEFAULT_HERO_IMAGE = "/images/products/mini-bar.jpg"` constant.
+   - Inside `Hero()`: new `heroImage` state initialised to `DEFAULT_HERO_IMAGE`. `useEffect` calls `fetch("/api/admin/cms?key=homepage:hero", { cache: "no-store" })`, parses `value.heroImage`, sets state if it's a non-empty string. Cancellation guard + .catch() keeps the fallback silently on error.
+   - `HeroFallback` now accepts a `src: string` prop; the `<img src>` uses this prop instead of the hardcoded path. Call site `<HeroFallback src={heroImage} />` passes the resolved (CMS-or-fallback) URL.
+   - The 3D HeroStage on desktop is untouched — only the static fallback image is CMS-overridable, per the task's "fallback to current static image" wording.
+   - No CSS / layout / text changes.
+
+3) Created src/app/experience-center/layout.tsx (NEW FILE) + modified src/app/experience-center/page.tsx (CHANGED).
+   - layout.tsx: exports the original `metadata` object (title + description) so the SEO meta is preserved after the page itself becomes a client component. Renders `<>{children}</>`.
+   - page.tsx: prepended `"use client"`; replaced `import type { Metadata } from "next"` with `import { useEffect, useState } from "react"`. Removed the `export const metadata` block (moved to layout.tsx).
+   - Added `demoVideoUrl` state + `useEffect` that fetches `/api/admin/cms?key=page:experience-center` (cache: "no-store"), reads `value.demoVideoUrl`, sets state if non-empty string.
+   - In the Demo Video Section: when `demoVideoUrl` is set, renders `<video src={demoVideoUrl} controls playsInline className="absolute inset-0 h-full w-full object-cover" />` inside the existing rounded-24px aspect-video container; otherwise renders the EXACT same Play-icon + caption placeholder markup that was there before.
+   - All other sections (CENTERS list, Why Visit, PageCTA) are byte-identical to the original.
+
+4) Modified src/app/admin/homepage/page.tsx (CHANGED).
+   - Added `useRef` to React imports; added `Upload`, `Loader2` to lucide-react imports.
+   - Added a new `HeroImageUploader` component (~210 lines) that:
+     • Takes `value: string` (current persisted URL) and `onPersist: (url: string) => Promise<boolean>`.
+     • Renders a 28×28 preview (or ImageIcon placeholder), an `Upload Hero Image` button (POSTs FormData `file` + `model: "homepage-hero"` to `/api/admin/upload`), a `Clear` button, a text input for manual URL paste, and a `Save Hero Image` button.
+     • Local `draft` state syncs with `value` via useEffect so initial CMS load is reflected.
+     • On upload: handles 413 ("Image too large. Please use a smaller image (max 8MB)."), other !ok responses, and network errors; on success sets draft to `data.imageUrl` and shows a "Click Save Hero Image to apply" toast.
+     • On save: calls `onPersist(draft.trim())`; success → "Hero image saved — live on the homepage." toast; failure → inline error.
+     • Save button disabled when `saving` or `draft === value` (no change to persist).
+     • Uses the page's existing style tokens (`inputClass`, `labelClass`) and accent colors (brass button, red error, emerald success toast) to match the rest of the admin UI.
+   - In `AdminHomepagePage`:
+     • Added `heroImage` state (empty string fallback) + parallel `useEffect` fetch from `/api/admin/cms?key=homepage:hero` (cache: "no-store") that picks up `value.heroImage`.
+     • Added `handlePersistHeroImage` useCallback that PUTs to `/api/admin/cms` with body `{ key: "homepage:hero", value: { heroImage: url } }` and on success updates local state.
+     • Inserted `<HeroImageUploader value={heroImage} onPersist={handlePersistHeroImage} />` ABOVE the SECTIONS accordion so it's reachable in one click without scrolling through 13 sections.
+   - The homepage:full content + 13-section accordion + sticky save bar are all unchanged.
+
+5) Modified src/app/admin/pages/page.tsx (CHANGED).
+   - Added `Building2` to lucide-react imports.
+   - Added `EXPERIENCE_CENTER_DEFAULTS: PageContent = { demoVideoUrl: "" }`.
+   - Added a new entry to the PAGES array:
+       { slug: "experience-center", label: "Experience Center", icon: Building2,
+         storageKey: "page:experience-center", defaults: EXPERIENCE_CENTER_DEFAULTS,
+         groups: [{ title: "Demo Video", subtitle: "…", fields: [
+           { key: "demoVideoUrl", label: "Demo Video URL", placeholder: "/uploads/experience-center-tour.mp4" }
+         ]}] }
+   - The existing `mergeContent()` helper already handles arbitrary string fields, so the new field is loaded/saved automatically via the existing /api/admin/settings round-trip. No other changes needed.
+   - All 4 existing page tabs (Career, Dealers, Catalogue, Contact Us) are unchanged. The experience-center tab is appended and inherits all the existing tab/save/reset/toast behaviour.
+
+6) Modified src/components/site/category-bento.tsx (CHANGED).
+   - Added `useEffect`, `useState` to React imports.
+   - Added `DbCategory` type (slug + optional fields matching /api/admin/products response).
+   - `CategoryCard` accepts new optional `imageOverride?: string` prop. The `<img src>` resolves to `imageOverride || category.image` (DB wins, static fallback preserved).
+   - In `CategoryBento`: new `imageMap` state (`Record<string, string>`). `useEffect` fetches `/api/admin/products` (cache: "no-store"), reads `data.categories`, builds a slug→image map. On success (≥1 entry), updates state. On error or empty, leaves state empty so static images keep showing.
+   - Each `<CategoryCard>` now receives `imageOverride={imageMap[category.slug]}`.
+   - No CSS, layout, text, or count changes — only the `<img src>` URL becomes CMS/DB-driven when a DB image exists for that slug.
+
+Verification:
+- `npx tsc --noEmit`: EXIT 0 (zero type errors).
+- `bun run lint`: 0 errors, 28 warnings — ALL pre-existing in OTHER files (27× @next/next/no-img-element across career/cart/catalogue/products/components/admin-shell + 1 unused eslint-disable in db.ts). ZERO new warnings introduced by this task. The 2 `<img>` warnings in hero.tsx (line 398) and category-bento.tsx (line 63) are the SAME pre-existing `<img>` elements that were there before — only their `src` attribute now flows through a variable instead of a string literal.
+- Dev server (:3000) was not responding at task time; per runbook it is auto-managed by the system and must not be started manually. Code compiles cleanly and is ready for the next dev server restart.
+- Note on Prisma provider: previous worklog entries (MEDIA-LIBRARY) flagged a pre-existing infra mismatch — `prisma/schema.prisma` declares `provider = "postgresql"` while `.env` has `DATABASE_URL=file:/home/z/my-project/db/custom.db` (SQLite). This blocks `db:push` and causes DB-backed routes to 500. Per task constraint ("Only ADD CMS-driven image/video override capability"), I did NOT touch the Prisma schema. All my fetches use `.catch(() => /* keep fallback */)` so the public pages continue to render correctly even when the DB is unreachable; the admin upload route uses `node:fs/promises` (no DB). Once the Prisma provider is switched to `sqlite` + `db:push` is run, the CMS overrides will start persisting end-to-end.
+
+Stage Summary:
+- Files created (3):
+  1. src/app/api/admin/upload/route.ts — missing upload endpoint, restored.
+  2. src/app/experience-center/layout.tsx — preserves the page's metadata after page.tsx becomes a client component.
+  3. (No third file — only 2 new files were needed.)
+- Files modified (4):
+  1. src/components/site/hero.tsx — CMS hero image override (key "homepage:hero" → field "heroImage") with `/images/products/mini-bar.jpg` fallback.
+  2. src/app/experience-center/page.tsx — "use client" + `useEffect` fetch of `page:experience-center.demoVideoUrl`; renders `<video controls playsInline>` when set, otherwise the original Play-icon placeholder.
+  3. src/app/admin/homepage/page.tsx — new `HeroImageUploader` component + state + parallel CMS fetch + `handlePersistHeroImage` PUT to `homepage:hero`; uploader renders above the SECTIONS accordion.
+  4. src/app/admin/pages/page.tsx — added `experience-center` tab with `Demo Video URL` field stored under `page:experience-center.demoVideoUrl`.
+  5. src/components/site/category-bento.tsx — `useEffect` fetch of `/api/admin/products`; per-card `imageOverride` from the DB image map; static `category.image` remains the fallback.
+- CMS keys introduced: `homepage:hero` (value: `{ heroImage: string }`), `page:experience-center` (value: `{ demoVideoUrl: string }`). Both are upserted via /api/admin/cms PUT (admin/homepage uses cms route directly; admin/pages uses /api/admin/settings which writes to the same SiteContent table).
+- All static fallbacks preserved: hero → `/images/products/mini-bar.jpg`; experience-center → Play-icon placeholder; category-bento → `category.image` from site-data.ts.
+- No CSS, layout, or text changes anywhere. No existing content deleted. Only image/video URL override capability was added.
