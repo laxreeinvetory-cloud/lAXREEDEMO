@@ -37,6 +37,7 @@ const navItems = [
   // ── CATALOGUE ──
   { label: "Products", href: "/admin/products", icon: Package },
   { label: "Image Manager", href: "/admin/images", icon: ImageIcon },
+  { label: "Track Pages", href: "/admin/track-pages", icon: FileEdit },
   { label: "Media Library", href: "/admin/media", icon: FileEdit },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
   // ── CONTENT ──
