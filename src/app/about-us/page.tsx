@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 /**
  * About Us page — LaxRee Amenities
  * Task ID: P-1
@@ -20,6 +23,7 @@ import {
   Handshake,
   type LucideIcon,
 } from "lucide-react";
+import { usePageContent } from "@/hooks/use-page-content";
 import {
   PageHero,
   SectionHeading,
@@ -48,7 +52,18 @@ const VALUE_ICONS: Record<string, LucideIcon> = {
   Handshake,
 };
 
+
+const DEFAULTS = {
+  heroEyebrow: "Who We Are",
+  heroTitle: "Eleven Years of Opening Doors",
+  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
+  heroImage: "",
+  factoryImage: "",
+};
+
 export default function AboutUsPage() {
+  const { content } = usePageContent("page:about-us", DEFAULTS);
+
   return (
     <>
       {/* ═══════════════════════════════════════════════════════════
@@ -58,9 +73,9 @@ export default function AboutUsPage() {
           ═══════════════════════════════════════════════════════════ */}
       <PageHero
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
-        eyebrow="Who We Are"
-        title="Eleven Years of Opening Doors"
-        subtitle="LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."
+        eyebrow={content.heroEyebrow || "Who We Are"}
+        title={content.heroTitle || "Eleven Years of Opening Doors"}
+        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
       >
         {/* Stats band — glass-on-charcoal strip, static Plex Mono numbers */}
         <div className="glass-on-charcoal rounded-3xl p-6 md:p-8 max-w-4xl">
@@ -147,7 +162,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src="/images/about/factory.jpg"
+                  src={content.heroImage || "/images/about/factory.jpg"}
                   alt="Inside the LaxRee manufacturing facility in Ajmer, Rajasthan"
                   width={800}
                   height={640}
@@ -255,7 +270,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src="/images/products/mini-bar.jpg"
+                  src={content.factoryImage || "/images/products/mini-bar.jpg"}
                   alt="A LaxRee absorption minibar assembled on the Ajmer production line"
                   width={800}
                   height={640}
