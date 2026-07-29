@@ -77,7 +77,7 @@ export default function ExperienceCenterPage() {
             body="Can't visit in person? Take a virtual tour of our Gurugram experience center — India's largest hospitality supplier showcase."
           />
           <FadeIn>
-            <div className="mt-12 relative overflow-hidden rounded-24px aspect-video bg-charcoal border border-white/10">
+            <div className="mt-12 relative overflow-hidden rounded-[24px] aspect-video bg-charcoal border border-white/10">
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brass/20 border-2 border-brass/40 cursor-pointer hover:bg-brass/30 transition-colors">
                   <Play className="h-8 w-8 text-brass ml-1" fill="currentColor" />
@@ -101,7 +101,7 @@ export default function ExperienceCenterPage() {
           <div className="container-laxree">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <FadeIn delay={0.1}>
-                <div className="relative overflow-hidden rounded-24px aspect-[4/3] bg-charcoal border border-white/10">
+                <div className="relative overflow-hidden rounded-[24px] aspect-[4/3] bg-charcoal border border-white/10">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Building2 className="h-24 w-24 text-brass/30" />
                   </div>
@@ -188,7 +188,7 @@ export default function ExperienceCenterPage() {
               { title: "Expert Consultation", desc: "Meet our hospitality procurement experts who can guide you on product selection and project planning." },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.1}>
-                <div className="glass-on-ivory rounded-24px p-6">
+                <div className="glass-on-ivory rounded-[24px] p-6">
                   <h3 className="font-display text-lg text-ink mb-2">{item.title}</h3>
                   <p className="font-body text-[14px] leading-relaxed text-ink-muted">
                     {item.desc}

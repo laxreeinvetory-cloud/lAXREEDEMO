@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -17,11 +17,25 @@ import {
 import { useEnquiry } from "@/components/providers/enquiry-provider";
 import { BLOG_POSTS } from "@/lib/laxree/site-data";
 
+type BlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  image: string;
+  author: string;
+  authorRole: string;
+  date: string;
+  readTime: string;
+  published: boolean;
+};
+
 /* ─────────────────────────────────────────────────────────────
    Section 2 — Featured post
    ───────────────────────────────────────────────────────────── */
-function FeaturedPost() {
-  const post = BLOG_POSTS[0];
+function FeaturedPost({ post }: { post: BlogPost | null }) {
+  if (!post) return null;
   return (
     <section className="section section-ivory py-20 md:py-28">
       <div className="container-laxree">
@@ -90,7 +104,7 @@ function FeaturedPost() {
 /* ─────────────────────────────────────────────────────────────
    Section 3 — All posts grid (charcoal)
    ───────────────────────────────────────────────────────────── */
-function AllPostsGrid() {
+function AllPostsGrid({ posts }: { posts: BlogPost[] }) {
   return (
     <section className="section section-charcoal py-20 md:py-28">
       <div className="container-laxree">
@@ -101,7 +115,7 @@ function AllPostsGrid() {
         />
 
         <div className="mt-12 grid md:grid-cols-3 gap-6">
-          {BLOG_POSTS.map((post, i) => (
+          {posts.map((post, i) => (
             <FadeIn key={post.slug} delay={i * 0.08}>
               <Link
                 href={`/blog/${post.slug}`}
@@ -265,6 +279,30 @@ function NewsletterSignup() {
    Blog listing page
    ───────────────────────────────────────────────────────────── */
 export default function BlogListingPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/blog", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.posts && data.posts.length > 0) {
+          setPosts(data.posts);
+        } else {
+          // Fallback to static data
+          setPosts(BLOG_POSTS as unknown as BlogPost[]);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setPosts(BLOG_POSTS as unknown as BlogPost[]);
+        setLoading(false);
+      });
+  }, []);
+
+  const featured = posts[0] || null;
+  const rest = posts.slice(1);
+
   return (
     <>
       <PageHero
@@ -274,8 +312,8 @@ export default function BlogListingPage() {
         subtitle="Sustainability, design psychology, amenity trends — practical insights for hotel procurement teams, from the LaxRee factory floor."
       />
 
-      <FeaturedPost />
-      <AllPostsGrid />
+      <FeaturedPost post={featured} />
+      <AllPostsGrid posts={rest} />
       <TopicsRow />
       <NewsletterSignup />
 
