@@ -162,7 +162,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src={content.heroImage || "/images/about/factory.jpg"}
+                  src={content.factoryImage || content.heroImage || "/images/about/factory.jpg"}
                   alt="Inside the LaxRee manufacturing facility in Ajmer, Rajasthan"
                   width={800}
                   height={640}
