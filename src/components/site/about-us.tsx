@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -23,6 +23,19 @@ const ABOUT_CHIPS = [
 export function AboutUs() {
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
+  const [factoryImage, setFactoryImage] = useState<string>("/images/about/factory.jpg");
+
+  useEffect(() => {
+    fetch("/api/admin/cms?key=page:about-us", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.value) {
+          if (data.value.factoryImage) setFactoryImage(data.value.factoryImage);
+          else if (data.value.heroImage) setFactoryImage(data.value.heroImage);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Parallax: as the section scrolls through the viewport, the inner image
   // translates from -8% → +8%. Image is scaled 1.1 so edges never reveal.
@@ -124,7 +137,7 @@ export function AboutUs() {
             >
               {/* Parallax image — scaled 1.1 so the ±8% translate never reveals edges */}
               <motion.img
-                src="/images/about/factory.jpg"
+                src={factoryImage}
                 alt="LaxRee Amenities manufacturing facility in Ajmer, Rajasthan"
                 width={800}
                 height={1000}
