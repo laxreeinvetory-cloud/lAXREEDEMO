@@ -15,7 +15,7 @@ import {
   FadeIn,
 } from "@/components/site/page-primitives";
 import { db } from "@/lib/db";
-import { ProductDetailCard } from "@/components/site/product-detail-card";
+import { ProductPageWithSelector, SuggestionCard } from "@/components/site/product-detail-card";
 
 export const dynamic = "force-dynamic";
 
@@ -104,18 +104,15 @@ export default async function ItemPage({
         subtitle={`${allProducts.length} models available. Click any product to see full details, images, and specifications.`}
       />
 
-      {/* Amazon-style product detail cards */}
-      <section className="section section-ivory py-12 md:py-16">
+      {/* Product selector + single product detail */}
+      <section className="section section-ivory py-8 md:py-12">
         <div className="container-laxree">
-          <div className="flex flex-col gap-12">
-            {allProducts.map((product, i) => (
-              <FadeIn key={product.model} delay={i * 0.05}>
-                <div className="pb-12 border-b border-ink/10 last:border-0">
-                  <ProductDetailCard product={product} index={i} />
-                </div>
-              </FadeIn>
-            ))}
-          </div>
+          <ProductPageWithSelector
+            products={allProducts}
+            categoryName={item.name}
+            parentSlug={parent.slug}
+            itemSlug={itemSlug}
+          />
 
           {allProducts.length === 0 && (
             <div className="text-center py-16">
@@ -125,22 +122,36 @@ export default async function ItemPage({
         </div>
       </section>
 
+      {/* Suggestion models — other products in same category */}
+      {allProducts.length > 1 && (
+        <section className="section section-charcoal py-12 md:py-16">
+          <div className="container-laxree">
+            <SectionHeading theme="charcoal" eyebrow="YOU MAY ALSO LIKE" title="Other Models" />
+            <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
+              {allProducts.map((product, i) => (
+                <SuggestionCard key={product.model} product={product} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Other item types */}
-      <section className="section section-charcoal py-16 md:py-20">
+      <section className="section section-ivory py-12 md:py-16">
         <div className="container-laxree">
-          <SectionHeading theme="charcoal" eyebrow="EXPLORE MORE" title="Other Item Types" />
+          <SectionHeading theme="ivory" eyebrow="EXPLORE MORE" title="Other Item Types" />
           <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {siblingItems.map((other) => {
               const img = other.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
               return (
                 <Link key={other.slug} href={`/products/${parent.slug}/${other.slug}`}
-                  className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
+                  className="group glass-on-ivory rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-white">
                     <img src={img} alt={other.name} loading="lazy"
                       className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="p-3">
-                    <h3 className="font-display text-[14px] text-ivory">{other.name}</h3>
+                    <h3 className="font-display text-[14px] text-ink">{other.name}</h3>
                   </div>
                 </Link>
               );
