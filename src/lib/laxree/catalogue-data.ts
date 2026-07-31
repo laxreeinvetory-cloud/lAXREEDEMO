@@ -223,7 +223,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-132",
         name: "45L Solid Door Compressor Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--132.jpg",
         description:
           "Automatic defrost, low noise and vibration, LED light inside, right side open, 1 pc shelf. Compressor based cooling. Size: W400 × D390 × H480mm.",
         tier: "Essential",
@@ -241,7 +241,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-126",
         name: "30L Glass Door Thermoelectric Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--126.jpg",
         description:
           "Low noise & vibration, CFC free, internal LED light, right side open, 1 pc shelf. Thermoelectric cooling. Size: W400 × D390 × H480mm.",
         tier: "Premium",
@@ -258,7 +258,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-127",
         name: "30L Solid Door Thermoelectric Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--127.jpg",
         description:
           "Low noise & vibration, CFC free, internal LED light, right side open, 1 pc shelf. Thermoelectric cooling. Size: W400 × D390 × H480mm.",
         tier: "Premium",
@@ -275,7 +275,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-128",
         name: "40L Glass Door Thermoelectric Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--128.jpg",
         description:
           "Low noise & vibration, CFC free, internal LED light, right side open, 1 pc shelf. Thermoelectric cooling. Size: W400 × D425 × H540mm.",
         tier: "Premium",
@@ -292,7 +292,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-129",
         name: "40L Solid Door Thermoelectric Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--129.jpg",
         description:
           "Low noise & vibration, CFC free, internal LED light, right side open, 1 pc shelf. Thermoelectric cooling. Size: W400 × D425 × H540mm.",
         tier: "Premium",
@@ -310,7 +310,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-130",
         name: "30L Mirror Finish Solid Door Absorption Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--130.jpg",
         description:
           "Zero noise and vibration, internal LED light, right side open, 1 pc shelf. Absorption cooling. Mirror finish solid door. Size: W400 × D425 × H475mm.",
         tier: "Lux",
@@ -327,7 +327,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMB-131",
         name: "40L Mirror Finish Solid Door Absorption Mini Bar",
         category: "Mini Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRMB--131.jpg",
         description:
           "Zero noise and vibration, internal LED light, right side open, 1 pc shelf. Absorption cooling. Mirror finish solid door for luxury rooms. Size: W400 × D425 × H550mm.",
         tier: "Lux",
@@ -354,7 +354,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-155",
         name: "0.8L Electric Kettle — Double Layer SS304",
         category: "Tea Kettle",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--155.jpg",
         description:
           "0.8L electric kettle, double layer with SS 304 food-grade inner stainless steel body. Matt finish PP outer surface. Automatic shut-off, anti-scalding. Power: 220V, 50Hz, 1200W.",
         tier: "Premium",
@@ -371,7 +371,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-146",
         name: "0.6L Electric Kettle — Wooden Finish",
         category: "Tea Kettle",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--146.jpg",
         description:
           "0.6L electric kettle with wooden finish and 304 SS inner body. Power: 220V-240V, 50-60Hz, 1000W. Stylish wooden exterior with food-grade steel interior.",
         tier: "Premium",
@@ -388,7 +388,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-150",
         name: "0.8L Electric Kettle — Strix Controller, Pastel",
         category: "Tea Kettle",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--150.jpg",
         description:
           "0.8L electric kettle with premium Strix controller. Pastel off-white finish. Power: 220-240V, 50-60Hz, 1000W. Luxury tier for premium rooms.",
         tier: "Lux",
@@ -404,7 +404,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-156",
         name: "1L Electric Kettle — Strix Controller, Double Layer",
         category: "Tea Kettle",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--156.jpg",
         description:
           "1L electric kettle with Strix controller. Double layer body with SS 304 food-grade inner stainless steel, PP housing outer. Anti-scratch round spout, flat lid design. Auto shut-off, anti-scalding. Power: 220V, 50Hz, 1000W.",
         tier: "Lux",
@@ -434,7 +434,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-160",
         name: "TCM Tray Set — ABS Material",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--160.jpg",
         description:
           "TCM tray set comprising main tray and sachet holder. Made in ABS material. Suitable for all kettles. Size: W380 × D260 × H55mm.",
         tier: "Essential",
@@ -450,7 +450,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-158",
         name: "TCM Tray with Anti-Theft Mechanism — ABS",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-158.jpg",
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS material. Size: W440 × D225 × H30mm.",
         tier: "Essential",
@@ -469,7 +469,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-161",
         name: "TCM Tray with Anti-Theft — ABS, Compact",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-161.jpg",
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS material. Size: W355 × D235 × H30mm.",
         tier: "Essential",
@@ -488,7 +488,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-168",
         name: "TCM Tray — Melamine with Sachet Holder",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-168.jpg",
         description:
           "TCM tray made in melamine material with sachet holder. Main tray size: W395 × D280 × H24mm. Sachet holder: 155 × 115 × 50mm.",
         tier: "Essential",
@@ -504,7 +504,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-171",
         name: "TCM Tray with Anti-Theft — Melamine",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--171.jpg",
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in melamine material. Size: W440 × D225 × H30mm.",
         tier: "Essential",
@@ -524,7 +524,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-167",
         name: "TCM Tray with Anti-Theft — ABS + SS",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-167.jpg",
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS with SS accents. Size: W350 × D204 × H50mm.",
         tier: "Premium",
@@ -543,7 +543,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-166",
         name: "TCM Tray Complete Set — Melamine, Anti-Theft",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/tray/LRWT-166.jpg",
         description:
           "Complete TCM tray set with anti-theft mechanism. Includes main tray, sachet holder, and service tray for mugs and glasses. Made in melamine. Main tray: W380 × D300 × H22.5mm. Service tray: W335 × D130 × H11mm. Tea box: W155 × D115 × H50mm.",
         tier: "Premium",
@@ -565,7 +565,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-170",
         name: "TCM Tray with Anti-Theft — Wooden Finish + SS",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT--170.jpg",
         description:
           "TCM tray with anti-theft mechanism. ABS tray with wooden finish and SS accents. In-built sachet holder, separate compartment for stirrer, water spill collector. Size: W350 × D204 × H50mm.",
         tier: "Lux",
@@ -584,7 +584,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-163",
         name: "TCM Tray — ABS with PU Leatherette Covering",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-163.jpg",
         description:
           "TCM tray comprising main tray and sachet holder. ABS body with PU leatherette covering. Suitable for all kettles. Size: W390 × D260 × H30mm.",
         tier: "Lux",
@@ -600,7 +600,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-159",
         name: "TCM Tray — Melamine, In-Built Compartments",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-159.jpg",
         description:
           "TCM tray with in-built compartments for sachet, stirrer, mugs, and water bottle. Made in melamine material. Suitable for all kettle types. Size: W420 × D300 × H28mm.",
         tier: "Lux",
@@ -619,7 +619,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-164",
         name: "TCM Tray — Leatherette, Premium",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-164.jpg",
         description:
           "TCM tray made in leatherette. In-built sachet holder. Suitable for all kettle types. Size: W340 × D300 × H40mm. Luxury finish for premium rooms.",
         tier: "Lux",
@@ -635,7 +635,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-165",
         name: "TCM Tray with Anti-Theft — ABS + SS, Compact",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-165.jpg",
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS with SS accents. Size: W267 × D198 × H70mm.",
         tier: "Lux",
@@ -654,7 +654,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-162",
         name: "TCM Tray — Leatherette, Large",
         category: "Kettle Tray",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWT-162.jpg",
         description:
           "TCM tray comprising main tray and sachet holder. Made in leatherette material. Suitable for all kettles. Size: W450 × D300 × H55mm. Large premium tray for luxury rooms.",
         tier: "Lux",
@@ -678,7 +678,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-201",
         name: "Essential Safe Box (Black)",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/safe-box/LRSB-201.jpg",
         description:
           "Right hand flip with 4-6 digit personal codes. Low energy consumption. Individual manual over-ride key. Pre-drilled mount holes in the bottom. Master over-ride key option available.",
         tier: "Essential",
@@ -695,7 +695,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-206",
         name: "Medium Size Safe Box",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB-206.jpg",
         description:
           "Right hand flip with 4-6 digit personal codes. Auto lock on 4 times wrong codes input. Low energy consumption. Manual over-ride key. Pre-drilled mount holes. Master over-ride key option available.",
         tier: "Essential",
@@ -712,7 +712,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-211",
         name: "Medium Size Safe Box — Essential",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB--211.jpg",
         description:
           "Right hand flip with 4-6 digit personal codes. Auto lock on 4 times wrong codes input. Low energy consumption. Manual over-ride key. Pre-drilled mount holes. Master over-ride key option available.",
         tier: "Essential",
@@ -729,7 +729,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-212",
         name: "Laptop Size Safe Box — LED Display",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB--212.jpg",
         description:
           "LED display, right hand flip with 4-6 digit personal codes. LED light inside for better visibility. Auto lock on 4 times wrong codes input. Individual over-ride key. Last 100 event records. Pre-drilled mount holes.",
         tier: "Essential",
@@ -746,7 +746,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-214",
         name: "Laptop Size Safe Box — LED, Premium",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB--214.jpg",
         description:
           "LED display, right hand flip with 4-6 digit personal codes. LED light inside for better visibility. Auto lock on 4 times wrong codes input. Individual over-ride key. Last 100 event records. Pre-drilled mount holes.",
         tier: "Premium",
@@ -763,7 +763,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-202",
         name: "Laptop Size Safe Box — LED, Back-Lit",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB-202.jpg",
         description:
           "LED display, right hand flip with 4-6 digit personal codes. LED light inside for better visibility. Auto lock on 4 times wrong codes input. Individual over-ride key. Last 100 event records.",
         tier: "Premium",
@@ -780,7 +780,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-213",
         name: "Laptop Size Safe Box — LED Display",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB--213.jpg",
         description:
           "LED display, right hand flip with 4-6 digit personal codes. LED light inside for better visibility. Auto lock on 4 times wrong codes input. Individual over-ride key. Last 100 event records.",
         tier: "Premium",
@@ -797,7 +797,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-203",
         name: "Laptop Size Safe Box — Back-Lit Keypad",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB-203.jpg",
         description:
           "LED display with back-lit keypad. Right hand flip with 4-6 digit personal codes. LED light inside for better visibility. Auto lock on 4 times wrong codes input. Master over-ride key option. Last 100 event records.",
         tier: "Lux",
@@ -814,7 +814,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-216",
         name: "Laptop Size Safe Box — Lux",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/safe-box/LRSB-216.jpg",
         description:
           "LED display, right hand flip with 4-6 digit personal codes. LED light inside for better visibility. Auto lock on 4 times wrong codes input. Individual over-ride key. Last 100 event records. Pre-drilled mount holes.",
         tier: "Lux",
@@ -831,7 +831,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-204",
         name: "Laptop Size Safe Box — Steel Ring, Lux",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB-204.jpg",
         description:
           "LED display with back-lit keypad with aesthetic steel ring around the display panel. Right hand flip with 4-6 digit personal codes. LED light inside. Auto lock on 4 times wrong codes input. Master over-ride key option. Last 100 event records.",
         tier: "Lux",
@@ -848,7 +848,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-209",
         name: "Laptop Size Safe Box — ORBITA, Lux",
         category: "Safe Box",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRSB-209.jpg",
         description:
           "LED display, right hand flip with 4-6 digit personal codes. LED light inside. Auto lock on 4 times wrong codes input. Master password available. Mechanical override optional. Pre-drilled mount holes. Last 100 event records.",
         tier: "Lux",
@@ -877,7 +877,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-229B",
         name: "Solid Wood Hanger with Anti-Slip Notch — B Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-229-B.jpg",
         description:
           "Made in 'B' grade lotus wood with central hook that can be 360° swiveled and a multi-function cross bar with anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -893,7 +893,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-227B",
         name: "Solid Wood Hanger — Antitheft, U-Shape Notch, B Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-227-B.jpg",
         description:
           "Made in 'B' grade Lotus wood with antitheft attachment, multi-function cross bar and U-shape notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -909,7 +909,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-231B",
         name: "Solid Wood Hanger with Anti-Slip Notch & Metal Clips — B Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-231-B.jpg",
         description:
           "Made in 'B' grade lotus wood with central hook that can be 360° swiveled and metal clips for pants. Anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -925,7 +925,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-226B",
         name: "Solid Wood Hanger — Antitheft, SS Clip, B Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-226-B.jpg",
         description:
           "Made in 'B' grade wood with antitheft attachment, U-shape notch and stainless-steel clip for pants. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -942,7 +942,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-229",
         name: "Solid Wood Hanger with Anti-Slip Notch — A Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-229.jpg",
         description:
           "Made in 'A' grade lotus wood with central hook that can be 360° swiveled and a multi-function cross bar with anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -958,7 +958,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-234",
         name: "Solid Wood Hanger — Anti-Slip Teeth Bar, A Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-234.jpg",
         description:
           "Made in 'A' grade lotus wood with anti-slip teeth bar. Premium build with smooth finish. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -973,7 +973,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-227",
         name: "Solid Wood Hanger — Antitheft, U-Shape, A Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-227.jpg",
         description:
           "Made in 'A' grade Lotus wood with antitheft attachment, multi-function cross bar and U-shape notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -989,7 +989,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-231",
         name: "Solid Wood Hanger with Anti-Slip Notch & Metal Clips — A Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-231.jpg",
         description:
           "Made in 'A' grade lotus wood with central hook that can be 360° swiveled and metal clips for pants. Anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -1005,7 +1005,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-233",
         name: "Solid Wood Hanger — Antitheft, Teeth Bar, A Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-233.jpg",
         description:
           "Made in 'A' grade Lotus wood with antitheft attachment and anti-slip teeth bar. Premium build. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -1022,7 +1022,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-228",
         name: "Satin Finish Shawl Hanger — Antitheft",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-228.jpg",
         description:
           "Satin finish shawl hanger with antitheft attachment. Luxury off-white finish for premium wardrobes. Size: 44.5 cm.",
         tier: "Lux",
@@ -1037,7 +1037,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-232",
         name: "Solid Wood Structure Coat Hanger — Flat Hook, A Grade",
         category: "Wooden Hangers",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWH-232.jpg",
         description:
           "Made in 'A' grade lotus wood with flat hook that can be 360° swiveled. Multifunction anti-slip bar with teeth. Designed for coats and heavier garments. Colour: Natural Wood.",
         tier: "Lux",
@@ -1061,7 +1061,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRFD-608",
         name: "RFID Lock — SS Outer Body",
         category: "RFID Locks",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/door-lock/LRFD-608.jpg",
         description:
           "Made in SS outer body with 5 match SS finish mortise lock. Override key. Size: 242 × 32.5 × 77mm.",
         tier: "Essential",
@@ -1077,7 +1077,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRFD-609",
         name: "RFID Lock — Aluminium Alloy",
         category: "RFID Locks",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/door-lock/LRFD-609.jpg",
         description:
           "Made in aluminium alloy body and coated gloss paint with 5 match mortise lock. Master over-ride key. Size: 330 × 45 × 16mm.",
         tier: "Essential",
@@ -1093,7 +1093,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRFD-610",
         name: "RFID Lock — SS Body",
         category: "RFID Locks",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/door-lock/LRFD-610.jpg",
         description:
           "Made in stainless steel body with 5 SS finish latch mortise lock. Master key for override. Size: 242 × 32.5 × 77mm.",
         tier: "Essential",
@@ -1109,7 +1109,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRFD-611",
         name: "DND Set — Do Not Disturb",
         category: "RFID Locks",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/door-lock/LRFD-611.jpg",
         description:
           "With a pair of two switches — DND switch set and integrated door bell for guest room. Outer body made of glossy acrylic material. AC: 220V / 50Hz. Size: 86 × 89mm.",
         tier: "Essential",
@@ -1125,7 +1125,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRFD-607",
         name: "RFID Hotel Room Lock — SS, Premium",
         category: "RFID Locks",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/door-lock/LRFD-607.jpg",
         description:
           "RFID Lock + Mifare Card + Mortise Lock. 304 stainless steel body. Moisture proof, fire rated. Suitable for 35mm to 65mm doors. External panel: H280 × W40mm × D13mm. Audit records latest 1680. Interface with most PMS systems (Fidelio/Opera). Low battery detection. Up to 16 public areas integration.",
         tier: "Premium",
@@ -1144,7 +1144,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRFD-606",
         name: "RFID Hotel Room Lock — Black, Lux",
         category: "RFID Locks",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/door-lock/LRFD-606.jpg",
         description:
           "RFID Lock + Mifare Card + Mortise Lock. 304 stainless steel body. Moisture proof, fire rated. Suitable for 35mm to 65mm doors. External panel: H52 × W52mm × D12mm. Audit records latest 1680. Interface with most PMS systems (Fidelio/Opera). Low battery detection. Up to 16 public areas integration.",
         tier: "Lux",
@@ -1172,7 +1172,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-191",
         name: "Basic Room Telephone",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-telephones/LRDR-191.jpg",
         description:
           "Basic room telephone unit for standard hotel guest rooms. Simple, reliable and easy to use.",
         tier: "Essential",
@@ -1186,7 +1186,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-192",
         name: "Bathroom Telephone",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-telephones/LRDR-192.jpg",
         description:
           "Bathroom telephone unit designed for humid environments. Compact and discreet.",
         tier: "Essential",
@@ -1201,7 +1201,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-181",
         name: "Telephone Unit — Large Panel, 8 Speed Dialing",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDR-181.jpg",
         description:
           "Telephone unit with large panel cardboard, 8 speed dialing keys, dual tone electric ringing, hands-free function, mute key, auto dynamic redial key, flash key, dual tone dialing, hold key.",
         tier: "Premium",
@@ -1220,7 +1220,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-183",
         name: "Telephone Unit — Large Message Light, 6 Speed Dialing",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDR-183.jpg",
         description:
           "Telephone unit with large panel cardboard, large message light, message extraction one-touch to talk, 6 speed dialing keys, automatic line take-up function, long earphone cable, power-off memory, hands-free function.",
         tier: "Premium",
@@ -1239,7 +1239,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-190",
         name: "Wall Mountable Bathroom Telephone — Waterproof",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDR--190.jpg",
         description:
           "Wall mountable bathroom telephone unit. Soft humanized ring, efficient light for ringer, double audio dialing, auto redial, flash/transfer, mute button lighting proof, moisture proof and water proof.",
         tier: "Premium",
@@ -1259,7 +1259,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-182",
         name: "Lobby House Telephone — Panel Indicator",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDR-182.jpg",
         description:
           "Lobby house telephone unit with panel indicator for call connect. Designed for lobby and house use.",
         tier: "Lux",
@@ -1274,7 +1274,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-189",
         name: "Telephone Unit — Lux",
         category: "Room Telephone",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDR--189.jpg",
         description:
           "Premium telephone unit for luxury rooms and suites. High-grade build and finish.",
         tier: "Lux",
@@ -1296,7 +1296,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDR-177",
         name: "Electronic FM Radio with Bluetooth — Dual USB Charging",
         category: "Docking Pod",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDR-177.jpg",
         description:
           "Electronic FM Radio with Bluetooth. Rotatable lightning connector / Micro USB & Type C connector. Dual USB charging, supports 2.1A charging current. AC input: 100-240V / 50-60Hz, DC output: 5V/2A. Size: L150 × W110 × H13.8mm.",
         tier: "Lux",
@@ -1323,7 +1323,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-658",
         name: "Perforated SS Dustbin — Round",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-658.jpg",
         description:
           "Perforated stainless steel dustbin, full round shape, with soft rubber grip at the bottom for anti-scratch. Size: 175 × 250mm.",
         tier: "Essential",
@@ -1339,7 +1339,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-656",
         name: "Peddle SS Dustbin — 5 Ltr",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-656.jpg",
         description:
           "Peddle stainless steel dustbin, full round shape, with inner plastic bucket and soft rubber grip at the bottom for anti-scratch. Capacity: 5 ltr.",
         tier: "Essential",
@@ -1356,7 +1356,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-659",
         name: "Double Layer Room Dustbin — PP, Leather Finish",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-659.jpg",
         description:
           "Double layer room dustbin. Outer cover made in leather finish PP, inner cover of plain finish PP with soft rubber grip at the bottom for anti-scratch. Size: 225 × 255mm.",
         tier: "Essential",
@@ -1372,7 +1372,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-667",
         name: "SS 5 Ltr Swing Lid Dustbin",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-667.jpg",
         description:
           "Stainless steel 5 ltr dustbin with swing lid. Rubber ring at the bottom for scratch resistance. Size: 8 × 12 inches.",
         tier: "Essential",
@@ -1390,7 +1390,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-669",
         name: "Double Layer Dustbin — Wooden Finish, 5 Ltr",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-669.jpg",
         description:
           "Double layer dustbin with outer layer in wooden finish, rectangle shape and SS strip. Capacity: 5 ltr.",
         tier: "Premium",
@@ -1406,7 +1406,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-670",
         name: "Double Layer Dustbin — ABS, Brown & Orange, 5 Ltr",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-670.jpg",
         description:
           "Double layer dustbin with outer layer made with ABS material, rectangle shape. Capacity: 5 ltr. Brown & orange / grey finish.",
         tier: "Premium",
@@ -1421,7 +1421,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-668",
         name: "Double Layer Dustbin — Marble Finish, 5 Ltr",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-668.jpg",
         description:
           "Double layer dustbin with outer layer in marble finish, rectangle shape and SS strip. Capacity: 5 ltr.",
         tier: "Premium",
@@ -1438,7 +1438,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-657",
         name: "Double Layer SS Dustbin — Matt Finish",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-657.jpg",
         description:
           "Double layer SS dustbin. Outer cover made in matt finish SS, inner cover of PP with soft rubber grip at the bottom for anti-scratch. Size: 225 × 255mm.",
         tier: "Premium",
@@ -1456,7 +1456,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-665",
         name: "Peddle SS Dustbin — Soft Close, 5 Ltr",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-665.jpg",
         description:
           "Soft-close lid SS dustbin with inner plastic bucket, round shape. Capacity: 5 ltr. Size: dia-200 × H270mm.",
         tier: "Lux",
@@ -1474,7 +1474,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-660",
         name: "Square Leatherette Room Dustbin",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/dustbin/LRRA-660.jpg",
         description:
           "Room dustbin made in leatherette material. Size: D265 × H265mm. Luxury finish for premium rooms.",
         tier: "Lux",
@@ -1489,7 +1489,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRRA-671",
         name: "ABS Dustbin — With Partition",
         category: "Room Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-dustbins/LRRA-671.jpg",
         description:
           "ABS dustbin with partition in the middle for waste segregation. Modern design.",
         tier: "Lux",
@@ -1512,7 +1512,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-805",
         name: "Rectangle Tissue Box — ABS + PU Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-805.jpg",
         description:
           "Rectangle tissue box made in ABS body with top cover of PU leatherette. Size: W205 × D100 × H70mm.",
         tier: "Essential",
@@ -1528,7 +1528,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-806",
         name: "Square Tissue Box — ABS + PU Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-806.jpg",
         description:
           "Square tissue box made in ABS body with top cover of PU leatherette. Size: W100 × D100 × H80mm.",
         tier: "Essential",
@@ -1544,7 +1544,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-814",
         name: "Remote Holder — ABS + PU Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-814.jpg",
         description:
           "Remote holder made in ABS body with top cover of PU leatherette. Size: W90 × D100 × H90mm.",
         tier: "Essential",
@@ -1559,7 +1559,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-811",
         name: "Notepad Holder — Resin",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-811.jpg",
         description: "Resin-made notepad holder. Size: 205 × 12 × 105mm.",
         tier: "Essential",
         specs: [
@@ -1572,7 +1572,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-817",
         name: "Accessory Tray — ABS + PU Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-817.jpg",
         description:
           "Accessory tray made in ABS body and covered with PU leatherette material. Size: W310 × D205 × H30mm.",
         tier: "Essential",
@@ -1587,7 +1587,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-824",
         name: "Coaster for Double Glass — Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-824.jpg",
         description:
           "Coaster for double glass made in leatherette material. Size: 4\" × 12\".",
         tier: "Essential",
@@ -1603,7 +1603,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-812",
         name: "Notepad Holder — Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDA-812.jpg",
         description:
           "Notepad holder made in leatherette. Size: W200 × D105 × H10mm.",
         tier: "Premium",
@@ -1617,7 +1617,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-812A",
         name: "A3 Compedium — Leatherette, Magnetic Clip",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-desktop/LRDA-812A.jpg",
         description:
           "A3 size compedium made in leatherette material with magnetic clip for paper and pocket brochure on one side. Size: 297 × 420mm.",
         tier: "Premium",
@@ -1635,7 +1635,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-815",
         name: "Remote Holder — Leatherette",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRDA-815.jpg",
         description:
           "Remote holder made in leatherette. Size: W120 × D140 × H90mm.",
         tier: "Premium",
@@ -1649,7 +1649,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-801",
         name: "Square Leatherette Tissue Box",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-801.jpg",
         description:
           "Square tissue box made in leatherette material. Size: W130 × D130 × H145mm.",
         tier: "Premium",
@@ -1664,7 +1664,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-804",
         name: "Rectangle Leatherette Tissue Box",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-804.jpg",
         description:
           "Rectangle tissue box made in leatherette material. Size: W220 × D130 × H55mm.",
         tier: "Premium",
@@ -1679,7 +1679,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-818",
         name: "Accessory Tray — Leatherette, Large",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/desktop-accessories/LRDA-818.jpg",
         description:
           "Accessory tray made in leatherette material. Size: W305 × D300 × H80mm.",
         tier: "Premium",
@@ -1693,7 +1693,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRAT-370",
         name: "Notepad Holder — Resin, Wood Finish",
         category: "Desktop Accessories",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/amenities-tray-set/LRAT-370.jpg",
         description:
           "Resin-made notepad holder in wood-like finish. Size: 205 × 12 × 105mm. Premium wooden-look alternative to standard resin holder.",
         tier: "Premium",
@@ -1765,7 +1765,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRHD-280",
         name: "Hair Dryer with Foldable Handle + Hang-Up Loop",
         category: "Hair Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRHD-280.jpg",
         description:
           "Power: 2100W. Safety switch. Power supply: 220-240V, 50Hz. 2 speed blow with 3 mode hot/cold intensity option. Ionised air for softer hair. Magnetic removable air-blast nozzles. Auto off on over-heat. Twisted cord length: 2m. Size: W270 × D140 × H250mm.",
         tier: "Lux",
@@ -1792,7 +1792,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-382",
         name: "Manual Soap Dispenser — ABS, 350ml",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA-382.jpg",
         description:
           "Manual soap dispenser made in ABS. Capacity: 350ml. Wall-mounted for guest-room washbasins.",
         tier: "Essential",
@@ -1808,7 +1808,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-383",
         name: "Manual Soap Dispenser — 3 Liquid Types, 400ml",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA-383.jpg",
         description:
           "Manual soap dispenser that supports 3 liquid types (soap, shampoo, lotion). Capacity: 400ml. Wall-mounted.",
         tier: "Essential",
@@ -1824,7 +1824,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-385",
         name: "Manual Soap Dispenser — Silicone Vacuum, 300ml",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-soap-dispensers/LRWA-385.jpg",
         description:
           "Manual soap dispenser with silicone vacuum mechanism for clean, drip-free dispensing. Capacity: 300ml.",
         tier: "Essential",
@@ -1840,7 +1840,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-362-1pc",
         name: "Manual Pump Soap Dispenser — ABS Bracket, 300ml",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--362-1-pc.jpg",
         description:
           "Manual pump soap dispenser with ABS bracket. Single bottle. Capacity: 300ml.",
         tier: "Premium",
@@ -1856,7 +1856,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-362-2pc",
         name: "Manual Pump Soap Dispenser — 2 Bottles, 300ml",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--362-2-Pc.jpg",
         description:
           "Manual pump soap dispenser with ABS bracket and two bottles for soap + shampoo (or shampoo + lotion). Capacity: 300ml each.",
         tier: "Premium",
@@ -1872,7 +1872,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-364",
         name: "Soap Dispenser Set of 3 — SS, Anti-Theft, 500ml",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--364.jpg",
         description:
           "Set of 3 stainless-steel soap dispensers (soap, shampoo, lotion) with anti-theft mechanism. Capacity: 500ml each.",
         tier: "Premium",
@@ -1888,7 +1888,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-362-wooden",
         name: "Manual Pump Soap Dispenser — Wooden Finish, 300ml × 2",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-soap-dispensers/LRWA-362-wooden.jpg",
         description:
           "Manual pump soap dispenser with wooden finish bracket and two bottles. Capacity: 300ml each. Warm, premium look for boutique rooms.",
         tier: "Premium",
@@ -1904,7 +1904,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-365",
         name: "Manual Soap Dispenser — SS Bracket, PET Bottle, 400ml × 2",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--365.jpg",
         description:
           "Manual soap dispenser with stainless-steel bracket and two PET bottles. Capacity: 400ml each. Premium dual-bottle setup.",
         tier: "Lux",
@@ -1921,7 +1921,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-373",
         name: "Automatic Soap Dispenser — ABS",
         category: "Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-soap-dispenser/LRWA-373.jpg",
         description:
           "Automatic (sensor) soap dispenser made in ABS. Touch-free operation for hygiene. White finish.",
         tier: "Lux",
@@ -1944,7 +1944,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMM-305S",
         name: "Magnifying Mirror — 8 Inch, SS Finish",
         category: "Magnifying Mirror",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-mirrors/LRMM-305S.jpg",
         description:
           "Wall mounting mirror, 8 inch. SS base and brass body with foldable arm. Double side mirror — 1 side plain mirror, other side 3× magnifying.",
         tier: "Essential",
@@ -1961,7 +1961,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMM-305R",
         name: "Magnifying Mirror — 8 Inch, Rose Gold",
         category: "Magnifying Mirror",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-mirrors/LRMM-305R.jpg",
         description:
           "Wall mounting mirror, 8 inch. SS base and brass body with foldable arm. Double side mirror — 1 side plain mirror, other side 3× magnifying.",
         tier: "Essential",
@@ -1978,7 +1978,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMM-305B",
         name: "Magnifying Mirror — 8 Inch, Matte Black",
         category: "Magnifying Mirror",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-mirrors/LRMM-305B.jpg",
         description:
           "Wall mounting mirror, 8 inch. SS base and brass body with foldable arm. Double side mirror — 1 side plain mirror, other side 3× magnifying.",
         tier: "Essential",
@@ -1995,7 +1995,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMM-302S",
         name: "LED Magnifying Mirror — 8 Inch, SS",
         category: "Magnifying Mirror",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-mirrors/LRMM-302S.jpg",
         description:
           "LED light magnifying mirror, wall mounting, 8 inch. SS base and brass body with foldable arm. Double side mirror — 1 side plain, other side 3× magnifying. Main power supply: 220V/50Hz. Button switch on base plate.",
         tier: "Premium",
@@ -2013,7 +2013,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMM-302R",
         name: "LED Magnifying Mirror — 8 Inch, Rose Gold",
         category: "Magnifying Mirror",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-mirrors/LRMM-302R.jpg",
         description:
           "LED light magnifying mirror, wall mounting, 8 inch. SS base and brass body with foldable arm. Double side mirror — 1 side plain, other side 3× magnifying. Main power supply: 220V/50Hz. Button switch on base plate.",
         tier: "Premium",
@@ -2031,7 +2031,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRMM-302B",
         name: "LED Magnifying Mirror — 8 Inch, Matte Black",
         category: "Magnifying Mirror",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-mirrors/LRMM-302B.jpg",
         description:
           "LED light magnifying mirror, wall mounting, 8 inch. SS base and brass body with foldable arm. Double side mirror — 1 side plain, other side 3× magnifying. Main power supply: 220V/50Hz. Button switch on base plate.",
         tier: "Premium",
@@ -2062,7 +2062,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-358",
         name: "Manual Lobby Soap Dispenser — SS, 800ml",
         category: "Lobby Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--358.jpg",
         description:
           "Manual lobby soap dispenser made in stainless steel. Capacity: 800ml. Suitable for lobby and public washrooms.",
         tier: "Essential",
@@ -2079,7 +2079,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-375",
         name: "Manual Lobby Soap Dispenser — 304 SS, 1200ml, Black",
         category: "Lobby Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--375.jpg",
         description:
           "Manual lobby soap dispenser made in 304 stainless steel. Capacity: 1200ml. Black finish for premium public washrooms.",
         tier: "Premium",
@@ -2095,7 +2095,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-384",
         name: "Automatic Lobby Soap Dispenser — 3 Liquid Types, 1200ml",
         category: "Lobby Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA-384.jpg",
         description:
           "Automatic (sensor) lobby soap dispenser supporting 3 liquid types (soap, shampoo, lotion). Capacity: 1200ml. Touch-free operation for high-traffic washrooms.",
         tier: "Premium",
@@ -2112,7 +2112,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-372",
         name: "Automatic Lobby Soap Dispenser — ABS, Large Capacity",
         category: "Lobby Soap Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/lobby-soap-dispenser/LRWA-372.jpg",
         description:
           "Automatic (sensor) lobby soap dispenser made in ABS with large-capacity reservoir for high-traffic public washrooms. Touch-free operation.",
         tier: "Lux",
@@ -2143,7 +2143,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-390",
         name: "N-Fold Paper Dispenser — ABS, 22×25×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-390.jpg",
         description:
           "N-fold paper (multi-fold) dispenser made in ABS body. Size: 22 × 25 × 11.5cm. Wall-mounted for washrooms.",
         tier: "Essential",
@@ -2158,7 +2158,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-378",
         name: "JTR Paper Dispenser — Jagged Outlet, 270×126×280mm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-378.jpg",
         description:
           "JTR paper dispenser with jagged outlet for clean tearing. Size: 270 × 126 × 280mm. Wall-mounted.",
         tier: "Essential",
@@ -2173,7 +2173,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-391",
         name: "C/Fold N-Fold Paper Dispenser — ABS, 35×20×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-391.jpg",
         description:
           "C-fold and N-fold compatible paper dispenser made in ABS body. Size: 35 × 20 × 11.5cm. Larger capacity for high-traffic washrooms.",
         tier: "Essential",
@@ -2189,7 +2189,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-389",
         name: "N-Fold Paper Dispenser — SS Body, 22×25×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-389.jpg",
         description:
           "N-fold paper dispenser made in stainless-steel body. Size: 22 × 25 × 11.5cm. Durable and easy to clean.",
         tier: "Premium",
@@ -2204,7 +2204,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-405",
         name: "Recessed Tissue Dispenser — 304 SS Mirror, W252×D74×H128mm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--405.jpg",
         description:
           "Recessed tissue dispenser made in 304 stainless steel with mirror finish. Size: W252 × D74 × H128mm. Wall-recessed for a clean, flush look.",
         tier: "Premium",
@@ -2221,7 +2221,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-404",
         name: "Multi-Purpose Paper Dispenser — 304 SS, 325×102×435mm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--404.jpg",
         description:
           "Multi-purpose paper dispenser made in 304 stainless steel. Size: 325 × 102 × 435mm. Suitable for multiple paper formats in luxury washrooms.",
         tier: "Lux",
@@ -2236,7 +2236,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-398P",
         name: "Recessed Multi-Purpose Dispenser — 304 SS Satin, 435×108×1420mm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-paper-dispensers/LRWA-398P.jpg",
         description:
           "Recessed multi-purpose paper dispenser made in 304 stainless steel with satin finish. Size: 435 × 108 × 1420mm. Tall, premium unit for luxury washrooms.",
         tier: "Lux",
@@ -2260,7 +2260,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-397",
         name: "Hand Dryer — ABS Body, 850W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--397.jpg",
         description:
           "Hand dryer made in ABS outer body. Power: 850W. Air speed: 6.8 m/s. 220-240V/50-60Hz.",
         tier: "Essential",
@@ -2276,7 +2276,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-376",
         name: "Hand Dryer — ABS, 800W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--376.jpg",
         description:
           "ABS plastic body. Over-heating protection. Over-time protection. Power: 800W. Dimension: 240×195×235mm.",
         tier: "Essential",
@@ -2292,7 +2292,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-398",
         name: "Automatic Hand Dryer — ABS, 1200W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--398.jpg",
         description:
           "Automatic hand dryer in ABS body with over-time auto cut-off of 60 seconds. Power: 1200W. AC 220V-240V: 50/60Hz. Wind speed: 94 m/sec.",
         tier: "Essential",
@@ -2309,7 +2309,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-399",
         name: "Hand Dryer — Aluminium Alloy, 1650W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--399.jpg",
         description:
           "Hand dryer, 1650W power. Air speed: 10 m/s. Aluminium alloy body. Size: 290W × 165D × 215H mm.",
         tier: "Premium",
@@ -2325,7 +2325,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-396",
         name: "Hand Dryer — ABS, 1800W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--396.jpg",
         description:
           "Hand dryer made in ABS outer body. Power: 1800W. Air speed: 12 m/s. 220-240V, 50/60Hz.",
         tier: "Premium",
@@ -2341,7 +2341,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-393",
         name: "Hand Dryer — SS 304 Satin, 2300W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--393.jpg",
         description:
           "Hand dryer made in satin finish SS 304 outer body. Power: 2300W. Sensor distance: 10-15cm. Wind speed: 30 m/s.",
         tier: "Lux",
@@ -2357,7 +2357,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-394",
         name: "Hand Dryer — SS Body, Heavy Duty",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--394.jpg",
         description:
           "Stainless steel body. Energy efficient heavy duty motor. Thermal protection and overtime protection system. Advanced infrared technology. Air speed: 40m/s. Waterproofing grade: IP22. Frequency: 4A.",
         tier: "Lux",
@@ -2374,7 +2374,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-395",
         name: "Jet Hand Dryer — Brushless, ABS",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--395.jpg",
         description: "Jet hand dryer, brushless type. Made in ABS body.",
         tier: "Lux",
         specs: [
@@ -2395,7 +2395,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-346",
         name: "Anti-Skid Shower Mat — Coming Soon",
         category: "Shower Mat",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA-346.jpg",
         description:
           "Anti-skid shower mat in white. Final specs being finalised — contact us for custom quotes.",
         tier: "Essential",
@@ -2417,7 +2417,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-350",
         name: "SS Clothesline — Retractable Nylon Rope",
         category: "Cloth Line",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/cloth-line/LRWA-350.jpg",
         description:
           "Stainless-steel clothesline with retractable nylon rope. Wall-mounted for bathroom use. Size: 90 × 90 × 55mm.",
         tier: "Essential",
@@ -2441,7 +2441,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-347",
         name: "Towel Rack — SS Finish",
         category: "Towel Rack",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/towel-rack/LRWA-347.jpg",
         description:
           "Towel rack in stainless-steel finish. Wall-mounted for bathroom and washroom use.",
         tier: "Essential",
@@ -2470,7 +2470,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-348",
         name: "Towel Rod — SS Finish",
         category: "Towel Rod",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA-348.jpg",
         description:
           "Towel rod in stainless-steel finish. Wall-mounted for bathroom and washroom use.",
         tier: "Essential",
@@ -2499,7 +2499,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-349",
         name: "Handicap Grab Bar — 202 SS Grade",
         category: "Handicap Grab Bar",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRWA--349.jpg",
         description:
           "Handicap grab bar made in 202 stainless-steel grade. Wall-mounted for accessible washrooms.",
         tier: "Essential",
@@ -2526,7 +2526,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLT-401",
         name: "Luggage Hand Trolley — 4 Wheel",
         category: "Luggage Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLT-401.jpg",
         description:
           "Stainless steel body. Heavy duty four wheel luggage trolley. Soft carpet luggage platform. Bag hanger bar on top. Heavy duty wheels. Size: L1070 × D620 × H1880mm.",
         tier: "Essential",
@@ -2543,7 +2543,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLT-402",
         name: "Luggage Hand Cart — 2 Wheel",
         category: "Luggage Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLT-402.jpg",
         description:
           "Stainless steel body. Heavy duty two wheel luggage cart. Soft carpet luggage platform. Suitable for smaller passages and lifts. Size: L570 × D730 × H1280mm.",
         tier: "Essential",
@@ -2560,7 +2560,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLT-403",
         name: "Luggage Hand Truck — 4 Wheel",
         category: "Luggage Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLT-403.jpg",
         description:
           "Heavy duty four wheel luggage trolley. Soft carpet luggage platform. Robust wheels suitable for rough pathways and passages. Size: L1150 × D620 × H950mm.",
         tier: "Premium",
@@ -2585,7 +2585,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRHT-430",
         name: "Linen Trolley — SS with Soil Bag",
         category: "Housekeeping Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-trolleys/LRHT-430.jpg",
         description:
           "Linen trolley made in SS with soil linen waterproof bag. Size: L900 × D660 × H810mm.",
         tier: "Essential",
@@ -2600,7 +2600,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRHT-426",
         name: "Housekeeping Trolley — 3 Shelves",
         category: "Housekeeping Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRHT-426.jpg",
         description:
           "Housekeeping trolley made in MS powder coated. Waterproof fabric. 3 shelves with one soil bag. Heavy duty wheels. Size: L900 × D460 × H1060mm.",
         tier: "Premium",
@@ -2617,7 +2617,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRHT-427",
         name: "Housekeeping Trolley — 3 Shelves, 2 Soil Bags",
         category: "Housekeeping Trolley",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRHT-427.jpg",
         description:
           "Housekeeping trolley made in MS powder coated. Waterproof fabric. 3 shelves with two soil bags. Heavy duty wheels. Size: L1370 × D460 × H1070mm.",
         tier: "Lux",
@@ -2643,7 +2643,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-453",
         name: "Lobby Dustbin — MS Powder Coated, Round, D250×H600mm",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--453.jpg",
         description:
           "Lobby dustbin made in MS powder coated body. Round shape. Size: D250 × H600mm. Black finish.",
         tier: "Essential",
@@ -2658,7 +2658,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-449",
         name: "Lobby Dustbin — SS Push Lid, 14×28 inches",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-lobby-dustbins/LRLI-449.jpg",
         description:
           "Lobby dustbin made in stainless steel with push lid. Size: 14 × 28 inches.",
         tier: "Essential",
@@ -2673,7 +2673,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-450",
         name: "Lobby Dustbin — SS Swing Lid, 14×28 inches",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-lobby-dustbins/LRLI-450.jpg",
         description:
           "Lobby dustbin made in stainless steel with swing lid. Size: 14 × 28 inches.",
         tier: "Essential",
@@ -2689,7 +2689,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-452",
         name: "Lobby Dustbin — MS Powder Coated, Rectangle, L310×W250×H600mm",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--452.jpg",
         description:
           "Lobby dustbin made in MS powder coated body. Rectangle shape. Size: L310 × W250 × H600mm. Black finish.",
         tier: "Premium",
@@ -2704,7 +2704,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-445",
         name: "Lobby Dustbin — SS, L250×W250×H600mm",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--445.jpg",
         description:
           "Lobby dustbin made in stainless steel. Square footprint. Size: L250 × W250 × H600mm.",
         tier: "Premium",
@@ -2720,7 +2720,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-447",
         name: "Lobby Dustbin — SS + Synthetic Stone, L300×W300×H680mm",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--447.jpg",
         description:
           "Lobby dustbin made in SS with synthetic stone top panel. Square footprint. Size: L300 × W300 × H680mm. Luxury finish for premium lobbies.",
         tier: "Lux",
@@ -2736,7 +2736,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-448",
         name: "Lobby Dustbin — SS + Natural Stone, L300×W300×H680mm",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--448.jpg",
         description:
           "Lobby dustbin made in SS with natural stone top panel. Square footprint. Size: L300 × W300 × H680mm. Genuine stone luxury finish.",
         tier: "Lux",
@@ -2752,7 +2752,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-446",
         name: "Lobby Dustbin — SS + Natural Stone, L280×W280×H620mm",
         category: "Lobby Dustbin",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--446.jpg",
         description:
           "Lobby dustbin made in SS with natural stone top panel. Compact square footprint. Size: L280 × W280 × H620mm. Genuine stone luxury finish.",
         tier: "Lux",
@@ -2777,7 +2777,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-457S",
         name: "Q Manager Stanchion — SS, Retractable Belt 2m",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--457-S.jpg",
         description:
           "Stainless-steel stanchion with retractable belt (2m). Size: 320 × 51 × 950mm. Crowd-control post for lobbies and queues.",
         tier: "Essential",
@@ -2793,7 +2793,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458B",
         name: "Q Manager Stanchion — Ball Top, Black",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--458-B.jpg",
         description:
           "Ball-top stanchion in black finish. Size: 320 × 51 × 950mm. Crowd-control post with classic ball-top design.",
         tier: "Essential",
@@ -2808,7 +2808,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-457G",
         name: "Q Manager Stanchion — SS Gold",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--457-G.jpg",
         description:
           "Stainless-steel stanchion in gold finish. Size: 320 × 51 × 950mm. Premium crowd-control post for upscale lobbies.",
         tier: "Premium",
@@ -2823,7 +2823,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458S",
         name: "Q Manager Stanchion — Ball Top, SS",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--458-S.jpg",
         description:
           "Ball-top stanchion in stainless-steel finish. Size: 320 × 51 × 950mm. Premium ball-top crowd-control post.",
         tier: "Premium",
@@ -2839,7 +2839,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458G",
         name: "Q Manager Stanchion — Ball Top, Gold",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--458-G.jpg",
         description:
           "Ball-top stanchion in gold finish. Size: 320 × 51 × 950mm. Luxury ball-top crowd-control post.",
         tier: "Lux",
@@ -2853,7 +2853,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458-Velvet",
         name: "Q Manager Rope — Velvet, 1.5m, Red",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-q-manager/LRLI-458-Velvet.jpg",
         description:
           "Velvet rope for Q Manager stanchions. Length: 1.5m. Red colour. Luxury crowd-control rope for premium venues.",
         tier: "Lux",
@@ -2867,7 +2867,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458-Twisted",
         name: "Q Manager Rope — Twisted, 1.5m, Red",
         category: "Q Manager",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-q-manager/LRLI-458-Twisted.jpg",
         description:
           "Twisted rope for Q Manager stanchions. Length: 1.5m. Red colour. Classic twisted-rope look for luxury venues.",
         tier: "Lux",
@@ -2889,7 +2889,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-459-A4",
         name: "A4 Signage — Gold / SS / Black",
         category: "Sign Board",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--459-A4.jpg",
         description:
           "A4-size signage panel. Available in Gold, SS and Black finishes. Wall-mounted for directional and informational use.",
         tier: "Essential",
@@ -2903,7 +2903,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-459-A3",
         name: "A3 Signage — Gold / SS / Black",
         category: "Sign Board",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--459-A3.jpg",
         description:
           "A3-size signage panel. Available in Gold, SS and Black finishes. Larger format for high-visibility directional and informational use.",
         tier: "Essential",
@@ -2917,7 +2917,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-460",
         name: "A4 Signage with Pole — SS",
         category: "Sign Board",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--460.jpg",
         description:
           "A4-size signage panel mounted on a pole in stainless-steel finish. Freestanding for lobby and entrance use.",
         tier: "Premium",
@@ -2931,7 +2931,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-463",
         name: "Wet Floor Sign — SS",
         category: "Sign Board",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/excel-images/LRLI--463.jpg",
         description:
           "Wet floor caution sign in stainless-steel finish. Durable and visible. For washroom entrances and spill zones.",
         tier: "Premium",
@@ -2944,7 +2944,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-469",
         name: "Foldable SS Floor Signage — 400×400×580mm",
         category: "Sign Board",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-sign-board/LRLI-469.jpg",
         description:
           "Foldable floor signage in stainless steel. Size: 400 × 400 × 580mm. Easy to store and deploy for caution / directional messaging.",
         tier: "Lux",
@@ -2959,7 +2959,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-472",
         name: "Foldable Wooden Floor Signage — 590×380×570mm",
         category: "Sign Board",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-sign-board/LRLI-472.jpg",
         description:
           "Foldable floor signage in wooden finish. Size: 590 × 380 × 570mm. Warm wooden look for boutique properties.",
         tier: "Lux",
@@ -2989,7 +2989,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDS-43",
         name: 'Digital Signage Totem — 43" FHD, Android v9.0',
         category: "Digital Signage",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-digital-signage/LRDS-43.jpg",
         description:
           '43" Full HD digital signage totem. Resolution: 1920 × 1080. Brightness: 350 cd/m². Android v9.0 built-in. Size: 61" × 24". Black finish. Ideal for lobby directories and promotions.',
         tier: "Essential",
@@ -3006,7 +3006,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDS-50",
         name: 'Digital Signage Totem — 50" UHD, Android v9.0',
         category: "Digital Signage",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-digital-signage/LRDS-50.jpg",
         description:
           '50" Ultra HD digital signage totem. Resolution: 3840 × 2160. Brightness: 300 cd/m². Android v9.0 built-in. Size: 72" × 28". Black finish. Premium 4K display for high-impact lobby content.',
         tier: "Premium",
@@ -3023,7 +3023,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDS-55",
         name: 'Digital Signage Totem — 55" UHD, Android v9.0',
         category: "Digital Signage",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-digital-signage/LRDS-55.jpg",
         description:
           '55" Ultra HD digital signage totem. Resolution: 3840 × 2160. Brightness: 350 cd/m². Android v9.0 built-in. Size: 72" × 30". Black finish. Largest 4K display for flagship lobby installations.',
         tier: "Lux",
@@ -3138,7 +3138,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6601",
         name: "Freestanding Bath Tub — LRBT-6601",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-bath-tubs/LRBT-6601.jpg",
         description: "Premium freestanding bath tub with elegant oval design. Available in multiple sizes. Solid surface construction with smooth matte finish.",
         specs: [
           { label: "Model", value: "LRBT-6601" },
@@ -3152,7 +3152,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6601B",
         name: "Freestanding Bath Tub — LRBT-6601B",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/ssp-bath-tubs/LRBT-6601B.jpg",
         description: "Premium freestanding bath tub, variant B. Elegant design with smooth finish. Multiple sizes available.",
         specs: [
           { label: "Model", value: "LRBT-6601B" },
@@ -3166,7 +3166,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6602",
         name: "Freestanding Bath Tub — LRBT-6602",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6602.jpg",
         description: "Modern freestanding bath tub with contemporary design. Available in multiple sizes for different bathroom layouts.",
         specs: [
           { label: "Model", value: "LRBT-6602" },
@@ -3180,7 +3180,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6602B",
         name: "Freestanding Bath Tub — LRBT-6602B",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6602--B.jpg",
         description: "Freestanding bath tub, variant B. Contemporary design with premium finish.",
         specs: [
           { label: "Model", value: "LRBT-6602B" },
@@ -3193,7 +3193,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6603",
         name: "Freestanding Bath Tub — LRBT-6603",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6603.jpg",
         description: "Elegant freestanding bath tub with sleek profile. Solid surface construction.",
         specs: [
           { label: "Model", value: "LRBT-6603" },
@@ -3206,7 +3206,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6605",
         name: "Freestanding Bath Tub — LRBT-6605",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6605.jpg",
         description: "Premium white freestanding bath tub. Multiple size options available.",
         specs: [
           { label: "Model", value: "LRBT-6605" },
@@ -3219,7 +3219,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6606",
         name: "Freestanding Bath Tub — LRBT-6606",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6606.jpg",
         description: "White freestanding bath tub with clean modern lines.",
         specs: [
           { label: "Model", value: "LRBT-6606" },
@@ -3232,7 +3232,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6608",
         name: "Freestanding Bath Tub — LRBT-6608",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6608.jpg",
         description: "Freestanding bath tub with taller profile (720mm height). Premium design.",
         specs: [
           { label: "Model", value: "LRBT-6608" },
@@ -3245,7 +3245,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6609",
         name: "Freestanding Bath Tub — LRBT-6609",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6609.jpg",
         description: "Freestanding bath tub with wider profile. Multiple size options.",
         specs: [
           { label: "Model", value: "LRBT-6609" },
@@ -3258,7 +3258,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6610",
         name: "Freestanding Bath Tub — LRBT-6610",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6610.jpg",
         description: "Elegant freestanding bath tub. Available in 4 sizes.",
         specs: [
           { label: "Model", value: "LRBT-6610" },
@@ -3271,7 +3271,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6611",
         name: "Freestanding Bath Tub — LRBT-6611",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6611.jpg",
         description: "Freestanding bath tub with wider design. Premium solid surface construction.",
         specs: [
           { label: "Model", value: "LRBT-6611" },
@@ -3284,7 +3284,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6612",
         name: "Freestanding Bath Tub — LRBT-6612",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6612.jpg",
         description: "Modern freestanding bath tub with sleek design.",
         specs: [
           { label: "Model", value: "LRBT-6612" },
@@ -3297,7 +3297,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6613",
         name: "Freestanding Bath Tub — LRBT-6613",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6613.jpg",
         description: "Freestanding bath tub with wider profile options. Premium finish.",
         specs: [
           { label: "Model", value: "LRBT-6613" },
@@ -3310,7 +3310,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6613B",
         name: "Freestanding Bath Tub — LRBT-6613B",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6613--B.jpg",
         description: "Freestanding bath tub, variant B. Wider profile with premium finish.",
         specs: [
           { label: "Model", value: "LRBT-6613B" },
@@ -3323,7 +3323,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6615",
         name: "Freestanding Bath Tub — LRBT-6615",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6615.jpg",
         description: "Glossy white freestanding bath tub. Premium acrylic/solid surface construction.",
         specs: [
           { label: "Model", value: "LRBT-6615" },
@@ -3337,7 +3337,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6619L",
         name: "Freestanding Bath Tub — LRBT-6619L (Left)",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6619-L.jpg",
         description: "Freestanding bath tub, left configuration. Available in multiple sizes.",
         specs: [
           { label: "Model", value: "LRBT-6619L" },
@@ -3350,7 +3350,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRBT-6619R",
         name: "Freestanding Bath Tub — LRBT-6619R (Right)",
         category: "Bath Tub",
-        image: "/images/product-catalogue/coming-soon.jpg",
+        image: "/images/product-catalogue/bath-tub/LRBT---6619-R.jpg",
         description: "Freestanding bath tub, right configuration. Available in multiple sizes.",
         specs: [
           { label: "Model", value: "LRBT-6619R" },

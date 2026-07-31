@@ -4,9 +4,10 @@
  * HeroStage — the single "wow" 3D moment of the LaxRee Amenities site.
  *
  * Uses a realistic 3D hotel room model embedded from Sketchfab:
- *   "Minimalistic Modern Bedroom" — a premium furnished room with bed,
- *   furniture, and amenities that showcases the hospitality context.
- *   https://sketchfab.com/3d-models/minimalistic-modern-bedroom-4f3db3cb57bd4bce886f7b9a13273a2f
+ *   "Hotel Room" by defiat11 — a fully furnished hotel room with bed,
+ *   furniture, bathroom amenities and decor that showcases the
+ *   hospitality context LaxRee supplies.
+ *   https://sketchfab.com/3d-models/hotel-room-f35223dfb97a43b7900e5707eb495532
  *
  * The embed is wrapped in a charcoal-themed stage with:
  *  - CSS brass particles floating upward (depth & atmosphere)
@@ -30,7 +31,9 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
    Constants
    ───────────────────────────────────────────────────────────── */
 
-const SKETCHFAB_MODEL_ID = "4f3db3cb57bd4bce886f7b9a13273a2f";
+// "Hotel Room" by defiat11 — free, fully furnished hotel room with
+// bed, furniture, bathroom amenities and decor.
+const SKETCHFAB_MODEL_ID = "f35223dfb97a43b7900e5707eb495532";
 
 // Sketchfab embed URL with minimal UI — just the 3D hotel room auto-rotating
 const SKETCHFAB_EMBED = `https://sketchfab.com/models/${SKETCHFAB_MODEL_ID}/embed?autostart=1&autospin=0.3&ui_infos=0&ui_watermark=0&ui_controls=0&ui_hint=0&ui_annotations=0&ui_stop=0&ui_help=0&ui_settings=0&ui_inspector=0&ui_snapshots=0&ui_ar=0&ui_vr=0&ui_fullscreen=0&ui_related=0`;
@@ -206,7 +209,7 @@ function SketchfabEmbed() {
             </svg>
           </span>
           <span className="font-display text-ivory text-lg">View 3D Hotel Room</span>
-          <span className="data-label text-[10px] text-brass">Click to load interactive 3D model</span>
+          <span className="data-label text-[10px] text-brass">Click to explore the furnished room</span>
         </button>
       ) : (
         <>
