@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -167,13 +167,9 @@ export function Hero() {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
   const isMobile = useIsMobile();
-  // useSyncExternalStore is the React-idiomatic way to detect "are we on
-  // the client after hydration" without calling setState inside an effect.
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true, // client snapshot
-    () => false // server snapshot
-  );
+  // Simple mounted state — useSyncExternalStore was causing issues on Vercel
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   // CMS-driven hero image override (key "homepage:hero" field "heroImage").
   // Falls back to the static /images/products/mini-bar.jpg image when the
