@@ -167,9 +167,8 @@ export function Hero() {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
   const isMobile = useIsMobile();
-  // Simple mounted state — useSyncExternalStore was causing issues on Vercel
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  // Client component always mounts — no need for mounted state
+  const mounted = true;
 
   // CMS-driven hero image override (key "homepage:hero" field "heroImage").
   // Falls back to the static /images/products/mini-bar.jpg image when the
