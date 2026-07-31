@@ -42,7 +42,7 @@ export function OwnerMessage() {
               />
               <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-brass/40 bg-charcoal">
                 <img
-                  src="/images/owner-cropped.jpg"
+                  src="/images/owner-cropped.webp"
                   alt="Ashish Agarwal — Founder & Managing Director, LaxRee Amenities"
                   className="w-full h-full object-cover object-top"
                 />

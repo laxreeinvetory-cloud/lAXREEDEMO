@@ -35,59 +35,59 @@ const PARENT_CATEGORY_MAP: Record<string, string[]> = {
    ───────────────────────────────────────────────────────────── */
 const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   // ── Room Amenities ──
-  "mini-bar": "/images/product-catalogue/mini-bar/LRMB-126.jpg",
-  "tea-kettle": "/images/product-catalogue/tea-kettle/LRWT--143.jpg",
-  "kettle-tray": "/images/product-catalogue/tray/LRWT-158.jpg",
-  "safe-box": "/images/product-catalogue/safe-box/LRMR-252-10.jpg",
-  "wooden-hangers": "/images/product-catalogue/hangers/LRRA-653.jpg",
-  "rfid-locks": "/images/product-catalogue/door-lock/LRFD--613.jpg",
-  "room-telephone": "/images/product-catalogue/telephone/LRDR--189.jpg",
-  "docking-pod": "/images/product-catalogue/ssp-docking-pod/LRDR-177.jpg",
-  "room-dustbin": "/images/product-catalogue/dustbin/LRRA--649.jpg",
-  "desktop-accessories": "/images/product-catalogue/desktop-accessories/LRAT-370.jpg",
-  "rollaway-bed": "/images/product-catalogue/rollaway-bed/LRMR-251.jpg",
-  "mattress": "/images/product-catalogue/mattress/LRMR-251-8.jpg",
-  "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.jpg",
-  "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.jpg",
-  "luggage-rack": "/images/product-catalogue/furniture/LRGF---673---Luggage-Rack.jpg",
+  "mini-bar": "/images/product-catalogue/mini-bar/LRMB-126.webp",
+  "tea-kettle": "/images/product-catalogue/tea-kettle/LRWT--143.webp",
+  "kettle-tray": "/images/product-catalogue/tray/LRWT-158.webp",
+  "safe-box": "/images/product-catalogue/safe-box/LRMR-252-10.webp",
+  "wooden-hangers": "/images/product-catalogue/hangers/LRRA-653.webp",
+  "rfid-locks": "/images/product-catalogue/door-lock/LRFD--613.webp",
+  "room-telephone": "/images/product-catalogue/telephone/LRDR--189.webp",
+  "docking-pod": "/images/product-catalogue/ssp-docking-pod/LRDR-177.webp",
+  "room-dustbin": "/images/product-catalogue/dustbin/LRRA--649.webp",
+  "desktop-accessories": "/images/product-catalogue/desktop-accessories/LRAT-370.webp",
+  "rollaway-bed": "/images/product-catalogue/rollaway-bed/LRMR-251.webp",
+  "mattress": "/images/product-catalogue/mattress/LRMR-251-8.webp",
+  "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.webp",
+  "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.webp",
+  "luggage-rack": "/images/product-catalogue/furniture/LRGF---673---Luggage-Rack.webp",
   // ── Washroom Amenities ──
-  "hair-dryer": "/images/product-catalogue/hair-dryer/LRHD-276.jpg",
-  "soap-dispenser": "/images/product-catalogue/soap-dispenser/LRWA--358.jpg",
-  "magnifying-mirror": "/images/product-catalogue/magnifying-mirror/LRMM-302.jpg",
-  "lobby-soap-dispenser": "/images/product-catalogue/lobby-soap-dispenser/LRWA-372.jpg",
-  "weighing-scale": "/images/product-catalogue/weighing-scale/LRWA-327.jpg",
-  "paper-dispenser": "/images/product-catalogue/paper-dispenser/LRWA-378.jpg",
-  "hand-dryer": "/images/product-catalogue/hand-dryer/LRHD--285.jpg",
-  "shower-mat": "/images/product-catalogue/shower-mat/LRWA-346.jpg",
-  "cloth-line": "/images/product-catalogue/cloth-line/LRWA-350.jpg",
-  "towel-rack": "/images/product-catalogue/towel-rack/LRWA-347.jpg",
-  "toilet-paper-dispenser": "/images/product-catalogue/toilet-paper-dispenser/LRWA-355.jpg",
-  "towel-rod": "/images/product-catalogue/towel-rod/LRWA-348.jpg",
-  "washroom-tray": "/images/product-catalogue/washroom-tray/LRWA--372-Automatic.jpg",
-  "handicap-grab-bar": "/images/product-catalogue/handicap-grab-bar/LRWA-349.jpg",
+  "hair-dryer": "/images/product-catalogue/hair-dryer/LRHD-276.webp",
+  "soap-dispenser": "/images/product-catalogue/soap-dispenser/LRWA--358.webp",
+  "magnifying-mirror": "/images/product-catalogue/magnifying-mirror/LRMM-302.webp",
+  "lobby-soap-dispenser": "/images/product-catalogue/lobby-soap-dispenser/LRWA-372.webp",
+  "weighing-scale": "/images/product-catalogue/weighing-scale/LRWA-327.webp",
+  "paper-dispenser": "/images/product-catalogue/paper-dispenser/LRWA-378.webp",
+  "hand-dryer": "/images/product-catalogue/hand-dryer/LRHD--285.webp",
+  "shower-mat": "/images/product-catalogue/shower-mat/LRWA-346.webp",
+  "cloth-line": "/images/product-catalogue/cloth-line/LRWA-350.webp",
+  "towel-rack": "/images/product-catalogue/towel-rack/LRWA-347.webp",
+  "toilet-paper-dispenser": "/images/product-catalogue/toilet-paper-dispenser/LRWA-355.webp",
+  "towel-rod": "/images/product-catalogue/towel-rod/LRWA-348.webp",
+  "washroom-tray": "/images/product-catalogue/washroom-tray/LRWA--372-Automatic.webp",
+  "handicap-grab-bar": "/images/product-catalogue/handicap-grab-bar/LRWA-349.webp",
   // ── Lobby Items ──
-  "luggage-trolley": "/images/product-catalogue/luggage-trolley-LT-801.jpg",
-  "housekeeping-trolley": "/images/product-catalogue/housekeeping-trolley/LRHT--425.jpg",
-  "lobby-dustbin": "/images/product-catalogue/ssp-lobby-dustbins/LRLI-445.jpg",
-  "q-manager": "/images/product-catalogue/ssp-q-manager/LRLI-457B.jpg",
-  "sign-board": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.jpg",
-  "stand-pole": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.jpg",
-  "digital-signage": "/images/product-catalogue/ssp-digital-signage/LRDS-43.jpg",
+  "luggage-trolley": "/images/product-catalogue/luggage-trolley-LT-801.webp",
+  "housekeeping-trolley": "/images/product-catalogue/housekeeping-trolley/LRHT--425.webp",
+  "lobby-dustbin": "/images/product-catalogue/ssp-lobby-dustbins/LRLI-445.webp",
+  "q-manager": "/images/product-catalogue/ssp-q-manager/LRLI-457B.webp",
+  "sign-board": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.webp",
+  "stand-pole": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.webp",
+  "digital-signage": "/images/product-catalogue/ssp-digital-signage/LRDS-43.webp",
   // ── Furniture ──
-  "outdoor-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "guest-room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "restaurant-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.jpg",
+  "outdoor-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.webp",
+  "guest-room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.webp",
+  "restaurant-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.webp",
+  "room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.webp",
+  "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.webp",
   // ── Linen ──
-  "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.png",
-  "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.png",
+  "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.webp",
+  "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.webp",
   // ── Bath Tub ──
-  "bath-tub-models": "/images/product-catalogue/bath-tub/LRBT---311-Color-Body.jpg",
+  "bath-tub-models": "/images/product-catalogue/bath-tub/LRBT---311-Color-Body.webp",
   // ── Amenities Tray Set ──
-  "amenities-tray-set-models": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
+  "amenities-tray-set-models": "/images/product-catalogue/amenities-tray-set/LRAT-366.webp",
   // ── Dome & Space POD ──
-  "dome-models": "/images/product-catalogue/dome-space-pod/LRDO---2001--4-2-Mtr.jpg",
+  "dome-models": "/images/product-catalogue/dome-space-pod/LRDO---2001--4-2-Mtr.webp",
 };
 
 /* ─────────────────────────────────────────────────────────────
@@ -95,14 +95,14 @@ const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
    Categories" rail at the bottom of each /products/[slug] page).
    ───────────────────────────────────────────────────────────── */
 const PARENT_FALLBACK_IMAGE: Record<string, string> = {
-  "room-amenities": "/images/categories/amenities.jpg",
-  "washroom-amenities": "/images/categories/washroom.jpg",
-  "lobby-items": "/images/categories/lobby.jpg",
-  "furniture": "/images/categories/furniture.jpg",
-  "linen": "/images/categories/linen.jpg",
-  "bath-tub": "/images/products/bath-tub.jpg",
-  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
-  "dome-space-pod": "/images/categories/dome.jpg",
+  "room-amenities": "/images/categories/amenities.webp",
+  "washroom-amenities": "/images/categories/washroom.webp",
+  "lobby-items": "/images/categories/lobby.webp",
+  "furniture": "/images/categories/furniture.webp",
+  "linen": "/images/categories/linen.webp",
+  "bath-tub": "/images/products/bath-tub.webp",
+  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.webp",
+  "dome-space-pod": "/images/categories/dome.webp",
 };
 
 function CategoryPageInner() {
@@ -136,7 +136,7 @@ function CategoryPageInner() {
           // Use real product image when available; otherwise the
           // sub-category-level fallback (always on disk); only fall back
           // to coming-soon.jpg when no mapping exists.
-          const fallback = SUBCATEGORY_FALLBACK_IMAGE[child.slug] || "/images/product-catalogue/coming-soon.jpg";
+          const fallback = SUBCATEGORY_FALLBACK_IMAGE[child.slug] || "/images/product-catalogue/coming-soon.webp";
           images[child.slug] = { image: withImage?.image || fallback, count: childProducts.length };
         }
         setItemImages(images);
@@ -145,7 +145,7 @@ function CategoryPageInner() {
           const otherCatNames = PARENT_CATEGORY_MAP[other.slug] || [];
           const otherProducts = allProducts.filter((p: { category: string; image: string }) => otherCatNames.includes(p.category));
           const withImage = otherProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
-          const fallback = PARENT_FALLBACK_IMAGE[other.slug] || "/images/product-catalogue/coming-soon.jpg";
+          const fallback = PARENT_FALLBACK_IMAGE[other.slug] || "/images/product-catalogue/coming-soon.webp";
           otherImgs[other.slug] = { image: withImage?.image || fallback, count: otherProducts.length };
         }
         setOtherImages(otherImgs);
@@ -179,7 +179,7 @@ function CategoryPageInner() {
                   <FadeIn key={item.slug} delay={i * 0.06}>
                     <Link href={`/products/${parent.slug}/${item.slug}`} className="group glass-on-ivory rounded-[24px] overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full">
                       <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
-                        <img src={preview?.image || "/images/product-catalogue/coming-soon.jpg"} alt={item.name} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />
+                        <img src={preview?.image || "/images/product-catalogue/coming-soon.webp"} alt={item.name} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />
                         <span className="absolute right-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">{preview?.count || 0} Models</span>
                       </div>
                       <div className="flex flex-1 flex-col p-5">
@@ -213,7 +213,7 @@ function CategoryPageInner() {
               return (
                 <Link key={p.slug} href={`/products/${p.slug}`} className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
-                    <img src={preview?.image || "/images/product-catalogue/coming-soon.jpg"} alt={p.name} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
+                    <img src={preview?.image || "/images/product-catalogue/coming-soon.webp"} alt={p.name} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="p-4">
                     <h3 className="font-display text-[16px] text-ivory">{p.name}</h3>

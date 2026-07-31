@@ -67,7 +67,7 @@ export const CATEGORIES: Category[] = [
     name: "Room Amenities",
     count: 91,
     blurb: "Mini bars, kettles, safes, locks, hangers, phones, dustbins, desktop accessories.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/categories/amenities.webp",
     span: "large",
   },
   {
@@ -75,7 +75,7 @@ export const CATEGORIES: Category[] = [
     name: "Washroom Amenities",
     count: 43,
     blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
-    image: "/images/categories/washroom.jpg",
+    image: "/images/categories/washroom.webp",
     span: "default",
   },
   {
@@ -83,7 +83,7 @@ export const CATEGORIES: Category[] = [
     name: "Lobby Items",
     count: 31,
     blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
-    image: "/images/categories/lobby.jpg",
+    image: "/images/categories/lobby.webp",
     span: "default",
   },
   {
@@ -91,7 +91,7 @@ export const CATEGORIES: Category[] = [
     name: "Furniture",
     count: 399,
     blurb: "Outdoor, guest room, restaurant, banquet furniture.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/furniture.webp",
     span: "default",
   },
   {
@@ -99,7 +99,7 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 2,
     blurb: "Room linen and bath linen.",
-    image: "/images/categories/linen.jpg",
+    image: "/images/categories/linen.webp",
     span: "tall",
   },
   {
@@ -107,7 +107,7 @@ export const CATEGORIES: Category[] = [
     name: "Bath Tub",
     count: 22,
     blurb: "Freestanding bath tubs in multiple sizes.",
-    image: "/images/categories/bath-tub.jpg",
+    image: "/images/products/bath-tub.webp",
     span: "default",
   },
   {
@@ -115,7 +115,7 @@ export const CATEGORIES: Category[] = [
     name: "Amenities Tray Set",
     count: 1,
     blurb: "Premium tray sets for guest rooms.",
-    image: "/images/categories/amenities-tray-set.jpg",
+    image: "/images/product-catalogue/amenities-tray-set/LRAT-366.webp",
     span: "default",
   },
   {
@@ -123,7 +123,7 @@ export const CATEGORIES: Category[] = [
     name: "Dome & Space POD",
     count: 4,
     blurb: "Geodesic domes and space pods for resorts and events.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/dome.webp",
     span: "default",
   },
 ];
@@ -138,15 +138,15 @@ export type Product = {
 };
 
 export const SPOTLIGHT_PRODUCTS: Product[] = [
-  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.jpg", link: "/products/room-amenities/mini-bar" },
-  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.jpg", link: "/products/room-amenities/tea-kettle" },
-  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.jpg", link: "/products/room-amenities/safe-box" },
-  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.jpg", link: "/products/room-amenities/rfid-locks" },
-  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.jpg", link: "/products/lobby-items/luggage-trolley" },
-  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.jpg", link: "/products/bath-tub/bath-tub-models" },
-  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.jpg", link: "/products/washroom-amenities/hair-dryer" },
-  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.jpg", link: "/products/washroom-amenities/magnifying-mirror" },
-  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.jpg", link: "/products/washroom-amenities/hand-dryer" },
+  { slug: "mini-bar", name: "Mini Bar", category: "Amenities", image: "/images/products/mini-bar.webp", link: "/products/room-amenities/mini-bar" },
+  { slug: "kettle-set", name: "Kettle Set", category: "Amenities", image: "/images/products/kettle-set.webp", link: "/products/room-amenities/tea-kettle" },
+  { slug: "safe-box", name: "Safe Box", category: "Amenities", image: "/images/products/safe-box.webp", link: "/products/room-amenities/safe-box" },
+  { slug: "door-lock", name: "Door Lock", category: "Amenities", image: "/images/products/door-lock.webp", link: "/products/room-amenities/rfid-locks" },
+  { slug: "luggage-trolley", name: "Luggage Trolley", category: "Lobby", image: "/images/products/luggage-trolley.webp", link: "/products/lobby-items/luggage-trolley" },
+  { slug: "bath-tub", name: "Bath Tub", category: "Washroom", image: "/images/products/bath-tub.webp", link: "/products/bath-tub/bath-tub-models" },
+  { slug: "hair-dryer", name: "Hair Dryer", category: "Washroom", image: "/images/products/hair-dryer.webp", link: "/products/washroom-amenities/hair-dryer" },
+  { slug: "magnifying-mirror", name: "Magnifying Mirror", category: "Washroom", image: "/images/products/magnifying-mirror.webp", link: "/products/washroom-amenities/magnifying-mirror" },
+  { slug: "hand-dryer", name: "Hand Dryer", category: "Washroom", image: "/images/products/hand-dryer.webp", link: "/products/washroom-amenities/hand-dryer" },
 ];
 
 export type RoomSolution = {
@@ -320,9 +320,9 @@ export type Exhibition = {
 };
 
 export const EXHIBITIONS: Exhibition[] = [
-  { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
-  { image: "/images/gallery/exhibition-2.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
-  { image: "/images/gallery/exhibition-3.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
+  { image: "/images/gallery/exhibition-1.webp", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
+  { image: "/images/gallery/exhibition-2.webp", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
+  { image: "/images/gallery/exhibition-3.webp", caption: "India International Hospitality Expo (IHE)", year: "2024" },
 ];
 
 export type Certification = {
@@ -407,7 +407,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Sustainability",
     excerpt:
       "Refillable dispensers, low-VOC finishes and lifecycle costing are no longer optional. Here is what to specify in your next tender.",
-    image: "/images/blog/blog-1.jpg",
+    image: "/images/blog/blog-1.webp",
     date: "Jan 2026",
     readTime: "6 min",
   },
@@ -417,7 +417,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Design",
     excerpt:
       "Eye-tracking studies show warm-metal accents increase perceived room value by 18%. A case for rethinking your hardware palette.",
-    image: "/images/blog/blog-2.jpg",
+    image: "/images/blog/blog-2.webp",
     date: "Dec 2025",
     readTime: "4 min",
   },
@@ -427,7 +427,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Trends",
     excerpt:
       "From in-room smart safes to weighted curtain hooks, the details that quietly move your TripAdvisor score.",
-    image: "/images/blog/blog-3.jpg",
+    image: "/images/blog/blog-3.webp",
     date: "Dec 2025",
     readTime: "5 min",
   },
@@ -437,7 +437,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "Absorption vs compressor, 40L vs 60L, glass door vs solid — everything a hotel procurement manager needs to know before ordering minibars in bulk.",
-    image: "/images/blog/blog-4.jpg",
+    image: "/images/blog/blog-4.webp",
     date: "Jul 2026",
     readTime: "8 min",
   },
@@ -447,7 +447,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "Digital keypad vs RFID, small vs large, steel thickness ratings — a complete specification checklist for procuring hotel safes at the best price.",
-    image: "/images/blog/blog-5.jpg",
+    image: "/images/blog/blog-5.webp",
     date: "Jul 2026",
     readTime: "7 min",
   },
@@ -457,7 +457,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "Mifare vs NFC, audit trails, PMS integration, battery life — the definitive guide to choosing RFID door locks for hotels and resorts.",
-    image: "/images/blog/blog-6.jpg",
+    image: "/images/blog/blog-6.webp",
     date: "Jul 2026",
     readTime: "9 min",
   },
@@ -467,7 +467,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "A step-by-step procurement framework for Indian hotels — supplier evaluation, specification writing, quality control, and delivery management.",
-    image: "/images/blog/blog-7.jpg",
+    image: "/images/blog/blog-7.webp",
     date: "Jul 2026",
     readTime: "10 min",
   },
@@ -477,7 +477,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Industry Insights",
     excerpt:
       "Not all hotel supplies vendors are equal. Here's how to evaluate manufacturers vs traders, OEM capabilities, and after-sales support across India.",
-    image: "/images/blog/blog-8.jpg",
+    image: "/images/blog/blog-8.webp",
     date: "Jul 2026",
     readTime: "8 min",
   },
@@ -487,7 +487,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "SS304 vs SS202, 1.0L vs 1.2L, auto shut-off mechanisms — the definitive guide to choosing electric kettles for hotel rooms in bulk.",
-    image: "/images/blog/blog-9.jpg",
+    image: "/images/blog/blog-9.webp",
     date: "Jul 2026",
     readTime: "7 min",
   },
@@ -497,7 +497,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "Infrared sensor range, refill capacity, battery life, drip tray design — everything you need to specify when buying soap dispensers for hotels.",
-    image: "/images/blog/blog-10.jpg",
+    image: "/images/blog/blog-10.webp",
     date: "Jul 2026",
     readTime: "6 min",
   },
@@ -507,7 +507,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "Luggage trolleys, housekeeping trolleys, linen trolleys — load capacity, wheel quality, frame materials, and fair pricing benchmarks for India.",
-    image: "/images/blog/blog-11.jpg",
+    image: "/images/blog/blog-11.webp",
     date: "Jul 2026",
     readTime: "8 min",
   },
@@ -517,7 +517,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Procurement Guide",
     excerpt:
       "Wattage, steam output, soleplate material, auto shut-off — the complete specification guide for procuring steam irons for hotel rooms in India.",
-    image: "/images/blog/blog-12.jpg",
+    image: "/images/blog/blog-12.webp",
     date: "Jul 2026",
     readTime: "7 min",
   },
@@ -684,7 +684,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "mini-bar",
     name: "Mini Bar",
     category: "Amenities",
-    image: "/images/products/mini-bar.jpg",
+    image: "/images/products/mini-bar.webp",
     description:
       "Absorption and compressor minibars with brass-trimmed glass doors. Silent operation, energy-efficient, available in 40L/60L/80L.",
     specs: [
@@ -698,7 +698,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "kettle-set",
     name: "Kettle Set",
     category: "Amenities",
-    image: "/images/products/kettle-set.jpg",
+    image: "/images/products/kettle-set.webp",
     description:
       "Stainless steel electric kettle sets with matching cups and tray. Food-grade SS304, 1.2L capacity, auto shut-off.",
     specs: [
@@ -712,7 +712,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "safe-box",
     name: "Safe Box",
     category: "Amenities",
-    image: "/images/products/safe-box.jpg",
+    image: "/images/products/safe-box.webp",
     description:
       "Electronic hotel safe boxes with digital keypad and emergency override. Brushed metal finish, brass accent trim.",
     specs: [
@@ -726,7 +726,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "door-lock",
     name: "Door Lock",
     category: "Amenities",
-    image: "/images/products/door-lock.jpg",
+    image: "/images/products/door-lock.webp",
     description:
       "RFID card door locks with brass accent trim. Battery-powered, audit trail, integrates with PMS systems.",
     specs: [
@@ -740,7 +740,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "luggage-trolley",
     name: "Luggage Trolley",
     category: "Lobby",
-    image: "/images/products/luggage-trolley.jpg",
+    image: "/images/products/luggage-trolley.webp",
     description:
       "Brass-framed luggage trolleys with black leather straps and silent castors. Heavy-duty, 200kg load capacity.",
     specs: [
@@ -754,7 +754,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "bath-tub",
     name: "Bath Tub",
     category: "Washroom",
-    image: "/images/products/bath-tub.jpg",
+    image: "/images/products/bath-tub.webp",
     description:
       "Freestanding acrylic bathtubs with brass faucet. Minimalist luxury design, 180L capacity, scratch-resistant.",
     specs: [
@@ -768,7 +768,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "hair-dryer",
     name: "Hair Dryer",
     category: "Washroom",
-    image: "/images/products/hair-dryer.jpg",
+    image: "/images/products/hair-dryer.webp",
     description:
       "Wall-mounted hotel hair dryers with brass accents. 1600W, dual speed, auto shut-off on release.",
     specs: [
@@ -782,7 +782,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "magnifying-mirror",
     name: "Magnifying Mirror",
     category: "Washroom",
-    image: "/images/products/magnifying-mirror.jpg",
+    image: "/images/products/magnifying-mirror.webp",
     description:
       "Brass-framed magnifying vanity mirrors on extendable arm. 5× magnification, fog-free, 360° rotation.",
     specs: [
@@ -796,7 +796,7 @@ export const ALL_PRODUCTS: ProductDetail[] = [
     slug: "hand-dryer",
     name: "Hand Dryer",
     category: "Washroom",
-    image: "/images/products/hand-dryer.jpg",
+    image: "/images/products/hand-dryer.webp",
     description:
       "High-speed commercial hand dryers with brass accent. Dries in 10 seconds, HEPA filter, energy-efficient.",
     specs: [

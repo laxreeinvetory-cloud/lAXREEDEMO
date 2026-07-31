@@ -1,7 +1,10 @@
 import type { MetadataRoute } from "next";
-import { CATEGORIES } from "@/lib/laxree/site-data"
-import { CATALOGUE_CATEGORIES } from "@/lib/laxree/catalogue-data"
-import { BLOG_POSTS } from "@/lib/laxree/site-data";
+import { CATEGORIES, BLOG_POSTS } from "@/lib/laxree/site-data";
+import {
+  CATALOGUE_CATEGORIES,
+  CATALOGUE_PARENTS,
+  getCategoriesByParent,
+} from "@/lib/laxree/catalogue-data";
 
 const BASE_URL = "https://l-axreedemo.vercel.app";
 
@@ -19,23 +22,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/career`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${BASE_URL}/contact-us`, lastModified: now, changeFrequency: "yearly", priority: 0.8 },
     { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/experience-center`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
   ];
 
-  // Category pages
-  const categoryPages: MetadataRoute.Sitemap = CATEGORIES.map((c) => ({
-    url: `${BASE_URL}/products/${c.slug}`,
+  // Category pages (parent level: /products/[parentSlug])
+  const categoryPages: MetadataRoute.Sitemap = CATALOGUE_PARENTS.map((p) => ({
+    url: `${BASE_URL}/products/${p.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
-  // Item type pages (nested under amenities)
-  const itemTypePages: MetadataRoute.Sitemap = CATALOGUE_CATEGORIES.map((c) => ({
-    url: `${BASE_URL}/products/amenities/${c.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
+  // Item type pages (child level: /products/[parentSlug]/[childSlug])
+  // Build the correct parent→child URL for each sub-category instead of
+  // hardcoding "/products/amenities/..." which only matches 1 of 8 parents.
+  const itemTypePages: MetadataRoute.Sitemap = CATALOGUE_PARENTS.flatMap((parent) => {
+    const children = getCategoriesByParent(parent.slug);
+    return children.map((child) => ({
+      url: `${BASE_URL}/products/${parent.slug}/${child.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }));
+  });
 
   // Blog post pages
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((p) => ({

@@ -23,7 +23,7 @@ const ABOUT_CHIPS = [
 export function AboutUs() {
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
-  const [factoryImage, setFactoryImage] = useState<string>("/images/about/factory.jpg");
+  const [factoryImage, setFactoryImage] = useState<string>("/images/about/factory.webp");
 
   useEffect(() => {
     fetch("/api/admin/cms?key=page:about-us", { cache: "no-store" })

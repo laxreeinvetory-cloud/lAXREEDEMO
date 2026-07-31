@@ -22,14 +22,14 @@ import {
    resolves a representative product image.
    ───────────────────────────────────────────────────────────── */
 const PARENT_FALLBACK_IMAGE: Record<string, string> = {
-  "room-amenities": "/images/categories/amenities.jpg",
-  "washroom-amenities": "/images/categories/washroom.jpg",
-  "lobby-items": "/images/categories/lobby.jpg",
-  furniture: "/images/categories/furniture.jpg",
-  linen: "/images/categories/linen.jpg",
-  "bath-tub": "/images/products/bath-tub.jpg",
-  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
-  "dome-space-pod": "/images/categories/dome.jpg",
+  "room-amenities": "/images/categories/amenities.webp",
+  "washroom-amenities": "/images/categories/washroom.webp",
+  "lobby-items": "/images/categories/lobby.webp",
+  furniture: "/images/categories/furniture.webp",
+  linen: "/images/categories/linen.webp",
+  "bath-tub": "/images/products/bath-tub.webp",
+  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.webp",
+  "dome-space-pod": "/images/categories/dome.webp",
 };
 
 /* ─────────────────────────────────────────────────────────────
@@ -60,7 +60,7 @@ function ParentCategoryCard({
   //   2. Category-level hero image (always on disk)
   //   3. First product's image (only if it isn't the coming-soon placeholder)
   const apiImage = imageMap[parent.slug];
-  const fallback = PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/amenities.jpg";
+  const fallback = PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/amenities.webp";
   const firstProduct = children[0]?.products[0];
   const firstProductImage =
     firstProduct?.image && !firstProduct.image.includes("coming-soon")

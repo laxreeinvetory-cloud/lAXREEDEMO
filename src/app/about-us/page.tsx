@@ -162,7 +162,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src={content.factoryImage || content.heroImage || "/images/about/factory.jpg"}
+                  src={content.factoryImage || content.heroImage || "/images/about/factory.webp"}
                   alt="Inside the LaxRee manufacturing facility in Ajmer, Rajasthan"
                   width={800}
                   height={640}
@@ -270,7 +270,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src={content.factoryImage || "/images/products/mini-bar.jpg"}
+                  src={content.factoryImage || "/images/products/mini-bar.webp"}
                   alt="A LaxRee absorption minibar assembled on the Ajmer production line"
                   width={800}
                   height={640}

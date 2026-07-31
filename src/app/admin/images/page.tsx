@@ -18,17 +18,17 @@ type ImageEntry = {
 
 const EDITABLE_IMAGES: ImageEntry[] = [
   // Homepage
-  { key: "hero", label: "Homepage Hero Image", section: "Homepage", cmsKey: "homepage:hero", field: "heroImage", fallback: "/images/products/mini-bar.jpg" },
-  { key: "about", label: "About Us — Factory Image", section: "Homepage", cmsKey: "homepage", field: "aboutUs.image", fallback: "/images/about/factory.jpg" },
-  { key: "owner", label: "Owner's Photo", section: "Homepage", cmsKey: "homepage", field: "ownerMessage.image", fallback: "/images/owner-cropped.jpg" },
-  { key: "gallery1", label: "Our Presence — Gallery Image 1", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image1", fallback: "/images/gallery/exhibition-1.jpg" },
-  { key: "gallery2", label: "Our Presence — Gallery Image 2", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image2", fallback: "/images/gallery/exhibition-2.jpg" },
-  { key: "gallery3", label: "Our Presence — Gallery Image 3", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image3", fallback: "/images/gallery/exhibition-3.jpg" },
-  { key: "gallery4", label: "Our Presence — Gallery Image 4", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image4", fallback: "/images/gallery/exhibition-4.jpg" },
-  { key: "gallery5", label: "Our Presence — Gallery Image 5", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image5", fallback: "/images/gallery/exhibition-5.jpg" },
+  { key: "hero", label: "Homepage Hero Image", section: "Homepage", cmsKey: "homepage:hero", field: "heroImage", fallback: "/images/products/mini-bar.webp" },
+  { key: "about", label: "About Us — Factory Image", section: "Homepage", cmsKey: "homepage", field: "aboutUs.image", fallback: "/images/about/factory.webp" },
+  { key: "owner", label: "Owner's Photo", section: "Homepage", cmsKey: "homepage", field: "ownerMessage.image", fallback: "/images/owner-cropped.webp" },
+  { key: "gallery1", label: "Our Presence — Gallery Image 1", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image1", fallback: "/images/gallery/exhibition-1.webp" },
+  { key: "gallery2", label: "Our Presence — Gallery Image 2", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image2", fallback: "/images/gallery/exhibition-2.webp" },
+  { key: "gallery3", label: "Our Presence — Gallery Image 3", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image3", fallback: "/images/gallery/exhibition-3.webp" },
+  { key: "gallery4", label: "Our Presence — Gallery Image 4", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image4", fallback: "/images/gallery/exhibition-4.webp" },
+  { key: "gallery5", label: "Our Presence — Gallery Image 5", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image5", fallback: "/images/gallery/exhibition-5.webp" },
   // Pages
   { key: "about-hero", label: "About Us Page — Hero Image", section: "Pages", cmsKey: "page:about-us", field: "heroImage", fallback: "" },
-  { key: "about-factory", label: "About Us Page — Factory Image", section: "Pages", cmsKey: "page:about-us", field: "factoryImage", fallback: "/images/about/factory.jpg" },
+  { key: "about-factory", label: "About Us Page — Factory Image", section: "Pages", cmsKey: "page:about-us", field: "factoryImage", fallback: "/images/about/factory.webp" },
   { key: "clients-hero", label: "Clients Page — Hero Image", section: "Pages", cmsKey: "page:clients", field: "heroImage", fallback: "" },
   { key: "exp-hero", label: "Experience Center — Hero Image", section: "Pages", cmsKey: "page:experience-center", field: "heroImage", fallback: "" },
 ];

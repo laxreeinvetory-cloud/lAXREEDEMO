@@ -100,7 +100,7 @@ const DEFAULTS: HomepageContent = {
     title: "11 years of hospitality craftsmanship, now available pan-India.",
     body:
       "Founded in Ajmer, Rajasthan, LaxRee Amenities has grown from a regional minibar supplier into India's most comprehensive hospitality procurement partner. Today, we manufacture and supply 700+ SKUs across five core categories, serving 1,347+ properties nationwide.",
-    image: "/images/about/factory.jpg",
+    image: "/images/about/factory.webp",
     stats: [
       { value: "1347+", label: "Projects Delivered" },
       { value: "11+", label: "Years in Business" },
@@ -744,11 +744,11 @@ function SectionEditor({
           <TextField label="Eyebrow" value={section.eyebrow as string} onChange={(v) => set("eyebrow", v)} />
           <TextField label="Title" value={section.title as string} onChange={(v) => set("title", v)} />
           <TextAreaField label="Subtitle" value={section.subtitle as string} onChange={(v) => set("subtitle", v)} />
-          <ImageField label="Gallery Image 1" value={(section as any).image1 || "/images/gallery/exhibition-1.jpg"} onChange={(v) => set("image1", v)} />
-          <ImageField label="Gallery Image 2" value={(section as any).image2 || "/images/gallery/exhibition-2.jpg"} onChange={(v) => set("image2", v)} />
-          <ImageField label="Gallery Image 3" value={(section as any).image3 || "/images/gallery/exhibition-3.jpg"} onChange={(v) => set("image3", v)} />
-          <ImageField label="Gallery Image 4" value={(section as any).image4 || "/images/gallery/exhibition-4.jpg"} onChange={(v) => set("image4", v)} />
-          <ImageField label="Gallery Image 5" value={(section as any).image5 || "/images/gallery/exhibition-5.jpg"} onChange={(v) => set("image5", v)} />
+          <ImageField label="Gallery Image 1" value={(section as any).image1 || "/images/gallery/exhibition-1.webp"} onChange={(v) => set("image1", v)} />
+          <ImageField label="Gallery Image 2" value={(section as any).image2 || "/images/gallery/exhibition-2.webp"} onChange={(v) => set("image2", v)} />
+          <ImageField label="Gallery Image 3" value={(section as any).image3 || "/images/gallery/exhibition-3.webp"} onChange={(v) => set("image3", v)} />
+          <ImageField label="Gallery Image 4" value={(section as any).image4 || "/images/gallery/exhibition-4.webp"} onChange={(v) => set("image4", v)} />
+          <ImageField label="Gallery Image 5" value={(section as any).image5 || "/images/gallery/exhibition-5.webp"} onChange={(v) => set("image5", v)} />
         </div>
       );
 
@@ -809,7 +809,7 @@ export default function AdminHomepagePage() {
   // CMS-driven hero image override (key "homepage:hero" → field "heroImage").
   // Loaded from /api/admin/cms (not /settings) so it stays decoupled from
   // the homepage:full block above. Empty string means "no override — use
-  // the static /images/products/mini-bar.jpg fallback on the live site".
+  // the static /images/products/mini-bar.webp fallback on the live site".
   const [heroImage, setHeroImage] = useState<string>("");
 
   useEffect(() => {

@@ -3,22 +3,24 @@
 /**
  * HeroStage — the single "wow" 3D moment of the LaxRee Amenities site.
  *
- * Uses a realistic 3D hotel room model embedded from Sketchfab:
- *   "Hotel Room" by defiat11 — a fully furnished hotel room with bed,
- *   furniture, bathroom amenities and decor that showcases the
- *   hospitality context LaxRee supplies.
- *   https://sketchfab.com/3d-models/hotel-room-f35223dfb97a43b7900e5707eb495532
+ * Uses a high-quality architectural visualization 3D bedroom model embedded
+ * from Sketchfab. The model auto-loads (no click gate) so visitors see the
+ * 3D room immediately on page load.
+ *
+ * Model: "bedroom archviz" — a realistic, fully furnished bedroom with
+ * furniture, lighting, and decor that showcases the hospitality context.
+ * https://sketchfab.com/3d-models/bedroom-archviz-277aad94542a412790dc6d6ff8d9b2ea
  *
  * The embed is wrapped in a charcoal-themed stage with:
- *  - CSS brass particles floating upward (depth & atmosphere)
  *  - Radial brass glow behind the model
  *  - Mouse-parallax tilt on the stage container
- *  - Scroll-based opacity/scale shift (model slowly fades as you scroll)
+ *  - Smooth loading skeleton → fade-in transition
+ *  - Auto-rotation enabled (autospin)
  *
  * Behaviour matrix:
- *  - Desktop (≥768px)  → Sketchfab 3D embed + particles + parallax
- *  - Mobile  (<768px)  → static product photo + subtle scroll parallax
- *  - Reduced motion    → static product photo, no particles
+ *  - Desktop (≥768px)  → Sketchfab 3D embed (auto-loads) + parallax tilt
+ *  - Mobile  (<768px)  → static product photo (saves bandwidth)
+ *  - Reduced motion    → static product photo
  *
  * Named export `HeroStage`, no props. Intended for dynamic import with
  * `{ ssr: false }` — see src/components/site/hero.tsx.
@@ -31,18 +33,17 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
    Constants
    ───────────────────────────────────────────────────────────── */
 
-// "Hotel Room" by defiat11 — free, fully furnished hotel room with
-// bed, furniture, bathroom amenities and decor.
-const SKETCHFAB_MODEL_ID = "f35223dfb97a43b7900e5707eb495532";
+// "bedroom archviz" — high-quality architectural visualization bedroom.
+// Realistic materials, professional lighting, fully furnished.
+const SKETCHFAB_MODEL_ID = "277aad94542a412790dc6d6ff8d9b2ea";
 
-// Sketchfab embed URL with minimal UI — just the 3D hotel room auto-rotating
-const SKETCHFAB_EMBED = `https://sketchfab.com/models/${SKETCHFAB_MODEL_ID}/embed?autostart=1&autospin=0.3&ui_infos=0&ui_watermark=0&ui_controls=0&ui_hint=0&ui_annotations=0&ui_stop=0&ui_help=0&ui_settings=0&ui_inspector=0&ui_snapshots=0&ui_ar=0&ui_vr=0&ui_fullscreen=0&ui_related=0`;
+// Sketchfab embed URL — auto-start, auto-spin, minimal UI, preload enabled
+const SKETCHFAB_EMBED = `https://sketchfab.com/models/${SKETCHFAB_MODEL_ID}/embed?autostart=1&autospin=0.2&ui_infos=0&ui_watermark=0&ui_controls=0&ui_hint=0&ui_annotations=0&ui_stop=0&ui_help=0&ui_settings=0&ui_inspector=0&ui_snapshots=0&ui_ar=0&ui_vr=0&ui_fullscreen=0&ui_related=0&preload=1`;
 
-const BRASS = "#c6a15b";
 const CHARCOAL = "#12100d";
 
 /* ─────────────────────────────────────────────────────────────
-   Hooks
+   Hooks (inlined to keep this self-contained)
    ───────────────────────────────────────────────────────────── */
 
 const emptySubscribe = () => () => {};
@@ -86,84 +87,24 @@ function useIsMobile(breakpoint = 768) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   CSSParticles — brass particles floating upward (pure CSS)
-   ───────────────────────────────────────────────────────────── */
-
-function CSSParticles() {
-  // Pre-generate particle positions
-  const particles = Array.from({ length: 24 }, (_, i) => {
-    const left = Math.random() * 100;
-    const size = 2 + Math.random() * 4;
-    const duration = 6 + Math.random() * 8;
-    const delay = Math.random() * 8;
-    const opacity = 0.15 + Math.random() * 0.35;
-    return { left, size, duration, delay, opacity, id: i };
-  });
-
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-    >
-      {particles.map((p) => (
-        <span
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: `${p.left}%`,
-            bottom: "-10px",
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            backgroundColor: BRASS,
-            opacity: p.opacity,
-            boxShadow: `0 0 ${p.size * 2}px ${BRASS}`,
-            animation: `particle-float ${p.duration}s linear infinite`,
-            animationDelay: `${p.delay}s`,
-          }}
-        />
-      ))}
-      <style jsx>{`
-        @keyframes particle-float {
-          0% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.4;
-          }
-          90% {
-            opacity: 0.2;
-          }
-          100% {
-            transform: translateY(-500px) translateX(20px);
-            opacity: 0;
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────
-   SketchfabEmbed — the real 3D minibar model
+   SketchfabEmbed — the 3D hotel room, auto-loads on mount
    ───────────────────────────────────────────────────────────── */
 
 function SketchfabEmbed() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
-  const [userActivated, setUserActivated] = useState(false);
 
-  // Mouse-parallax tilt
-  const mouseX = useSpring(0, { stiffness: 150, damping: 20 });
-  const mouseY = useSpring(0, { stiffness: 150, damping: 20 });
+  // Mouse-parallax tilt (subtle, smooth)
+  const mouseX = useSpring(0, { stiffness: 120, damping: 20 });
+  const mouseY = useSpring(0, { stiffness: 120, damping: 20 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x * 6);
-    mouseY.set(-y * 6);
+    mouseX.set(x * 5);
+    mouseY.set(-y * 5);
   };
 
   const handleMouseLeave = () => {
@@ -171,83 +112,58 @@ function SketchfabEmbed() {
     mouseY.set(0);
   };
 
-  // Scroll-based opacity/scale
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.3]);
-  const scale = useTransform(scrollYProgress, [0, 0.3, 1], [0.9, 1, 0.95]);
-
   return (
     <motion.div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
-        opacity,
-        scale,
         rotateX: mouseY,
         rotateY: mouseX,
         transformPerspective: 1200,
       }}
       className="relative w-full h-full"
     >
-      {/* Click-to-activate 3D (prevents auto-loading heavy iframe) */}
-      {!userActivated ? (
-        <button
-          type="button"
-          onClick={() => setUserActivated(true)}
-          className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-[20px] border border-brass/20 bg-charcoal/60 transition-colors hover:border-brass/40 hover:bg-charcoal/40"
-        >
-          {/* 3D icon */}
-          <span className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-brass/40 bg-brass/10">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6A15B" strokeWidth="1.5">
-              <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z" />
-              <path d="M3 7l9 5 9-5" />
-              <path d="M12 22V12" />
-            </svg>
-          </span>
-          <span className="font-display text-ivory text-lg">View 3D Hotel Room</span>
-          <span className="data-label text-[10px] text-brass">Click to explore the furnished room</span>
-        </button>
-      ) : (
-        <>
-          {/* Loading skeleton */}
-          {!loaded && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex flex-col items-center gap-4">
-                <div
-                  className="h-10 w-10 animate-spin rounded-full border-2 border-brass/30 border-t-brass"
-                  aria-hidden
-                />
-                <span className="data-label text-[10px] text-sand">
-                  Loading 3D Model…
-                </span>
-              </div>
+      {/* Loading skeleton — shown until iframe finishes loading */}
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-[20px] bg-charcoal/80">
+          <div className="flex flex-col items-center gap-4">
+            {/* Animated 3D cube loader */}
+            <div className="relative h-12 w-12">
+              <div
+                className="absolute inset-0 rounded-full border-2 border-brass/20 border-t-brass animate-spin"
+                style={{ animationDuration: "0.8s" }}
+              />
+              <div
+                className="absolute inset-2 rounded-full border-2 border-brass/10 border-b-brass animate-spin"
+                style={{ animationDuration: "1.2s", animationDirection: "reverse" }}
+              />
             </div>
-          )}
-
-          {/* Sketchfab iframe — only loads after user clicks */}
-          <iframe
-            title="LaxRee Hotel Room 3D Model"
-            src={SKETCHFAB_EMBED}
-            onLoad={() => setLoaded(true)}
-            allow="autoplay; fullscreen; xr-spatial-tracking"
-            allowFullScreen
-            loading="lazy"
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "none",
-              borderRadius: "20px",
-              background: CHARCOAL,
-              opacity: loaded ? 1 : 0,
-              transition: "opacity 0.6s ease",
-            }}
-          />
-        </>
+            <span className="data-label text-[10px] text-sand">
+              Loading 3D Room…
+            </span>
+          </div>
+        </div>
       )}
+
+      {/* Sketchfab iframe — auto-loads on mount (no click gate) */}
+      <iframe
+        title="LaxRee 3D Hotel Room Showcase"
+        src={SKETCHFAB_EMBED}
+        onLoad={() => setLoaded(true)}
+        allow="autoplay; fullscreen; xr-spatial-tracking"
+        allowFullScreen
+        loading="eager"
+        style={{
+          width: "100%",
+          height: "100%",
+          border: "none",
+          borderRadius: "20px",
+          background: CHARCOAL,
+          opacity: loaded ? 1 : 0,
+          transition: "opacity 0.8s ease",
+        }}
+      />
     </motion.div>
   );
 }
@@ -262,22 +178,20 @@ function StaticFallback() {
     target: ref,
     offset: ["start end", "end start"],
   });
-  const rotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.05]);
 
   return (
     <motion.div
       ref={ref}
-      style={{ rotate, scale }}
+      style={{ scale }}
       className="relative w-full h-full flex items-center justify-center"
     >
       <img
-        src="/images/products/mini-bar.jpg"
+        src="/images/products/mini-bar.webp"
         alt="LaxRee Minibar"
         loading="eager"
         className="max-h-full max-w-full object-contain rounded-[20px]"
         onError={(e) => {
-          // Fallback: charcoal box with brass label
           const target = e.currentTarget;
           target.style.display = "none";
         }}
@@ -306,12 +220,9 @@ export function HeroStage() {
         className="absolute inset-0 -z-10 rounded-full blur-3xl"
         style={{
           background:
-            "radial-gradient(circle at center, rgba(198,161,91,0.15), transparent 60%)",
+            "radial-gradient(circle at center, rgba(198,161,91,0.18), transparent 60%)",
         }}
       />
-
-      {/* CSS particles (desktop, no reduced motion) */}
-      {show3D && <CSSParticles />}
 
       {/* Brass ring frame */}
       <div
@@ -320,11 +231,11 @@ export function HeroStage() {
       />
 
       {/* 3D model or fallback */}
-      <div className="relative w-full h-full p-2">
+      <div className="relative w-full h-full p-1.5">
         {show3D ? <SketchfabEmbed /> : <StaticFallback />}
       </div>
 
-      {/* Floating badge — "3D" indicator */}
+      {/* Floating badge — "3D LIVE" indicator */}
       {show3D && (
         <div className="absolute -top-3 -right-3 z-10 flex items-center gap-1.5 rounded-full border border-brass/40 bg-charcoal/90 px-3 py-1.5 backdrop-blur-sm">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brass" />

@@ -122,7 +122,7 @@ export async function PATCH(req: NextRequest) {
               model: data.model,
               name: data.name || data.model,
               category: data.category || "",
-              image: data.image || "/images/product-catalogue/coming-soon.jpg",
+              image: data.image || "/images/product-catalogue/coming-soon.webp",
               description: data.description || "",
               specs: data.specs || "[]",
               price: data.price || "",

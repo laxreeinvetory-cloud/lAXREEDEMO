@@ -171,7 +171,7 @@ function BlogEditor({
     title: post?.title || "",
     category: post?.category || "Procurement Guide",
     excerpt: post?.excerpt || "",
-    image: post?.image || "/images/blog/blog-1.jpg",
+    image: post?.image || "/images/blog/blog-1.webp",
     author: post?.author || "LaxRee Editorial Team",
     authorRole: post?.authorRole || "Hospitality Procurement Insights",
     date: post?.date || new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),

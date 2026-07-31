@@ -46,7 +46,7 @@ const PAGES: PageDef[] = [
       {
         name: "Hero Image",
         fields: [
-          { key: "heroImage", label: "Homepage Hero Image", type: "image", fallback: "/images/products/mini-bar.jpg" },
+          { key: "heroImage", label: "Homepage Hero Image", type: "image", fallback: "/images/products/mini-bar.webp" },
         ],
       },
     ],
@@ -68,8 +68,8 @@ const PAGES: PageDef[] = [
       {
         name: "Page Images",
         fields: [
-          { key: "factoryImage", label: "Factory Image", type: "image", fallback: "/images/about/factory.jpg" },
-          { key: "heroImage", label: "Second Image", type: "image", fallback: "/images/products/mini-bar.jpg" },
+          { key: "factoryImage", label: "Factory Image", type: "image", fallback: "/images/about/factory.webp" },
+          { key: "heroImage", label: "Second Image", type: "image", fallback: "/images/products/mini-bar.webp" },
         ],
       },
     ],

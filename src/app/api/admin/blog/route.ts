@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         category: body.category,
         excerpt: body.excerpt,
         content: JSON.stringify(body.content || []),
-        image: body.image || "/images/blog/blog-1.jpg",
+        image: body.image || "/images/blog/blog-1.webp",
         author: body.author || "LaxRee Editorial Team",
         authorRole: body.authorRole || "Hospitality Procurement Insights",
         date: body.date || new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),

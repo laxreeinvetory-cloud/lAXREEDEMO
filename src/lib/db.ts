@@ -53,19 +53,33 @@ export const db = new Proxy({} as PrismaClient, {
         get(_t, method: string | symbol) {
           // All model methods resolve to empty / zero / null so callers
           // treating the result as an array or count keep working.
-          if (method === 'findMany' || method === 'findUnique' || method === 'findFirst') {
+          // IMPORTANT: findUnique/findFirst must return null (not []) so
+          // truthiness checks like `if (dbAdmin)` work correctly.
+          if (method === 'findMany') {
             return async () => [];
+          }
+          if (method === 'findUnique' || method === 'findFirst') {
+            return async () => null;
           }
           if (method === 'count' || method === 'aggregate') {
             return async () => 0;
           }
-          if (method === 'create' || method === 'createMany') {
+          if (method === 'create') {
+            return async () => ({ id: 'local-noop' });
+          }
+          if (method === 'createMany') {
             return async () => ({ count: 0 });
           }
-          if (method === 'update' || method === 'updateMany' || method === 'upsert') {
-            return async () => null;
+          if (method === 'update' || method === 'upsert') {
+            return async () => ({ id: 'local-noop' });
           }
-          if (method === 'delete' || method === 'deleteMany') {
+          if (method === 'updateMany') {
+            return async () => ({ count: 0 });
+          }
+          if (method === 'delete') {
+            return async () => ({ id: 'local-noop' });
+          }
+          if (method === 'deleteMany') {
             return async () => ({ count: 0 });
           }
           // Anything else (groupBy, etc.) → null

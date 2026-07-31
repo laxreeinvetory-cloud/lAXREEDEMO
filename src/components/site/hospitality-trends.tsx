@@ -19,7 +19,7 @@ export function HospitalityTrends() {
             title: p.title,
             category: p.category || "Blog",
             excerpt: p.excerpt || "",
-            image: p.image || "/images/blog/blog-1.jpg",
+            image: p.image || "/images/blog/blog-1.webp",
             date: p.date || "",
             readTime: p.readTime || "5 min",
           }));
