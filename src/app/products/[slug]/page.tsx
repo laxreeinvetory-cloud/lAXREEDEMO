@@ -132,21 +132,27 @@ function CategoryPageInner() {
           if (child.name === "Dome & Space POD Models") catFilters.push("Dome & Space POD");
           if (child.name === "Dome & Space POD") catFilters.push("Dome & Space POD Models");
           const childProducts = allProducts.filter((p: { category: string; image: string }) => catFilters.includes(p.category));
-          const withImage = childProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
-          // Use real product image when available; otherwise the
-          // sub-category-level fallback (always on disk); only fall back
-          // to coming-soon.jpg when no mapping exists.
-          const fallback = SUBCATEGORY_FALLBACK_IMAGE[child.slug] || "/images/product-catalogue/coming-soon.jpg";
-          images[child.slug] = { image: withImage?.image || fallback, count: childProducts.length };
+          // ALWAYS use the premium sub-category fallback image first.
+          // This is a hand-picked Lux/Premium tier product photo that
+          // best represents the sub-category. Only fall back to a random
+          // DB product image if no fallback mapping exists.
+          const fallback = SUBCATEGORY_FALLBACK_IMAGE[child.slug];
+          const withImage = fallback
+            ? null  // fallback takes priority — don't use DB image
+            : childProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
+          images[child.slug] = { image: fallback || withImage?.image || "/images/product-catalogue/coming-soon.jpg", count: childProducts.length };
         }
         setItemImages(images);
         const otherImgs: Record<string, { image: string; count: number }> = {};
         for (const other of otherParents) {
           const otherCatNames = PARENT_CATEGORY_MAP[other.slug] || [];
           const otherProducts = allProducts.filter((p: { category: string; image: string }) => otherCatNames.includes(p.category));
-          const withImage = otherProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
-          const fallback = PARENT_FALLBACK_IMAGE[other.slug] || "/images/product-catalogue/coming-soon.jpg";
-          otherImgs[other.slug] = { image: withImage?.image || fallback, count: otherProducts.length };
+          // ALWAYS use the premium parent fallback image first.
+          const fallback = PARENT_FALLBACK_IMAGE[other.slug];
+          const withImage = fallback
+            ? null
+            : otherProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
+          otherImgs[other.slug] = { image: fallback || withImage?.image || "/images/product-catalogue/coming-soon.jpg", count: otherProducts.length };
         }
         setOtherImages(otherImgs);
       })
