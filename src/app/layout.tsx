@@ -11,8 +11,7 @@ import { ConditionalChrome } from "@/components/providers/conditional-chrome";
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
   display: "swap",
   preload: true,
 });

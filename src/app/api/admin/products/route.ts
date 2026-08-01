@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
         model: body.model,
         name: body.name,
         category: body.category || "",
-        image: body.image || "/images/product-catalogue/placeholder.jpg",
+        image: body.image || "/images/product-catalogue/coming-soon.jpg",
         description: body.description || "",
         specs,
         price: body.price || "",

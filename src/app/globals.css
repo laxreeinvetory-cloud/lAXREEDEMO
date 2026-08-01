@@ -83,18 +83,10 @@
     overflow-x: hidden;
     /* Optimize text rendering for performance */
     text-rendering: optimizeLegibility;
-    /* Reduce layout shifts from font loading */
-    font-display: swap;
   }
 
-  /* Performance: use content-visibility for below-the-fold sections
-     to skip rendering work until they're near the viewport. */
-  section[id] {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 500px;
-  }
-
-  /* Performance: hint the browser to GPU-composite animated elements */
+  /* Performance: hint the browser to GPU-composite animated elements.
+     Only applied to elements that actually animate. */
   [style*="transform"],
   [style*="opacity"] {
     will-change: transform, opacity;

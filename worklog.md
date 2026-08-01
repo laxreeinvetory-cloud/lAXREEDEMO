@@ -1742,3 +1742,278 @@ Stage Summary:
 
 - [src/app/admin/login/page.tsx:23-27] **No "remember me" / session expiry.** Once logged in, the localStorage entry persists forever (until the user clicks Logout or clears storage). Fix: store a server-set cookie with a reasonable expiry (e.g., 7 days) and refresh it on activity.
 
+
+---
+Task ID: PERF-1
+Agent: performance-audit
+Task: Audit entire website for performance issues and dead code
+
+Work Log:
+- Read /home/z/my-project/worklog.md (1744 lines) to understand prior agent work and known issues. Built on prior findings (MagneticButton, ProductCardWithCart, shadcn Toaster/use-toast, closeButtonRef dead code already documented) — focused on NEW performance-specific findings.
+- Audited next.config.ts (31 lines), package.json (67 lines), tailwind.config.ts (65 lines), tsconfig.json, components.json, eslint.config.mjs.
+- Audited globals.css (370 lines) — found overly-broad will-change selector, invalid font-display on body, 4× marquee duplication.
+- Audited all 19 files in src/components/site/ (hero, navbar, about-us, category-bento, category-explorer, product-spotlight, owner-message, our-presence, trust-marquee, certifications, clients-testimonials, why-choose, hospitality-trends, lead-cta-banner, page-primitives, magnetic-button, scroll-progress, product-detail-card, product-card-cart, site-footer).
+- Audited all 5 files in src/components/floating/ (floating-root, whatsapp-launcher, mobile-sticky-bar, enquire-modal, catalogue-modal).
+- Audited all 4 files in src/components/providers/ (smooth-scroll-provider, enquiry-provider, cart-provider, conditional-chrome).
+- Audited src/components/three/hero-stage.tsx (250 lines) and all 13 files in src/components/ui/ (label, dialog, separator, button, input, card, textarea, sheet, toast, popover, badge, alert, toaster, site-toaster).
+- Audited all 4 hooks (use-laxree-motion, use-mobile, use-page-content, use-toast).
+- Audited all 6 lib/laxree files (site-data 1116 lines, catalogue-data 3389 lines, blog-content 603 lines, product-images 187 lines, seo 135 lines, site-data-types 30 lines) + lib/db.ts, lib/cms.ts, lib/utils.ts, lib/admin/* (4 files).
+- Audited src/app/layout.tsx (255 lines), src/app/page.tsx (62 lines), all route layouts (13 files), all 11 public pages, all 14 admin pages, and 17 API route files.
+- Cross-verified dead code by grepping every suspect import path across the entire src/ tree to confirm zero importers.
+
+## CRITICAL (big performance impact)
+
+- **[package.json:19-40]** 15 of 21 `@radix-ui/react-*` packages are completely unused. Codebase only imports `react-dialog, react-label, react-popover, react-separator, react-slot, react-toast` — and ALL 6 of those are imported only by dead shadcn UI components (see DEAD CODE section). If dead UI components are deleted, ALL 21 Radix packages can be removed. **Fix**: Delete dead UI components first, then `bun remove` all 21 `@radix-ui/react-*` packages. Each Radix package is 5–40 KB minified; removing 15+ packages cuts ~200–400 KB from `node_modules` and significantly shrinks the install/build time.
+
+- **[package.json:41,52,53]** `class-variance-authority`, `clsx`, `tailwind-merge` are dependencies that exist ONLY to support `src/lib/utils.ts` (`cn` helper), which itself is ONLY imported by dead shadcn UI components. **Fix**: After deleting dead UI components, also `bun remove class-variance-authority clsx tailwind-merge` and delete `src/lib/utils.ts`.
+
+- **[src/app/layout.tsx:11-18]** Fraunces font is preloaded with **8 variants** (4 weights × 2 styles) AND `preload: true`. Every variant is a separate WOFF2 fetch on initial page load (~30–50 KB each = 240–400 KB just for the display font). **Fix**: Drop `italic` style entirely (not used in CSS body) and reduce to weights `["500", "600", "700"]` — cuts preload from 8 files to 3, saving ~150 KB on first paint. Also consider `preload: false` for non-`400` weights.
+
+- **[src/components/site/hero.tsx:385-393, src/components/three/hero-stage.tsx:189-198]** All product/hero images use raw `<img>` tags. There are **zero `next/image` imports** across the entire codebase and **10+ `<img>` tags** in src/components and src/app. This bypasses Next.js's automatic image optimization (AVIF/WebP, responsive `srcset`, lazy-loading, blur placeholders). On a page like `/products` with 8 category cards, this means 8 full-size JPEGs are shipped at native resolution. **Fix**: Migrate to `next/image` starting with hero (eager + priority), category cards, product cards, and blog thumbnails. Add `images: { formats: ['image/avif', 'image/webp'] }` to `next.config.ts`. Estimated savings: 40–70% image weight on most pages.
+
+- **[src/app/globals.css:97-101]** `[style*="transform"], [style*="opacity"] { will-change: transform, opacity; }` is a **wildly over-broad** selector. It forces GPU compositing layers on EVERY element that has any inline transform/opacity style — including the brass-dot animations, scroll-progress bar, hover transitions, modal backdrops, etc. This causes excessive GPU memory use and can cause stutter on low-end devices. **Fix**: Remove this rule entirely. Apply `will-change` only on specific elements known to animate (e.g. `.animate-marquee { will-change: transform; }`).
+
+## HIGH (moderate impact)
+
+- **[src/lib/cms.ts (entire file, 213 lines)]** `loadCMS()`, `loadCMSSection()`, `CMS_DEFAULTS` are NEVER imported anywhere in src/. The site uses the `/api/admin/cms` REST endpoint via `fetch()` from client components instead. The file also imports `db` from `@/lib/db`, which means it's parsed and its dependencies resolved at build time. **Fix**: Delete `src/lib/cms.ts`. Savings: ~213 lines of dead code + removes a Prisma import path.
+
+- **[src/lib/laxree/seo.ts (entire file, 135 lines)]** All 5 exported functions (`pageMetadata`, `productJsonLd`, `breadcrumbJsonLd`, `faqJsonLd`, `localBusinessJsonLd`) and `BASE_URL` are NEVER imported anywhere. Each page builds its own metadata inline and the blog `[slug]/page.tsx` constructs its own `breadcrumbJsonLd` constant locally (line 98) instead of importing the helper. **Fix**: Delete `src/lib/laxree/seo.ts`. Savings: 135 lines of dead code + the `import type { Metadata } from "next"` at the top.
+
+- **[src/lib/laxree/site-data-types.ts (entire file, 30 lines)]** Never imported anywhere. The same types (`BlogPost`, `BlogPostFull`, `CatalogueProduct`, `CatalogueCategory`) are redefined inline at the top of `site-data.ts` and `catalogue-data.ts` where they're actually consumed. **Fix**: Delete `src/lib/laxree/site-data-types.ts`.
+
+- **[src/components/site/trust-marquee.tsx:21-26]** `items` array duplicates `CERTIFICATIONS_MARQUEE` **4 times** (4× copy). The `marquee-x` keyframe translates the track from 0 → -50%, so only **2× copy** is needed for a seamless loop. The extra 2 copies are dead DOM nodes (each item is a `<span>` with nested spans) that consume memory and increase initial layout cost. **Fix**: Change to `[...CERTIFICATIONS_MARQUEE, ...CERTIFICATIONS_MARQUEE]` — halves the marquee DOM size.
+
+- **[src/hooks/laxree/use-laxree-motion.ts:105-124]** `useScrollProgress` hook is exported but NEVER imported anywhere in the codebase. **Fix**: Delete the export (lines 105-124). Saves ~20 lines of dead code in a file imported by 9 client components.
+
+- **[src/components/three/hero-stage.tsx:53-87]** Two hooks (`useIsClient`, `useIsMobile`, `usePrefersReducedMotion`) are duplicated inline in `hero-stage.tsx` despite equivalent implementations existing in `src/hooks/laxree/use-laxree-motion.ts` (`usePrefersReducedMotion`) and `src/hooks/use-mobile.ts` (`useIsMobile`). The duplication means bug-fixes have to be made in 2–3 places. **Fix**: Import the shared hooks; remove the 3 inline duplicates (~35 lines saved).
+
+- **[src/components/site/product-spotlight.tsx:24-33]** Third copy of `useIsMobile` is defined inline. Same issue as above. **Fix**: Import from `@/hooks/use-mobile`.
+
+- **[src/app/about-us/page.tsx:1, 14-15]** The file has `"use client"` at the top AND uses `usePageContent` (a client hook), but the doc-comment on lines 12–15 claims *"The page is a server component — every interactive piece (motion, hover, the CTA button) lives inside the client components it imports"*. The comment is wrong. The page became a client component when `usePageContent` was added. **Fix**: Either (a) fix the comment to reflect reality, or (b) split into a server component that fetches CMS server-side + a small client child for the form. Option (b) would let the entire 464-line page render on the server and ship zero JS for the static content.
+
+- **[src/components/site/hospitality-trends.tsx:1, 11-30]** `"use client"` is added solely for a `useEffect` that fetches `/api/admin/blog`. The fetch could be done server-side and the data passed as props, making this a server component (no JS shipped). **Fix**: Convert to server component, fetch blogs in the parent server component or in a server action, pass `posts` as props. Eliminates one client boundary + one runtime fetch waterfall.
+
+- **[src/app/globals.css:87]** `font-display: swap;` declared on `body` is **invalid CSS** — `font-display` is a `@font-face` descriptor, not a property that applies to elements. It's silently ignored by browsers (the actual swap behavior comes from `display: "swap"` in `next/font/google` config in `layout.tsx`). **Fix**: Delete line 87.
+
+- **[src/app/globals.css:92-95]** `section[id] { content-visibility: auto; contain-intrinsic-size: auto 500px; }` applies to ALL sections with an `id` attribute. While this speeds up initial render of below-the-fold sections, the `contain-intrinsic-size: auto 500px` value is a rough guess — sections like the hero (min-h-screen ≈ 800px+) and the product spotlight coverflow (CARD_HEIGHT + 80 = 440px + header) get a wrong intrinsic height, causing noticeable scroll-bar jumps when sections hydrate. Also impacts anchor-link scrolling (Lenis `scrollTo` may target the wrong offset). **Fix**: Either (a) remove the rule entirely, or (b) apply `content-visibility: auto` selectively via a utility class on truly below-the-fold sections, with accurate `contain-intrinsic-size` per section.
+
+- **[tailwind.config.ts:1-64 + globals.css:1-2]** Tailwind v4 is configured via `@import "tailwindcss"` + `@import "tw-animate-css"` + `@theme inline {...}` in `globals.css` (the v4 way). The `tailwind.config.ts` file uses the v3 plugin pattern (`tailwindcssAnimate` plugin) AND `darkMode: "class"` AND a `content` glob — most of which Tailwind v4 ignores when CSS-based config is present. Additionally, **both** `tailwindcss-animate` (v3 plugin) AND `tw-animate-css` (v4 replacement) are installed — duplicate animation utilities. **Fix**: Delete `tailwind.config.ts` entirely (Tailwind 4 doesn't need it), `bun remove tailwindcss-animate` (the `tw-animate-css` import in `globals.css` already covers animation utilities). Verifies content scanning still works via Tailwind 4's automatic source detection.
+
+- **[src/app/layout.tsx:247-251]** `CartProvider` wraps the entire app including `/admin/*` routes. The admin panel doesn't use the cart (verified — no admin file imports `useCart`), but every admin page still loads the cart's `useSyncExternalStore` subscription, localStorage init, and event listeners. **Fix**: Move `CartProvider` inside `ConditionalChrome`'s non-admin branch (or split admin into its own layout segment that doesn't inherit the provider).
+
+- **[src/app/api/route.ts:1-5]** Root API route returns `{ message: "Hello, world!" }`. Never called from anywhere in the codebase. **Fix**: Delete the file (saves one route build entry; also removes the inconsistent `{ message }` shape that prior agents flagged).
+
+## MEDIUM (small impact)
+
+- **[src/app/products/page.tsx:5]** Imports 6 lucide icons that are never used: `ShowerHead, ConciergeBell, Armchair, Layers, Bath, Utensils`. Only `ArrowRight, Building2, Globe, Check` are used. Each unused icon adds ~1–2 KB to the client bundle. **Fix**: Remove the 6 unused icons from the import.
+
+- **[src/app/products/page.tsx:14]** `CATALOGUE_CATEGORIES` is imported from `@/lib/laxree/catalogue-data` but never used in the file (only `CATALOGUE_PARENTS` and `getCategoriesByParent` are used). **Fix**: Remove from import.
+
+- **[src/app/sitemap.ts:2, 4]** `CATEGORIES` (from site-data) and `CATALOGUE_CATEGORIES` (from catalogue-data) are imported but never used. Only `BLOG_POSTS`, `CATALOGUE_PARENTS`, and `getCategoriesByParent` are referenced. **Fix**: Remove the two unused imports.
+
+- **[src/app/clients/page.tsx:4]** `Utensils` is imported but never used (the only icon used for the "Boutique Hotels" category is `Heart`). **Fix**: Remove `Utensils` from the import.
+
+- **[src/components/site/product-detail-card.tsx:23-28]** `ProductPageWithSelector`'s type signature requires `parentSlug: string` and `itemSlug: string` props, but the function body only destructures `products` and `categoryName` — `parentSlug` and `itemSlug` are NEVER read. The caller (`[itemSlug]/page.tsx:114-115`) dutifully passes both. Dead props. **Fix**: Remove `parentSlug` and `itemSlug` from the props type and from the call site.
+
+- **[src/components/floating/enquire-modal.tsx:40, 147]** `closeButtonRef` is declared, attached to the close button, and never read. The useEffect on lines 44-58 focuses `firstFieldRef` instead. **Fix**: Remove `closeButtonRef` declaration and the `ref={closeButtonRef}` attribute.
+
+- **[src/components/floating/catalogue-modal.tsx:46-47]** `closeButtonRef` declared and silenced with `void closeButtonRef;`. Pure dead code (already noted by prior agent). **Fix**: Delete both lines.
+
+- **[src/components/site/hero.tsx:204]** Inline `style={{ paddingTop: 96 }}` — should be Tailwind `pt-24` (96px = 6rem = pt-24 in Tailwind). Minor consistency issue. **Fix**: Replace with `pt-24` class.
+
+- **[src/app/experience-center/page.tsx:1, 57-78]** The whole 240-line page is `"use client"` just to fetch one CMS field (`demoVideoUrl`) in a `useEffect`. Could be split: keep the page as a server component, extract the video block into a small `<ExperienceCenterVideo />` client component. **Fix**: Refactor — page renders server-side, only the video block hydrates.
+
+- **[src/components/site/why-choose.tsx:1]** `"use client"` is needed only because of `motion.div` `whileInView` animations. If the fade-in animations were converted to a CSS-only approach (e.g. Tailwind's `motion-safe:animate-in` from `tw-animate-css`), the entire 78-line component could be a server component. **Fix**: Optional refactor — replace Framer Motion `whileInView` with IntersectionObserver-driven CSS classes (or `@view-transition` API in modern browsers). Eliminates ~30 KB of Framer Motion JS from this section's bundle.
+
+- **[src/lib/db.ts:17-20]** `isLocalSqliteMismatch()` reads `process.env.DATABASE_URL` on every property access of the `db` Proxy (called for every `db.lead`, `db.product`, etc.). Reading `process.env` is cheap but not free in serverless cold paths. **Fix**: Memoize the result in a module-level `const IS_LOCAL_SQLITE = process.env.DATABASE_URL?.startsWith('file:') ?? false;` outside the Proxy.
+
+- **[src/app/globals.css:285-298]** `marquee-x` keyframe + `animate-marquee`/`animate-marquee-slow` classes are defined. Also lines 301-318 define a SECOND pair of marquee keyframes (`marquee-left`, `marquee-right`) used only on `/clients` page. Could be consolidated into one keyframe parameterized by direction. Minor.
+
+- **[next.config.ts]** No `images` config (formats, deviceSizes, imageSizes), no `experimental.optimizePackageImports` for `lucide-react` (which would tree-shake the ~600 icon set down to only used icons). **Fix**: Add `images: { formats: ['image/avif', 'image/webp'] }` and `experimental: { optimizePackageImports: ['lucide-react'] }` to next.config.ts. The lucide optimization alone can cut 20–40 KB from pages that import only a few icons.
+
+- **[src/components/site/product-detail-card.tsx:5]** Imports 8 lucide icons (`Check, Crown, Star, Gem, ShoppingBag, Play, ChevronDown, ArrowRight`) — `Crown` and `Gem` are only used in the `TIER_STYLES` map. If the tier feature is rarely used (most products have no tier), the icons are still bundled. Minor.
+
+## LOW (code quality)
+
+- **[src/components/site/hero.tsx:32]** `DEFAULT_HERO_IMAGE = "/images/products/mini-bar.jpg"` — the file comment on line 30 calls it the "static fallback hero image" but the actual default mini-bar path used by `StaticFallback` in `hero-stage.tsx:190` is also `/images/products/mini-bar.jpg`. Two separate hardcoded constants for the same image — should be in `site-data.ts` as a shared constant.
+
+- **[src/components/site/category-bento.tsx:7-10]** Imports `useTilt` and `usePrefersReducedMotion` from `use-laxree-motion` — `usePrefersReducedMotion` is used to gate the tilt handlers. However, the `useTilt` hook internally creates `useMotionValue`/`useSpring` (which run regardless of reduced-motion). For reduced-motion users, this still pays the cost of creating 4 motion values per card. **Fix**: Move the `reduced` check inside `useTilt` and short-circuit early.
+
+- **[src/components/providers/cart-provider.tsx:67-75]** `subscribe()` listens to BOTH `laxree-cart-change` (custom event) AND `storage` (cross-tab). The `storage` event never fires from same-tab `localStorage.setItem` calls — it only fires in OTHER tabs. So the `storage` listener is correct for cross-tab sync, but the comment doesn't mention that. Minor doc issue.
+
+- **[src/components/site/page-primitives.tsx:1]** `"use client"` is added at the file level, but `SectionHeading` and `GlassCard` are pure server-renderable components (no hooks, no event handlers, no client-only APIs). They get bundled into the client graph because they share a file with `PageHero`, `PageCTA`, and `FadeIn` which DO need client. **Fix**: Split into `page-primitives-server.tsx` (SectionHeading, GlassCard) and `page-primitives-client.tsx` (PageHero, PageCTA, FadeIn). Lets server components import SectionHeading without pulling in Framer Motion.
+
+- **[src/components/site/owner-message.tsx:44-48]** Uses raw `<img>` for the owner photo instead of `next/image`. Same pattern as the hero image issue (see CRITICAL).
+
+- **[src/components/site/site-footer.tsx:84-91]** Uses raw `<img>` for the logo. Next.js `<Image>` would auto-serve WebP/AVIF. Minor since the logo is small.
+
+- **[src/app/layout.tsx:39]** `BASE_URL = "https://l-axreedemo.vercel.app"` is hardcoded in `layout.tsx`. The same URL is also hardcoded in `src/lib/laxree/seo.ts:3`, `src/app/sitemap.ts:9`, `src/app/robots.ts:12`, `src/app/products/layout.tsx:7,11`, `src/app/about-us/layout.tsx:7,11`, etc. — 10+ places. Should be a single `lib/laxree/site-data.ts` constant or env var.
+
+- **[src/components/site/clients-testimonials.tsx:52-79]** Two copies of `CLIENT_LOGOS.map(...)` render identical markup. Could be DRY'd into a `<LogoItem>` component. Minor.
+
+- **[src/components/ui/site-toaster.tsx:20-22, 27-32]** `emptySubscribe`/`clientSnapshot`/`serverSnapshot` inline `useSyncExternalStore` pattern is duplicated in `hero-stage.tsx:49-55` and (similar logic) in `cart-provider.tsx`. Could be a shared `useIsClient` hook in `hooks/laxree/`.
+
+- **[src/app/api/admin/upload/route.ts:11-18]** `uniqueName()` uses `Math.random()` (already noted by prior agent). Tiny perf issue: `Math.random()` is fine here. Not a real performance concern.
+
+## DEAD CODE (safe to remove)
+
+- **[src/components/ui/label.tsx]** Never imported anywhere (confirmed via `grep -r "ui/label" src/` → 0 results outside the file itself). Uses `@radix-ui/react-label` + `cn`.
+
+- **[src/components/ui/dialog.tsx]** Never imported. Uses `@radix-ui/react-dialog` + `cn`.
+
+- **[src/components/ui/separator.tsx]** Never imported. Uses `@radix-ui/react-separator` + `cn`.
+
+- **[src/components/ui/button.tsx]** Never imported. Uses `@radix-ui/react-slot` + `cn` + `class-variance-authority`.
+
+- **[src/components/ui/input.tsx]** Never imported. Uses `@radix-ui/react-slot` + `cn`.
+
+- **[src/components/ui/card.tsx]** Never imported. Uses `@radix-ui/react-slot` + `cn`.
+
+- **[src/components/ui/textarea.tsx]** Never imported. Uses `@radix-ui/react-slot` + `cn`.
+
+- **[src/components/ui/sheet.tsx]** Never imported. Uses `@radix-ui/react-dialog` + `cn`.
+
+- **[src/components/ui/toast.tsx]** Only imported by dead `toaster.tsx` and dead `use-toast.ts`. Uses `@radix-ui/react-toast` + `cn` + `class-variance-authority`.
+
+- **[src/components/ui/popover.tsx]** Never imported. Uses `@radix-ui/react-popover` + `cn`.
+
+- **[src/components/ui/badge.tsx]** Never imported. Uses `@radix-ui/react-slot` + `cn` + `class-variance-authority`.
+
+- **[src/components/ui/alert.tsx]** Never imported. Uses `@radix-ui/react-slot` + `cn` + `class-variance-authority`.
+
+- **[src/components/ui/toaster.tsx]** Never imported (the live site uses `src/components/ui/site-toaster.tsx` instead). Confirmed by `grep -r "ui/toaster" src/` → 0 results outside the file. Already documented by prior agent — re-confirmed still dead.
+
+- **[src/hooks/use-toast.ts]** Only imported by dead `toaster.tsx`. Already documented by prior agent — re-confirmed still dead.
+
+- **[src/lib/utils.ts]** The `cn` helper is only imported by the 12 dead shadcn UI components listed above. Once those are deleted, `utils.ts` has zero importers.
+
+- **[src/lib/cms.ts]** `loadCMS`, `loadCMSSection`, `CMS_DEFAULTS` — none are imported anywhere in src/. The entire 213-line file is dead. The site uses `/api/admin/cms` REST endpoints with `fetch()` from client components instead.
+
+- **[src/lib/laxree/seo.ts]** All 5 exported functions (`pageMetadata`, `productJsonLd`, `breadcrumbJsonLd`, `faqJsonLd`, `localBusinessJsonLd`) and `BASE_URL` — none imported anywhere. 135 lines of dead code.
+
+- **[src/lib/laxree/site-data-types.ts]** The entire 30-line file is never imported. Types are redeclared inline at the top of `site-data.ts` and `catalogue-data.ts`.
+
+- **[src/hooks/laxree/use-laxree-motion.ts:104-124]** `useScrollProgress` export is never imported. (Other exports `useCountUp`, `useTilt`, `usePrefersReducedMotion` ARE used — only `useScrollProgress` is dead.)
+
+- **[src/components/site/magnetic-button.tsx]** `MagneticButton` is never imported anywhere (already documented by prior agent — re-confirmed still dead).
+
+- **[src/components/site/product-card-cart.tsx]** `ProductCardWithCart` is never imported anywhere (already documented by prior agent — re-confirmed still dead).
+
+- **[src/app/api/route.ts]** The "Hello, world!" root API route is never fetched by any client or server code.
+
+- **[src/components/floating/enquire-modal.tsx:40, 147]** `closeButtonRef` declared and attached but never read (already documented by prior agent).
+
+- **[src/components/floating/catalogue-modal.tsx:46-47]** `closeButtonRef` declared and silenced with `void` (already documented by prior agent).
+
+- **[src/components/site/product-detail-card.tsx:23-28]** `parentSlug` and `itemSlug` props declared in `ProductPageWithSelector`'s type signature but never destructured or used in the function body.
+
+Stage Summary:
+
+The LaxRee Amenities site has significant performance and dead-code debt that accumulated across multiple agent iterations. The biggest wins, in priority order:
+
+1. **Delete 12+ dead shadcn UI components** (`label, dialog, separator, button, input, card, textarea, sheet, toast, popover, badge, alert, toaster`) — this unblocks removing 21 `@radix-ui/react-*` packages + `class-variance-authority` + `clsx` + `tailwind-merge` + `src/lib/utils.ts`. Total impact: ~300–500 KB removed from `node_modules`, faster installs, smaller serverless cold-start bundles.
+
+2. **Delete 3 dead lib files** — `src/lib/cms.ts` (213 lines), `src/lib/laxree/seo.ts` (135 lines), `src/lib/laxree/site-data-types.ts` (30 lines). Total: ~380 lines of dead code that's still parsed at build time.
+
+3. **Migrate `<img>` to `next/image`** — 10+ raw `<img>` tags across the codebase bypass Next.js image optimization. Adding `next/image` + `images: { formats: ['image/avif', 'image/webp'] }` in `next.config.ts` would cut image weight 40–70% on most pages.
+
+4. **Fix font preloading** — Fraunces is preloaded with 8 variants (4 weights × 2 styles). Reducing to 3 weights (no italic) saves ~150 KB on first paint.
+
+5. **Remove the overly-broad `will-change` selector** in globals.css — currently forces GPU compositing on every element with inline transform/opacity. Major memory/stutter win on low-end devices.
+
+6. **Consolidate duplicate hooks** — `useIsMobile` exists in 3 places (hooks/use-mobile.ts, hero-stage.tsx, product-spotlight.tsx); `usePrefersReducedMotion` exists in 2 places. Deduplicate to single shared implementations.
+
+7. **Add `experimental.optimizePackageImports: ['lucide-react']`** to next.config.ts — tree-shakes the ~600-icon lucide set, saving 20–40 KB per page that imports icons.
+
+8. **Move `CartProvider` inside `ConditionalChrome`'s public-route branch** — admin routes don't need cart context, but currently load it anyway.
+
+9. **Convert `hospitality-trends.tsx` and `experience-center/page.tsx` to server components** — both are `"use client"` solely for one `useEffect` fetch that could be done server-side. Removes 2 client boundaries + 2 runtime fetch waterfalls.
+
+10. **Drop `tailwind.config.ts` + `tailwindcss-animate`** — Tailwind v4 uses CSS-based config; the JS config file is largely ignored, and the `tw-animate-css` import in globals.css already provides animation utilities.
+
+Minor wins: remove unused imports in `products/page.tsx`, `sitemap.ts`, `clients/page.tsx`; remove `useScrollProgress` dead export; remove dead `parentSlug`/`itemSlug` props; remove `closeButtonRef` dead refs; remove root `/api/route.ts`.
+
+Combined estimated impact: ~500–800 KB removed from production bundles (mostly via dead Radix deps + cn utility chain), 40–70% image weight reduction via next/image, ~150 KB faster first paint via font preload trim, and 5+ fewer client component boundaries on the homepage.
+
+---
+Task ID: BUG-1
+Agent: bug-audit
+Task: Audit entire website for bugs and errors
+
+Work Log:
+- Read worklog.md to understand prior agent work (foundation, mega-restructure, perf audit, etc.)
+- Audited src/app/layout.tsx, globals.css, manifest.ts, robots.ts, sitemap.ts
+- Audited all page components in src/app/ (home, about-us, products, products/[slug], products/[slug]/[itemSlug], blog, blog/[slug], cart, catalogue, career, clients, contact-us, dealers, experience-center, faq)
+- Audited all API routes in src/app/api/ (lead, quotation, generate-excel, admin/login, admin/products, admin/products/categories, admin/products/seed, admin/blog, admin/cms, admin/faq, admin/leads, admin/settings, admin/stats, admin/upload, admin/upload/[filename])
+- Audited all components in src/components/ (site/*, floating/*, providers/*, three/*, ui/*)
+- Audited src/lib/ (db.ts, cms.ts, utils.ts, admin/*, laxree/*)
+- Verified image file existence on disk for every image path referenced in code
+- Verified internal link hrefs against actual route segments in CATALOGUE_PARENTS
+- Ran `tsc --noEmit` — passes cleanly with no type errors
+- Scanned for hydration mismatches, Suspense boundaries, z-index conflicts, CORS issues
+- Verified the mobile sticky bar spacer math against actual bar height
+- Cross-referenced `source` fields sent by lead forms against `source` filters in admin/stats
+
+Stage Summary:
+
+## CRITICAL (breaks functionality)
+
+- **[src/app/cart/page.tsx:152, 236]** "Browse Products" (empty-cart state) and "Continue Shopping" (post-submission state) links point to `/products/amenities`, which is NOT a valid parent slug. `products/[slug]/page.tsx` looks up the slug in `CATALOGUE_PARENTS`; when not found, the component returns `null` (line 89), rendering a blank page. **Fix:** change both `href="/products/amenities"` to `href="/products/room-amenities"` (or `/products`).
+
+## HIGH (visible bugs / bad UX)
+
+- **[prisma/schema.prisma:70, 87; src/app/api/admin/products/route.ts:74; src/app/api/admin/products/categories/route.ts:43]** Default image paths `/images/product-catalogue/placeholder.jpg` and `/images/categories/placeholder.jpg` are referenced as fallbacks for new products/categories, but NEITHER file exists on disk. Any newly-created product/category without an explicit image URL will get a broken `<img>` (404). **Fix:** replace both with `/images/product-catalogue/coming-soon.jpg` (which exists), or actually create the placeholder files.
+
+- **[src/components/site/page-primitives.tsx:176-181]** `PageCTA`'s secondary button has a hardcoded `href="tel:18001207001"` while allowing custom `secondaryLabel` text. As a result:
+  - `src/app/career/page.tsx:443` shows "Email hr@laxree.com" but clicking dials 18001207001 (wrong channel).
+  - `src/app/dealers/page.tsx:431` shows "Call +91-92516 83662" but clicking dials 18001207001 (wrong number).
+  **Fix:** add a `secondaryHref` prop (or `secondaryHref = "tel:18001207001"`) and let callers override.
+
+- **[src/lib/laxree/site-data.ts:604]** `LEADERSHIP[0]` (Ashish Agarwal, Founder & MD) has `initials: "RS"` — wrong initials. Should be `"AA"`. The founder's avatar displays "RS" on /about-us.
+
+- **[src/app/api/admin/stats/route.ts:69]** Filters catalogue leads by `source: "catalogue-page"`, but `src/app/catalogue/page.tsx:213` actually sends `source: "catalogue-discount"`. The admin dashboard's "Catalogue" lead count is permanently 0. **Fix:** change the filter to `"catalogue-discount"` (or align both on a single value).
+
+- **[src/components/floating/catalogue-modal.tsx:220-230]** "Download Catalogue (PDF)" anchor uses `href="#"` with an `onClick` that only calls `e.preventDefault()`. The button implies a download but does nothing. Comment in code says "Placeholder — no real file yet". **Fix:** either link to `/catalogues/master-catalogue.pdf` (which exists on disk) or remove the button until a real file is available.
+
+## MEDIUM (minor bugs)
+
+- **[src/components/site/lead-cta-banner.tsx:42]** Does not send a `source` field in the API payload. `/api/lead/route.ts:49` defaults `source` to `"contact-page"`, so homepage CTA submissions are mis-categorized as contact-page leads in the admin dashboard. **Fix:** add `source: "homepage-cta"`.
+
+- **[src/components/site/lead-cta-banner.tsx:44-53]** When the API returns 400 (validation error), `!res.ok` is true, so the code throws and the catch block shows a generic "Something went wrong" message. The specific validation error from the server is discarded. **Fix:** parse `res.json()` first and surface `data.errors[0]` like the other forms do.
+
+- **[src/components/providers/conditional-chrome.tsx:47]** Mobile sticky bar spacer is `h-14` (56px), but `MobileStickyBar` adds `paddingBottom: env(safe-area-inset-bottom)` (up to ~34px on notched iPhones). On iPhone the bar can be ~90px tall but only 56px is reserved, so the bar covers ~34px of footer content. **Fix:** either increase the spacer to `h-20` or use `paddingBottom: calc(56px + env(safe-area-inset-bottom))` on the spacer.
+
+- **[src/app/experience-center/page.tsx:112-114]** The "play" button on the demo-video placeholder is a `<div>` with `cursor-pointer` and hover styles but no `onClick` handler. Clicking does nothing — non-functional UI element. **Fix:** either remove the cursor-pointer styling or wire up an onClick (e.g., open a contact modal).
+
+- **[src/app/contact-us/page.tsx:88-91]** Sends `company` and `subject` fields to `/api/lead`, but the API only persists `name/email/phone/category/message/source`. The company and subject data is silently discarded. **Fix:** either add `company`/`subject` to the Prisma Lead schema and API, or merge them into the `message` field (as the dealer/career forms do).
+
+- **[no error.tsx / not-found.tsx / loading.tsx anywhere in src/app/]** Unhandled runtime errors and 404s render Next.js's default error pages, which don't match the LaxRee brand. **Fix:** add at minimum `src/app/not-found.tsx` and `src/app/error.tsx` with branded layouts.
+
+- **[src/components/floating/enquire-modal.tsx:40, 50-51, 147]** `closeButtonRef` is declared and attached to the close button, but never used. The comment on line 50 says "Focus close button shortly after mount" but the code actually focuses `firstFieldRef`. Dead code + misleading comment. **Fix:** delete `closeButtonRef` and fix the comment, or actually focus the close button.
+
+- **[src/components/floating/catalogue-modal.tsx:46-47]** `closeButtonRef` declared and explicitly `void`'d — dead code. **Fix:** delete.
+
+- **[src/components/site/product-detail-card.tsx:20-28]** `ProductPageWithSelector` destructures only `products` and `categoryName` from props, but the type signature also requires `parentSlug` and `itemSlug`. The caller passes them but they're ignored. **Fix:** either remove `parentSlug`/`itemSlug` from the type, or actually use them (e.g., for "back to category" links).
+
+- **[src/lib/cms.ts:112]** Footer default config includes `{ label: "Privacy Policy", link: "/privacy" }` but no `/privacy` page exists in `src/app/`. Latent — only manifests if the admin saves the CMS footer config without overriding the default. **Fix:** create a basic `/privacy` page, or remove the link from the defaults.
+
+- **[src/components/floating/catalogue-modal.tsx:58-64]** Countdown timer effect uses `useEffect` with `[secondsLeft]` dependency and `setInterval` — recreates the interval every second. Functionally correct but inefficient. **Fix:** use `setTimeout` for a one-shot tick, or move the interval out of the effect.
+
+## LOW (code quality issues that could cause bugs)
+
+- **[src/lib/db.ts:90-95]** The Prisma Proxy's `knownModels` set is a hardcoded list of model names. If a new Prisma model is added (e.g., `Order`, `Dealer`), it must be added to this set, otherwise `db.order.findMany()` returns `undefined` and crashes the caller. **Fix:** derive the model list from the Prisma client at runtime, or document the maintenance burden.
+
+- **[src/app/api/admin/login/route.ts:28-29]** Hardcoded default admin credentials `admin/laxree2026` in source code. If `ADMIN_USERNAME`/`ADMIN_PASSWORD` env vars are not set on Vercel, anyone who reads the source can log in. Acceptable for a demo, but should be flagged for production.
+
+- **[src/lib/admin/auth-context.tsx]** Admin auth stores user info in `localStorage` with no server-side token validation. All `/api/admin/*` routes are publicly callable — there is no auth middleware. Any anonymous user can POST/DELETE products, leads, blog posts, etc. **Fix:** add a server-side auth check (cookie or bearer token) to all `/api/admin/*` routes.
+
+- **[src/components/ui/toaster.tsx + src/hooks/use-toast.ts]** shadcn-style toast system is dead code — not imported anywhere (the app uses `src/components/ui/site-toaster.tsx` instead). Adds bundle size. **Fix:** delete both files.
+
+- **[src/components/three/hero-stage.tsx:53-87]** Duplicates `useIsClient`, `usePrefersReducedMotion`, and `useIsMobile` hooks that already exist in `src/hooks/laxree/use-laxree-motion.ts` and `src/hooks/use-mobile.ts`. Code duplication. **Fix:** import from the shared hooks.
+
+- **[src/app/manifest.ts:14-18 vs src/app/layout.tsx:104-106]** `manifest.ts` references `/favicon.svg` while `layout.tsx` references `/favicon.jpg`. Both files exist on disk so this isn't a runtime bug, but the inconsistency is confusing. **Fix:** pick one and use it consistently.
+
+- **[src/app/api/admin/products/route.ts:49]** Inline type annotation `p: { model: string; image: string }` loses type safety vs the actual ProductRow type. **Fix:** import and use the proper type.
+
+- **[src/components/site/product-detail-card.tsx:79]** `image: images[0]` is used in `handleAddToCart`, but on the very first render `images` is still `[]` (it's populated by `useEffect` after mount). If a user could click "Add to Cart" before the effect runs, the cart item would have `image: undefined`. In practice this is unreachable because the button isn't clickable until after render, but defensively `images[0] || product.image` would be safer.
+

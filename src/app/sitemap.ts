@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
-import { CATEGORIES, BLOG_POSTS } from "@/lib/laxree/site-data";
+import { BLOG_POSTS } from "@/lib/laxree/site-data";
 import {
-  CATALOGUE_CATEGORIES,
   CATALOGUE_PARENTS,
   getCategoriesByParent,
 } from "@/lib/laxree/catalogue-data";

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Building2, ShowerHead, ConciergeBell, Armchair, Layers, Bath, Utensils, Globe, Check } from "lucide-react";
+import { ArrowRight, Building2, Check, Globe } from "lucide-react";
 import {
   PageHero,
   SectionHeading,
@@ -11,7 +11,6 @@ import {
 } from "@/components/site/page-primitives";
 import {
   CATALOGUE_PARENTS,
-  CATALOGUE_CATEGORIES,
   getCategoriesByParent,
 } from "@/lib/laxree/catalogue-data";
 import { PARENT_FALLBACK_IMAGE } from "@/lib/laxree/product-images";

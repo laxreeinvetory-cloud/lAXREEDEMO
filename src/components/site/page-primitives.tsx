@@ -140,11 +140,13 @@ export function PageCTA({
   subtitle = "Get a custom quotation within 24 hours. No obligation.",
   primaryLabel = "Get a Quotation",
   secondaryLabel = "Call 1800 120 7001",
+  secondaryHref = "tel:18001207001",
 }: {
   title?: string;
   subtitle?: string;
   primaryLabel?: string;
   secondaryLabel?: string;
+  secondaryHref?: string;
 }) {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
@@ -174,7 +176,7 @@ export function PageCTA({
               {primaryLabel} <ArrowRight className="ml-2 h-4 w-4" />
             </button>
             <a
-              href="tel:18001207001"
+              href={secondaryHref}
               className="pill pill-ghost-ivory text-[14px] px-8 py-3.5"
             >
               {secondaryLabel}
