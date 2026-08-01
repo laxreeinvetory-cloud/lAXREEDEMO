@@ -75,7 +75,7 @@ export const CATEGORIES: Category[] = [
     name: "Washroom Amenities",
     count: 43,
     blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/washroom.jpg",
     span: "default",
   },
   {
@@ -83,7 +83,7 @@ export const CATEGORIES: Category[] = [
     name: "Lobby Items",
     count: 31,
     blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
-    image: "/images/categories/linen.jpg",
+    image: "/images/categories/lobby.jpg",
     span: "default",
   },
   {
@@ -91,7 +91,7 @@ export const CATEGORIES: Category[] = [
     name: "Furniture",
     count: 399,
     blurb: "Outdoor, guest room, restaurant, banquet furniture.",
-    image: "/images/categories/roofing.jpg",
+    image: "/images/categories/furniture.jpg",
     span: "default",
   },
   {
@@ -99,7 +99,7 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 2,
     blurb: "Room linen and bath linen.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/linen.jpg",
     span: "tall",
   },
   {
@@ -107,7 +107,7 @@ export const CATEGORIES: Category[] = [
     name: "Bath Tub",
     count: 22,
     blurb: "Freestanding bath tubs in multiple sizes.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/products/bath-tub.jpg",
     span: "default",
   },
   {
@@ -115,7 +115,7 @@ export const CATEGORIES: Category[] = [
     name: "Amenities Tray Set",
     count: 1,
     blurb: "Premium tray sets for guest rooms.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
     span: "default",
   },
   {
@@ -566,7 +566,7 @@ export const TIMELINE: Milestone[] = [
     year: "2019",
     title: "Exhibition Centre",
     description:
-      "Ajmer's largest hospitality exhibition centre inaugurated — 12,000 sq ft of product displays and procurement consultation.",
+      "India's largest hospitality exhibition centre inaugurated — 12,000 sq ft of product displays and procurement consultation.",
   },
   {
     year: "2021",
@@ -604,22 +604,22 @@ export const LEADERSHIP: TeamMember[] = [
     initials: "RS",
   },
   {
-    name: "Priya Sharma",
-    role: "Director, Operations",
-    bio: "Leads the Ajmer factory and exhibition centre. Architects the 700+ SKU catalogue and custom-order workflow.",
-    initials: "PS",
+    name: "Samarth Agarwal",
+    role: "Head of Sales (Country)",
+    bio: "Leads the national sales team and direct procurement contracts with hotel chains across India. Drives revenue growth and strategic client relationships.",
+    initials: "SA",
   },
   {
-    name: "Amit Verma",
-    role: "Head of Sales (Pan-India)",
-    bio: "Manages the 22-state dealer network and direct procurement contracts with national hotel chains.",
-    initials: "AV",
+    name: "Reema Bajaj",
+    role: "CMO",
+    bio: "Chief Marketing Officer overseeing brand strategy, digital presence, and market expansion. 12+ years in hospitality brand building.",
+    initials: "RB",
   },
   {
-    name: "Sunita Jain",
-    role: "Head of Quality & Compliance",
-    bio: "Oversees ISO 9001/14001/45001, CE and RoHS testing. 15 years in industrial QC.",
-    initials: "SJ",
+    name: "Bavika Agarwal",
+    role: "Head of HR",
+    bio: "Heads Human Resources, talent acquisition, and organizational culture. Ensures a motivated workforce across factory, sales, and corporate teams.",
+    initials: "BA",
   },
 ];
 

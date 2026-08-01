@@ -56,7 +56,7 @@ const VALUE_ICONS: Record<string, LucideIcon> = {
 const DEFAULTS = {
   heroEyebrow: "Who We Are",
   heroTitle: "Eleven Years of Opening Doors",
-  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
+  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
   heroImage: "",
   factoryImage: "",
 };
@@ -75,7 +75,7 @@ export default function AboutUsPage() {
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
         eyebrow={content.heroEyebrow || "Who We Are"}
         title={content.heroTitle || "Eleven Years of Opening Doors"}
-        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
+        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
       >
         {/* Stats band — glass-on-charcoal strip, static Plex Mono numbers */}
         <div className="glass-on-charcoal rounded-3xl p-6 md:p-8 max-w-4xl">
@@ -137,7 +137,7 @@ export default function AboutUsPage() {
                 <p>
                   In 2019 we opened{" "}
                   <span className="text-ink font-medium">
-                    Ajmer's largest hospitality exhibition centre
+                    India's largest hospitality exhibition centre
                   </span>
                   : 12,000 sq ft of working product displays where procurement
                   teams can test minibar cooling curves, weigh safe-locker

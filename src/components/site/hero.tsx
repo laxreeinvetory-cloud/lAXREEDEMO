@@ -281,7 +281,7 @@ export function Hero() {
             >
               Premium hotel &amp; resort amenities, furniture, linen, roofing
               and lighting — manufactured and supplied pan-India by LaxRee,
-              Ajmer&apos;s largest hospitality exhibition centre.
+              India&apos;s largest hospitality exhibition centre.
             </motion.p>
 
             {/* CTAs */}

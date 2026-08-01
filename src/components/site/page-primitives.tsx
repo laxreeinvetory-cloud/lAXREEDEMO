@@ -136,7 +136,7 @@ export function SectionHeading({
    Emerald background, heading + subline + buttons.
    ───────────────────────────────────────────────────────────── */
 export function PageCTA({
-  title = "Ready to elevate your hospitality?",
+  title = "Ready to elevate your Guest Experience?",
   subtitle = "Get a custom quotation within 24 hours. No obligation.",
   primaryLabel = "Get a Quotation",
   secondaryLabel = "Call 1800 120 7001",
