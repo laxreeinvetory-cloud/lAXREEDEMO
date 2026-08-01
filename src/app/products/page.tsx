@@ -22,14 +22,14 @@ import {
    resolves a representative product image.
    ───────────────────────────────────────────────────────────── */
 const PARENT_FALLBACK_IMAGE: Record<string, string> = {
-  "room-amenities": "/images/categories/amenities.jpg",
-  "washroom-amenities": "/images/categories/washroom.jpg",
-  "lobby-items": "/images/categories/lobby.jpg",
+  "room-amenities": "/images/categories/room-amenities.png",
+  "washroom-amenities": "/images/categories/washroom-amenities.png",
+  "lobby-items": "/images/categories/lobby-items.png",
   furniture: "/images/categories/furniture.jpg",
-  linen: "/images/categories/linen.jpg",
+  linen: "/images/categories/linen-new.jpg",
   "bath-tub": "/images/products/bath-tub.jpg",
-  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
-  "dome-space-pod": "/images/categories/dome.jpg",
+  "amenities-tray-set": "/images/categories/amenities-tray-set.jpg",
+  "dome-space-pod": "/images/categories/space-pod.png",
 };
 
 /* ─────────────────────────────────────────────────────────────
@@ -56,32 +56,38 @@ function ParentCategoryCard({
   );
 
   // Resolve the best available image:
-  //   1. API-provided representative product image (real photo)
-  //   2. Category-level hero image (always on disk)
+  //   1. Category-level hero image (user-uploaded, always matches the category)
+  //   2. API-provided representative product image (real photo)
   //   3. First product's image (only if it isn't the coming-soon placeholder)
+  const fallback = PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/room-amenities.png";
   const apiImage = imageMap[parent.slug];
-  const fallback = PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/amenities.jpg";
   const firstProduct = children[0]?.products[0];
   const firstProductImage =
     firstProduct?.image && !firstProduct.image.includes("coming-soon")
       ? firstProduct.image
       : null;
-  const image = apiImage || firstProductImage || fallback;
+  // Use the category-level image first — it's specifically chosen to
+  // represent this category and always matches. Only fall back to a
+  // product image if no category image is available.
+  const image = fallback || apiImage || firstProductImage || "/images/categories/room-amenities.png";
 
   return (
     <FadeIn delay={index * 0.06}>
       <Link
         href={`/products/${parent.slug}`}
-        className="group relative block h-full w-full overflow-hidden rounded-[24px] border border-ink/0 transition-colors duration-500 hover:border-brass/40"
+        className="group relative block h-full w-full overflow-hidden rounded-[24px] border border-ink/10 transition-all duration-500 hover:border-brass/40 hover:shadow-2xl hover:shadow-brass/10"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
           <img
             src={image}
             alt={parent.name}
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-charcoal/50 to-transparent" />
+          {/* Gradient overlay — darker at bottom for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-charcoal/40 to-transparent" />
+          {/* Brass top accent line on hover */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         </div>
         <div className="absolute inset-x-0 bottom-0 p-5">
           <h3
@@ -93,7 +99,7 @@ function ParentCategoryCard({
           <p className="mt-1 font-mono text-[12px] tracking-wide text-brass">
             {children.length} {children.length === 1 ? "Category" : "Categories"} · {productCount} Products
           </p>
-          <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-sand opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-sand opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1">
             Explore <ArrowRight size={12} strokeWidth={1.5} />
           </span>
         </div>

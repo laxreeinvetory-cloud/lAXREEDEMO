@@ -115,7 +115,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
     images: [
       {
-        url: "/images/laxree-logo.jpg",
+        url: "/images/laxree-logo.png",
         width: 2560,
         height: 614,
         alt: "LaxRee Amenities — Hotel Supplies Redefined",
@@ -127,7 +127,7 @@ export const metadata: Metadata = {
     title: "LaxRee Amenities — Hotel Supplies Redefined",
     description:
       "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee.",
-    images: ["/images/laxree-logo.jpg"],
+    images: ["/images/laxree-logo.png"],
   },
   category: "business",
   other: {
@@ -205,7 +205,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               name: "LaxRee Amenities",
-              image: `${BASE_URL}/images/laxree-logo.jpg`,
+              image: `${BASE_URL}/images/laxree-logo.png`,
               url: BASE_URL,
               telephone: "+91-92516-83662",
               priceRange: "₹₹",

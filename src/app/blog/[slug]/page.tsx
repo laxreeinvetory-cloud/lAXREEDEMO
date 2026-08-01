@@ -85,7 +85,7 @@ export default async function BlogPostPage({
       name: "LaxRee Amenities",
       logo: {
         "@type": "ImageObject",
-        url: "https://l-axreedemo.vercel.app/images/laxree-logo.jpg",
+        url: "https://l-axreedemo.vercel.app/images/laxree-logo.png",
       },
     },
     mainEntityOfPage: {

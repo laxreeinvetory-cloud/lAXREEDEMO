@@ -112,7 +112,7 @@ export function localBusinessJsonLd() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "LaxRee Amenities",
-    image: `${BASE_URL}/images/laxree-logo.jpg`,
+    image: `${BASE_URL}/images/laxree-logo.png`,
     url: BASE_URL,
     telephone: "+91-92516-83662",
     priceRange: "₹₹",

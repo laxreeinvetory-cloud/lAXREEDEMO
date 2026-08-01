@@ -2143,7 +2143,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-390",
         name: "N-Fold Paper Dispenser — ABS, 22×25×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/weighing-scale/LRWA-390.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-327.jpg",
         description:
           "N-fold paper (multi-fold) dispenser made in ABS body. Size: 22 × 25 × 11.5cm. Wall-mounted for washrooms.",
         tier: "Essential",
@@ -2158,7 +2158,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-378",
         name: "JTR Paper Dispenser — Jagged Outlet, 270×126×280mm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/weighing-scale/LRWA-378.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-329.jpg",
         description:
           "JTR paper dispenser with jagged outlet for clean tearing. Size: 270 × 126 × 280mm. Wall-mounted.",
         tier: "Essential",
@@ -2173,7 +2173,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-391",
         name: "C/Fold N-Fold Paper Dispenser — ABS, 35×20×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/weighing-scale/LRWA-391.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-330.jpg",
         description:
           "C-fold and N-fold compatible paper dispenser made in ABS body. Size: 35 × 20 × 11.5cm. Larger capacity for high-traffic washrooms.",
         tier: "Essential",
@@ -2189,7 +2189,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-389",
         name: "N-Fold Paper Dispenser — SS Body, 22×25×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/weighing-scale/LRWA-389.jpg",
+        image: "/images/product-catalogue/paper-dispenser/LRWA-398.jpg",
         description:
           "N-fold paper dispenser made in stainless-steel body. Size: 22 × 25 × 11.5cm. Durable and easy to clean.",
         tier: "Premium",
@@ -2260,7 +2260,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-397",
         name: "Hand Dryer — ABS Body, 850W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--397.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-397.jpg",
         description:
           "Hand dryer made in ABS outer body. Power: 850W. Air speed: 6.8 m/s. 220-240V/50-60Hz.",
         tier: "Essential",
@@ -2276,7 +2276,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-376",
         name: "Hand Dryer — ABS, 800W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--376.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-376.jpg",
         description:
           "ABS plastic body. Over-heating protection. Over-time protection. Power: 800W. Dimension: 240×195×235mm.",
         tier: "Essential",
@@ -2292,7 +2292,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-398",
         name: "Automatic Hand Dryer — ABS, 1200W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--398.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-398.jpg",
         description:
           "Automatic hand dryer in ABS body with over-time auto cut-off of 60 seconds. Power: 1200W. AC 220V-240V: 50/60Hz. Wind speed: 94 m/sec.",
         tier: "Essential",
@@ -2309,7 +2309,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-399",
         name: "Hand Dryer — Aluminium Alloy, 1650W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--399.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-399.jpg",
         description:
           "Hand dryer, 1650W power. Air speed: 10 m/s. Aluminium alloy body. Size: 290W × 165D × 215H mm.",
         tier: "Premium",
@@ -2325,7 +2325,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-396",
         name: "Hand Dryer — ABS, 1800W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--396.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-396.jpg",
         description:
           "Hand dryer made in ABS outer body. Power: 1800W. Air speed: 12 m/s. 220-240V, 50/60Hz.",
         tier: "Premium",
@@ -2341,7 +2341,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-393",
         name: "Hand Dryer — SS 304 Satin, 2300W",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--393.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-393.jpg",
         description:
           "Hand dryer made in satin finish SS 304 outer body. Power: 2300W. Sensor distance: 10-15cm. Wind speed: 30 m/s.",
         tier: "Lux",
@@ -2357,7 +2357,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-394",
         name: "Hand Dryer — SS Body, Heavy Duty",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--394.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-394.jpg",
         description:
           "Stainless steel body. Energy efficient heavy duty motor. Thermal protection and overtime protection system. Advanced infrared technology. Air speed: 40m/s. Waterproofing grade: IP22. Frequency: 4A.",
         tier: "Lux",
@@ -2374,7 +2374,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-395",
         name: "Jet Hand Dryer — Brushless, ABS",
         category: "Hand Dryer",
-        image: "/images/product-catalogue/excel-images/LRWA--395.jpg",
+        image: "/images/product-catalogue/ssp-hand-dryers/LRWA-395.jpg",
         description: "Jet hand dryer, brushless type. Made in ABS body.",
         tier: "Lux",
         specs: [
