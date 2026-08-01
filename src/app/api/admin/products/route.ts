@@ -4,6 +4,7 @@ import {
   getStaticProducts,
   getStaticCategories,
 } from "@/lib/admin/static-fallback";
+import { getProductImage } from "@/lib/laxree/product-images";
 
 export const runtime = "nodejs";
 
@@ -42,7 +43,15 @@ export async function GET(req: NextRequest) {
       categories = getStaticCategories() as unknown as typeof categories;
     }
 
-    return NextResponse.json({ ok: true, products, categories });
+    // Apply product image overrides — the live DB may have stale image paths
+    // (e.g. Docking Pod LRDR-177 pointing to a telephone image). This ensures
+    // every product returns the correct image regardless of DB state.
+    const productsWithCorrectImages = products.map((p: { model: string; image: string }) => ({
+      ...p,
+      image: getProductImage(p.model, p.image),
+    }));
+
+    return NextResponse.json({ ok: true, products: productsWithCorrectImages, categories });
   } catch (err) {
     console.error("[ADMIN PRODUCTS GET ERROR]", err);
     return NextResponse.json({ ok: false, message: "Server error" }, { status: 500 });

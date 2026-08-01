@@ -8,7 +8,7 @@ import {
   getCategoriesByParent,
   type CatalogueProduct,
 } from "@/lib/laxree/catalogue-data";
-import { getSubcategoryImage } from "@/lib/laxree/product-images";
+import { getSubcategoryImage, getProductImage } from "@/lib/laxree/product-images";
 import {
   PageHero,
   SectionHeading,
@@ -78,7 +78,7 @@ export default async function ItemPage({
         model: p.model,
         name: p.name,
         category: p.category,
-        image: p.image,
+        image: getProductImage(p.model, p.image),
         description: p.description,
         specs: (() => { try { return JSON.parse(p.specs); } catch { return []; } })(),
       }));

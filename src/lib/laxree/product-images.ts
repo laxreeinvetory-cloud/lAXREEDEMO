@@ -112,3 +112,46 @@ export function getParentImage(
   }
   return PARENT_FALLBACK_IMAGE[slug] || "/images/product-catalogue/coming-soon.jpg";
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Product model → correct image override.
+   The live DB (Neon Postgres on Vercel) has stale image paths for
+   some products (e.g. Docking Pod LRDR-177 points to a telephone
+   image). This map overrides those bad DB values with the correct
+   image path so the product detail page always shows the right
+   product photo.
+   ───────────────────────────────────────────────────────────── */
+export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
+  // Docking Pod products — DB points to telephone images, fix them
+  "LRDR-177": "/images/product-catalogue/excel-images/LRDR-177.jpg",
+  "LRDR 177": "/images/product-catalogue/excel-images/LRDR-177.jpg",
+  "LRDR-178": "/images/product-catalogue/excel-images/LRDR-180.jpg",
+  "LRDR 178": "/images/product-catalogue/excel-images/LRDR-180.jpg",
+  "LRDR-176": "/images/product-catalogue/excel-images/LRDR-184.jpg",
+  "LRDR 176": "/images/product-catalogue/excel-images/LRDR-184.jpg",
+  // Room Telephone products — ensure they point to telephone images
+  "LRDR-179": "/images/product-catalogue/excel-images/LRDR-179.jpg",
+  "LRDR-180": "/images/product-catalogue/excel-images/LRDR-180.jpg",
+  "LRDR-181": "/images/product-catalogue/excel-images/LRDR-181.jpg",
+  "LRDR-182": "/images/product-catalogue/excel-images/LRDR-182.jpg",
+  "LRDR-183": "/images/product-catalogue/excel-images/LRDR-183.jpg",
+  "LRDR-184": "/images/product-catalogue/excel-images/LRDR-184.jpg",
+  "LRDR-185": "/images/product-catalogue/excel-images/LRDR-185.jpg",
+  "LRDR-186": "/images/product-catalogue/excel-images/LRDR-186.jpg",
+  "LRDR-188": "/images/product-catalogue/excel-images/LRDR-188.jpg",
+  "LRDR-189": "/images/product-catalogue/excel-images/LRDR--189.jpg",
+  "LRDR-190": "/images/product-catalogue/excel-images/LRDR--190.jpg",
+  "LRDR-191": "/images/product-catalogue/ssp-telephones/LRDR-191.jpg",
+  "LRDR-192": "/images/product-catalogue/ssp-telephones/LRDR-192.jpg",
+};
+
+/**
+ * Returns the correct image for a product model, overriding stale
+ * DB values when necessary.
+ */
+export function getProductImage(model: string, dbImage?: string): string {
+  const override = PRODUCT_IMAGE_OVERRIDE[model] || PRODUCT_IMAGE_OVERRIDE[model.replace(/\s+/g, "-")];
+  if (override) return override;
+  if (dbImage && !dbImage.includes("coming-soon")) return dbImage;
+  return "/images/product-catalogue/coming-soon.jpg";
+}
