@@ -2143,7 +2143,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-390",
         name: "N-Fold Paper Dispenser — ABS, 22×25×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/paper-dispenser/LRWA-390.jpg",
+        image: "/images/product-catalogue/weighing-scale/LRWA-390.jpg",
         description:
           "N-fold paper (multi-fold) dispenser made in ABS body. Size: 22 × 25 × 11.5cm. Wall-mounted for washrooms.",
         tier: "Essential",
@@ -2158,7 +2158,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-378",
         name: "JTR Paper Dispenser — Jagged Outlet, 270×126×280mm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/paper-dispenser/LRWA-378.jpg",
+        image: "/images/product-catalogue/weighing-scale/LRWA-378.jpg",
         description:
           "JTR paper dispenser with jagged outlet for clean tearing. Size: 270 × 126 × 280mm. Wall-mounted.",
         tier: "Essential",
@@ -2173,7 +2173,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-391",
         name: "C/Fold N-Fold Paper Dispenser — ABS, 35×20×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/paper-dispenser/LRWA-391.jpg",
+        image: "/images/product-catalogue/weighing-scale/LRWA-391.jpg",
         description:
           "C-fold and N-fold compatible paper dispenser made in ABS body. Size: 35 × 20 × 11.5cm. Larger capacity for high-traffic washrooms.",
         tier: "Essential",
@@ -2189,7 +2189,7 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-389",
         name: "N-Fold Paper Dispenser — SS Body, 22×25×11.5cm",
         category: "Paper Dispenser",
-        image: "/images/product-catalogue/paper-dispenser/LRWA-389.jpg",
+        image: "/images/product-catalogue/weighing-scale/LRWA-389.jpg",
         description:
           "N-fold paper dispenser made in stainless-steel body. Size: 22 × 25 × 11.5cm. Durable and easy to clean.",
         tier: "Premium",

@@ -36,8 +36,8 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "soap-dispenser": "/images/product-catalogue/soap-dispenser/LRWA--358.jpg",
   "magnifying-mirror": "/images/product-catalogue/magnifying-mirror/LRMM-302.jpg",
   "lobby-soap-dispenser": "/images/product-catalogue/lobby-soap-dispenser/LRWA-372.jpg",
-  "weighing-scale": "/images/product-catalogue/weighing-scale/LRWA-327.jpg",
-  "paper-dispenser": "/images/product-catalogue/paper-dispenser/LRWA-378.jpg",
+  "weighing-scale": "/images/product-catalogue/weighing-scale/LRWA-390.jpg",
+  "paper-dispenser": "/images/product-catalogue/paper-dispenser/LRWA-327.jpg",
   "hand-dryer": "/images/product-catalogue/hand-dryer/LRHD--285.jpg",
   "shower-mat": "/images/product-catalogue/shower-mat/LRWA-346.jpg",
   "cloth-line": "/images/product-catalogue/cloth-line/LRWA-350.jpg",
@@ -75,14 +75,14 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
    Parent slug → category-level hero image.
    ───────────────────────────────────────────────────────────── */
 export const PARENT_FALLBACK_IMAGE: Record<string, string> = {
-  "room-amenities": "/images/categories/amenities.jpg",
-  "washroom-amenities": "/images/categories/washroom.jpg",
-  "lobby-items": "/images/categories/lobby.jpg",
+  "room-amenities": "/images/categories/room-amenities.png",
+  "washroom-amenities": "/images/categories/washroom-amenities.png",
+  "lobby-items": "/images/categories/lobby-items.png",
   "furniture": "/images/categories/furniture.jpg",
-  "linen": "/images/categories/linen.jpg",
+  "linen": "/images/categories/linen-new.jpg",
   "bath-tub": "/images/products/bath-tub.jpg",
-  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
-  "dome-space-pod": "/images/categories/dome.jpg",
+  "amenities-tray-set": "/images/categories/amenities-tray-set.jpg",
+  "dome-space-pod": "/images/categories/space-pod.png",
 };
 
 /**

@@ -111,7 +111,7 @@ export function ProductPageWithSelector({
                 }`}
               >
                 <div className="h-10 w-10 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                  <img src={p.image} alt={p.model} className="h-full w-full object-contain" />
+                  <img src={p.image} alt={p.model} className="h-full w-full object-contain" style={{ filter: "brightness(0.92) contrast(1.08)" }} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-xs text-brass">{p.model}</p>
@@ -137,6 +137,7 @@ export function ProductPageWithSelector({
                 src={images[Math.max(0, activeImage)] || images[0]}
                 alt={product.name}
                 className="h-full w-full object-contain p-4"
+                style={{ filter: "brightness(0.92) contrast(1.08)" }}
               />
             )}
           </div>
@@ -151,7 +152,7 @@ export function ProductPageWithSelector({
                   activeImage === i ? "border-brass ring-2 ring-brass/20" : "border-ink/10 hover:border-brass/50"
                 }`}
               >
-                <img src={img} alt={`${product.name} ${i + 1}`} className="h-full w-full object-contain" />
+                <img src={img} alt={`${product.name} ${i + 1}`} className="h-full w-full object-contain" style={{ filter: "brightness(0.92) contrast(1.08)" }} />
               </button>
             ))}
             {videoUrl && (
@@ -271,6 +272,7 @@ export function SuggestionCard({
           alt={product.name}
           loading="lazy"
           className="h-full w-full object-contain p-2 transition-transform duration-500 hover:scale-105"
+          style={{ filter: "brightness(0.92) contrast(1.08)" }}
         />
       </div>
       <div className="p-3">
