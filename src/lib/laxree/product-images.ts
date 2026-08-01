@@ -38,7 +38,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "lobby-soap-dispenser": "/images/product-catalogue/lobby-soap-dispenser/LRWA-372.jpg",
   "weighing-scale": "/images/product-catalogue/weighing-scale/LRWA-390.jpg",
   "paper-dispenser": "/images/product-catalogue/paper-dispenser/LRWA-327.jpg",
-  "hand-dryer": "/images/product-catalogue/ssp-hand-dryers/LRWA-376.jpg",
+  "hand-dryer": "/images/product-catalogue/hand-dryer/LRWA-376.jpg",
   "shower-mat": "/images/product-catalogue/shower-mat/LRWA-346.jpg",
   "cloth-line": "/images/product-catalogue/cloth-line/LRWA-350.jpg",
   "towel-rack": "/images/product-catalogue/towel-rack/LRWA-347.jpg",
