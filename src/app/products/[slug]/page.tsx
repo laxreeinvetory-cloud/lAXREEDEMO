@@ -177,15 +177,37 @@ function CategoryPageInner() {
                 const preview = itemImages[item.slug];
                 return (
                   <FadeIn key={item.slug} delay={i * 0.06}>
-                    <Link href={`/products/${parent.slug}/${item.slug}`} className="group glass-on-ivory rounded-[24px] overflow-hidden transition-all duration-300 hover:border-brass/40 hover:shadow-xl flex flex-col h-full">
-                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
-                        <img src={preview?.image || "/images/product-catalogue/coming-soon.jpg"} alt={item.name} loading="lazy" className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105" />
-                        <span className="absolute right-3 top-3 rounded-full bg-charcoal/80 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm">{preview?.count || 0} Models</span>
+                    <Link
+                      href={`/products/${parent.slug}/${item.slug}`}
+                      className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-ink/10 bg-white transition-all duration-300 hover:border-brass/40 hover:shadow-2xl hover:shadow-brass/10"
+                    >
+                      {/* Image area — white bg, object-contain, subtle zoom on hover */}
+                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-white to-ivory/50">
+                        <img
+                          src={preview?.image || "/images/product-catalogue/coming-soon.jpg"}
+                          alt={item.name}
+                          loading="lazy"
+                          className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
+                        />
+                        {/* Model count badge */}
+                        <span className="absolute right-3 top-3 rounded-full bg-charcoal/85 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm transition-colors duration-300 group-hover:bg-brass group-hover:text-charcoal">
+                          {preview?.count || 0} Models
+                        </span>
+                        {/* Brass top accent on hover */}
+                        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                       </div>
+                      {/* Content */}
                       <div className="flex flex-1 flex-col p-5">
-                        <h3 className="font-display text-[20px] font-medium text-ink leading-tight">{item.name}</h3>
-                        <p className="mt-2 font-body text-[13px] leading-relaxed text-ink-muted line-clamp-2">{item.products[0]?.description}</p>
-                        <span className="mt-auto pt-4 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider text-brass">View All Models <ArrowRight size={14} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" /></span>
+                        <h3 className="font-display text-[20px] font-medium text-ink leading-tight transition-colors duration-300 group-hover:text-brass">
+                          {item.name}
+                        </h3>
+                        <p className="mt-2 font-body text-[13px] leading-relaxed text-ink-muted line-clamp-2">
+                          {item.products[0]?.description}
+                        </p>
+                        <span className="mt-auto pt-4 inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider text-brass">
+                          View All Models
+                          <ArrowRight size={14} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+                        </span>
                       </div>
                     </Link>
                   </FadeIn>
