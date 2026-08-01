@@ -22,7 +22,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "safe-box": "/images/product-catalogue/excel-images/LRSB--214.jpg",
   "wooden-hangers": "/images/product-catalogue/hangers/LRRA-653.jpg",
   "rfid-locks": "/images/product-catalogue/door-lock/LRFD-607.jpg",
-  "room-telephone": "/images/product-catalogue/ssp-telephones/LRDR-189.jpg",
+  "room-telephone": "/images/product-catalogue/excel-images/LRDR--189.jpg",
   "docking-pod": "/images/product-catalogue/excel-images/LRDR-177.jpg",
   "room-dustbin": "/images/product-catalogue/dustbin/LRRA-657.jpg",
   "desktop-accessories": "/images/product-catalogue/desktop-accessories/LRAT-370.jpg",
@@ -30,7 +30,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "mattress": "/images/product-catalogue/mattress/LRMR-251-8.jpg",
   "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.jpg",
   "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.jpg",
-  "luggage-rack": "/images/product-catalogue/furniture/LRGF---673---Luggage-Rack.jpg",
+  "luggage-rack": "/images/product-catalogue/luggage-trolley-LT-801.jpg",
   // ── Washroom Amenities ──
   "hair-dryer": "/images/product-catalogue/hair-dryer/LRHD-276.jpg",
   "soap-dispenser": "/images/product-catalogue/soap-dispenser/LRWA--358.jpg",
