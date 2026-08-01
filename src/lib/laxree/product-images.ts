@@ -15,16 +15,16 @@
    Sub-category slug → representative real product image.
    ───────────────────────────────────────────────────────────── */
 export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
-  // ── Room Amenities ──
+  // ── Room Amenities ── (premium/lux tier models for previews)
   "mini-bar": "/images/product-catalogue/mini-bar/LRMB-126.jpg",
-  "tea-kettle": "/images/product-catalogue/tea-kettle/LRWT--143.jpg",
-  "kettle-tray": "/images/product-catalogue/tray/LRWT-158.jpg",
-  "safe-box": "/images/product-catalogue/safe-box/LRMR-252-10.jpg",
+  "tea-kettle": "/images/product-catalogue/excel-images/LRWT--155.jpg",
+  "kettle-tray": "/images/product-catalogue/excel-images/LRWT-168.jpg",
+  "safe-box": "/images/product-catalogue/excel-images/LRSB--214.jpg",
   "wooden-hangers": "/images/product-catalogue/hangers/LRRA-653.jpg",
-  "rfid-locks": "/images/product-catalogue/door-lock/LRFD--613.jpg",
+  "rfid-locks": "/images/product-catalogue/door-lock/LRFD-607.jpg",
   "room-telephone": "/images/product-catalogue/ssp-telephones/LRDR-189.jpg",
   "docking-pod": "/images/product-catalogue/excel-images/LRDR-177.jpg",
-  "room-dustbin": "/images/product-catalogue/dustbin/LRRA--649.jpg",
+  "room-dustbin": "/images/product-catalogue/dustbin/LRRA-657.jpg",
   "desktop-accessories": "/images/product-catalogue/desktop-accessories/LRAT-370.jpg",
   "rollaway-bed": "/images/product-catalogue/rollaway-bed/LRMR-251.jpg",
   "mattress": "/images/product-catalogue/mattress/LRMR-251-8.jpg",
@@ -143,6 +143,14 @@ export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
   "LRDR-190": "/images/product-catalogue/excel-images/LRDR--190.jpg",
   "LRDR-191": "/images/product-catalogue/ssp-telephones/LRDR-191.jpg",
   "LRDR-192": "/images/product-catalogue/ssp-telephones/LRDR-192.jpg",
+  // RFID Lock accessories — DB points all to LRFD-608, fix with correct images
+  "DND Set": "/images/product-catalogue/excel-images/DND-Set.jpg",
+  "Encoder (ZFD)": "/images/product-catalogue/excel-images/Encoder-ZFD.jpg",
+  "Encoder (Orbita)": "/images/product-catalogue/excel-images/Encoder-Orbita.jpg",
+  "Key Tag": "/images/product-catalogue/excel-images/Key-Tag.jpg",
+  "Key Card (Z)": "/images/product-catalogue/excel-images/Key-Card-Z.jpg",
+  "Key Card (O)": "/images/product-catalogue/excel-images/Key-Card-O.jpg",
+  "Energy Saver Switch": "/images/product-catalogue/excel-images/Energy-Saver-Switch.jpg",
 };
 
 /**
