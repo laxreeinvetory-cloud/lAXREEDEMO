@@ -151,6 +151,13 @@ export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
   "Key Card (Z)": "/images/product-catalogue/excel-images/Key-Card-Z.jpg",
   "Key Card (O)": "/images/product-catalogue/excel-images/Key-Card-O.jpg",
   "Energy Saver Switch": "/images/product-catalogue/excel-images/Energy-Saver-Switch.jpg",
+  // Safe Box products — DB has mattress image for LRSB-210 and duplicates
+  "LRSB-210": "/images/product-catalogue/safe-box/LRSB-211.jpg",
+  "LRSB-205": "/images/product-catalogue/safe-box/LRSB-215.jpg",
+  "LRSB-208": "/images/product-catalogue/safe-box/LRSB-216.jpg",
+  "LRSB-201": "/images/product-catalogue/safe-box/LRSB-201.jpg",
+  "LRSB-202": "/images/product-catalogue/safe-box/LRSB-202.jpg",
+  "LRSB-209": "/images/product-catalogue/safe-box/LRSB-209.jpg",
 };
 
 /**
@@ -158,8 +165,23 @@ export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
  * DB values when necessary.
  */
 export function getProductImage(model: string, dbImage?: string): string {
-  const override = PRODUCT_IMAGE_OVERRIDE[model] || PRODUCT_IMAGE_OVERRIDE[model.replace(/\s+/g, "-")];
+  // Try exact match first
+  let override = PRODUCT_IMAGE_OVERRIDE[model];
+  // Try normalized (spaces → dashes, collapse multiple dashes, trim)
+  if (!override) {
+    const normalized = model.replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+    override = PRODUCT_IMAGE_OVERRIDE[normalized];
+  }
+  // Also try without spaces entirely
+  if (!override) {
+    const noSpaces = model.replace(/\s+/g, "");
+    override = PRODUCT_IMAGE_OVERRIDE[noSpaces];
+  }
   if (override) return override;
+  // Reject LRMR (mattress) images — they should never show for non-mattress products
+  if (dbImage && dbImage.includes("LRMR") && !model.includes("LRMR")) {
+    return "/images/product-catalogue/coming-soon.jpg";
+  }
   if (dbImage && !dbImage.includes("coming-soon")) return dbImage;
   return "/images/product-catalogue/coming-soon.jpg";
 }
