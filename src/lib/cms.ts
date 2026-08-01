@@ -86,7 +86,7 @@ export const CMS_DEFAULTS: CMSContent = {
     cards: [],
   },
   "header:nav": {
-    logo: "/images/laxree-logo.png",
+    logo: "/images/laxree-logo.jpg",
     topBar: "Hotel Supplies Redefined",
     menus: [
       { id: "m1", label: "Home", link: "/", order: 1, visible: true, dropdown: [] },

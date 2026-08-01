@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import {
@@ -15,15 +16,37 @@ import {
 } from "@/lib/laxree/catalogue-data";
 
 /* ─────────────────────────────────────────────────────────────
-   ParentCategoryCard — large card for each of the 8 main categories
-   Links to /products/[parentSlug] which shows sub-categories
+   Parent slug → category-level hero image.
+   These always exist on disk, so the "Explore by Category" grid
+   never shows the coming-soon placeholder even before the API
+   resolves a representative product image.
+   ───────────────────────────────────────────────────────────── */
+const PARENT_FALLBACK_IMAGE: Record<string, string> = {
+  "room-amenities": "/images/categories/amenities.jpg",
+  "washroom-amenities": "/images/categories/washroom.jpg",
+  "lobby-items": "/images/categories/lobby.jpg",
+  furniture: "/images/categories/furniture.jpg",
+  linen: "/images/categories/linen.jpg",
+  "bath-tub": "/images/products/bath-tub.jpg",
+  "amenities-tray-set": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
+  "dome-space-pod": "/images/categories/dome.jpg",
+};
+
+/* ─────────────────────────────────────────────────────────────
+   ParentCategoryCard — large card for each of the 8 main categories.
+   Links to /products/[parentSlug] which shows sub-categories.
+   Fetches a representative real product image from the API; falls
+   back to the category-level hero image so it never shows
+   "coming-soon.jpg".
    ───────────────────────────────────────────────────────────── */
 function ParentCategoryCard({
   parent,
   index,
+  imageMap,
 }: {
   parent: (typeof CATALOGUE_PARENTS)[0];
   index: number;
+  imageMap: Record<string, string>;
 }) {
   const children = getCategoriesByParent(parent.slug);
   // Get product count across all sub-categories
@@ -31,9 +54,19 @@ function ParentCategoryCard({
     (sum, cat) => sum + cat.products.length,
     0,
   );
-  // Get a representative image from the first sub-category's first product
+
+  // Resolve the best available image:
+  //   1. API-provided representative product image (real photo)
+  //   2. Category-level hero image (always on disk)
+  //   3. First product's image (only if it isn't the coming-soon placeholder)
+  const apiImage = imageMap[parent.slug];
+  const fallback = PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/amenities.jpg";
   const firstProduct = children[0]?.products[0];
-  const image = firstProduct?.image || "/images/product-catalogue/coming-soon.jpg";
+  const firstProductImage =
+    firstProduct?.image && !firstProduct.image.includes("coming-soon")
+      ? firstProduct.image
+      : null;
+  const image = apiImage || firstProductImage || fallback;
 
   return (
     <FadeIn delay={index * 0.06}>
@@ -46,7 +79,7 @@ function ParentCategoryCard({
             src={image}
             alt={parent.name}
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-charcoal/50 to-transparent" />
         </div>
@@ -73,6 +106,56 @@ function ParentCategoryCard({
    Products overview page — shows 8 main categories
    ───────────────────────────────────────────────────────────── */
 export default function ProductsPage() {
+  // imageMap[parentSlug] = a real product image URL picked from the API.
+  // Empty until the fetch resolves; the category-level hero image is the
+  // immediate fallback so the grid never shows coming-soon.jpg.
+  const [imageMap, setImageMap] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/products", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.ok || !Array.isArray(data.products)) return;
+        const products: Array<{ category: string; image: string }> = data.products;
+        const next: Record<string, string> = {};
+
+        // For each parent, pick the first non-coming-soon product image
+        // across all of its child sub-categories.
+        for (const parent of CATALOGUE_PARENTS) {
+          const childCats = CATALOGUE_CATEGORIES.filter((c) =>
+            parent.children.includes(c.slug),
+          );
+          const childNames = new Set(childCats.map((c) => c.name));
+          // Some sub-categories share names with their siblings (e.g. "Bath Tub"
+          // vs "Bath Tub Models") — include the parent name too so we still
+          // find a representative image.
+          childCats.forEach((c) => childNames.add(c.name));
+
+          const found = products.find(
+            (p) =>
+              childNames.has(p.category) &&
+              typeof p.image === "string" &&
+              p.image &&
+              !p.image.includes("coming-soon"),
+          );
+          if (found) {
+            next[parent.slug] = found.image;
+          }
+        }
+
+        if (Object.keys(next).length > 0) {
+          setImageMap(next);
+        }
+      })
+      .catch(() => {
+        /* keep fallback images */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <>
       {/* ── PageHero ── */}
@@ -99,6 +182,7 @@ export default function ProductsPage() {
                 key={parent.slug}
                 parent={parent}
                 index={i}
+                imageMap={imageMap}
               />
             ))}
           </div>

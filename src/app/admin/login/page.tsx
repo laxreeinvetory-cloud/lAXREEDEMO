@@ -31,7 +31,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-charcoal flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <img src="/images/laxree-logo.png" alt="LaxRee" className="h-12 mx-auto" />
+          <img src="/images/laxree-logo.jpg" alt="LaxRee" className="h-12 mx-auto" />
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.3em] text-sand">Admin Panel</p>
         </div>
         <div className="glass-on-charcoal rounded-[24px] p-8">

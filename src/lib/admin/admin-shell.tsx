@@ -91,7 +91,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 h-screen w-64 bg-charcoal border-r border-white/10 transition-transform flex flex-col`}
       >
         <div className="shrink-0 p-6 border-b border-white/10">
-          <img src="/images/laxree-logo.png" alt="LaxRee" className="h-8" />
+          <img src="/images/laxree-logo.jpg" alt="LaxRee" className="h-8" />
           <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.3em] text-sand">Admin Panel</p>
         </div>
 
@@ -155,7 +155,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-ivory">
             {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
-          <img src="/images/laxree-logo.png" alt="LaxRee" className="h-6" />
+          <img src="/images/laxree-logo.jpg" alt="LaxRee" className="h-6" />
           <div className="w-6" />
         </header>
 

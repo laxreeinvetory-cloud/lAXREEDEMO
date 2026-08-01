@@ -37,7 +37,7 @@ function LaxReeLogo({ compact = false, logoSrc }: { compact?: boolean; logoSrc?:
       className="group flex items-center select-none"
     >
       <img
-        src={logoSrc || "/images/laxree-logo.png"}
+        src={logoSrc || "/images/laxree-logo.jpg"}
         alt="LaxRee Amenities — Hotel Supplies Redefined"
         width={compact ? 120 : 150}
         height={compact ? 29 : 36}
@@ -87,7 +87,7 @@ export function Navbar() {
   const navLinks = cmsNav?.menus
     ? cmsNav.menus.filter((m) => m.visible).sort((a, b) => a.order - b.order)
     : NAV_LINKS;
-  const logoUrl = cmsNav?.logo || "/images/laxree-logo.png";
+  const logoUrl = cmsNav?.logo || "/images/laxree-logo.jpg";
   const ctaText = cmsNav?.ctaButton?.text || "Enquire Now";
   const ctaVisible = cmsNav?.ctaButton?.visible ?? true;
 
