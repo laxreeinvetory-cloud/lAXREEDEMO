@@ -10,7 +10,7 @@ import {
   AnimatePresence,
   type Variants,
 } from "framer-motion";
-import { Menu, X, MessageCircle, ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import { NAV_LINKS, SITE } from "@/lib/laxree/site-data";
 import { useEnquiry } from "@/components/providers/enquiry-provider";
 import { useCart } from "@/components/providers/cart-provider";
@@ -160,15 +160,6 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <a
-              href={`https://wa.me/${SITE.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Chat on WhatsApp"
-              className="grid place-items-center w-8 h-8 rounded-full border border-brass/60 text-brass transition-all duration-300 hover:bg-brass hover:text-charcoal hover:border-brass"
-            >
-              <MessageCircle className="w-4 h-4" strokeWidth={1.75} />
-            </a>
             <button
               type="button"
               onClick={handleEnquire}
@@ -263,15 +254,6 @@ export function Navbar() {
                     </span>
                   )}
                 </Link>
-                <a
-                  href={`https://wa.me/${SITE.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Chat on WhatsApp"
-                  className="grid place-items-center w-11 h-11 rounded-full border border-brass/60 text-brass transition-all duration-300 hover:bg-brass hover:text-charcoal"
-                >
-                  <MessageCircle className="w-5 h-5" strokeWidth={1.75} />
-                </a>
                 <button
                   type="button"
                   onClick={handleEnquire}

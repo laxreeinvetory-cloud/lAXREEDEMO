@@ -139,7 +139,7 @@ export function PageCTA({
   title = "Ready to elevate your hospitality?",
   subtitle = "Get a custom quotation within 24 hours. No obligation.",
   primaryLabel = "Get a Quotation",
-  secondaryLabel = "Call 1800 120 7001",
+  secondaryLabel = "Call +91 93520 54400",
 }: {
   title?: string;
   subtitle?: string;
@@ -174,7 +174,7 @@ export function PageCTA({
               {primaryLabel} <ArrowRight className="ml-2 h-4 w-4" />
             </button>
             <a
-              href="tel:18001207001"
+              href="tel:+919352054400"
               className="pill pill-ghost-ivory text-[14px] px-8 py-3.5"
             >
               {secondaryLabel}

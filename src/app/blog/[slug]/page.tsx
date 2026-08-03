@@ -438,7 +438,7 @@ export default async function BlogPostPage({
         title="Need help implementing these ideas?"
         subtitle="Our factory team can manufacture to your spec."
         primaryLabel="Get a Quotation"
-        secondaryLabel="Call 1800 120 7001"
+        secondaryLabel="Call +91 93520 54400"
       />
     </>
   );

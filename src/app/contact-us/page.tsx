@@ -546,7 +546,7 @@ export default function ContactUsPage() {
                   href={`tel:${SITE.tollFreeHref}`}
                   className="text-brass hover:text-brass-light transition-colors"
                 >
-                  1800 120 7001
+                  +91 93520 54400
                 </a>
                 .
               </p>
@@ -562,9 +562,9 @@ export default function ContactUsPage() {
       {/* ───────── Section 6 — PageCTA (emerald) ───────── */}
       <PageCTA
         title="Ready to talk?"
-        subtitle="Call 1800 120 7001 or fill the form above."
+        subtitle="Call +91 93520 54400 or fill the form above."
         primaryLabel="Send an Enquiry"
-        secondaryLabel="Call 1800 120 7001"
+        secondaryLabel="Call +91 93520 54400"
       />
     </>
   );

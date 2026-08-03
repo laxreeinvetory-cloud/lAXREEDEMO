@@ -56,9 +56,15 @@ const VALUE_ICONS: Record<string, LucideIcon> = {
 const DEFAULTS = {
   heroEyebrow: "Who We Are",
   heroTitle: "Eleven Years of Opening Doors",
-  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
+  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
   heroImage: "",
   factoryImage: "",
+  team: {
+    ashish: "/images/team/ashish-agarwal.png",
+    samarth: "/images/team/samarth-agarwal.png",
+    reema: "/images/team/reema-bajaj.png",
+    bavika: "/images/team/bavika-agarwal.png",
+  },
 };
 
 export default function AboutUsPage() {
@@ -347,15 +353,29 @@ export default function AboutUsPage() {
           />
 
           <div className="mt-12 md:mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-            {LEADERSHIP.map((member, i) => (
+            {LEADERSHIP.map((member, i) => {
+              // Get CMS image override for this team member
+              const teamKey = member.name.split(" ")[0].toLowerCase();
+              const memberImage = (content as any)?.team?.[teamKey] || member.image;
+              return (
               <FadeIn key={member.name} delay={i * 0.07}>
                 <GlassCard theme="charcoal" className="p-6 md:p-7 h-full">
-                  {/* Avatar — initials in brass */}
-                  <div className="w-20 h-20 rounded-full bg-brass/10 border border-brass/30 grid place-items-center">
-                    <span className="font-display text-brass text-2xl font-medium">
-                      {member.initials}
-                    </span>
-                  </div>
+                  {/* Avatar — real photo if available, otherwise initials */}
+                  {memberImage ? (
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-brass/30">
+                      <img
+                        src={memberImage}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 rounded-full bg-brass/10 border border-brass/30 grid place-items-center">
+                      <span className="font-display text-brass text-2xl font-medium">
+                        {member.initials}
+                      </span>
+                    </div>
+                  )}
 
                   <h3 className="mt-5 font-display text-ivory text-lg leading-snug">
                     {member.name}
@@ -371,7 +391,8 @@ export default function AboutUsPage() {
                   </p>
                 </GlassCard>
               </FadeIn>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

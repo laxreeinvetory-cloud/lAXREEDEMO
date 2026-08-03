@@ -50,7 +50,7 @@ export function LeadCtaBanner() {
       );
       setForm(INITIAL);
     } catch {
-      notify("error", "Something went wrong. Please call us at 1800 120 7001.");
+      notify("error", "Something went wrong. Please call us at +91 93520 54400.");
     } finally {
       setSubmitting(false);
     }
