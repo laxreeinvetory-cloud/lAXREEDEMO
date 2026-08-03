@@ -30,7 +30,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "mattress": "/images/product-catalogue/mattress/LRMR-251-8.jpg",
   "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.jpg",
   "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.jpg",
-  "luggage-rack": "/images/product-catalogue/luggage-trolley-LT-801.jpg",
+  "luggage-rack": "/images/product-catalogue/coming-soon.jpg",
   // ── Washroom Amenities ──
   "hair-dryer": "/images/product-catalogue/hair-dryer/LRHD-276.jpg",
   "soap-dispenser": "/images/product-catalogue/soap-dispenser/LRWA--358.jpg",
@@ -158,6 +158,21 @@ export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
   "LRSB-201": "/images/product-catalogue/safe-box/LRSB-201.jpg",
   "LRSB-202": "/images/product-catalogue/safe-box/LRSB-202.jpg",
   "LRSB-209": "/images/product-catalogue/safe-box/LRSB-209.jpg",
+  // Luggage Rack — DB has dustbin (LRRA) and towel rack (LRWA) products
+  // miscategorized as Luggage Rack. Show coming-soon instead.
+  "LRRA 655": "/images/product-catalogue/coming-soon.jpg",
+  "LRRA-655": "/images/product-catalogue/coming-soon.jpg",
+  "LRRA - 650": "/images/product-catalogue/coming-soon.jpg",
+  "LRRA-650": "/images/product-catalogue/coming-soon.jpg",
+  "LRRA - 649": "/images/product-catalogue/coming-soon.jpg",
+  "LRRA-649": "/images/product-catalogue/coming-soon.jpg",
+  "LRWA-347": "/images/product-catalogue/coming-soon.jpg",
+  "LRLT 401": "/images/product-catalogue/coming-soon.jpg",
+  "LRLT-401": "/images/product-catalogue/coming-soon.jpg",
+  "LRLT 402": "/images/product-catalogue/coming-soon.jpg",
+  "LRLT-402": "/images/product-catalogue/coming-soon.jpg",
+  "LRLT 403": "/images/product-catalogue/coming-soon.jpg",
+  "LRLT-403": "/images/product-catalogue/coming-soon.jpg",
 };
 
 /**
@@ -180,6 +195,15 @@ export function getProductImage(model: string, dbImage?: string): string {
   if (override) return override;
   // Reject LRMR (mattress) images — they should never show for non-mattress products
   if (dbImage && dbImage.includes("LRMR") && !model.includes("LRMR")) {
+    return "/images/product-catalogue/coming-soon.jpg";
+  }
+  // Reject LRRA (dustbin) images for non-dustbin products
+  if (dbImage && dbImage.includes("LRRA") && !model.includes("LRRA")) {
+    return "/images/product-catalogue/coming-soon.jpg";
+  }
+  // Reject LRWA (washroom accessories) images for products whose model
+  // doesn't start with LRWA (prevents towel-rack images showing for luggage racks etc.)
+  if (dbImage && dbImage.includes("LRWA") && !model.includes("LRWA")) {
     return "/images/product-catalogue/coming-soon.jpg";
   }
   if (dbImage && !dbImage.includes("coming-soon")) return dbImage;
