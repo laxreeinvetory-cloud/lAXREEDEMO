@@ -139,8 +139,8 @@ export function PageCTA({
   title = "Ready to elevate your Guest Experience?",
   subtitle = "Get a custom quotation within 24 hours. No obligation.",
   primaryLabel = "Get a Quotation",
-  secondaryLabel = "Call +91 93520 54400",
-  secondaryHref = "tel:+919352054400",
+  secondaryLabel = "Call +91 92516 83662",
+  secondaryHref = "tel:+919251683662",
 }: {
   title?: string;
   subtitle?: string;

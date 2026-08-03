@@ -337,7 +337,7 @@ export default function BlogListingPage() {
         title="Have a topic suggestion?"
         subtitle="We'd love to hear what procurement topics matter to you."
         primaryLabel="Get a Quotation"
-        secondaryLabel="Call +91 93520 54400"
+        secondaryLabel="Call +91 92516 83662"
       />
     </>
   );

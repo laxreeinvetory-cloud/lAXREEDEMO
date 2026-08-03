@@ -7,11 +7,11 @@
 export const SITE = {
   name: "LaxRee Amenities",
   tagline: "Hotel Supplies Redefined",
-  phoneDisplay: "+91 93520 54400",
-  phoneHref: "+919352054400",
-  tollFreeDisplay: "+91 93520 54400",
-  tollFreeHref: "+919352054400",
-  whatsapp: "919352054400",
+  phoneDisplay: "+91 92516 83662",
+  phoneHref: "+919251683662",
+  tollFreeDisplay: "+91 92516 83662",
+  tollFreeHref: "+919251683662",
+  whatsapp: "919251683662",
   email: "contactus@laxree.com",
   careersEmail: "hr@laxree.com",
   officeHours: "10:00 AM – 7:00 PM",
@@ -526,8 +526,8 @@ export const BLOG_POSTS: BlogPost[] = [
 
 export const WHATSAPP_EXECUTIVES = [
   { name: "Sales — North India", phone: "919251683658" },
-  { name: "Sales — South India", phone: "919352054400" },
-  { name: "Catalogue & Pricing", phone: "919352054400" },
+  { name: "Sales — South India", phone: "919251683662" },
+  { name: "Catalogue & Pricing", phone: "919251683662" },
   { name: "After-Sales Support", phone: "919982286667" },
 ];
 
@@ -970,10 +970,7 @@ export const DEALER_BENEFITS: DealerBenefit[] = [
 
 /* Dealers — existing dealer network cities */
 export const DEALER_CITIES = [
-  "New Delhi", "Mumbai", "Bengaluru", "Chennai", "Hyderabad", "Kolkata",
-  "Pune", "Ahmedabad", "Jaipur", "Udaipur", "Lucknow", "Chandigarh",
-  "Bhopal", "Patna", "Guwahati", "Visakhapatnam", "Cochin", "Coimbatore",
-  "Nagpur", "Surat", "Indore", "Bhubaneswar",
+  "Nagpur", "Uttarakhand", "Tamil Nadu", "Haridwar",
 ];
 
 /* Clients — case studies */

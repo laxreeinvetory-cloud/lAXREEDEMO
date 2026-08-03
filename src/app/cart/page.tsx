@@ -654,7 +654,7 @@ function generateProfessionalQuotationHTML(
   </div>
   <div class="footer">
     <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" />
-    <div class="footer-addr">Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>Phone: +91 93520 54400 &nbsp;|&nbsp; Email: contactus@laxree.com</div>
+    <div class="footer-addr">Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>Phone: +91 92516 83662 &nbsp;|&nbsp; Email: contactus@laxree.com</div>
     <div class="footer-certs">ISO 9001 • ISO 14001 • ISO 45001 • CE Certified • RoHS Compliant</div>
   </div>
 </div>

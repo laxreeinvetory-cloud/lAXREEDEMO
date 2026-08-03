@@ -123,8 +123,8 @@ const COMPANY_DEFAULTS: CompanySettings = {
   tagline: "Hotel Supplies Redefined",
   phoneDisplay: "+91-92516 83662",
   phoneHref: "+919251683662",
-  tollFreeDisplay: "+91 93520 54400",
-  tollFreeHref: "+919352054400",
+  tollFreeDisplay: "+91 92516 83662",
+  tollFreeHref: "+919251683662",
   whatsapp: "919251683662",
   email: "contactus@laxree.com",
   careersEmail: "hr@laxree.com",
@@ -777,7 +777,7 @@ function CompanyCard({
               onChange={(e) =>
                 setCompany({ ...company, tollFreeDisplay: e.target.value })
               }
-              placeholder="+91 93520 54400"
+              placeholder="+91 92516 83662"
             />
           </div>
           <div>
@@ -788,7 +788,7 @@ function CompanyCard({
               onChange={(e) =>
                 setCompany({ ...company, tollFreeHref: e.target.value })
               }
-              placeholder="+919352054400"
+              placeholder="+919251683662"
             />
           </div>
         </div>

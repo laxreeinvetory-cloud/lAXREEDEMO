@@ -536,7 +536,7 @@ export default function ContactUsPage() {
                   href={`tel:${SITE.tollFreeHref}`}
                   className="text-brass hover:text-brass-light transition-colors"
                 >
-                  +91 93520 54400
+                  +91 92516 83662
                 </a>
                 .
               </p>
@@ -552,9 +552,9 @@ export default function ContactUsPage() {
       {/* ───────── Section 6 — PageCTA (emerald) ───────── */}
       <PageCTA
         title="Ready to talk?"
-        subtitle="Call +91 93520 54400 or fill the form above."
+        subtitle="Call +91 92516 83662 or fill the form above."
         primaryLabel="Send an Enquiry"
-        secondaryLabel="Call +91 93520 54400"
+        secondaryLabel="Call +91 92516 83662"
       />
     </>
   );

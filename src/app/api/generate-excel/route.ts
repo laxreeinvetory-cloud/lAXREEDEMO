@@ -303,7 +303,7 @@ export async function POST(req: NextRequest) {
     const footerLines: [string, Partial<ExcelJS.Font>, number][] = [
       ["LaxRee Amenities", { name: "Georgia", size: 14, bold: true, color: { argb: BRASS } }, 24],
       ["Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001", { name: "Calibri", size: 10, color: { argb: SAND } }, 18],
-      ["Phone: +91 93520 54400  |  Email: contactus@laxree.com", { name: "Calibri", size: 10, color: { argb: SAND } }, 18],
+      ["Phone: +91 92516 83662  |  Email: contactus@laxree.com", { name: "Calibri", size: 10, color: { argb: SAND } }, 18],
       ["ISO 9001  •  ISO 14001  •  ISO 45001  •  CE CERTIFIED  •  RoHS COMPLIANT", { name: "Calibri", size: 8, color: { argb: INK_MUTED } }, 16],
     ];
     footerLines.forEach(([text, font, height]) => {

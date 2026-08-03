@@ -50,7 +50,7 @@ export function LeadCtaBanner() {
       );
       setForm(INITIAL);
     } catch {
-      notify("error", "Something went wrong. Please call us at +91 93520 54400.");
+      notify("error", "Something went wrong. Please call us at +91 92516 83662.");
     } finally {
       setSubmitting(false);
     }
