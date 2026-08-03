@@ -106,15 +106,26 @@ export default function ExperienceCenterPage() {
             body="Can't visit in person? Take a virtual tour of our Gurugram experience center — India's largest hospitality supplier showcase with 700+ products on display."
           />
           <FadeIn>
-            <div className="mt-12 relative overflow-hidden rounded-[24px] aspect-video bg-charcoal border-2 border-brass/20 shadow-2xl shadow-brass/10">
+            <div
+              className="mt-12 relative overflow-hidden rounded-[24px] aspect-video bg-charcoal border-2 border-brass/20 shadow-2xl shadow-brass/10"
+              onContextMenu={(e) => e.preventDefault()}
+            >
               <video
                 src={demoVideoUrl}
                 controls
+                controlsList="nodownload noplaybackrate nofullscreen"
+                disablePictureInPicture
                 playsInline
                 autoPlay
                 muted
                 loop
                 className="absolute inset-0 h-full w-full object-cover"
+                onContextMenu={(e) => e.preventDefault()}
+              />
+              {/* Transparent overlay to block drag-download (clicks pass through to video controls) */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: "transparent" }}
               />
               {/* Brass corner accent */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent" />
