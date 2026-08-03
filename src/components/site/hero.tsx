@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -167,16 +167,9 @@ export function Hero() {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
   const isMobile = useIsMobile();
-  // useSyncExternalStore is the React-idiomatic way to detect "are we on
-  // the client after hydration" without calling setState inside an effect.
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true, // client snapshot
-    () => false // server snapshot
-  );
 
   // CMS-driven hero image override (key "homepage:hero" field "heroImage").
-  // Falls back to the static /images/products/mini-bar.jpg image when the
+  // Falls back to the static /images/products/mini-bar.webp image when the
   // CMS has no value or the fetch fails.
   const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
   useEffect(() => {
@@ -201,12 +194,8 @@ export function Hero() {
     };
   }, []);
 
-  // Decide whether to render the live 3D stage, the static fallback,
-  // or a skeleton (during SSR / before hydration).
-  // show3D = null → skeleton (loading), true → 3D, false → static fallback
-  const show3D: boolean | null = !mounted
-    ? null // SSR / pre-hydration → skeleton
-    : !reduced && !isMobile;
+  // Decide whether to render the live 3D stage or the static fallback.
+  const show3D = !reduced && !isMobile;
 
   return (
     <section
@@ -281,7 +270,7 @@ export function Hero() {
             >
               Premium hotel &amp; resort amenities, furniture, linen, roofing
               and lighting — manufactured and supplied pan-India by LaxRee,
-              Ajmer&apos;s largest hospitality exhibition centre.
+              India&apos;s largest hospitality exhibition centre.
             </motion.p>
 
             {/* CTAs */}
@@ -370,9 +359,7 @@ export function Hero() {
                 }}
               />
 
-              {show3D === null ? (
-                <HeroStageSkeleton />
-              ) : show3D ? (
+              {show3D ? (
                 <HeroStage />
               ) : (
                 <HeroFallback src={heroImage} />

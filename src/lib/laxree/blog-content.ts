@@ -385,7 +385,7 @@ export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
       {
         heading: "The LaxRee Advantage",
         paragraphs: [
-          "LaxRee Amenities is one of India's few OEM manufacturers of hotel minibars and safe lockers. Founded in 2015 in Ajmer, Rajasthan, we operate our own factory lines and Ajmer's largest hospitality exhibition centre (12,000 sq ft).",
+          "LaxRee Amenities is one of India's few OEM manufacturers of hotel minibars and safe lockers. Founded in 2015 in Ajmer, Rajasthan, we operate our own factory lines and India's largest hospitality exhibition centre (12,000 sq ft).",
           "Our advantages over competitors: (1) OEM factory-direct pricing (no middleman markup), (2) 700+ SKUs across 5 categories, (3) 1,347+ projects delivered across 28 states, (4) Service engineers in 14 cities, (5) 7+ certifications (ISO 9001/14001/45001, CE, RoHS), (6) 7-year spare-parts guarantee, (7) Custom manufacturing capability.",
         ],
       },

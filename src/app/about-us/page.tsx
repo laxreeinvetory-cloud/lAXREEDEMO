@@ -81,7 +81,7 @@ export default function AboutUsPage() {
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
         eyebrow={content.heroEyebrow || "Who We Are"}
         title={content.heroTitle || "Eleven Years of Opening Doors"}
-        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and Ajmer's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
+        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
       >
         {/* Stats band — glass-on-charcoal strip, static Plex Mono numbers */}
         <div className="glass-on-charcoal rounded-3xl p-6 md:p-8 max-w-4xl">
@@ -143,7 +143,7 @@ export default function AboutUsPage() {
                 <p>
                   In 2019 we opened{" "}
                   <span className="text-ink font-medium">
-                    Ajmer's largest hospitality exhibition centre
+                    India's largest hospitality exhibition centre
                   </span>
                   : 12,000 sq ft of working product displays where procurement
                   teams can test minibar cooling curves, weigh safe-locker
@@ -168,7 +168,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src={content.factoryImage || content.heroImage || "/images/about/factory.jpg"}
+                  src={content.factoryImage || content.heroImage || "/images/categories/about-us-team.png"}
                   alt="Inside the LaxRee manufacturing facility in Ajmer, Rajasthan"
                   width={800}
                   height={640}
@@ -276,7 +276,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src={content.factoryImage || "/images/products/mini-bar.jpg"}
+                  src="/images/products/mini-bar.jpg"
                   alt="A LaxRee absorption minibar assembled on the Ajmer production line"
                   width={800}
                   height={640}

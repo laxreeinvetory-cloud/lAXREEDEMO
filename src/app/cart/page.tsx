@@ -149,7 +149,7 @@ export default function CartPage() {
               the items you need.
             </p>
             <Link
-              href="/products/amenities"
+              href="/products"
               className="pill pill-brass px-8 py-3.5 text-[13px] inline-flex items-center gap-2"
             >
               Browse Products
@@ -233,7 +233,7 @@ export default function CartPage() {
                 {/* Clear and start over */}
                 <div className="mt-8 pt-6 border-t border-ink/10 flex items-center justify-between">
                   <Link
-                    href="/products/amenities"
+                    href="/products"
                     className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-brass hover:gap-2.5 transition-all"
                   >
                     <ArrowLeft size={12} strokeWidth={1.5} />

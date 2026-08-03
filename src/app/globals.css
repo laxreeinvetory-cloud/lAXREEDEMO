@@ -66,7 +66,11 @@
   }
 
   html {
-    scroll-behavior: auto; /* Lenis handles smooth scroll */
+    scroll-behavior: auto; /* Lenis handles smooth scroll on desktop */
+    /* Fallback smooth scroll for mobile / when Lenis is disabled */
+    -webkit-overflow-scrolling: touch;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -77,6 +81,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* Optimize text rendering for performance */
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Performance: hint the browser to GPU-composite animated elements.
+     Only applied to elements that actually animate. */
+  [style*="transform"],
+  [style*="opacity"] {
+    will-change: transform, opacity;
   }
 
   ::selection {
@@ -273,6 +286,26 @@
 }
 .marquee-pause:hover .animate-marquee,
 .marquee-pause:hover .animate-marquee-slow {
+  animation-play-state: paused;
+}
+
+/* Clients page — dual-row logo marquee */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+@keyframes marquee-right {
+  0% { transform: translateX(-33.33%); }
+  100% { transform: translateX(0); }
+}
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+.animate-marquee-right {
+  animation: marquee-right 35s linear infinite;
+}
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
   animation-play-state: paused;
 }
 

@@ -42,6 +42,9 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     rafId = requestAnimationFrame(raf);
 
     // Anchor link integration
+    // NOTE: passive must be false here because we call e.preventDefault().
+    // Using { passive: true } silently ignores preventDefault and breaks
+    // the smooth-scroll-on-anchor-click behaviour.
     const handleAnchorClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest(
         'a[href^="#"]'
@@ -55,7 +58,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         lenis.scrollTo(el as HTMLElement, { offset: -80 });
       }
     };
-    document.addEventListener("click", handleAnchorClick, { passive: true });
+    document.addEventListener("click", handleAnchorClick, { passive: false });
 
     return () => {
       cancelAnimationFrame(rafId);

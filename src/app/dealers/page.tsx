@@ -426,9 +426,10 @@ export default function DealersPage() {
       {/* Section 6 — PageCTA (emerald) */}
       <PageCTA
         title="Questions about dealership?"
-        subtitle="Call Amit Verma, Head of Sales, at +91-92516 83662."
+        subtitle="Call Samarth Agarwal, Head of Sales, at +91-92516 83662."
         primaryLabel="Get a Quotation"
         secondaryLabel="Call +91-92516 83662"
+        secondaryHref="tel:+919251683662"
       />
     </>
   );

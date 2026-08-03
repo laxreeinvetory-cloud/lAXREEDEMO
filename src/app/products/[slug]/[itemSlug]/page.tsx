@@ -8,6 +8,7 @@ import {
   getCategoriesByParent,
   type CatalogueProduct,
 } from "@/lib/laxree/catalogue-data";
+import { getSubcategoryImage, getProductImage } from "@/lib/laxree/product-images";
 import {
   PageHero,
   SectionHeading,
@@ -77,7 +78,7 @@ export default async function ItemPage({
         model: p.model,
         name: p.name,
         category: p.category,
-        image: p.image,
+        image: getProductImage(p.model, p.image),
         description: p.description,
         specs: (() => { try { return JSON.parse(p.specs); } catch { return []; } })(),
       }));
@@ -142,7 +143,7 @@ export default async function ItemPage({
           <SectionHeading theme="ivory" eyebrow="EXPLORE MORE" title="Other Item Types" />
           <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {siblingItems.map((other) => {
-              const img = other.products[0]?.image || "/images/product-catalogue/coming-soon.jpg";
+              const img = getSubcategoryImage(other.slug, other.products[0]?.image);
               return (
                 <Link key={other.slug} href={`/products/${parent.slug}/${other.slug}`}
                   className="group glass-on-ivory rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">

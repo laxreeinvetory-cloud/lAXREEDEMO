@@ -34,7 +34,7 @@ function LaxReeLogo({ compact = false, logoSrc }: { compact?: boolean; logoSrc?:
     <Link
       href="/"
       aria-label="LaxRee Amenities — home"
-      className="group flex items-center select-none"
+      className="group flex items-center select-none shrink-0"
     >
       <img
         src={logoSrc || "/images/laxree-logo.png"}
@@ -42,7 +42,11 @@ function LaxReeLogo({ compact = false, logoSrc }: { compact?: boolean; logoSrc?:
         width={compact ? 120 : 150}
         height={compact ? 29 : 36}
         className="h-auto w-auto transition-opacity duration-300 group-hover:opacity-90"
-        style={{ maxWidth: compact ? 120 : 150 }}
+        style={{
+          maxWidth: compact ? 120 : 150,
+          maxHeight: 40,
+          objectFit: "contain",
+        }}
       />
     </Link>
   );

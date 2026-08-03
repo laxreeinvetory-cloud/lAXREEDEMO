@@ -41,16 +41,16 @@ function ProductCard({ product, active }: { product: Product; active: boolean })
         active ? "border-brass shadow-2xl" : "border-transparent shadow-md"
       }`}
     >
-      {/* Product image — 60% of card height, object-cover on charcoal bg */}
+      {/* Product image — 60% of card height, object-contain on white bg */}
       <div
         className="relative w-full overflow-hidden"
-        style={{ height: "60%", backgroundColor: "var(--color-charcoal)" }}
+        style={{ height: "60%", backgroundColor: "#ffffff" }}
       >
         <img
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
         />
         {/* Subtle brass corner accent on active card */}
         {active && (
@@ -100,10 +100,12 @@ export function ProductSpotlight() {
         if (data.ok && data.value && data.value.images) {
           // Override spotlight images from CMS
           const overrides = data.value.images as Record<string, string>;
-          setProducts(products.map((p) => ({
-            ...p,
-            image: overrides[p.slug] || p.image,
-          })));
+          setProducts((prev) =>
+            prev.map((p) => ({
+              ...p,
+              image: overrides[p.slug] || p.image,
+            })),
+          );
         }
       })
       .catch(() => {});
