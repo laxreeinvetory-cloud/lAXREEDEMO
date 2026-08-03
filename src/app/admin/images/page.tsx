@@ -36,6 +36,10 @@ const EDITABLE_IMAGES: ImageEntry[] = [
   { key: "team-samarth", label: "Team — Samarth Agarwal (Head of Sales)", section: "Team Members", cmsKey: "page:about-us", field: "team.samarth", fallback: "/images/team/samarth-agarwal.png" },
   { key: "team-reema", label: "Team — Reema Bajaj (CMO)", section: "Team Members", cmsKey: "page:about-us", field: "team.reema", fallback: "/images/team/reema-bajaj.png" },
   { key: "team-bavika", label: "Team — Bavika Agarwal (Head of HR)", section: "Team Members", cmsKey: "page:about-us", field: "team.bavika", fallback: "/images/team/bavika-agarwal.png" },
+  // Experience Centers
+  { key: "ec-ajmer", label: "Experience Center — Ajmer", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.ajmer", fallback: "/images/experience-centers/ajmer-center.jpeg" },
+  { key: "ec-jaipur", label: "Experience Center — Jaipur", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.jaipur", fallback: "/images/experience-centers/jaipur-center.jpeg" },
+  { key: "ec-gurugram", label: "Experience Center — Gurugram", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.gurugram", fallback: "" },
 ];
 
 export default function AdminImagesPage() {

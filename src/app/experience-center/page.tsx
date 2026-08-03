@@ -14,6 +14,7 @@ const CENTERS = [
     description:
       "Our flagship experience center in Gurugram is India's largest hospitality supplier showcase. Spread across a massive showroom floor, it features every product category — from minibars to furniture, bath tubs to dome structures. Walk through complete room setups, test products hands-on, and meet with our procurement experts.",
     highlight: true,
+    image: "",
     stats: [
       { label: "Showroom Area", value: "50,000+ sq ft" },
       { label: "Product Categories", value: "8 Categories" },
@@ -28,6 +29,7 @@ const CENTERS = [
     description:
       "Located at our manufacturing headquarters in Ajmer, this experience center showcases our complete product range alongside the factory floor. See how products are made, meet our design team, and experience the quality firsthand.",
     highlight: false,
+    image: "/images/experience-centers/ajmer-center.jpeg",
     stats: [
       { label: "Showroom Area", value: "20,000+ sq ft" },
       { label: "Factory Tour", value: "Available" },
@@ -42,6 +44,7 @@ const CENTERS = [
     description:
       "Our Jaipur experience center brings the full LaxRee range to Rajasthan's capital. Explore room setups, test minibars, compare furniture finishes, and get expert consultation for your hospitality project.",
     highlight: false,
+    image: "/images/experience-centers/jaipur-center.jpeg",
     stats: [
       { label: "Showroom Area", value: "15,000+ sq ft" },
       { label: "Room Setups", value: "5 Complete Rooms" },
@@ -55,18 +58,22 @@ export default function ExperienceCenterPage() {
   // field "demoVideoUrl"). When unset, the placeholder shown below is
   // preserved exactly as the static fallback.
   const [demoVideoUrl, setDemoVideoUrl] = useState<string>("/videos/gurgaon-experience.mp4");
+  const [centerImages, setCenterImages] = useState<Record<string, string>>({});
   useEffect(() => {
     let cancelled = false;
     fetch("/api/admin/cms?key=page:experience-center", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (cancelled || !data) return;
-        const override =
-          data?.value && typeof data.value === "object"
-            ? (data.value as { demoVideoUrl?: unknown }).demoVideoUrl
-            : undefined;
-        if (typeof override === "string" && override.trim()) {
-          setDemoVideoUrl(override.trim());
+        const value = data?.value;
+        if (value && typeof value === "object") {
+          const v = value as { demoVideoUrl?: unknown; centerImages?: Record<string, string> };
+          if (typeof v.demoVideoUrl === "string" && v.demoVideoUrl.trim()) {
+            setDemoVideoUrl(v.demoVideoUrl.trim());
+          }
+          if (v.centerImages && typeof v.centerImages === "object") {
+            setCenterImages(v.centerImages);
+          }
         }
       })
       .catch(() => {
@@ -138,10 +145,20 @@ export default function ExperienceCenterPage() {
           <div className="container-laxree">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <FadeIn delay={0.1}>
-                <div className="relative overflow-hidden rounded-[24px] aspect-[4/3] bg-charcoal border border-white/10">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Building2 className="h-24 w-24 text-brass/30" />
-                  </div>
+                <div className="relative overflow-hidden rounded-[24px] aspect-[4/3] bg-charcoal border-2 border-brass/20 shadow-2xl shadow-brass/10">
+                  {center.image || centerImages[center.id] ? (
+                    <img
+                      src={centerImages[center.id] || center.image}
+                      alt={center.name}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Building2 className="h-24 w-24 text-brass/30" />
+                    </div>
+                  )}
+                  {/* Brass top accent */}
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent" />
                   {center.highlight && (
                     <div className="absolute top-4 right-4 rounded-full bg-brass px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-charcoal font-bold">
                       <Award className="inline h-3 w-3 mr-1" />

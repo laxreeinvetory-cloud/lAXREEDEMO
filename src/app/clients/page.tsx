@@ -32,7 +32,7 @@ const INDUSTRY_CATEGORIES = [
    ───────────────────────────────────────────────────────────── */
 const HOTEL_CHAINS = ["Radisson", "Holiday Inn", "Fairmont", "Ramada Group", "Taj", "Ananta Hotels"];
 const RESORTS = ["Sayaji Hotels", "Sunday Hotels", "Club Mahindra", "Swosti Group"];
-const HERITAGE = ["The Lords Inn", "The Derns Hotels & Resorts"];
+const HERITAGE = ["The Lords Inn", "The Fern Hotels & Resorts"];
 const BUSINESS = ["7 Apple Hotels"];
 
 function getCategoryForClient(name: string): string {

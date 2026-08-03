@@ -310,7 +310,7 @@ export const CLIENT_LOGOS = [
   "Taj",
   "Ananta Hotels",
   "The Lords Inn",
-  "The Derns Hotels & Resorts",
+  "The Fern Hotels & Resorts",
   "Swosti Group",
 ];
 
