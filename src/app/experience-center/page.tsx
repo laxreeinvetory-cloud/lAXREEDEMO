@@ -54,7 +54,7 @@ export default function ExperienceCenterPage() {
   // CMS-driven demo video override (key "page:experience-center"
   // field "demoVideoUrl"). When unset, the placeholder shown below is
   // preserved exactly as the static fallback.
-  const [demoVideoUrl, setDemoVideoUrl] = useState<string>("");
+  const [demoVideoUrl, setDemoVideoUrl] = useState<string>("/videos/gurgaon-experience.mp4");
   useEffect(() => {
     let cancelled = false;
     fetch("/api/admin/cms?key=page:experience-center", { cache: "no-store" })
@@ -70,7 +70,7 @@ export default function ExperienceCenterPage() {
         }
       })
       .catch(() => {
-        /* keep placeholder */
+        /* keep default video */
       });
     return () => {
       cancelled = true;
@@ -95,29 +95,35 @@ export default function ExperienceCenterPage() {
           <SectionHeading
             theme="charcoal"
             eyebrow="VIRTUAL TOUR"
-            title="Watch Our Experience Center Tour"
-            body="Can't visit in person? Take a virtual tour of our Gurugram experience center — India's largest hospitality supplier showcase."
+            title="Watch Our Gurugram Experience Center"
+            body="Can't visit in person? Take a virtual tour of our Gurugram experience center — India's largest hospitality supplier showcase with 700+ products on display."
           />
           <FadeIn>
-            <div className="mt-12 relative overflow-hidden rounded-[24px] aspect-video bg-charcoal border border-white/10">
-              {demoVideoUrl ? (
-                <video
-                  src={demoVideoUrl}
-                  controls
-                  playsInline
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brass/20 border-2 border-brass/40 cursor-pointer hover:bg-brass/30 transition-colors">
-                    <Play className="h-8 w-8 text-brass ml-1" fill="currentColor" />
-                  </div>
-                  <p className="font-body text-sm text-sand text-center max-w-md">
-                    Demo video will be placed here. Admin can upload the actual video
-                    through the CMS panel.
-                  </p>
-                </div>
-              )}
+            <div className="mt-12 relative overflow-hidden rounded-[24px] aspect-video bg-charcoal border-2 border-brass/20 shadow-2xl shadow-brass/10">
+              <video
+                src={demoVideoUrl}
+                controls
+                playsInline
+                autoPlay
+                muted
+                loop
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              {/* Brass corner accent */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent" />
+            </div>
+            {/* Video caption */}
+            <div className="mt-6 flex flex-col items-center gap-3 text-center">
+              <div className="flex items-center gap-2">
+                <MapPin size={14} strokeWidth={1.5} className="text-brass" />
+                <span className="font-mono text-[11px] uppercase tracking-wider text-brass">
+                  LaxRee Gurugram Experience Center
+                </span>
+              </div>
+              <p className="font-body text-[13px] text-sand max-w-2xl">
+                50,000+ sq ft showroom featuring 8 product categories, complete room setups, and hands-on product testing.
+              </p>
             </div>
           </FadeIn>
         </div>
