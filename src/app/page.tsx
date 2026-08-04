@@ -7,7 +7,6 @@ import { CategoryBento } from "@/components/site/category-bento";
 // These sections are below the first viewport and don't need to load immediately
 const AboutUs = dynamic(() => import("@/components/site/about-us").then(m => m.AboutUs));
 const ProductSpotlight = dynamic(() => import("@/components/site/product-spotlight").then(m => m.ProductSpotlight));
-const CategoryExplorer = dynamic(() => import("@/components/site/category-explorer").then(m => m.CategoryExplorer));
 const ClientsTestimonials = dynamic(() => import("@/components/site/clients-testimonials"));
 const OurPresence = dynamic(() => import("@/components/site/our-presence"));
 const Certifications = dynamic(() => import("@/components/site/certifications"));
@@ -33,10 +32,7 @@ export default function Home() {
       {/* 6. PRODUCT SPOTLIGHT — ivory coverflow (lazy) */}
       <ProductSpotlight />
 
-      {/* 7. DEEP CATEGORY EXPLORER — charcoal accordion (lazy) */}
-      <CategoryExplorer />
-
-      {/* 8. CLIENTS & TESTIMONIALS — ivory (lazy, CSS only) */}
+      {/* 7. CLIENTS & TESTIMONIALS — ivory (lazy, CSS only) */}
       <ClientsTestimonials />
 
       {/* 9. OUR PRESENCE — charcoal coverflow gallery (lazy) */}

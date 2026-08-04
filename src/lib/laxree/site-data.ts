@@ -605,13 +605,6 @@ export type TeamMember = {
 
 export const LEADERSHIP: TeamMember[] = [
   {
-    name: "Ashish Agarwal",
-    role: "Founder & Managing Director",
-    bio: "25 years in hospitality manufacturing. Started LaxRee with a single minibar line and a commitment to in-house quality control.",
-    initials: "AA",
-    image: "/images/team/ashish-agarwal.png",
-  },
-  {
     name: "Samarth Agarwal",
     role: "Head of Sales (Country)",
     bio: "Leads the national sales team and direct procurement contracts with hotel chains across India. Drives revenue growth and strategic client relationships.",

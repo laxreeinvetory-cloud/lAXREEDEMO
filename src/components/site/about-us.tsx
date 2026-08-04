@@ -74,15 +74,16 @@ export function AboutUs() {
               Who We Are
             </motion.span>
 
-            <motion.h2
+            <motion.p
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: 0.05, ease: "easeOut" }}
-              className="mt-5 font-display text-5xl text-ivory md:text-6xl"
+              className="mt-5 font-display text-ivory"
+              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 500, lineHeight: 1.05 }}
             >
-              About Us
-            </motion.h2>
+              Who We Are
+            </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 18 }}
