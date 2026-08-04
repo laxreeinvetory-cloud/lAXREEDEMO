@@ -311,12 +311,12 @@ export const CLIENT_LOGOS: ClientLogo[] = [
   { name: "Club Mahindra", logo: "/images/client-logos/club-mahindra.png" },
   { name: "Ramada", logo: "/images/client-logos/ramada.png" },
   { name: "The Fern Hotels & Resorts", logo: "/images/client-logos/the-fern.png" },
-  { name: "Sayaji Hotels", logo: "" },
-  { name: "Sunday Hotels", logo: "" },
-  { name: "7 Apple Hotels", logo: "" },
-  { name: "Ananta Hotels", logo: "" },
-  { name: "The Lords Inn", logo: "" },
-  { name: "Swosti Group", logo: "" },
+  { name: "Sayaji Hotels", logo: "/images/client-logos/sayaji.png" },
+  { name: "Sunday Hotels", logo: "/images/client-logos/sunday-hotels.png" },
+  { name: "7 Apple Hotels", logo: "/images/client-logos/7-apple.png" },
+  { name: "Ananta Hotels", logo: "/images/client-logos/ananta.png" },
+  { name: "The Lords Inn", logo: "/images/client-logos/the-lords-inn.png" },
+  { name: "Swosti Group", logo: "/images/client-logos/swosti.png" },
 ];
 
 export type Exhibition = {
