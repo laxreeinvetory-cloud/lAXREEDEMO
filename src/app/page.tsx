@@ -6,7 +6,6 @@ import { CategoryBento } from "@/components/site/category-bento";
 // Lazy-load below-the-fold sections to reduce initial JS payload
 // These sections are below the first viewport and don't need to load immediately
 const AboutUs = dynamic(() => import("@/components/site/about-us").then(m => m.AboutUs));
-const OwnerMessage = dynamic(() => import("@/components/site/owner-message").then(m => m.OwnerMessage));
 const ProductSpotlight = dynamic(() => import("@/components/site/product-spotlight").then(m => m.ProductSpotlight));
 const CategoryExplorer = dynamic(() => import("@/components/site/category-explorer").then(m => m.CategoryExplorer));
 const ClientsTestimonials = dynamic(() => import("@/components/site/clients-testimonials"));
@@ -30,9 +29,6 @@ export default function Home() {
 
       {/* 5. ABOUT US — charcoal split parallax (lazy) */}
       <AboutUs />
-
-      {/* 5b. OWNER'S MESSAGE — charcoal (lazy) */}
-      <OwnerMessage />
 
       {/* 6. PRODUCT SPOTLIGHT — ivory coverflow (lazy) */}
       <ProductSpotlight />

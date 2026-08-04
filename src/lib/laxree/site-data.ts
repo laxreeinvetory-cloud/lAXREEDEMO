@@ -298,20 +298,25 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-export const CLIENT_LOGOS = [
-  "Radisson",
-  "Holiday Inn",
-  "Fairmont",
-  "Sayaji Hotels",
-  "Ramada Group",
-  "Sunday Hotels",
-  "7 Apple Hotels",
-  "Club Mahindra",
-  "Taj",
-  "Ananta Hotels",
-  "The Lords Inn",
-  "The Fern Hotels & Resorts",
-  "Swosti Group",
+export type ClientLogo = {
+  name: string;
+  logo: string;
+};
+
+export const CLIENT_LOGOS: ClientLogo[] = [
+  { name: "Radisson", logo: "/images/client-logos/radisson.png" },
+  { name: "Holiday Inn", logo: "/images/client-logos/holiday-inn.png" },
+  { name: "Fairmont", logo: "/images/client-logos/fairmont.png" },
+  { name: "Taj", logo: "/images/client-logos/taj.png" },
+  { name: "Club Mahindra", logo: "/images/client-logos/club-mahindra.png" },
+  { name: "Ramada", logo: "/images/client-logos/ramada.png" },
+  { name: "The Fern Hotels & Resorts", logo: "/images/client-logos/the-fern.png" },
+  { name: "Sayaji Hotels", logo: "" },
+  { name: "Sunday Hotels", logo: "" },
+  { name: "7 Apple Hotels", logo: "" },
+  { name: "Ananta Hotels", logo: "" },
+  { name: "The Lords Inn", logo: "" },
+  { name: "Swosti Group", logo: "" },
 ];
 
 export type Exhibition = {

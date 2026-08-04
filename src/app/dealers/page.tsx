@@ -352,26 +352,40 @@ export default function DealersPage() {
             </div>
           </FadeIn>
 
-          {/* Google Maps for dealer locations */}
+          {/* Single India map with all dealer pins */}
           <FadeIn delay={0.1} className="mt-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-[24px] overflow-hidden border-2 border-brass/20 shadow-2xl shadow-brass/10">
+              <div className="bg-charcoal px-6 py-4 flex items-center justify-between border-b border-brass/20">
+                <div className="flex items-center gap-2">
+                  <MapPin size={18} strokeWidth={1.5} className="text-brass" />
+                  <span className="font-mono text-[12px] uppercase tracking-wider text-brass">
+                    Our Dealer Network Across India
+                  </span>
+                </div>
+                <span className="font-mono text-[11px] text-sand">
+                  {DEALER_CITIES.length} Locations
+                </span>
+              </div>
+              <iframe
+                title="LaxRee Dealer Network — India Map"
+                src={`https://www.google.com/maps?q=${DEALER_CITIES.map(c => encodeURIComponent(c + ", India")).join("%7C")}&output=embed`}
+                width="100%"
+                height="450"
+                style={{ border: 0, display: "block" }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            {/* Dealer location cards below map */}
+            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
               {DEALER_CITIES.map((city) => (
-                <div key={city} className="rounded-[20px] overflow-hidden border border-brass/20 shadow-xl">
-                  <div className="bg-charcoal px-5 py-3 flex items-center gap-2 border-b border-brass/20">
+                <div key={city} className="glass-on-charcoal rounded-[16px] p-4 flex items-center gap-3 hover:border-brass/40 transition-colors">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brass/30 bg-brass/10">
                     <MapPin size={16} strokeWidth={1.5} className="text-brass" />
-                    <span className="font-mono text-[12px] uppercase tracking-wider text-brass">
-                      {city}
-                    </span>
                   </div>
-                  <iframe
-                    title={`LaxRee Dealer — ${city}`}
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(city + ", India")}&output=embed`}
-                    width="100%"
-                    height="250"
-                    style={{ border: 0, display: "block" }}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
+                  <span className="font-display text-[15px] text-ivory leading-tight">
+                    {city}
+                  </span>
                 </div>
               ))}
             </div>

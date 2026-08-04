@@ -30,16 +30,16 @@ const INDUSTRY_CATEGORIES = [
 /* ─────────────────────────────────────────────────────────────
    Distribute client logos across industry categories
    ───────────────────────────────────────────────────────────── */
-const HOTEL_CHAINS = ["Radisson", "Holiday Inn", "Fairmont", "Ramada Group", "Taj", "Ananta Hotels"];
+const HOTEL_CHAINS = ["Radisson", "Holiday Inn", "Fairmont", "Ramada", "Taj", "Ananta Hotels"];
 const RESORTS = ["Sayaji Hotels", "Sunday Hotels", "Club Mahindra", "Swosti Group"];
 const HERITAGE = ["The Lords Inn", "The Fern Hotels & Resorts"];
 const BUSINESS = ["7 Apple Hotels"];
 
-function getCategoryForClient(name: string): string {
-  if (HOTEL_CHAINS.includes(name)) return "hotel";
-  if (RESORTS.includes(name)) return "resort";
-  if (HERITAGE.includes(name)) return "heritage";
-  if (BUSINESS.includes(name)) return "business";
+function getCategoryForClient(client: { name: string }): string {
+  if (HOTEL_CHAINS.includes(client.name)) return "hotel";
+  if (RESORTS.includes(client.name)) return "resort";
+  if (HERITAGE.includes(client.name)) return "heritage";
+  if (BUSINESS.includes(client.name)) return "business";
   return "boutique";
 }
 
@@ -165,12 +165,20 @@ export default function ClientsPage() {
             {/* Right — logo grid */}
             <div>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5">
-                {filteredClients.map((name, i) => (
-                  <FadeIn key={name} delay={(i % 6) * 0.05}>
+                {filteredClients.map((client, i) => (
+                  <FadeIn key={client.name} delay={(i % 6) * 0.05}>
                     <div className="group flex h-28 items-center justify-center rounded-[16px] border border-ink/10 bg-white p-6 shadow-sm transition-all duration-300 hover:border-brass/40 hover:shadow-lg hover:-translate-y-1">
-                      <span className="font-display text-[16px] font-medium text-ink-muted transition-colors duration-300 group-hover:text-ink text-center">
-                        {name}
-                      </span>
+                      {client.logo ? (
+                        <img
+                          src={client.logo}
+                          alt={client.name}
+                          className="max-h-16 max-w-full object-contain transition-all duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <span className="font-display text-[16px] font-medium text-ink-muted transition-colors duration-300 group-hover:text-ink text-center">
+                          {client.name}
+                        </span>
+                      )}
                     </div>
                   </FadeIn>
                 ))}
