@@ -61,8 +61,8 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
   "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.jpg",
   // ── Linen ──
-  "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.jpg",
-  "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.jpg",
+  "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.png",
+  "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.png",
   // ── Bath Tub ──
   "bath-tub-models": "/images/product-catalogue/bath-tub/LRBT---311-Color-Body.jpg",
   // ── Amenities Tray Set ──

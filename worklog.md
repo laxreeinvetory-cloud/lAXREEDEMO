@@ -2017,3 +2017,127 @@ Stage Summary:
 
 - **[src/components/site/product-detail-card.tsx:79]** `image: images[0]` is used in `handleAddToCart`, but on the very first render `images` is still `[]` (it's populated by `useEffect` after mount). If a user could click "Add to Cart" before the effect runs, the cart item would have `image: undefined`. In practice this is unreachable because the button isn't clickable until after render, but defensively `images[0] || product.image` would be safer.
 
+
+---
+Task ID: FULL-AUDIT-3
+Agent: expert-audit
+Task: Full comprehensive website audit
+
+Work Log:
+- Read worklog.md to understand prior agent work (foundation, mega-restructure, perf audit, BUG-1 audit)
+- Ran `npx tsc --noEmit` — passes cleanly with 0 errors
+- Ran `npx eslint .` — passes with 0 errors, 36 warnings (all `<img>` usage)
+- Ran `npx next build` — succeeds, 109 static pages generated, no build errors
+- Programmatically extracted all 278 image paths referenced in src/ and verified each against files on disk → 6 missing
+- Extracted all internal `href=` and `href={\`...\`}` links and verified against route segments in CATALOGUE_PARENTS → all valid
+- Audited every page.tsx and layout.tsx in src/app/ (home, about-us, products, products/[slug], products/[slug]/[itemSlug], blog, blog/[slug], cart, catalogue, career, clients, contact-us, dealers, experience-center, faq, admin/*)
+- Audited all API routes (lead, quotation, generate-excel, admin/login, admin/products, admin/products/categories, admin/products/seed, admin/blog, admin/cms, admin/faq, admin/leads, admin/settings, admin/stats, admin/upload, admin/upload/[filename])
+- Audited all components (site/*, floating/*, providers/*, three/hero-stage, ui/site-toaster)
+- Audited src/lib/ (db.ts, admin/static-fallback.ts, admin/admin-shell.tsx, admin/auth-context.tsx, admin/admin-toast.tsx, laxree/site-data.ts, laxree/catalogue-data.ts, laxree/product-images.ts, laxree/blog-content.ts)
+- Cross-referenced admin/stats source filters against the source strings actually sent by each form
+- Compared BLOG_POSTS slugs (12) against BLOG_POSTS_FULL content blocks (11) → 1 slug missing content
+- Verified z-index hierarchy across navbar (z-50), mobile drawer (z-60), modals (z-70), WhatsApp launcher (z-40), mobile sticky bar (z-30)
+- Verified mobile sticky bar spacer height (h-14 = 56px) against actual bar height (~50px content + env(safe-area-inset-bottom) up to ~34px on notched iPhones)
+- Verified CATALOGUE_PARENTS slugs against CATEGORIES slugs → all 8 match
+- Verified all SPOTLIGHT_PRODUCTS.link values resolve to existing /products/[slug]/[itemSlug] routes
+- Checked site-data.ts for data consistency (LEADERSHIP, CATEGORIES, CATALOGUES, BLOG_POSTS, etc.)
+- Cross-referenced SALES_WHATSAPP in /api/quotation/route.ts against SITE.whatsapp in site-data.ts → mismatch
+
+Stage Summary:
+
+## CRITICAL BUGS (breaks functionality)
+
+- **[src/lib/laxree/blog-content.ts]** The blog post `amenity-trends-2026` (3rd card on the homepage HospitalityTrends section, and 3rd post in BLOG_POSTS) has NO content block. Only 11 of 12 BLOG_POSTS slugs have an `if (post.slug === "...")` branch — `amenity-trends-2026` is missing. The `/blog/amenity-trends-2026` page renders with hero, image, and author info but an EMPTY article body (just an empty `<div>` where paragraphs should be). **Fix**: add an `if (post.slug === "amenity-trends-2026") { full.content = [...] }` block to blog-content.ts, or remove the post from BLOG_POSTS in site-data.ts.
+
+- **[src/lib/laxree/site-data.ts:633]** `LEADERSHIP[2]` (Bavika Agarwal, Head of HR) has `image: "/images/team/bavika-agarwal.png"` — this file does NOT exist on disk (only `ashish-agarwal.png`, `samarth-agarwal.png`, `reema-bajaj.png` exist). The /about-us page renders this as a broken `<img>` (404). The fallback in `about-us/page.tsx:67` (`bavika: "/images/team/bavika-agarwal.png"`) has the same issue. **Fix**: either create `bavika-agarwal.png`, or remove the `image` field so the page falls back to the initials avatar (line 452-457 of about-us/page.tsx).
+
+- **[src/lib/laxree/product-images.ts:64-65]** Two sub-category fallback images use `.jpg` extensions, but only `.png` and `.webp` variants exist on disk:
+  - Line 64: `"room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.jpg"` → only `bedsheet-plain.png` / `bedsheet-plain.webp` exist
+  - Line 65: `"bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.jpg"` → only `bath-towel-brown.png` / `bath-towel-brown.webp` exist
+  These cause 404s on the /products page (Linen category card) and /products/linen page (sub-category previews). **Fix**: change both `.jpg` → `.png` (or `.webp`).
+
+- **[src/app/api/admin/stats/route.ts:69]** Filters catalogue leads by `source: "catalogue-page"`, but `src/app/catalogue/page.tsx:227` actually sends `source: "catalogue-discount"`. The admin dashboard's "Catalogue" lead count is permanently 0. **Fix**: change the filter to `"catalogue-discount"` (or align both on a single value).
+
+## HIGH (visible bugs)
+
+- **[src/components/site/lead-cta-banner.tsx:42]** `body: JSON.stringify(form)` does not include a `source` field. `/api/lead` defaults `source` to `"contact-page"` (route.ts:49), so homepage CTA submissions are mis-categorized as contact-page leads in the admin dashboard. **Fix**: add `source: "homepage-cta"` to the JSON payload.
+
+- **[src/components/site/lead-cta-banner.tsx:44-53]** When the API returns 400 (validation error), `!res.ok` is true, so the code throws and the catch block shows a generic "Something went wrong" message. The specific validation error from the server is discarded. **Fix**: parse `res.json()` first and surface `data.errors[0]` like the other forms (catalogue, contact-us, career, dealers) do.
+
+- **[src/app/contact-us/page.tsx:88,90]** Sends `company` and `subject` fields to `/api/lead`, but the API only persists `name/email/phone/category/message/source`. The company and subject data is silently discarded. **Fix**: either add `company`/`subject` to the Prisma Lead schema and `/api/lead` route, or merge them into the `message` field (as the dealer/career forms do).
+
+- **[src/components/providers/conditional-chrome.tsx:47]** Mobile sticky bar spacer is `h-14` (56px), but `MobileStickyBar` adds `paddingBottom: env(safe-area-inset-bottom)` (up to ~34px on notched iPhones). On iPhone the bar can be ~84px tall but only 56px is reserved, so the bar covers ~28px of footer content. **Fix**: bump the spacer to `h-20` (80px), or use `style={{ height: 'calc(56px + env(safe-area-inset-bottom))' }}` on the spacer.
+
+- **[src/app/admin/homepage/page.tsx:117]** Default `image: "/images/about/owner.jpg"` for the ownerMessage form field — file does not exist on disk. If an admin saves the homepage form without overriding this URL, a broken image path gets persisted to the CMS. (Note: the live `OwnerMessage` component at `src/components/site/owner-message.tsx:45` hardcodes `/images/owner-cropped.jpg` and never reads this CMS field, so the bug is admin-side only — but the field is misleading dead UI.) **Fix**: change the default to `/images/owner-cropped.jpg` (which exists), or remove the field.
+
+## MEDIUM (minor bugs / performance)
+
+- **[src/app/globals.css:90-93]** Overly broad selector `[style*="transform"], [style*="opacity"] { will-change: transform, opacity; }` forces GPU compositing on every element with inline transform/opacity. Causes memory/stutter on low-end devices. **Fix**: remove this rule and add `will-change` only to specific animated elements.
+
+- **[src/app/globals.css:320-328]** `card-3d-rotate` and `badge-3d-flip` keyframes are defined but never used (only `animate-float` is referenced, in `clients-testimonials.tsx`). **Fix**: delete both keyframe blocks.
+
+- **[src/components/site/hero.tsx:204]** Inline `style={{ paddingTop: 96 }}` instead of Tailwind `pt-24` (96px = 6rem). Minor consistency issue. **Fix**: replace with `pt-24` class.
+
+- **[src/components/site/product-spotlight.tsx:24-33]** Defines a local `useIsMobile` hook duplicating `src/hooks/use-mobile.ts`. **Fix**: import from the shared hook (but note that the shared hook is currently only used by dead code — see UNUSED CODE).
+
+- **[src/app/sitemap.ts]** Missing `/faq` route — the page exists at `src/app/faq/page.tsx` but is not listed in `staticPages`. Minor SEO issue. **Fix**: add `{ url: \`${BASE_URL}/faq\`, lastModified: now, changeFrequency: "monthly", priority: 0.6 }` to the staticPages array.
+
+- **[src/app/manifest.ts:14 vs src/app/layout.tsx:103]** `manifest.ts` references `/favicon.svg` while `layout.tsx` references `/favicon.jpg`. Both files exist on disk so this isn't a runtime bug, but the inconsistency is confusing. **Fix**: pick one and use it consistently.
+
+- **[src/app/api/quotation/route.ts:26]** `SALES_WHATSAPP = "919251683660"` (ending in 60) differs from `SITE.whatsapp = "919251683662"` (ending in 62) in site-data.ts. Could be intentional (a separate sales-quotation number), but if not, quotation WhatsApp links go to the wrong number. **Fix**: verify with the team — if it should be the same, change to `"919251683662"` or import `SITE.whatsapp`.
+
+- **[src/app/layout.tsx:38]** `BASE_URL = "https://l-axreedemo.vercel.app"` is hardcoded in 10+ places (layout.tsx, sitemap.ts, robots.ts, products/layout.tsx, about-us/layout.tsx, blog/[slug]/page.tsx, api/admin/settings, admin/seo, etc.). **Fix**: extract to a single `lib/laxree/site-config.ts` constant or use `process.env.NEXT_PUBLIC_BASE_URL`.
+
+- **[src/lib/db.ts:90-95]** `knownModels` set is a hardcoded list of Prisma model names. If a new model is added to the Prisma schema, it must be manually added here, otherwise `db.newModel.findMany()` returns `undefined` and crashes the caller. **Fix**: derive the model list from the Prisma client at runtime, or document the maintenance burden.
+
+- **[src/app/api/admin/login/route.ts:28-29]** Hardcoded default admin credentials `admin/laxree2026` in source code. If `ADMIN_USERNAME`/`ADMIN_PASSWORD` env vars are not set on Vercel, anyone who reads the source can log in. Acceptable for a demo, but should be flagged for production.
+
+- **[no error.tsx / not-found.tsx / loading.tsx / global-error.tsx in src/app/]** Unhandled runtime errors and 404s render Next.js's default error pages, which don't match the LaxRee brand. **Fix**: add at minimum `src/app/not-found.tsx` and `src/app/error.tsx` with branded layouts.
+
+- **[All /api/admin/* routes]** No auth middleware — admin auth is purely client-side (`localStorage`). Anyone can POST/DELETE products, leads, blog posts, FAQ items by hitting the API directly. Acceptable for a demo, but should be flagged for production.
+
+- **[src/lib/admin/admin-shell.tsx:8-29]** Imports `Globe`, `Shield`, `TrendingUp` from lucide-react but never uses them (3 unused imports). **Fix**: remove from the import statement.
+
+- **[src/components/site/product-detail-card.tsx:79]** `image: images[0]` is used in `handleAddToCart`, but on the very first render `images` is still `[]` (populated by `useEffect` after mount). If a user could click "Add to Cart" before the effect runs, the cart item would have `image: undefined`. In practice this is unreachable because the button isn't clickable until after render, but defensively `images[0] || product.image` would be safer.
+
+- **[src/components/site/product-detail-card.tsx:110,120]** Uses `bg-yellow-50`, `text-yellow-600`, `text-yellow-700` (off-brand Tailwind default yellow) for the selected dropdown item and check icon. Inconsistent with the LaxRee brass palette. **Fix**: replace with `bg-brass/10`, `text-brass`, `text-brass`.
+
+- **[src/components/site/navbar.tsx:162]** Uses `h-4.5 w-4.5` (non-standard Tailwind classes; works in v4 but redundant since the inline `style={{ minWidth: 18, height: 18 }}` already sizes the badge). **Fix**: remove the `h-4.5 w-4.5` classes, keep the inline style.
+
+## UNUSED CODE (safe to remove)
+
+- **[src/components/three/hero-stage.tsx]** Entire 249-line file is dead. `HeroStage` is dynamic-imported in `hero.tsx:22-29` but never rendered because `show3D = false` is hardcoded on line 198 of hero.tsx ("3D model removed per user request"). Confirmed by `rg "three/hero-stage"` → only hero.tsx references it. **Fix**: delete the file and remove the dynamic import from hero.tsx.
+
+- **[src/components/site/category-explorer.tsx]** 196 lines, never imported anywhere. Confirmed by `rg "category-explorer|CategoryExplorer"` → only the file itself. **Fix**: delete the file.
+
+- **[src/hooks/use-mobile.ts]** Only used by `hero.tsx` (which doesn't need it — see below) and `hero-stage.tsx` (which is dead). Effectively dead. **Fix**: delete after removing the dead references in hero.tsx and hero-stage.tsx.
+
+- **[src/hooks/laxree/use-laxree-motion.ts:104-124]** `useScrollProgress` export is never imported. Confirmed by `rg "useScrollProgress"` → only the definition file. **Fix**: delete lines 104-124.
+
+- **[src/components/site/hero.tsx]** Multiple dead references:
+  - Lines 22-29: `HeroStage` dynamic import (unused because `show3D = false`)
+  - Lines 34-43: `HeroStageSkeleton` (only used as `HeroStage`'s loading fallback — dead because `HeroStage` is dead)
+  - Line 20: `import { useIsMobile } from "@/hooks/use-mobile"` (only assigned to `isMobile` which is unused)
+  - Line 169: `const isMobile = useIsMobile();` (computed but never read)
+  - Lines 122-160: `TiltStage` component (declared but never rendered)
+  **Fix**: remove all of the above from hero.tsx.
+
+- **[src/components/floating/enquire-modal.tsx:40,50-51,147]** `closeButtonRef` declared and attached but never read. Comment on line 50 says "Focus close button shortly after mount" but the code actually focuses `firstFieldRef`. Dead code + misleading comment. **Fix**: delete `closeButtonRef` and fix the comment, or actually focus the close button.
+
+- **[src/components/floating/catalogue-modal.tsx:46-47]** `closeButtonRef` declared and silenced with `void closeButtonRef;`. Dead code. **Fix**: delete both lines.
+
+- **[src/components/site/product-detail-card.tsx:23-28]** `parentSlug` and `itemSlug` props declared in `ProductPageWithSelector`'s type signature but never destructured or used in the function body. The caller (`products/[slug]/[itemSlug]/page.tsx:114-115`) passes them but they're ignored. **Fix**: remove `parentSlug` and `itemSlug` from the type signature (and from the call site).
+
+- **[src/app/experience-center/page.tsx:5]** `Play` icon imported from lucide-react but never used (only `autoPlay` appears, which is a video element attribute, not the icon). **Fix**: remove `Play` from the import.
+
+- **[src/lib/admin/admin-shell.tsx:8-29]** `Globe`, `Shield`, `TrendingUp` lucide icons imported but never used. **Fix**: remove from the import statement.
+
+- **[src/app/globals.css:320-328]** `card-3d-rotate` and `badge-3d-flip` keyframes defined but never referenced. **Fix**: delete both keyframe blocks.
+
+## ERRORS (console / runtime)
+
+- **[src/lib/laxree/site-data.ts:633]** `/images/team/bavika-agarwal.png` causes a 404 when rendered on /about-us leadership section (file doesn't exist on disk). Browser console shows 404 + broken image icon. **Fix**: create the file, or remove the `image` field (page falls back to initials avatar).
+
+- **[src/lib/laxree/product-images.ts:64-65]** `.jpg` extensions on `room-linen/bedsheet-plain` and `bath-linen/bath-towel-brown` cause 404s when these sub-categories are previewed on /products (Linen card) or /products/linen (sub-category previews). Browser console shows 404s. **Fix**: change both `.jpg` → `.png` (or `.webp`).
+
+- **[src/lib/laxree/blog-content.ts]** `/blog/amenity-trends-2026` renders with empty article body (no paragraphs). No console error, but the user sees a blank white section where the article body should be. **Fix**: add a content block for `amenity-trends-2026`, or remove the post from `BLOG_POSTS` in site-data.ts.

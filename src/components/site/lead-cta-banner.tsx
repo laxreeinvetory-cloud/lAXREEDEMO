@@ -39,10 +39,12 @@ export function LeadCtaBanner() {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, source: "homepage-cta" }),
       });
       if (!res.ok) {
-        throw new Error(`Request failed: ${res.status}`);
+        const errorData = await res.json().catch(() => null);
+        const msg = errorData?.errors?.[0]?.message || errorData?.message || `Request failed: ${res.status}`;
+        throw new Error(msg);
       }
       notify(
         "success",

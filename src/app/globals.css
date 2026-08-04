@@ -317,16 +317,6 @@
   animation: float-y 4s ease-in-out infinite;
 }
 
-@keyframes card-3d-rotate {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(360deg); }
-}
-
-@keyframes badge-3d-flip {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(360deg); }
-}
-
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }

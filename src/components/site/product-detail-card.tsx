@@ -107,7 +107,7 @@ export function ProductPageWithSelector({
                 key={p.model}
                 onClick={() => { setSelectedIdx(i); setDropdownOpen(false); }}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-colors ${
-                  i === selectedIdx ? "bg-yellow-50 text-yellow-700" : "text-ink hover:bg-ink/5"
+                  i === selectedIdx ? "bg-brass/10 text-brass" : "text-ink hover:bg-ink/5"
                 }`}
               >
                 <div className="h-10 w-10 rounded-lg overflow-hidden bg-gray-100 shrink-0">
@@ -117,7 +117,7 @@ export function ProductPageWithSelector({
                   <p className="font-mono text-xs text-brass">{p.model}</p>
                   <p className="font-body text-sm text-ink truncate">{p.name}</p>
                 </div>
-                {i === selectedIdx && <Check className="h-4 w-4 text-yellow-600 shrink-0" />}
+                {i === selectedIdx && <Check className="h-4 w-4 text-brass shrink-0" />}
               </button>
             ))}
           </div>

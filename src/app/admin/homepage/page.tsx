@@ -114,7 +114,7 @@ const DEFAULTS: HomepageContent = {
       "Every product we make carries the weight of a guest's experience. A minibar that's too loud at 2 AM. A safe that won't open at checkout. A door lock that sticks when it rains. These aren't product failures — they're hospitality failures. That's why we engineer every LaxRee product to perform flawlessly, night after night, year after year.",
     ownerName: "Founder Name",
     ownerTitle: "Founder & Managing Director, LaxRee Amenities",
-    image: "/images/about/owner.jpg",
+    image: "/images/owner-cropped.jpg",
   },
   productSpotlight: {
     eyebrow: "Product Spotlight",

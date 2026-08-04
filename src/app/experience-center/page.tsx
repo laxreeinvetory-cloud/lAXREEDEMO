@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, MapPin, Play, Building2, Award } from "lucide-react";
+import { ArrowRight, MapPin, Building2, Award } from "lucide-react";
 import { PageHero, SectionHeading, PageCTA, FadeIn } from "@/components/site/page-primitives";
 
 const CENTERS = [
