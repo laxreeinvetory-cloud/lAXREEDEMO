@@ -43,6 +43,11 @@ export default function OurPresence() {
             if (op.image3 && updated[2]) updated[2] = { ...updated[2], image: op.image3 };
             if (op.image4 && updated[3]) updated[3] = { ...updated[3], image: op.image4 };
             if (op.image5 && updated[4]) updated[4] = { ...updated[4], image: op.image5 };
+            if (op.image6 && updated[5]) updated[5] = { ...updated[5], image: op.image6 };
+            if (op.image7 && updated[6]) updated[6] = { ...updated[6], image: op.image7 };
+            if (op.image8 && updated[7]) updated[7] = { ...updated[7], image: op.image8 };
+            if (op.image9 && updated[8]) updated[8] = { ...updated[8], image: op.image9 };
+            if (op.image10 && updated[9]) updated[9] = { ...updated[9], image: op.image10 };
             setExhibitions(updated);
           }
         }

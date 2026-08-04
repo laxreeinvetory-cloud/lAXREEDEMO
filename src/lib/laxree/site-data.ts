@@ -329,6 +329,13 @@ export const EXHIBITIONS: Exhibition[] = [
   { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
   { image: "/images/gallery/exhibition-2.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
   { image: "/images/gallery/exhibition-3.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
+  { image: "/images/gallery/exhibition-4.jpg", caption: "Hospitality World Expo, Mumbai", year: "2024" },
+  { image: "/images/gallery/exhibition-5.jpg", caption: "Hotel & Restaurant Association Show", year: "2023" },
+  { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Experience Center Tour", year: "2023" },
+  { image: "/images/gallery/exhibition-2.jpg", caption: "Trade Expo, Bengaluru", year: "2023" },
+  { image: "/images/gallery/exhibition-3.jpg", caption: "Hotel Supply Expo, Delhi", year: "2022" },
+  { image: "/images/gallery/exhibition-4.jpg", caption: "Hospitality Summit, Jaipur", year: "2022" },
+  { image: "/images/gallery/exhibition-5.jpg", caption: "Manufacturing Facility Showcase", year: "2022" },
 ];
 
 export type Certification = {
@@ -1044,6 +1051,8 @@ export type CatalogueFile = {
   fileSize: string;
   category: string; // matches CATEGORIES slug, or "master" for the full catalogue
   available: boolean; // whether the actual PDF is uploaded
+  image?: string;
+  categories?: string[]; // sub-categories included in this catalogue
 };
 
 export const CATALOGUES: CatalogueFile[] = [
@@ -1051,11 +1060,13 @@ export const CATALOGUES: CatalogueFile[] = [
     slug: "master",
     name: "Master Catalogue 2026",
     description:
-      "The complete LaxRee product catalogue — all 700+ SKUs across Amenities, Furniture, Linen, Roofing and Dome in a single PDF. Full specifications, pricing tiers, and lead times.",
+      "The complete LaxRee product catalogue — all 700+ SKUs across 8 categories in a single PDF. Full specifications, pricing tiers, and lead times.",
     fileName: "master-catalogue.pdf",
     fileSize: "18 MB",
     category: "master",
     available: true,
+    image: "/images/categories/room-amenities.png",
+    categories: ["Room Amenities", "Washroom Amenities", "Lobby Items", "Furniture", "Linen", "Bath Tub", "Amenities Tray Set", "Dome & Space POD"],
   },
   {
     slug: "amenities",
@@ -1066,6 +1077,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "amenities",
     available: false,
+    image: "/images/categories/washroom-amenities.png",
+    categories: ["Mini Bar", "Safe Box", "Kettle", "Door Lock", "Hair Dryer", "Hand Dryer"],
   },
   {
     slug: "furniture",
@@ -1076,6 +1089,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "furniture",
     available: false,
+    image: "/images/categories/furniture.jpg",
+    categories: ["Beds", "Headboards", "Night Stands", "Work Desks", "Lounge Chairs", "Outdoor Furniture"],
   },
   {
     slug: "linen",
@@ -1086,6 +1101,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "linen",
     available: false,
+    image: "/images/categories/linen-new.jpg",
+    categories: ["Bed Sheets", "Pillow Cases", "Duvets", "Bath Towels", "Bath Robes", "Table Linen"],
   },
   {
     slug: "roofing",
@@ -1096,6 +1113,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "48 MB",
     category: "roofing",
     available: true,
+    image: "/images/categories/roofing.jpg",
+    categories: ["Standing Seam", "Insulated Panels", "Polycarbonate", "Flashings", "Gutter Systems"],
   },
   {
     slug: "dome",

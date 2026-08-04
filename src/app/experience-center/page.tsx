@@ -10,7 +10,7 @@ const CENTERS = [
     id: "gurugram",
     name: "Gurugram Experience Center",
     tagline: "India's Largest Hospitality Supplier Experience Center",
-    address: "Gurugram, Haryana, India",
+    address: "Plot No. 232, Sector-18, Phase-4, Udyog Vihar, Gurugram, Haryana - 122016",
     description:
       "Our flagship experience center in Gurugram is India's largest hospitality supplier showcase. Spread across a massive showroom floor, it features every product category — from minibars to furniture, bath tubs to dome structures. Walk through complete room setups, test products hands-on, and meet with our procurement experts.",
     highlight: true,
@@ -40,7 +40,7 @@ const CENTERS = [
     id: "jaipur",
     name: "Jaipur Experience Center",
     tagline: "Premium Showroom in Pink City",
-    address: "Jaipur, Rajasthan, India",
+    address: "Plot No. 8, 1st Floor, Opp. Metro Pillar No. 30, Rani Sati Nagar, Gopalpura Bypass Road, Mansarovar, Jaipur - 302019",
     description:
       "Our Jaipur experience center brings the full LaxRee range to Rajasthan's capital. Explore room setups, test minibars, compare furniture finishes, and get expert consultation for your hospitality project.",
     highlight: false,

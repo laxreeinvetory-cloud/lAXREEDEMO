@@ -62,10 +62,10 @@ export default function ClientsTestimonials() {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="h-10 w-auto object-contain opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                    className="h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-300"
                   />
                 ) : (
-                  <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink grayscale hover:grayscale-0 transition-all duration-300 whitespace-nowrap">
+                  <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink transition-all duration-300 whitespace-nowrap">
                     {client.name}
                   </span>
                 )}
@@ -83,10 +83,10 @@ export default function ClientsTestimonials() {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="h-10 w-auto object-contain opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                    className="h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-300"
                   />
                 ) : (
-                  <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink grayscale hover:grayscale-0 transition-all duration-300 whitespace-nowrap">
+                  <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink transition-all duration-300 whitespace-nowrap">
                     {client.name}
                   </span>
                 )}
