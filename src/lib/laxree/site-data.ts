@@ -551,40 +551,40 @@ export type Milestone = {
 
 export const TIMELINE: Milestone[] = [
   {
-    year: "2015",
-    title: "The First Factory",
+    year: "2026",
+    title: "New Factory Launch",
     description:
-      "LaxRee opens its first manufacturing line in Ajmer for absorption minibars — 200 units/month capacity.",
+      "Expanded manufacturing capacity with a state-of-the-art factory facility, doubling production output to meet growing pan-India demand across all product categories.",
   },
   {
-    year: "2017",
-    title: "Safe Locker Division",
+    year: "2025",
+    title: "Largest Exhibition Centre",
     description:
-      "Electronic safe locker production line launched. First client: a 150-room heritage hotel in Udaipur.",
-  },
-  {
-    year: "2019",
-    title: "Exhibition Centre",
-    description:
-      "Ajmer's largest hospitality exhibition centre inaugurated — 12,000 sq ft of product displays and procurement consultation.",
-  },
-  {
-    year: "2021",
-    title: "Pan-India Network",
-    description:
-      "Dealer network expands to 22 states. ISO 9001 and ISO 14001 certifications achieved.",
+      "Established India's largest hospitality exhibition centre in Gurugram — a 50,000+ sq ft flagship showcase featuring 700+ products, complete room setups, and hands-on product testing.",
   },
   {
     year: "2023",
-    title: "700+ SKU Milestone",
+    title: "Minibar Factory Launch",
     description:
-      "Product catalogue crosses 700 SKUs across five categories. CE and RoHS compliance achieved for electronics.",
+      "Inaugurated a dedicated minibar manufacturing facility with in-house compressor assembly, thermoelectric cooling lines, and absorption technology — making LaxRee India's only OEM minibar manufacturer.",
   },
   {
-    year: "2026",
-    title: "Smart Hospitality",
+    year: "2022",
+    title: "Pan-India Delivery",
     description:
-      "Launch of brass-rim smart minibar line and IoT-enabled safes. 1,347+ projects delivered.",
+      "Launched nationwide delivery network covering 28 states and 8 union territories. Achieved 97.4% on-time delivery rate across 1,347+ hotel projects with dedicated logistics partners.",
+  },
+  {
+    year: "2021",
+    title: "700+ SKU Catalogue",
+    description:
+      "Expanded product catalogue to 700+ SKUs across 8 categories — minibars, safes, locks, kettles, furniture, linen, bath tubs, and dome structures. Achieved CE and RoHS compliance for all electronics.",
+  },
+  {
+    year: "2020",
+    title: "Hospitality Supplier Launch",
+    description:
+      "Founded LaxRee Amenities with a vision to redefine hotel supplies in India. Started with a single product line — absorption minibars — and a commitment to in-house quality control and OEM manufacturing.",
   },
 ];
 

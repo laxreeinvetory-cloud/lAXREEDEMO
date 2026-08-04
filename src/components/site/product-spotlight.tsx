@@ -123,20 +123,36 @@ export function ProductSpotlight() {
   const goPrev = () => setActiveIndex((i) => Math.max(0, i - 1));
 
   return (
-    <section id="products" className="section section-ivory py-28 md:py-36">
-      <div className="container-laxree">
-        {/* Header */}
+    <section id="products" className="section section-ivory py-28 md:py-36 relative overflow-hidden">
+      {/* Decorative brass gradient blobs */}
+      <div
+        aria-hidden
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
+        style={{ background: "radial-gradient(circle, var(--color-brass), transparent 70%)" }}
+      />
+      <div
+        aria-hidden
+        className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
+        style={{ background: "radial-gradient(circle, var(--color-brass), transparent 70%)" }}
+      />
+
+      <div className="container-laxree relative">
+        {/* Header — enhanced creative design */}
         <div className="text-center mb-12 md:mb-16">
-          <div className="eyebrow text-ink-muted mb-3">EXPLORE</div>
+          <div className="inline-flex items-center gap-2 mb-3">
+            <span className="h-px w-8 bg-brass/40" />
+            <span className="eyebrow text-brass">EXPLORE</span>
+            <span className="h-px w-8 bg-brass/40" />
+          </div>
           <h2
             className="font-display text-ink font-medium"
             style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
           >
-            Product Spotlight
+            Product <span className="text-brass-gradient">Spotlight</span>
           </h2>
           <p className="text-ink-muted mt-4 max-w-xl mx-auto text-base">
-            Nine flagship products from across our catalogue.
-            Use the arrows, or click any card to bring it center-stage.
+            Nine flagship products from across our catalogue —
+            handpicked to showcase the breadth of our manufacturing capabilities.
           </p>
         </div>
 

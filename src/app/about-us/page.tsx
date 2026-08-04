@@ -31,6 +31,7 @@ import {
   FadeIn,
   GlassCard,
 } from "@/components/site/page-primitives";
+import { OwnerMessage } from "@/components/site/owner-message";
 import {
   HERO_STATS,
   TIMELINE,
@@ -248,6 +249,11 @@ export default function AboutUsPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 4b — Founder's Message (charcoal)
+          ═══════════════════════════════════════════════════════════ */}
+      <OwnerMessage />
 
       {/* ═══════════════════════════════════════════════════════════
           SECTION 5 — OEM Manufacturing (ivory)

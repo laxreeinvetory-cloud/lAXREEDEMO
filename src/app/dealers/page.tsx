@@ -352,6 +352,31 @@ export default function DealersPage() {
             </div>
           </FadeIn>
 
+          {/* Google Maps for dealer locations */}
+          <FadeIn delay={0.1} className="mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {DEALER_CITIES.map((city) => (
+                <div key={city} className="rounded-[20px] overflow-hidden border border-brass/20 shadow-xl">
+                  <div className="bg-charcoal px-5 py-3 flex items-center gap-2 border-b border-brass/20">
+                    <MapPin size={16} strokeWidth={1.5} className="text-brass" />
+                    <span className="font-mono text-[12px] uppercase tracking-wider text-brass">
+                      {city}
+                    </span>
+                  </div>
+                  <iframe
+                    title={`LaxRee Dealer — ${city}`}
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(city + ", India")}&output=embed`}
+                    width="100%"
+                    height="250"
+                    style={{ border: 0, display: "block" }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+
           {/* Stat row */}
           <FadeIn delay={0.1} className="mt-14">
             <div className="hairline-brass mb-10" />
