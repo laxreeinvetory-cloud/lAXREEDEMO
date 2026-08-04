@@ -203,9 +203,22 @@ export default function ExperienceCenterPage() {
                     {center.description}
                   </p>
 
-                  <div className="flex items-start gap-2 mb-6">
+                  <div className="flex items-start gap-2 mb-4">
                     <MapPin className="h-5 w-5 text-brass shrink-0 mt-0.5" />
                     <p className="font-body text-sm text-ink-muted">{center.address}</p>
+                  </div>
+
+                  {/* Google Map embed */}
+                  <div className="mb-8 rounded-[16px] overflow-hidden border border-brass/20 shadow-lg">
+                    <iframe
+                      title={`${center.name} — Location Map`}
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(center.address)}&output=embed`}
+                      width="100%"
+                      height="200"
+                      style={{ border: 0, display: "block" }}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 mb-8">

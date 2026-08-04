@@ -1,13 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Quote, Star, TrendingUp, Award, Users, MapPin, Building2, Hotel, Utensils, Heart, Briefcase } from "lucide-react";
+import { Quote, Star, TrendingUp, Award, MapPin, Building2 } from "lucide-react";
 import {
   PageHero,
   SectionHeading,
   PageCTA,
   FadeIn,
-  GlassCard,
 } from "@/components/site/page-primitives";
 import {
   CLIENT_LOGOS,
@@ -16,35 +14,7 @@ import {
 } from "@/lib/laxree/site-data";
 
 /* ─────────────────────────────────────────────────────────────
-   Industry categories for sidebar filter (Dolphy-style)
-   ───────────────────────────────────────────────────────────── */
-const INDUSTRY_CATEGORIES = [
-  { label: "All Clients", value: "all", icon: Users },
-  { label: "Hotel Chains", value: "hotel", icon: Hotel },
-  { label: "Resorts", value: "resort", icon: Building2 },
-  { label: "Heritage Properties", value: "heritage", icon: Briefcase },
-  { label: "Business Hotels", value: "business", icon: Building2 },
-  { label: "Boutique Hotels", value: "boutique", icon: Heart },
-];
-
-/* ─────────────────────────────────────────────────────────────
-   Distribute client logos across industry categories
-   ───────────────────────────────────────────────────────────── */
-const HOTEL_CHAINS = ["Radisson", "Holiday Inn", "Fairmont", "Ramada", "Taj", "Ananta Hotels"];
-const RESORTS = ["Sayaji Hotels", "Sunday Hotels", "Club Mahindra", "Swosti Group"];
-const HERITAGE = ["The Lords Inn", "The Fern Hotels & Resorts"];
-const BUSINESS = ["7 Apple Hotels"];
-
-function getCategoryForClient(client: { name: string }): string {
-  if (HOTEL_CHAINS.includes(client.name)) return "hotel";
-  if (RESORTS.includes(client.name)) return "resort";
-  if (HERITAGE.includes(client.name)) return "heritage";
-  if (BUSINESS.includes(client.name)) return "business";
-  return "boutique";
-}
-
-/* ─────────────────────────────────────────────────────────────
-   Trust stats — eye-catching animated counters
+   Trust stats
    ───────────────────────────────────────────────────────────── */
 const TRUST_STATS = [
   { value: "1,347+", label: "Projects Delivered", icon: Building2 },
@@ -54,12 +24,6 @@ const TRUST_STATS = [
 ];
 
 export default function ClientsPage() {
-  const [activeCategory, setActiveCategory] = useState("all");
-
-  const filteredClients = activeCategory === "all"
-    ? CLIENT_LOGOS
-    : CLIENT_LOGOS.filter((name) => getCategoryForClient(name) === activeCategory);
-
   return (
     <>
       {/* ─────────────────────────────────────────────
@@ -112,7 +76,7 @@ export default function ClientsPage() {
       </section>
 
       {/* ─────────────────────────────────────────────
-          Section 3 — Client logos with sidebar filter (Dolphy-style)
+          Section 3 — Simple logo grid (no filter)
           ───────────────────────────────────────────── */}
       <section className="section section-ivory py-16 md:py-24">
         <div className="container-laxree">
@@ -123,75 +87,24 @@ export default function ClientsPage() {
             body="A selection of the hospitality brands we manufacture and supply for — from luxury chains to boutique resorts."
           />
 
-          {/* Two-column layout: sidebar filter + logo grid */}
-          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr]">
-            {/* Left sidebar — industry filter (Dolphy-style) */}
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <div className="rounded-[16px] border border-ink/10 bg-white p-4 shadow-sm">
-                <h3 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-ink-muted">
-                  Filter by Industry
-                </h3>
-                <div className="flex flex-col gap-1">
-                  {INDUSTRY_CATEGORIES.map((cat) => {
-                    const Icon = cat.icon;
-                    const isActive = activeCategory === cat.value;
-                    const count = cat.value === "all"
-                      ? CLIENT_LOGOS.length
-                      : CLIENT_LOGOS.filter((n) => getCategoryForClient(n) === cat.value).length;
-                    return (
-                      <button
-                        key={cat.value}
-                        onClick={() => setActiveCategory(cat.value)}
-                        className={`flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-left transition-all duration-200 ${
-                          isActive
-                            ? "bg-charcoal text-ivory"
-                            : "text-ink-muted hover:bg-charcoal/5 hover:text-ink"
-                        }`}
-                      >
-                        <Icon size={16} strokeWidth={1.5} className={isActive ? "text-brass" : ""} />
-                        <span className="font-body text-[13px] font-medium flex-1">
-                          {cat.label}
-                        </span>
-                        <span className={`font-mono text-[10px] ${isActive ? "text-brass" : "text-ink-muted/60"}`}>
-                          {count}
-                        </span>
-                      </button>
-                    );
-                  })}
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
+            {CLIENT_LOGOS.map((client, i) => (
+              <FadeIn key={client.name} delay={(i % 8) * 0.05}>
+                <div className="group flex h-32 items-center justify-center rounded-[16px] border border-ink/10 bg-white p-6 shadow-sm transition-all duration-300 hover:border-brass/40 hover:shadow-xl hover:-translate-y-1">
+                  {client.logo ? (
+                    <img
+                      src={client.logo}
+                      alt={client.name}
+                      className="max-h-20 max-w-full object-contain transition-all duration-300 group-hover:scale-110"
+                    />
+                  ) : (
+                    <span className="font-display text-[16px] font-medium text-ink-muted transition-colors duration-300 group-hover:text-ink text-center">
+                      {client.name}
+                    </span>
+                  )}
                 </div>
-              </div>
-            </div>
-
-            {/* Right — logo grid */}
-            <div>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5">
-                {filteredClients.map((client, i) => (
-                  <FadeIn key={client.name} delay={(i % 6) * 0.05}>
-                    <div className="group flex h-28 items-center justify-center rounded-[16px] border border-ink/10 bg-white p-6 shadow-sm transition-all duration-300 hover:border-brass/40 hover:shadow-lg hover:-translate-y-1">
-                      {client.logo ? (
-                        <img
-                          src={client.logo}
-                          alt={client.name}
-                          className="max-h-16 max-w-full object-contain transition-all duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <span className="font-display text-[16px] font-medium text-ink-muted transition-colors duration-300 group-hover:text-ink text-center">
-                          {client.name}
-                        </span>
-                      )}
-                    </div>
-                  </FadeIn>
-                ))}
-              </div>
-
-              {filteredClients.length === 0 && (
-                <div className="flex h-40 items-center justify-center rounded-[16px] border border-ink/10 bg-white">
-                  <p className="font-body text-[14px] text-ink-muted">
-                    No clients in this category yet.
-                  </p>
-                </div>
-              )}
-            </div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
@@ -211,12 +124,10 @@ export default function ClientsPage() {
             {CASE_STUDIES.map((cs, i) => (
               <FadeIn key={cs.slug} delay={i * 0.1}>
                 <div className="group relative h-full overflow-hidden rounded-[20px] border border-brass/15 bg-charcoal/40 p-8 transition-all duration-300 hover:border-brass/40 hover:bg-charcoal/30">
-                  {/* Brass top accent line */}
                   <div
                     aria-hidden
                     className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent"
                   />
-                  {/* Large metric */}
                   <div className="mb-6">
                     <span
                       className="font-mono font-medium leading-none text-brass"
@@ -228,7 +139,6 @@ export default function ClientsPage() {
                       {cs.metricLabel}
                     </span>
                   </div>
-                  {/* Hotel name + location */}
                   <h3 className="font-display text-[22px] font-medium leading-tight text-ivory">
                     {cs.hotel}
                   </h3>
@@ -236,15 +146,12 @@ export default function ClientsPage() {
                     <MapPin size={12} strokeWidth={1.5} />
                     <span className="data-label text-[11px]">{cs.location}</span>
                   </div>
-                  {/* Project title */}
                   <p className="mt-4 font-body text-[16px] font-medium text-ivory">
                     {cs.project}
                   </p>
-                  {/* Scope */}
                   <p className="mt-3 font-body text-[13px] leading-relaxed text-sand">
                     {cs.scope}
                   </p>
-                  {/* Outcome — highlighted */}
                   <div className="mt-5 rounded-[12px] border border-brass/20 bg-brass/5 p-4">
                     <span className="data-label mb-1 block text-[10px] text-brass">
                       OUTCOME
@@ -275,13 +182,11 @@ export default function ClientsPage() {
             {TESTIMONIALS.map((t, i) => (
               <FadeIn key={t.name} delay={i * 0.1}>
                 <div className="group relative h-full overflow-hidden rounded-[20px] border border-ink/10 bg-white p-8 transition-all duration-300 hover:border-brass/40 hover:shadow-xl hover:-translate-y-1">
-                  {/* Quote icon */}
                   <Quote
                     className="absolute right-6 top-6 h-12 w-12 text-brass/15 transition-colors duration-300 group-hover:text-brass/25"
                     strokeWidth={1}
                     aria-hidden
                   />
-                  {/* 5-star rating */}
                   <div className="mb-4 flex gap-1">
                     {[...Array(5)].map((_, idx) => (
                       <Star
@@ -291,13 +196,10 @@ export default function ClientsPage() {
                       />
                     ))}
                   </div>
-                  {/* Quote text */}
                   <p className="relative z-10 font-body text-[15px] italic leading-relaxed text-ink">
                     &ldquo;{t.quote}&rdquo;
                   </p>
-                  {/* Divider */}
                   <div className="hairline-brass mt-6" />
-                  {/* Author */}
                   <div className="mt-4 flex flex-col gap-1">
                     <span className="font-display text-[16px] font-medium text-ink">
                       {t.name}

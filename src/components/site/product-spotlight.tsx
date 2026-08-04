@@ -129,32 +129,40 @@ export function ProductSpotlight() {
       {/* Decorative brass gradient blobs */}
       <div
         aria-hidden
-        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-[0.04] blur-3xl pointer-events-none"
         style={{ background: "radial-gradient(circle, var(--color-brass), transparent 70%)" }}
       />
       <div
         aria-hidden
-        className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-[0.03] blur-3xl pointer-events-none"
+        className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-[0.04] blur-3xl pointer-events-none"
         style={{ background: "radial-gradient(circle, var(--color-brass), transparent 70%)" }}
+      />
+      {/* Subtle top border accent */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/20 to-transparent pointer-events-none"
       />
 
       <div className="container-laxree relative">
-        {/* Header — enhanced creative design */}
+        {/* Header — professional creative design */}
         <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <span className="h-px w-8 bg-brass/40" />
-            <span className="eyebrow text-brass">EXPLORE</span>
-            <span className="h-px w-8 bg-brass/40" />
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span className="h-px w-12 bg-brass/30" />
+            <span className="eyebrow text-brass" style={{ fontSize: "13px", letterSpacing: "0.2em" }}>
+              EXPLORE
+            </span>
+            <span className="h-px w-12 bg-brass/30" />
           </div>
           <h2
-            className="font-display text-ink font-medium"
-            style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
+            className="font-display text-ink"
+            style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)", fontWeight: 500, letterSpacing: "-0.02em" }}
           >
             Product <span className="text-brass-gradient">Spotlight</span>
           </h2>
-          <p className="text-ink-muted mt-4 max-w-xl mx-auto text-base">
-            Nine flagship products from across our catalogue —
-            handpicked to showcase the breadth of our manufacturing capabilities.
+          <p className="text-ink-muted mt-5 max-w-2xl mx-auto text-[16px] leading-relaxed">
+            Nine flagship products from across our catalogue — handpicked to showcase
+            the breadth of our manufacturing capabilities. From premium minibars to
+            smart safes, each product is engineered for hospitality excellence.
           </p>
         </div>
 
