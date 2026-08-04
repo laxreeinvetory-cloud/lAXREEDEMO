@@ -388,7 +388,7 @@ export default function ContactUsPage() {
         </div>
       </section>
 
-      {/* ───────── Section 3 — Map placeholder (charcoal) ───────── */}
+      {/* ───────── Section 3 — Google Map (charcoal) ───────── */}
       <section className="section section-charcoal py-20 md:py-28">
         <div className="container-laxree">
           <SectionHeading
@@ -398,46 +398,36 @@ export default function ContactUsPage() {
           />
 
           <FadeIn className="mt-10">
-            <div
-              className="relative w-full rounded-[24px] overflow-hidden border border-white/10"
-              style={{
-                aspectRatio: "21 / 9",
-                backgroundColor: "#0e0c0a",
-                backgroundImage: `
-                  linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
-                  radial-gradient(circle at 50% 50%, rgba(198,161,91,0.10), transparent 55%)
-                `,
-                backgroundSize: "44px 44px, 44px 44px, 100% 100%",
-              }}
-              role="img"
-              aria-label={`Map placeholder showing the location of LaxRee Amenities at ${SITE.address}`}
-            >
-              {/* Center pin */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6">
-                <div className="relative flex flex-col items-center">
-                  <span
-                    aria-hidden
-                    className="absolute -inset-6 rounded-full bg-brass/20 blur-2xl animate-pulse-glow"
-                  />
-                  <MapPin
-                    size={48}
-                    strokeWidth={1.5}
-                    className="text-brass relative drop-shadow-[0_4px_12px_rgba(198,161,91,0.6)]"
-                  />
-                </div>
-                <div className="glass-on-charcoal rounded-2xl px-5 py-3 text-center max-w-2xl">
-                  <p className="font-mono text-[11px] uppercase tracking-wider text-brass mb-1">
-                    LaxRee Amenities
-                  </p>
-                  <p className="font-mono text-[13px] text-ivory leading-relaxed">
-                    {SITE.address}
-                  </p>
-                </div>
-              </div>
+            <div className="relative w-full rounded-[24px] overflow-hidden border border-brass/20 shadow-2xl shadow-brass/10">
+              {/* Google Maps embed — LaxRee Amenities, Ajmer */}
+              <iframe
+                title="LaxRee Amenities — Ajmer Campus Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3578.7!2d74.6425!3d26.4735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zTWFrZSBpbiBBam1lciAtIExheFJlZSBBbWVuaXRpZXM!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                width="100%"
+                height="450"
+                style={{
+                  border: 0,
+                  display: "block",
+                }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
 
-            <div className="mt-6 flex justify-center">
+            {/* Address card below map */}
+            <div className="mt-6 flex flex-col items-center gap-4">
+              <div className="glass-on-charcoal rounded-2xl px-6 py-4 text-center max-w-2xl">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <MapPin size={16} strokeWidth={1.5} className="text-brass" />
+                  <p className="font-mono text-[11px] uppercase tracking-wider text-brass">
+                    LaxRee Amenities — Ajmer Campus
+                  </p>
+                </div>
+                <p className="font-mono text-[13px] text-ivory leading-relaxed">
+                  {SITE.address}
+                </p>
+              </div>
               <a
                 href="https://maps.google.com/?q=LaxRee+Amenities+Ajmer"
                 target="_blank"
@@ -546,7 +536,7 @@ export default function ContactUsPage() {
                   href={`tel:${SITE.tollFreeHref}`}
                   className="text-brass hover:text-brass-light transition-colors"
                 >
-                  1800 120 7001
+                  +91 92516 83662
                 </a>
                 .
               </p>
@@ -562,9 +552,9 @@ export default function ContactUsPage() {
       {/* ───────── Section 6 — PageCTA (emerald) ───────── */}
       <PageCTA
         title="Ready to talk?"
-        subtitle="Call 1800 120 7001 or fill the form above."
+        subtitle="Call +91 92516 83662 or fill the form above."
         primaryLabel="Send an Enquiry"
-        secondaryLabel="Call 1800 120 7001"
+        secondaryLabel="Call +91 92516 83662"
       />
     </>
   );

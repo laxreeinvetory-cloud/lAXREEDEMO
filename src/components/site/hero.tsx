@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -29,7 +29,7 @@ const HeroStage = dynamic(
 );
 
 // Static fallback hero image — used when the CMS has no override.
-const DEFAULT_HERO_IMAGE = "/images/products/mini-bar.jpg";
+const DEFAULT_HERO_IMAGE = "/images/hero-room.png";
 
 function HeroStageSkeleton() {
   return (
@@ -167,16 +167,9 @@ export function Hero() {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
   const isMobile = useIsMobile();
-  // useSyncExternalStore is the React-idiomatic way to detect "are we on
-  // the client after hydration" without calling setState inside an effect.
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true, // client snapshot
-    () => false // server snapshot
-  );
 
   // CMS-driven hero image override (key "homepage:hero" field "heroImage").
-  // Falls back to the static /images/products/mini-bar.jpg image when the
+  // Falls back to the static /images/products/mini-bar.webp image when the
   // CMS has no value or the fetch fails.
   const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
   useEffect(() => {
@@ -201,12 +194,8 @@ export function Hero() {
     };
   }, []);
 
-  // Decide whether to render the live 3D stage, the static fallback,
-  // or a skeleton (during SSR / before hydration).
-  // show3D = null → skeleton (loading), true → 3D, false → static fallback
-  const show3D: boolean | null = !mounted
-    ? null // SSR / pre-hydration → skeleton
-    : !reduced && !isMobile;
+  // Always show the static hero image (3D model removed per user request).
+  const show3D = false;
 
   return (
     <section
@@ -281,7 +270,7 @@ export function Hero() {
             >
               Premium hotel &amp; resort amenities, furniture, linen, roofing
               and lighting — manufactured and supplied pan-India by LaxRee,
-              Ajmer&apos;s largest hospitality exhibition centre.
+              India&apos;s largest hospitality exhibition centre.
             </motion.p>
 
             {/* CTAs */}
@@ -370,9 +359,7 @@ export function Hero() {
                 }}
               />
 
-              {show3D === null ? (
-                <HeroStageSkeleton />
-              ) : show3D ? (
+              {show3D ? (
                 <HeroStage />
               ) : (
                 <HeroFallback src={heroImage} />
@@ -390,20 +377,22 @@ export function Hero() {
    ─────────────────────────────────────────────────────────── */
 
 function HeroFallback({ src }: { src: string }) {
-  // Subtle scroll parallax (4° max) — safe for reduced-motion:CSS media query
-  // already zeroes our transforms, but we keep the markup static regardless.
-  // `src` is the CMS-driven hero image (defaults to the static minibar).
+  // Premium hero image display — fills the stage with object-cover for
+  // an immersive look. Brass border + shadow for premium feel.
   return (
-    <div className="w-full h-full rounded-[24px] overflow-hidden border border-brass/15 bg-charcoal/60 grid place-items-center">
+    <div className="w-full h-full rounded-[24px] overflow-hidden border-2 border-brass/20 bg-charcoal/60 shadow-2xl shadow-brass/10 relative">
       <img
         src={src}
-        alt="LaxRee Minibar — flagship product"
-        className="w-full h-full object-contain p-8"
+        alt="LaxRee Amenities — Premium Hotel Room"
+        className="w-full h-full object-cover"
         onError={(e) => {
-          // Graceful charcoal box if image not yet present
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}
       />
+      {/* Subtle gradient overlay at bottom for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none" />
+      {/* Brass top accent */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/60 to-transparent pointer-events-none" />
     </div>
   );
 }

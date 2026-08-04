@@ -7,13 +7,14 @@
 export const SITE = {
   name: "LaxRee Amenities",
   tagline: "Hotel Supplies Redefined",
-  phoneDisplay: "+91-92516 83662",
+  phoneDisplay: "+91 92516 83662",
   phoneHref: "+919251683662",
-  tollFreeDisplay: "1800 120 7001",
-  tollFreeHref: "18001207001",
+  tollFreeDisplay: "+91 92516 83662",
+  tollFreeHref: "+919251683662",
   whatsapp: "919251683662",
   email: "contactus@laxree.com",
   careersEmail: "hr@laxree.com",
+  officeHours: "10:00 AM – 7:00 PM",
   address:
     "Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001",
   socials: {
@@ -67,7 +68,7 @@ export const CATEGORIES: Category[] = [
     name: "Room Amenities",
     count: 91,
     blurb: "Mini bars, kettles, safes, locks, hangers, phones, dustbins, desktop accessories.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/categories/room-amenities.png",
     span: "large",
   },
   {
@@ -75,7 +76,7 @@ export const CATEGORIES: Category[] = [
     name: "Washroom Amenities",
     count: 43,
     blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/washroom-amenities.png",
     span: "default",
   },
   {
@@ -83,7 +84,7 @@ export const CATEGORIES: Category[] = [
     name: "Lobby Items",
     count: 31,
     blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
-    image: "/images/categories/linen.jpg",
+    image: "/images/categories/lobby-items.png",
     span: "default",
   },
   {
@@ -91,7 +92,7 @@ export const CATEGORIES: Category[] = [
     name: "Furniture",
     count: 399,
     blurb: "Outdoor, guest room, restaurant, banquet furniture.",
-    image: "/images/categories/roofing.jpg",
+    image: "/images/categories/furniture.jpg",
     span: "default",
   },
   {
@@ -99,7 +100,7 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 2,
     blurb: "Room linen and bath linen.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/linen-new.jpg",
     span: "tall",
   },
   {
@@ -107,7 +108,7 @@ export const CATEGORIES: Category[] = [
     name: "Bath Tub",
     count: 22,
     blurb: "Freestanding bath tubs in multiple sizes.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/products/bath-tub.jpg",
     span: "default",
   },
   {
@@ -115,7 +116,7 @@ export const CATEGORIES: Category[] = [
     name: "Amenities Tray Set",
     count: 1,
     blurb: "Premium tray sets for guest rooms.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/amenities-tray-set.jpg",
     span: "default",
   },
   {
@@ -123,7 +124,7 @@ export const CATEGORIES: Category[] = [
     name: "Dome & Space POD",
     count: 4,
     blurb: "Geodesic domes and space pods for resorts and events.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/space-pod.png",
     span: "default",
   },
 ];
@@ -309,7 +310,7 @@ export const CLIENT_LOGOS = [
   "Taj",
   "Ananta Hotels",
   "The Lords Inn",
-  "The Derns Hotels & Resorts",
+  "The Fern Hotels & Resorts",
   "Swosti Group",
 ];
 
@@ -524,10 +525,10 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 export const WHATSAPP_EXECUTIVES = [
-  { name: "Sales — North India", phone: "919251683662" },
+  { name: "Sales — North India", phone: "919251683658" },
   { name: "Sales — South India", phone: "919251683662" },
   { name: "Catalogue & Pricing", phone: "919251683662" },
-  { name: "After-Sales Support", phone: "919251683662" },
+  { name: "After-Sales Support", phone: "919982286667" },
 ];
 
 export const ENQUIRY_CATEGORIES = [
@@ -594,6 +595,7 @@ export type TeamMember = {
   role: string;
   bio: string;
   initials: string;
+  image?: string;
 };
 
 export const LEADERSHIP: TeamMember[] = [
@@ -601,25 +603,29 @@ export const LEADERSHIP: TeamMember[] = [
     name: "Ashish Agarwal",
     role: "Founder & Managing Director",
     bio: "25 years in hospitality manufacturing. Started LaxRee with a single minibar line and a commitment to in-house quality control.",
-    initials: "RS",
+    initials: "AA",
+    image: "/images/team/ashish-agarwal.png",
   },
   {
-    name: "Priya Sharma",
-    role: "Director, Operations",
-    bio: "Leads the Ajmer factory and exhibition centre. Architects the 700+ SKU catalogue and custom-order workflow.",
-    initials: "PS",
+    name: "Samarth Agarwal",
+    role: "Head of Sales (Country)",
+    bio: "Leads the national sales team and direct procurement contracts with hotel chains across India. Drives revenue growth and strategic client relationships.",
+    initials: "SA",
+    image: "/images/team/samarth-agarwal.png",
   },
   {
-    name: "Amit Verma",
-    role: "Head of Sales (Pan-India)",
-    bio: "Manages the 22-state dealer network and direct procurement contracts with national hotel chains.",
-    initials: "AV",
+    name: "Reema Bajaj",
+    role: "CMO",
+    bio: "Chief Marketing Officer overseeing brand strategy, digital presence, and market expansion. 12+ years in hospitality brand building.",
+    initials: "RB",
+    image: "/images/team/reema-bajaj.png",
   },
   {
-    name: "Sunita Jain",
-    role: "Head of Quality & Compliance",
-    bio: "Oversees ISO 9001/14001/45001, CE and RoHS testing. 15 years in industrial QC.",
-    initials: "SJ",
+    name: "Bavika Agarwal",
+    role: "Head of HR",
+    bio: "Heads Human Resources, talent acquisition, and organizational culture. Ensures a motivated workforce across factory, sales, and corporate teams.",
+    initials: "BA",
+    image: "/images/team/bavika-agarwal.png",
   },
 ];
 
@@ -964,10 +970,7 @@ export const DEALER_BENEFITS: DealerBenefit[] = [
 
 /* Dealers — existing dealer network cities */
 export const DEALER_CITIES = [
-  "New Delhi", "Mumbai", "Bengaluru", "Chennai", "Hyderabad", "Kolkata",
-  "Pune", "Ahmedabad", "Jaipur", "Udaipur", "Lucknow", "Chandigarh",
-  "Bhopal", "Patna", "Guwahati", "Visakhapatnam", "Cochin", "Coimbatore",
-  "Nagpur", "Surat", "Indore", "Bhubaneswar",
+  "Nagpur", "Uttarakhand", "Tamil Nadu", "Haridwar",
 ];
 
 /* Clients — case studies */

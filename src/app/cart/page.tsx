@@ -149,7 +149,7 @@ export default function CartPage() {
               the items you need.
             </p>
             <Link
-              href="/products/amenities"
+              href="/products"
               className="pill pill-brass px-8 py-3.5 text-[13px] inline-flex items-center gap-2"
             >
               Browse Products
@@ -233,7 +233,7 @@ export default function CartPage() {
                 {/* Clear and start over */}
                 <div className="mt-8 pt-6 border-t border-ink/10 flex items-center justify-between">
                   <Link
-                    href="/products/amenities"
+                    href="/products"
                     className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-brass hover:gap-2.5 transition-all"
                   >
                     <ArrowLeft size={12} strokeWidth={1.5} />
@@ -654,7 +654,7 @@ function generateProfessionalQuotationHTML(
   </div>
   <div class="footer">
     <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" />
-    <div class="footer-addr">Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>Phone: +91-92516 83662 &nbsp;|&nbsp; Toll Free: 1800 120 7001 &nbsp;|&nbsp; Email: contactus@laxree.com</div>
+    <div class="footer-addr">Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>Phone: +91 92516 83662 &nbsp;|&nbsp; Email: contactus@laxree.com</div>
     <div class="footer-certs">ISO 9001 • ISO 14001 • ISO 45001 • CE Certified • RoHS Compliant</div>
   </div>
 </div>

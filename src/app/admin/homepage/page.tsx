@@ -809,7 +809,7 @@ export default function AdminHomepagePage() {
   // CMS-driven hero image override (key "homepage:hero" → field "heroImage").
   // Loaded from /api/admin/cms (not /settings) so it stays decoupled from
   // the homepage:full block above. Empty string means "no override — use
-  // the static /images/products/mini-bar.jpg fallback on the live site".
+  // the static /images/products/mini-bar.webp fallback on the live site".
   const [heroImage, setHeroImage] = useState<string>("");
 
   useEffect(() => {
