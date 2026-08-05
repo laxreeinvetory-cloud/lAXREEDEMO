@@ -114,7 +114,7 @@ const DEFAULTS: HomepageContent = {
       "Every product we make carries the weight of a guest's experience. A minibar that's too loud at 2 AM. A safe that won't open at checkout. A door lock that sticks when it rains. These aren't product failures — they're hospitality failures. That's why we engineer every LaxRee product to perform flawlessly, night after night, year after year.",
     ownerName: "Founder Name",
     ownerTitle: "Founder & Managing Director, LaxRee Amenities",
-    image: "/images/about/owner.jpg",
+    image: "/images/owner-cropped.jpg",
   },
   productSpotlight: {
     eyebrow: "Product Spotlight",
@@ -809,7 +809,7 @@ export default function AdminHomepagePage() {
   // CMS-driven hero image override (key "homepage:hero" → field "heroImage").
   // Loaded from /api/admin/cms (not /settings) so it stays decoupled from
   // the homepage:full block above. Empty string means "no override — use
-  // the static /images/products/mini-bar.jpg fallback on the live site".
+  // the static /images/products/mini-bar.webp fallback on the live site".
   const [heroImage, setHeroImage] = useState<string>("");
 
   useEffect(() => {

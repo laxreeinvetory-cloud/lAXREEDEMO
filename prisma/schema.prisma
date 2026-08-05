@@ -67,7 +67,7 @@ model Product {
   model       String   @unique
   name        String
   category    String
-  image       String   @default("/images/product-catalogue/placeholder.jpg")
+  image       String   @default("/images/product-catalogue/coming-soon.jpg")
   description String   @default("")
   specs       String   @default("[]") // JSON string of {label, value}[]
   price       String   @default("")  // kept as string to support ranges like "₹12,000 - ₹18,000"
@@ -84,7 +84,7 @@ model Category {
   name      String
   count     Int      @default(0)
   blurb     String   @default("")
-  image     String   @default("/images/categories/placeholder.jpg")
+  image     String   @default("/images/categories/room-amenities.png")
   span      String   @default("default") // large | wide | tall | default
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())

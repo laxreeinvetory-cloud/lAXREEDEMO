@@ -26,11 +26,25 @@ const EDITABLE_IMAGES: ImageEntry[] = [
   { key: "gallery3", label: "Our Presence — Gallery Image 3", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image3", fallback: "/images/gallery/exhibition-3.jpg" },
   { key: "gallery4", label: "Our Presence — Gallery Image 4", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image4", fallback: "/images/gallery/exhibition-4.jpg" },
   { key: "gallery5", label: "Our Presence — Gallery Image 5", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image5", fallback: "/images/gallery/exhibition-5.jpg" },
+  { key: "gallery6", label: "Our Presence — Gallery Image 6", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image6", fallback: "/images/gallery/exhibition-1.jpg" },
+  { key: "gallery7", label: "Our Presence — Gallery Image 7", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image7", fallback: "/images/gallery/exhibition-2.jpg" },
+  { key: "gallery8", label: "Our Presence — Gallery Image 8", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image8", fallback: "/images/gallery/exhibition-3.jpg" },
+  { key: "gallery9", label: "Our Presence — Gallery Image 9", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image9", fallback: "/images/gallery/exhibition-4.jpg" },
+  { key: "gallery10", label: "Our Presence — Gallery Image 10", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image10", fallback: "/images/gallery/exhibition-5.jpg" },
   // Pages
   { key: "about-hero", label: "About Us Page — Hero Image", section: "Pages", cmsKey: "page:about-us", field: "heroImage", fallback: "" },
   { key: "about-factory", label: "About Us Page — Factory Image", section: "Pages", cmsKey: "page:about-us", field: "factoryImage", fallback: "/images/about/factory.jpg" },
   { key: "clients-hero", label: "Clients Page — Hero Image", section: "Pages", cmsKey: "page:clients", field: "heroImage", fallback: "" },
   { key: "exp-hero", label: "Experience Center — Hero Image", section: "Pages", cmsKey: "page:experience-center", field: "heroImage", fallback: "" },
+  // Team Members (About Us page)
+  { key: "team-ashish", label: "Team — Ashish Agarwal (Founder & MD)", section: "Team Members", cmsKey: "page:about-us", field: "team.ashish", fallback: "/images/team/ashish-agarwal.png" },
+  { key: "team-samarth", label: "Team — Samarth Agarwal (Head of Sales)", section: "Team Members", cmsKey: "page:about-us", field: "team.samarth", fallback: "/images/team/samarth-agarwal.png" },
+  { key: "team-reema", label: "Team — Reema Bajaj (CMO)", section: "Team Members", cmsKey: "page:about-us", field: "team.reema", fallback: "/images/team/reema-bajaj.png" },
+  { key: "team-bavika", label: "Team — Bavika Agarwal (Head of HR)", section: "Team Members", cmsKey: "page:about-us", field: "team.bavika", fallback: "/images/team/bavika-agarwal.png" },
+  // Experience Centers
+  { key: "ec-ajmer", label: "Experience Center — Ajmer", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.ajmer", fallback: "/images/experience-centers/ajmer-center.jpeg" },
+  { key: "ec-jaipur", label: "Experience Center — Jaipur", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.jaipur", fallback: "/images/experience-centers/jaipur-center.jpeg" },
+  { key: "ec-gurugram", label: "Experience Center — Gurugram", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.gurugram", fallback: "" },
 ];
 
 export default function AdminImagesPage() {
@@ -102,11 +116,12 @@ export default function AdminImagesPage() {
       // Fetch current CMS value
       const getRes = await fetch(`/api/admin/cms?key=${img.cmsKey}`, { cache: "no-store" });
       const getData = await getRes.json();
-      let current: any = getData.value || {};
+      const current: Record<string, unknown> = getData.value || {};
 
       // Set nested field
       const parts = img.field.split(".");
-      let obj = current;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let obj: any = current;
       for (let i = 0; i < parts.length - 1; i++) {
         if (!obj[parts[i]]) obj[parts[i]] = {};
         obj = obj[parts[i]];

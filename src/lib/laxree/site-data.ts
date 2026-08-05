@@ -7,13 +7,14 @@
 export const SITE = {
   name: "LaxRee Amenities",
   tagline: "Hotel Supplies Redefined",
-  phoneDisplay: "+91-92516 83662",
+  phoneDisplay: "+91 92516 83662",
   phoneHref: "+919251683662",
-  tollFreeDisplay: "1800 120 7001",
-  tollFreeHref: "18001207001",
+  tollFreeDisplay: "+91 92516 83662",
+  tollFreeHref: "+919251683662",
   whatsapp: "919251683662",
   email: "contactus@laxree.com",
   careersEmail: "hr@laxree.com",
+  officeHours: "10:00 AM – 7:00 PM",
   address:
     "Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001",
   socials: {
@@ -67,7 +68,7 @@ export const CATEGORIES: Category[] = [
     name: "Room Amenities",
     count: 91,
     blurb: "Mini bars, kettles, safes, locks, hangers, phones, dustbins, desktop accessories.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/categories/room-amenities.png",
     span: "large",
   },
   {
@@ -75,7 +76,7 @@ export const CATEGORIES: Category[] = [
     name: "Washroom Amenities",
     count: 43,
     blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/washroom-amenities.png",
     span: "default",
   },
   {
@@ -83,7 +84,7 @@ export const CATEGORIES: Category[] = [
     name: "Lobby Items",
     count: 31,
     blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
-    image: "/images/categories/linen.jpg",
+    image: "/images/categories/lobby-items.png",
     span: "default",
   },
   {
@@ -91,7 +92,7 @@ export const CATEGORIES: Category[] = [
     name: "Furniture",
     count: 399,
     blurb: "Outdoor, guest room, restaurant, banquet furniture.",
-    image: "/images/categories/roofing.jpg",
+    image: "/images/categories/furniture.jpg",
     span: "default",
   },
   {
@@ -99,7 +100,7 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 2,
     blurb: "Room linen and bath linen.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/linen-new.jpg",
     span: "tall",
   },
   {
@@ -107,7 +108,7 @@ export const CATEGORIES: Category[] = [
     name: "Bath Tub",
     count: 22,
     blurb: "Freestanding bath tubs in multiple sizes.",
-    image: "/images/categories/amenities.jpg",
+    image: "/images/products/bath-tub.jpg",
     span: "default",
   },
   {
@@ -115,7 +116,7 @@ export const CATEGORIES: Category[] = [
     name: "Amenities Tray Set",
     count: 1,
     blurb: "Premium tray sets for guest rooms.",
-    image: "/images/categories/furniture.jpg",
+    image: "/images/categories/amenities-tray-set.jpg",
     span: "default",
   },
   {
@@ -123,7 +124,7 @@ export const CATEGORIES: Category[] = [
     name: "Dome & Space POD",
     count: 4,
     blurb: "Geodesic domes and space pods for resorts and events.",
-    image: "/images/categories/dome.jpg",
+    image: "/images/categories/space-pod.png",
     span: "default",
   },
 ];
@@ -297,20 +298,25 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-export const CLIENT_LOGOS = [
-  "Radisson",
-  "Holiday Inn",
-  "Fairmont",
-  "Sayaji Hotels",
-  "Ramada Group",
-  "Sunday Hotels",
-  "7 Apple Hotels",
-  "Club Mahindra",
-  "Taj",
-  "Ananta Hotels",
-  "The Lords Inn",
-  "The Derns Hotels & Resorts",
-  "Swosti Group",
+export type ClientLogo = {
+  name: string;
+  logo: string;
+};
+
+export const CLIENT_LOGOS: ClientLogo[] = [
+  { name: "Radisson", logo: "/images/client-logos/radisson.png" },
+  { name: "Holiday Inn", logo: "/images/client-logos/holiday-inn.png" },
+  { name: "Fairmont", logo: "/images/client-logos/fairmont.png" },
+  { name: "Taj", logo: "/images/client-logos/taj.png" },
+  { name: "Club Mahindra", logo: "/images/client-logos/club-mahindra.png" },
+  { name: "Ramada", logo: "/images/client-logos/ramada.png" },
+  { name: "The Fern Hotels & Resorts", logo: "/images/client-logos/the-fern.png" },
+  { name: "Sayaji Hotels", logo: "/images/client-logos/sayaji.png" },
+  { name: "Sunday Hotels", logo: "/images/client-logos/sunday-hotels.png" },
+  { name: "7 Apple Hotels", logo: "/images/client-logos/7-apple.png" },
+  { name: "Ananta Hotels", logo: "/images/client-logos/ananta.png" },
+  { name: "The Lords Inn", logo: "/images/client-logos/the-lords-inn.png" },
+  { name: "Swosti Group", logo: "/images/client-logos/swosti.png" },
 ];
 
 export type Exhibition = {
@@ -323,6 +329,13 @@ export const EXHIBITIONS: Exhibition[] = [
   { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Hotel Supplies Booth, Aahar", year: "2025" },
   { image: "/images/gallery/exhibition-2.jpg", caption: "Aahar Trade Fair, Pragati Maidan", year: "2024" },
   { image: "/images/gallery/exhibition-3.jpg", caption: "India International Hospitality Expo (IHE)", year: "2024" },
+  { image: "/images/gallery/exhibition-4.jpg", caption: "Hospitality World Expo, Mumbai", year: "2024" },
+  { image: "/images/gallery/exhibition-5.jpg", caption: "Hotel & Restaurant Association Show", year: "2023" },
+  { image: "/images/gallery/exhibition-1.jpg", caption: "LaxRee Experience Center Tour", year: "2023" },
+  { image: "/images/gallery/exhibition-2.jpg", caption: "Trade Expo, Bengaluru", year: "2023" },
+  { image: "/images/gallery/exhibition-3.jpg", caption: "Hotel Supply Expo, Delhi", year: "2022" },
+  { image: "/images/gallery/exhibition-4.jpg", caption: "Hospitality Summit, Jaipur", year: "2022" },
+  { image: "/images/gallery/exhibition-5.jpg", caption: "Manufacturing Facility Showcase", year: "2022" },
 ];
 
 export type Certification = {
@@ -524,10 +537,10 @@ export const BLOG_POSTS: BlogPost[] = [
 ];
 
 export const WHATSAPP_EXECUTIVES = [
-  { name: "Sales — North India", phone: "919251683662" },
+  { name: "Sales — North India", phone: "919251683658" },
   { name: "Sales — South India", phone: "919251683662" },
   { name: "Catalogue & Pricing", phone: "919251683662" },
-  { name: "After-Sales Support", phone: "919251683662" },
+  { name: "After-Sales Support", phone: "919982286667" },
 ];
 
 export const ENQUIRY_CATEGORIES = [
@@ -551,40 +564,40 @@ export type Milestone = {
 
 export const TIMELINE: Milestone[] = [
   {
-    year: "2015",
-    title: "The First Factory",
+    year: "2026",
+    title: "New Factory Launch",
     description:
-      "LaxRee opens its first manufacturing line in Ajmer for absorption minibars — 200 units/month capacity.",
+      "Expanded manufacturing capacity with a state-of-the-art factory facility, doubling production output to meet growing pan-India demand across all product categories.",
   },
   {
-    year: "2017",
-    title: "Safe Locker Division",
+    year: "2025",
+    title: "Largest Exhibition Centre",
     description:
-      "Electronic safe locker production line launched. First client: a 150-room heritage hotel in Udaipur.",
-  },
-  {
-    year: "2019",
-    title: "Exhibition Centre",
-    description:
-      "Ajmer's largest hospitality exhibition centre inaugurated — 12,000 sq ft of product displays and procurement consultation.",
-  },
-  {
-    year: "2021",
-    title: "Pan-India Network",
-    description:
-      "Dealer network expands to 22 states. ISO 9001 and ISO 14001 certifications achieved.",
+      "Established India's largest hospitality exhibition centre in Gurugram — a 50,000+ sq ft flagship showcase featuring 700+ products, complete room setups, and hands-on product testing.",
   },
   {
     year: "2023",
-    title: "700+ SKU Milestone",
+    title: "Minibar Factory Launch",
     description:
-      "Product catalogue crosses 700 SKUs across five categories. CE and RoHS compliance achieved for electronics.",
+      "Inaugurated a dedicated minibar manufacturing facility with in-house compressor assembly, thermoelectric cooling lines, and absorption technology — making LaxRee India's only OEM minibar manufacturer.",
   },
   {
-    year: "2026",
-    title: "Smart Hospitality",
+    year: "2022",
+    title: "Pan-India Delivery",
     description:
-      "Launch of brass-rim smart minibar line and IoT-enabled safes. 1,347+ projects delivered.",
+      "Launched nationwide delivery network covering 28 states and 8 union territories. Achieved 97.4% on-time delivery rate across 1,347+ hotel projects with dedicated logistics partners.",
+  },
+  {
+    year: "2021",
+    title: "700+ SKU Catalogue",
+    description:
+      "Expanded product catalogue to 700+ SKUs across 8 categories — minibars, safes, locks, kettles, furniture, linen, bath tubs, and dome structures. Achieved CE and RoHS compliance for all electronics.",
+  },
+  {
+    year: "2020",
+    title: "Hospitality Supplier Launch",
+    description:
+      "Founded LaxRee Amenities with a vision to redefine hotel supplies in India. Started with a single product line — absorption minibars — and a commitment to in-house quality control and OEM manufacturing.",
   },
 ];
 
@@ -594,32 +607,30 @@ export type TeamMember = {
   role: string;
   bio: string;
   initials: string;
+  image?: string;
 };
 
 export const LEADERSHIP: TeamMember[] = [
   {
-    name: "Ashish Agarwal",
-    role: "Founder & Managing Director",
-    bio: "25 years in hospitality manufacturing. Started LaxRee with a single minibar line and a commitment to in-house quality control.",
-    initials: "RS",
+    name: "Samarth Agarwal",
+    role: "Head of Sales (Country)",
+    bio: "Leads the national sales team and direct procurement contracts with hotel chains across India. Drives revenue growth and strategic client relationships.",
+    initials: "SA",
+    image: "/images/team/samarth-agarwal.png",
   },
   {
-    name: "Priya Sharma",
-    role: "Director, Operations",
-    bio: "Leads the Ajmer factory and exhibition centre. Architects the 700+ SKU catalogue and custom-order workflow.",
-    initials: "PS",
+    name: "Reema Bajaj",
+    role: "CMO",
+    bio: "Chief Marketing Officer overseeing brand strategy, digital presence, and market expansion. 12+ years in hospitality brand building.",
+    initials: "RB",
+    image: "/images/team/reema-bajaj.png",
   },
   {
-    name: "Amit Verma",
-    role: "Head of Sales (Pan-India)",
-    bio: "Manages the 22-state dealer network and direct procurement contracts with national hotel chains.",
-    initials: "AV",
-  },
-  {
-    name: "Sunita Jain",
-    role: "Head of Quality & Compliance",
-    bio: "Oversees ISO 9001/14001/45001, CE and RoHS testing. 15 years in industrial QC.",
-    initials: "SJ",
+    name: "Bavika Agarwal",
+    role: "Head of HR",
+    bio: "Heads Human Resources, talent acquisition, and organizational culture. Ensures a motivated workforce across factory, sales, and corporate teams.",
+    initials: "BA",
+    image: "/images/team/bavika-agarwal.png",
   },
 ];
 
@@ -964,10 +975,7 @@ export const DEALER_BENEFITS: DealerBenefit[] = [
 
 /* Dealers — existing dealer network cities */
 export const DEALER_CITIES = [
-  "New Delhi", "Mumbai", "Bengaluru", "Chennai", "Hyderabad", "Kolkata",
-  "Pune", "Ahmedabad", "Jaipur", "Udaipur", "Lucknow", "Chandigarh",
-  "Bhopal", "Patna", "Guwahati", "Visakhapatnam", "Cochin", "Coimbatore",
-  "Nagpur", "Surat", "Indore", "Bhubaneswar",
+  "Nagpur", "Uttarakhand", "Tamil Nadu", "Haridwar",
 ];
 
 /* Clients — case studies */
@@ -1043,6 +1051,8 @@ export type CatalogueFile = {
   fileSize: string;
   category: string; // matches CATEGORIES slug, or "master" for the full catalogue
   available: boolean; // whether the actual PDF is uploaded
+  image?: string;
+  categories?: string[]; // sub-categories included in this catalogue
 };
 
 export const CATALOGUES: CatalogueFile[] = [
@@ -1050,11 +1060,13 @@ export const CATALOGUES: CatalogueFile[] = [
     slug: "master",
     name: "Master Catalogue 2026",
     description:
-      "The complete LaxRee product catalogue — all 700+ SKUs across Amenities, Furniture, Linen, Roofing and Dome in a single PDF. Full specifications, pricing tiers, and lead times.",
+      "The complete LaxRee product catalogue — all 700+ SKUs across 8 categories in a single PDF. Full specifications, pricing tiers, and lead times.",
     fileName: "master-catalogue.pdf",
     fileSize: "18 MB",
     category: "master",
     available: true,
+    image: "/images/categories/room-amenities.png",
+    categories: ["Room Amenities", "Washroom Amenities", "Lobby Items", "Furniture", "Linen", "Bath Tub", "Amenities Tray Set", "Dome & Space POD"],
   },
   {
     slug: "amenities",
@@ -1065,6 +1077,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "amenities",
     available: false,
+    image: "/images/categories/washroom-amenities.png",
+    categories: ["Mini Bar", "Safe Box", "Kettle", "Door Lock", "Hair Dryer", "Hand Dryer"],
   },
   {
     slug: "furniture",
@@ -1075,6 +1089,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "furniture",
     available: false,
+    image: "/images/categories/furniture.jpg",
+    categories: ["Beds", "Headboards", "Night Stands", "Work Desks", "Lounge Chairs", "Outdoor Furniture"],
   },
   {
     slug: "linen",
@@ -1085,6 +1101,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "linen",
     available: false,
+    image: "/images/categories/linen-new.jpg",
+    categories: ["Bed Sheets", "Pillow Cases", "Duvets", "Bath Towels", "Bath Robes", "Table Linen"],
   },
   {
     slug: "roofing",
@@ -1095,6 +1113,8 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "48 MB",
     category: "roofing",
     available: true,
+    image: "/images/categories/roofing.jpg",
+    categories: ["Standing Seam", "Insulated Panels", "Polycarbonate", "Flashings", "Gutter Systems"],
   },
   {
     slug: "dome",

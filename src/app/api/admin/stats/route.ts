@@ -66,7 +66,7 @@ export async function GET() {
         }),
         db.lead.count({ where: { source: "contact-page" } }),
         db.lead.count({ where: { source: "quotation" } }),
-        db.lead.count({ where: { source: "catalogue-page" } }),
+        db.lead.count({ where: { source: "catalogue-discount" } }),
         db.lead.count({ where: { source: "dealer-application" } }),
         db.lead.count({ where: { source: "career-application" } }),
         db.lead.count({ where: { source: "enquiry-modal" } }),

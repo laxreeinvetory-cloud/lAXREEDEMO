@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
  * Usage:
  * const { content, loaded } = usePageContent("page:about-us", defaults);
  */
-export function usePageContent<T extends Record<string, string>>(
+export function usePageContent<T extends Record<string, unknown>>(
   storageKey: string,
   defaults: T,
 ): { content: T; loaded: boolean } {
