@@ -16,6 +16,13 @@ type BlogPost = {
   readTime: string;
   published: boolean;
   createdAt: string;
+  // SEO fields
+  seoTitle?: string;
+  metaDescription?: string;
+  keywords?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  faqJsonLd?: string;
 };
 
 export default function AdminBlogPage() {
@@ -177,6 +184,13 @@ function BlogEditor({
     date: post?.date || new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),
     readTime: post?.readTime || "5 min",
     published: post?.published ?? true,
+    // SEO fields
+    seoTitle: post?.seoTitle || "",
+    metaDescription: post?.metaDescription || "",
+    keywords: post?.keywords || "",
+    canonicalUrl: post?.canonicalUrl || "",
+    ogImage: post?.ogImage || "",
+    faqJsonLd: post?.faqJsonLd || "",
   });
 
   const inputClass = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-ivory placeholder:text-sand/40 focus:border-brass focus:outline-none";
@@ -232,6 +246,48 @@ function BlogEditor({
               <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="accent-brass h-4 w-4" />
               <span className="text-sm text-ivory">Published</span>
             </label>
+          </div>
+
+          {/* SEO Section */}
+          <div className="col-span-2 mt-4">
+            <div className="rounded-xl border border-brass/20 bg-brass/5 p-4">
+              <h3 className="font-display text-base text-brass mb-4 flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                SEO Settings
+              </h3>
+              <p className="text-[11px] text-sand mb-4">Optimize this post for Google, AI tools (ChatGPT, Gemini, Claude, Grok), and social sharing.</p>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className={labelClass}>SEO Title (50-60 chars recommended)</label>
+                  <input className={inputClass} value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} placeholder="SEO optimized title for search engines" />
+                  <p className="text-[10px] text-sand/50 mt-1">{form.seoTitle?.length || 0}/60 characters</p>
+                </div>
+                <div className="col-span-2">
+                  <label className={labelClass}>Meta Description (150-160 chars recommended)</label>
+                  <textarea className={inputClass} rows={2} value={form.metaDescription} onChange={(e) => setForm({ ...form, metaDescription: e.target.value })} placeholder="Compelling description that appears in search results and AI summaries" />
+                  <p className="text-[10px] text-sand/50 mt-1">{form.metaDescription?.length || 0}/160 characters</p>
+                </div>
+                <div className="col-span-2">
+                  <label className={labelClass}>Target Keywords (comma-separated)</label>
+                  <input className={inputClass} value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder="hotel minibar supplier, hospitality amenities India, OEM manufacturer" />
+                  <p className="text-[10px] text-sand/50 mt-1">These help AI tools understand the topic context</p>
+                </div>
+                <div>
+                  <label className={labelClass}>Canonical URL (optional)</label>
+                  <input className={inputClass} value={form.canonicalUrl} onChange={(e) => setForm({ ...form, canonicalUrl: e.target.value })} placeholder="https://laxree.com/blog/your-post" />
+                </div>
+                <div>
+                  <label className={labelClass}>OG Image URL (optional)</label>
+                  <input className={inputClass} value={form.ogImage} onChange={(e) => setForm({ ...form, ogImage: e.target.value })} placeholder="/images/blog/custom-og.jpg" />
+                </div>
+                <div className="col-span-2">
+                  <label className={labelClass}>FAQ Schema (JSON-LD) — for Rich Results</label>
+                  <textarea className={inputClass} rows={4} value={form.faqJsonLd} onChange={(e) => setForm({ ...form, faqJsonLd: e.target.value })} placeholder={'{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Your question?","acceptedAnswer":{"@type":"Answer","text":"Your answer"}}]}'} />
+                  <p className="text-[10px] text-sand/50 mt-1">Add FAQ schema to get rich snippets in Google and AI answers</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

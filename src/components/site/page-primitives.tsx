@@ -136,15 +136,17 @@ export function SectionHeading({
    Emerald background, heading + subline + buttons.
    ───────────────────────────────────────────────────────────── */
 export function PageCTA({
-  title = "Ready to elevate your hospitality?",
+  title = "Ready to elevate your Guest Experience?",
   subtitle = "Get a custom quotation within 24 hours. No obligation.",
   primaryLabel = "Get a Quotation",
-  secondaryLabel = "Call 1800 120 7001",
+  secondaryLabel = "Call +91 92516 83662",
+  secondaryHref = "tel:+919251683662",
 }: {
   title?: string;
   subtitle?: string;
   primaryLabel?: string;
   secondaryLabel?: string;
+  secondaryHref?: string;
 }) {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();

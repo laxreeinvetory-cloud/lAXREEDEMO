@@ -1026,6 +1026,13 @@ export type BlogPostFull = BlogPost & {
   author: string;
   authorRole: string;
   content: { heading?: string; paragraphs: string[] }[];
+  // SEO fields (optional — populated from DB/CMS)
+  seoTitle?: string;
+  metaDescription?: string;
+  keywords?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  faqJsonLd?: string;
 };
 
 // Blog full content moved to blog-content.ts to reduce bundle size
