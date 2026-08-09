@@ -193,107 +193,138 @@ function BlogEditor({
     faqJsonLd: post?.faqJsonLd || "",
   });
 
-  const inputClass = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-ivory placeholder:text-sand/40 focus:border-brass focus:outline-none";
-  const labelClass = "data-label mb-1.5 block text-[11px] text-sand";
+  const inputClass = "w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-ivory placeholder:text-sand/30 focus:border-brass focus:bg-white/15 focus:outline-none transition-colors";
+  const labelClass = "data-label mb-1.5 block text-[11px] text-sand font-medium";
+  const [activeTab, setActiveTab] = useState<"content" | "seo">("content");
+
+  const handleSave = () => {
+    if (!form.title.trim()) { alert("Title is required"); return; }
+    if (!form.slug.trim()) { alert("Slug is required"); return; }
+    onSave(form);
+  };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="glass-on-charcoal rounded-[24px] p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-6">
+    <div className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
+      <div
+        className="bg-charcoal border border-brass/20 rounded-[24px] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+        style={{ backgroundColor: "#1a1815" }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
           <h2 className="font-display text-xl text-ivory">{post ? "Edit Post" : "New Blog Post"}</h2>
-          <button onClick={onClose} className="text-sand hover:text-ivory"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="text-sand hover:text-ivory transition-colors p-1"><X className="h-5 w-5" /></button>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
-            <label className={labelClass}>Title</label>
-            <input className={inputClass} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Post title" />
-          </div>
-          <div>
-            <label className={labelClass}>Slug</label>
-            <input className={inputClass} value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="post-slug" />
-          </div>
-          <div>
-            <label className={labelClass}>Category</label>
-            <input className={inputClass} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
-          </div>
-          <div className="col-span-2">
-            <label className={labelClass}>Excerpt</label>
-            <textarea className={inputClass} rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Short description..." />
-          </div>
-          <div>
-            <label className={labelClass}>Image URL</label>
-            <input className={inputClass} value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} />
-          </div>
-          <div>
-            <label className={labelClass}>Author</label>
-            <input className={inputClass} value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} />
-          </div>
-          <div>
-            <label className={labelClass}>Author Role</label>
-            <input className={inputClass} value={form.authorRole} onChange={(e) => setForm({ ...form, authorRole: e.target.value })} />
-          </div>
-          <div>
-            <label className={labelClass}>Date</label>
-            <input className={inputClass} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
-          </div>
-          <div>
-            <label className={labelClass}>Read Time</label>
-            <input className={inputClass} value={form.readTime} onChange={(e) => setForm({ ...form, readTime: e.target.value })} />
-          </div>
-          <div className="col-span-2 flex items-center gap-3">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="accent-brass h-4 w-4" />
-              <span className="text-sm text-ivory">Published</span>
-            </label>
-          </div>
+        {/* Tabs */}
+        <div className="flex gap-1 px-6 pt-4 shrink-0">
+          <button
+            onClick={() => setActiveTab("content")}
+            className={`px-4 py-2 rounded-t-lg text-[13px] font-medium transition-colors ${activeTab === "content" ? "bg-white/10 text-brass border-b-2 border-brass" : "text-sand hover:text-ivory"}`}
+          >
+            Content
+          </button>
+          <button
+            onClick={() => setActiveTab("seo")}
+            className={`px-4 py-2 rounded-t-lg text-[13px] font-medium transition-colors ${activeTab === "seo" ? "bg-white/10 text-brass border-b-2 border-brass" : "text-sand hover:text-ivory"}`}
+          >
+            SEO Settings
+          </button>
+        </div>
 
-          {/* SEO Section */}
-          <div className="col-span-2 mt-4">
-            <div className="rounded-xl border border-brass/20 bg-brass/5 p-4">
-              <h3 className="font-display text-base text-brass mb-4 flex items-center gap-2">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                SEO Settings
-              </h3>
-              <p className="text-[11px] text-sand mb-4">Optimize this post for Google, AI tools (ChatGPT, Gemini, Claude, Grok), and social sharing.</p>
+        {/* Scrollable content */}
+        <div className="overflow-y-auto px-6 py-4 flex-1">
+          {activeTab === "content" ? (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className={labelClass}>Title *</label>
+                <input className={inputClass} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Enter post title" />
+              </div>
+              <div>
+                <label className={labelClass}>Slug *</label>
+                <input className={inputClass} value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="post-url-slug" />
+              </div>
+              <div>
+                <label className={labelClass}>Category</label>
+                <input className={inputClass} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="e.g. Procurement Guide" />
+              </div>
+              <div className="col-span-2">
+                <label className={labelClass}>Excerpt (summary for blog listing)</label>
+                <textarea className={inputClass} rows={3} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Short description shown on blog listing page..." />
+              </div>
+              <div className="col-span-2">
+                <label className={labelClass}>Cover Image URL</label>
+                <input className={inputClass} value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="/images/blog/blog-1.jpg" />
+              </div>
+              <div>
+                <label className={labelClass}>Author Name</label>
+                <input className={inputClass} value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} placeholder="Author name" />
+              </div>
+              <div>
+                <label className={labelClass}>Author Role</label>
+                <input className={inputClass} value={form.authorRole} onChange={(e) => setForm({ ...form, authorRole: e.target.value })} placeholder="e.g. Head of Sales" />
+              </div>
+              <div>
+                <label className={labelClass}>Date</label>
+                <input className={inputClass} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} placeholder="e.g. Jan 2026" />
+              </div>
+              <div>
+                <label className={labelClass}>Read Time</label>
+                <input className={inputClass} value={form.readTime} onChange={(e) => setForm({ ...form, readTime: e.target.value })} placeholder="e.g. 5 min" />
+              </div>
+              <div className="col-span-2 flex items-center gap-3 pt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} className="accent-brass h-4 w-4" />
+                  <span className="text-sm text-ivory">Published</span>
+                </label>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-brass/20 bg-brass/5 p-4">
+                <p className="text-[12px] text-sand mb-4">Optimize this post for Google search, AI tools (ChatGPT, Gemini, Claude, Grok), and social media sharing.</p>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <label className={labelClass}>SEO Title (50-60 chars recommended)</label>
-                  <input className={inputClass} value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} placeholder="SEO optimized title for search engines" />
-                  <p className="text-[10px] text-sand/50 mt-1">{form.seoTitle?.length || 0}/60 characters</p>
-                </div>
-                <div className="col-span-2">
-                  <label className={labelClass}>Meta Description (150-160 chars recommended)</label>
-                  <textarea className={inputClass} rows={2} value={form.metaDescription} onChange={(e) => setForm({ ...form, metaDescription: e.target.value })} placeholder="Compelling description that appears in search results and AI summaries" />
-                  <p className="text-[10px] text-sand/50 mt-1">{form.metaDescription?.length || 0}/160 characters</p>
-                </div>
-                <div className="col-span-2">
-                  <label className={labelClass}>Target Keywords (comma-separated)</label>
-                  <input className={inputClass} value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder="hotel minibar supplier, hospitality amenities India, OEM manufacturer" />
-                  <p className="text-[10px] text-sand/50 mt-1">These help AI tools understand the topic context</p>
-                </div>
-                <div>
-                  <label className={labelClass}>Canonical URL (optional)</label>
-                  <input className={inputClass} value={form.canonicalUrl} onChange={(e) => setForm({ ...form, canonicalUrl: e.target.value })} placeholder="https://laxree.com/blog/your-post" />
-                </div>
-                <div>
-                  <label className={labelClass}>OG Image URL (optional)</label>
-                  <input className={inputClass} value={form.ogImage} onChange={(e) => setForm({ ...form, ogImage: e.target.value })} placeholder="/images/blog/custom-og.jpg" />
-                </div>
-                <div className="col-span-2">
-                  <label className={labelClass}>FAQ Schema (JSON-LD) — for Rich Results</label>
-                  <textarea className={inputClass} rows={4} value={form.faqJsonLd} onChange={(e) => setForm({ ...form, faqJsonLd: e.target.value })} placeholder={'{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Your question?","acceptedAnswer":{"@type":"Answer","text":"Your answer"}}]}'} />
-                  <p className="text-[10px] text-sand/50 mt-1">Add FAQ schema to get rich snippets in Google and AI answers</p>
+                <div className="space-y-4">
+                  <div>
+                    <label className={labelClass}>SEO Title (50-60 chars recommended)</label>
+                    <input className={inputClass} value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} placeholder="SEO optimized title for search engines" />
+                    <p className="text-[10px] text-sand/50 mt-1">{form.seoTitle?.length || 0}/60 characters</p>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Meta Description (150-160 chars recommended)</label>
+                    <textarea className={inputClass} rows={3} value={form.metaDescription} onChange={(e) => setForm({ ...form, metaDescription: e.target.value })} placeholder="Compelling description that appears in search results and AI summaries" />
+                    <p className="text-[10px] text-sand/50 mt-1">{form.metaDescription?.length || 0}/160 characters</p>
+                  </div>
+                  <div>
+                    <label className={labelClass}>Target Keywords (comma-separated)</label>
+                    <input className={inputClass} value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder="hotel minibar supplier, hospitality amenities India, OEM manufacturer" />
+                    <p className="text-[10px] text-sand/50 mt-1">These help AI tools understand the topic context</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className={labelClass}>Canonical URL (optional)</label>
+                      <input className={inputClass} value={form.canonicalUrl} onChange={(e) => setForm({ ...form, canonicalUrl: e.target.value })} placeholder="https://laxree.com/blog/your-post" />
+                    </div>
+                    <div>
+                      <label className={labelClass}>OG Image URL (optional)</label>
+                      <input className={inputClass} value={form.ogImage} onChange={(e) => setForm({ ...form, ogImage: e.target.value })} placeholder="/images/blog/custom-og.jpg" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass}>FAQ Schema (JSON-LD) — for Rich Results</label>
+                    <textarea className={inputClass} rows={5} value={form.faqJsonLd} onChange={(e) => setForm({ ...form, faqJsonLd: e.target.value })} placeholder={'{\n  "@context": "https://schema.org",\n  "@type": "FAQPage",\n  "mainEntity": [{\n    "@type": "Question",\n    "name": "Your question here?",\n    "acceptedAnswer": {\n      "@type": "Answer",\n      "text": "Your answer here"\n    }\n  }]\n}'} />
+                    <p className="text-[10px] text-sand/50 mt-1">Add FAQ schema to get rich snippets in Google and AI answers</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
-        <div className="flex gap-3 mt-6">
-          <button onClick={() => onSave(form)} className="pill pill-brass flex-1 py-3 text-[13px]">Save Post</button>
-          <button onClick={onClose} className="rounded-full bg-white/5 px-6 py-3 text-[13px] text-sand hover:bg-white/10">Cancel</button>
+        {/* Footer */}
+        <div className="flex gap-3 px-6 py-4 border-t border-white/10 shrink-0">
+          <button onClick={handleSave} className="pill pill-brass flex-1 py-3 text-[13px]">Save Post</button>
+          <button onClick={onClose} className="rounded-full bg-white/5 px-6 py-3 text-[13px] text-sand hover:bg-white/10 transition-colors">Cancel</button>
         </div>
       </div>
     </div>

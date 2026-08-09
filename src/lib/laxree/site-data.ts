@@ -630,7 +630,7 @@ export const LEADERSHIP: TeamMember[] = [
     role: "Head of HR",
     bio: "Heads Human Resources, talent acquisition, and organizational culture. Ensures a motivated workforce across factory, sales, and corporate teams.",
     initials: "BA",
-    image: "/images/team/bavika-agarwal.png",
+    
   },
 ];
 

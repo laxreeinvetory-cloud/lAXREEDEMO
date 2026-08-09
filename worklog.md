@@ -2141,3 +2141,131 @@ Stage Summary:
 - **[src/lib/laxree/product-images.ts:64-65]** `.jpg` extensions on `room-linen/bedsheet-plain` and `bath-linen/bath-towel-brown` cause 404s when these sub-categories are previewed on /products (Linen card) or /products/linen (sub-category previews). Browser console shows 404s. **Fix**: change both `.jpg` → `.png` (or `.webp`).
 
 - **[src/lib/laxree/blog-content.ts]** `/blog/amenity-trends-2026` renders with empty article body (no paragraphs). No console error, but the user sees a blank white section where the article body should be. **Fix**: add a content block for `amenity-trends-2026`, or remove the post from `BLOG_POSTS` in site-data.ts.
+
+---
+Task ID: AUDIT-FINAL
+Agent: expert-final-audit
+Task: Final comprehensive audit before production launch
+
+Work Log:
+- Read worklog.md (last 250 lines) to understand prior agent work (FULL-AUDIT-3, PERF-1, BUG-1)
+- Confirmed prior dead-code cleanup is largely complete: 12+ dead shadcn UI components (label/dialog/button/input/card/textarea/sheet/toast/popover/badge/alert/separator/toaster) all deleted; dead lib files (cms.ts, seo.ts, site-data-types.ts, utils.ts) deleted; dead components (magnetic-button, product-card-cart, category-explorer, three/hero-stage) deleted; use-toast.ts deleted; root /api/route.ts deleted
+- Confirmed prior CRITICAL fixes:
+  * Cart page now uses `/products` instead of `/products/amenities`
+  * LEADERSHIP[0] now Samarth Agarwal with correct initials "SA" (Ashish removed)
+  * bavika-agarwal.png now exists on disk (but see CRITICAL bug below)
+  * `SALES_WHATSAPP` (quotation route) matches `SITE.whatsapp` = "919251683662"
+  * admin/stats route now filters catalogue leads by `"catalogue-discount"` (matches sender)
+  * lead-cta-banner now sends `source: "homepage-cta"` + proper error handling
+  * catalogue-modal download link now points to `/catalogues/master-catalogue.pdf`
+  * PageCTA now supports custom `secondaryHref` prop; all callers pass it correctly
+  * product-images.ts no longer has the .jpg/.png extension mismatches
+  * experience-center page now has a real `<video>` element (no broken play button)
+  * admin/homepage default image now `/images/owner-cropped.jpg` (exists)
+  * All image refs checked against disk: 275/278 found (3 "missing" are placeholder text in `placeholder=` attrs)
+- Ran `npx tsc --noEmit` — 0 errors (cleaned .next/dev/types/validator.ts stale reference first)
+- Ran `npx eslint .` — 0 errors, 35 warnings (all `<img>` usage — acceptable)
+- Ran `npx next build` — succeeded, 110 static pages generated
+- Cross-referenced admin/stats source filters vs. form senders → CRM page TAB_SOURCES still mismatches (catalogue-discount vs catalogue-page)
+- Verified admin SOURCE_LABELS maps in admin/page.tsx, admin/leads/page.tsx, admin/crm/page.tsx — all 3 missing "catalogue-discount" and "homepage-cta" entries
+- md5sum'd team images → bavika-agarwal.png, samarth-agarwal.png, and ashish-agarwal.png all share hash e8fdcb225090168e926aa5b0a36af0bd (same image)
+- Verified blog-content.ts has 11 if (post.slug === ...) branches for 12 BLOG_POSTS slugs — amenity-trends-2026 still missing
+- Verified blog detail page (src/app/blog/[slug]/page.tsx) uses BLOG_POSTS_FULL hardcoded — DB-created blog posts will 404
+- Confirmed admin login page (src/app/admin/login/page.tsx:60-62) displays default credentials in plain text in UI
+
+Stage Summary:
+
+## CRITICAL (breaks functionality — must fix before production)
+
+- **[src/lib/laxree/blog-content.ts]** `amenity-trends-2026` (3rd post in BLOG_POSTS, also shown on homepage HospitalityTrends section) has NO content block in `BLOG_POSTS_FULL`. The route `/blog/amenity-trends-2026` is pre-generated at build time (visible in `next build` output) but renders with hero + cover image + EMPTY article body section. User sees a blank white section where the article should be. Fix: add an `if (post.slug === "amenity-trends-2026") { full.content = [...] }` block to blog-content.ts, OR remove the post from BLOG_POSTS in site-data.ts.
+
+- **[src/app/blog/[slug]/page.tsx:85]** Blog detail page uses `BLOG_POSTS_FULL.find()` from `src/lib/laxree/blog-content.ts` (hardcoded), NOT the database. The blog LISTING page (`/blog`) fetches from `/api/admin/blog` (which includes DB posts), so any new blog post created via the admin panel will appear on the listing page but clicking it returns 404 because `notFound()` is called when the slug isn't in `BLOG_POSTS_FULL`. The admin blog editor can create posts that look successful but can never be viewed publicly. Fix: either fetch the post from the DB in the detail page (server-side), or remove the admin "New Post" button and document that blog posts are static-only.
+
+- **[public/images/team/{bavika,samarth,ashish}-agarwal.png]** All three files have IDENTICAL md5 hash `e8fdcb225090168e926aa5b0a36af0bd` — they are literally the same image (1254×1254 PNG). The `/about-us` leadership section renders the same photo for "Samarth Agarwal (Head of Sales)", "Reema Bajaj (CMO — has unique photo)", and "Bavika Agarwal (Head of HR)". Bavika's profile photo is actually Samarth's. Critical data consistency bug. Fix: replace `bavika-agarwal.png` with an actual photo of Bavika Agarwal, or remove the `image` field from LEADERSHIP[2] in site-data.ts so the page falls back to the "BA" initials avatar.
+
+- **[src/app/admin/login/page.tsx:60-62]** The admin login page displays the default credentials `admin/laxree2026` in plain text right in the UI:
+  ```
+  Username: admin  Password: laxree2026
+  ```
+  Anyone visiting `/admin/login` can immediately log in. Combined with the hardcoded fallback in `src/app/api/admin/login/route.ts:28-29`, this gives unrestricted admin access to anyone who can read the login screen. Critical security issue for production. Fix: remove the "Default Login" info box (lines 59-62), or only show it when `process.env.NODE_ENV !== "production"`.
+
+- **[src/app/admin/crm/page.tsx:74]** The CRM's "Catalogue" tab filters leads by `source IN ["catalogue-page", "catalogue"]`, but the actual source string sent by the catalogue discount form (`src/app/catalogue/page.tsx:227`) is `"catalogue-discount"`. As a result, the CRM's Catalogue tab is permanently empty — catalogue leads only appear in the "All" tab. Note: admin/stats/route.ts was fixed to use `"catalogue-discount"` (line 69), but the CRM page was never updated. Fix: change `catalogue: ["catalogue-page", "catalogue"]` to `catalogue: ["catalogue-discount", "catalogue-page", "catalogue"]` on line 74, and add `"catalogue-discount": "Catalogue"` to SOURCE_LABELS on line 81.
+
+## HIGH (visible bugs — should fix before production)
+
+- **[src/app/admin/page.tsx:60-72 + src/app/admin/leads/page.tsx:32-39 + src/app/admin/crm/page.tsx:77-89]** The `SOURCE_LABELS` maps in all three admin pages are missing the `"catalogue-discount"` and `"homepage-cta"` source strings actually sent by the forms. On the dashboard and CRM, leads from the catalogue discount form and homepage CTA form display with NO source label (empty string). Fix: add `"catalogue-discount": "Catalogue"` and `"homepage-cta": "Homepage CTA"` to all three SOURCE_LABELS maps.
+
+- **[src/app/contact-us/page.tsx:88-90]** The contact form sends `company` and `subject` fields to `/api/lead`, but the API only persists `name/email/phone/category/message/source`. The company and subject data is silently discarded. Fix: either add `company`/`subject` to the Prisma Lead schema and `/api/lead` route, or merge them into the `message` field (as the dealer/career forms do).
+
+- **[All `/api/admin/*` routes]** No server-side auth middleware — admin auth is purely client-side (localStorage in `src/lib/admin/auth-context.tsx`). Anyone can POST/DELETE products, leads, blog posts, FAQ items, etc. by hitting the API endpoints directly with curl/Postman. Previously flagged as acceptable for demo, but blocks production launch. Fix: add a server-side session cookie check (or bearer token) to all `/api/admin/*` routes via Next.js middleware.
+
+- **[src/components/providers/conditional-chrome.tsx:47]** Mobile sticky bar spacer is `h-14` (56px), but `MobileStickyBar` (`src/components/floating/mobile-sticky-bar.tsx:15`) adds `paddingBottom: env(safe-area-inset-bottom)` which on iPhone X+ devices can be ~34px. The bar can be ~86px tall but only 56px is reserved — covering ~30px of footer content on notched iPhones. Fix: change spacer to `<div className="h-20 md:hidden" aria-hidden />` (80px) OR use `style={{ height: 'calc(56px + env(safe-area-inset-bottom))' }}`.
+
+- **[src/app/admin/blog/page.tsx:295]** The "Save Post" button has no validation. Clicking it with an empty title/slug sends an empty object to the API, creating a blog post with empty fields. Fix: add a `canSave` check (e.g., `disabled={!form.title.trim() || !form.slug.trim()}`) like the FAQ editor does.
+
+- **[Hardcoded admin credentials in src/app/api/admin/login/route.ts:28-29]** `admin/laxree2026` is the default if `ADMIN_USERNAME`/`ADMIN_PASSWORD` env vars aren't set. Anyone reading the source knows the credentials. Acceptable for demo, but production-blocking. Fix: require env vars in production (`if (process.env.NODE_ENV === 'production' && !process.env.ADMIN_PASSWORD) throw new Error(...)`).
+
+- **[No `error.tsx` / `not-found.tsx` / `loading.tsx` / `global-error.tsx` anywhere in src/app/]** Unhandled runtime errors and 404s render Next.js's default error pages, which don't match the LaxRee brand. Production users hitting a 404 see an unstyled white page. Fix: add at minimum `src/app/not-found.tsx` and `src/app/error.tsx` with branded layouts.
+
+- **[homepage-cta source not tracked]** `src/components/site/lead-cta-banner.tsx:42` sends `source: "homepage-cta"`, but:
+  - `src/app/api/admin/stats/route.ts` doesn't count it (no `homepage-cta` bucket in `leadsBySource`)
+  - `src/app/admin/crm/page.tsx` has no "Homepage" tab
+  - `src/app/admin/page.tsx` and `src/app/admin/leads/page.tsx` SOURCE_LABELS don't include it
+  Homepage CTA leads effectively disappear from analytics — they're only visible in the CRM's "All" tab with no source label. Fix: add a `homepage` bucket to admin/stats, add a Homepage tab to admin/crm, and add `"homepage-cta": "Homepage CTA"` to SOURCE_LABELS in admin/page.tsx and admin/leads/page.tsx.
+
+## MEDIUM (minor bugs — fix when convenient)
+
+- **[src/components/floating/catalogue-modal.tsx:46-47]** `closeButtonRef` declared and silenced with `void closeButtonRef;`. Dead code. Fix: delete both lines.
+
+- **[src/components/floating/enquire-modal.tsx:40, 50, 147]** `closeButtonRef` declared, attached to the close button, but never read. The comment on line 50 says "Focus close button shortly after mount" but the code actually focuses `firstFieldRef`. Dead code + misleading comment. Fix: delete `closeButtonRef` and fix the comment, or actually focus the close button.
+
+- **[src/components/site/product-detail-card.tsx:23-28]** `parentSlug` and `itemSlug` props declared in `ProductPageWithSelector`'s type signature but never destructured or used in the function body. The caller (`src/app/products/[slug]/[itemSlug]/page.tsx:114-115`) passes them but they're ignored. Dead props. Fix: remove from the type signature and from the call site.
+
+- **[src/hooks/use-mobile.ts (entire 19-line file)]** The `useIsMobile` hook is dead — confirmed not imported anywhere. `src/components/site/product-spotlight.tsx` defines its own local copy. Fix: delete the file.
+
+- **[src/hooks/laxree/use-laxree-motion.ts:104-124]** `useScrollProgress` export is never imported. Fix: delete lines 104-124.
+
+- **[src/app/about-us/page.tsx:12-14]** Doc-comment claims "The page is a server component — every interactive piece (motion, hover, the CTA button) lives inside the client components it imports" but the file has `"use client"` on line 1. The page became a client component when `usePageContent` was added. Misleading documentation. Fix: update the comment to reflect reality.
+
+- **[src/app/globals.css:90-93]** Overly-broad selector `[style*="transform"], [style*="opacity"] { will-change: transform, opacity; }` forces GPU compositing on EVERY element with any inline transform/opacity style — including hover transitions, modal backdrops, animated dots. Causes memory/stutter on low-end devices. Fix: remove this rule entirely; apply `will-change` only on specific animated elements.
+
+- **[src/app/globals.css:293-310]** `marquee-left` and `marquee-right` keyframes + `.animate-marquee-left` and `.animate-marquee-right` classes are defined but never used anywhere in src/. Dead CSS (~18 lines). Fix: delete lines 293-310.
+
+- **[src/lib/db.ts:90-92]** `knownModels` set is a hardcoded list of Prisma model names (`adminUser, lead, blogPost, siteContent, product, category, user`). If a new Prisma model is added, it must be manually added here, otherwise `db.newModel.findMany()` returns `undefined` and crashes the caller. Fix: document the maintenance burden, or derive the model list from the Prisma client at runtime.
+
+- **[src/lib/laxree/site-data.ts:12-13]** `tollFreeDisplay` and `tollFreeHref` are both `+91 92516 83662` — labeled as "toll-free" but it's a regular mobile number (Indian toll-free numbers start with 1800). The lead-cta-banner.tsx:154 also says "Call Toll-Free" but dials this mobile number. Misleading label. Fix: change the label to "Call Us" or "Call Sales", OR replace with an actual toll-free number.
+
+- **[src/app/layout.tsx:224 vs src/lib/laxree/site-data.ts:17]** Schema.org `openingHours` in the LocalBusiness JSON-LD says `"Mo-Sa 09:30-18:30"` (9:30am-6:30pm), but `SITE.officeHours` says `"10:00 AM – 7:00 PM"` (10am-7pm). Mismatch in business hours between structured data and visible content. Fix: align both to the same hours.
+
+- **[src/app/manifest.ts:14 vs src/app/layout.tsx:103]** `manifest.ts` references `/favicon.svg` while `layout.tsx` references `/favicon.jpg`. Both files exist on disk so not a runtime bug, but the inconsistency is confusing. Fix: pick one (recommend `/favicon.svg` for vector scalability) and use it consistently.
+
+- **[src/app/admin/cms/page.tsx:186]** Default footer config includes `{ id: "ql2", label: "Privacy Policy", link: "/privacy", order: 2, visible: true }` but no `/privacy` page exists in src/app/. Latent — only manifests if an admin saves the CMS footer config without overriding the defaults. Fix: create a basic `/privacy` page, or remove the link from the defaults.
+
+- **[src/app/admin/products/page.tsx + src/app/admin/cms/page.tsx + src/app/admin/track-pages/page.tsx]** All three admin pages use `bg-yellow-500`/`bg-yellow-600` (Tailwind default yellow) for primary buttons/inputs, while newer admin pages (crm, careers, dealers, faq, homepage) use `bg-brass` (brand color). The admin panel looks visually inconsistent. Fix: extract shared style constants to `src/lib/admin/styles.ts` and use `bg-brass` everywhere.
+
+- **[src/app/admin/upload/[filename]/route.ts]** Missing `export const runtime = "nodejs";` declaration (the sibling `upload/route.ts:4` has it). Defaults to nodejs in Next.js 16, but explicit is better for consistency. Fix: add `export const runtime = "nodejs";` at the top.
+
+- **[src/app/api/admin/upload/route.ts:9]** `ALLOWED_TYPES` set doesn't include `"image/jpg"` (non-standard but seen in some older Android browsers). Uploads from those clients would be rejected with 415. Fix: add `"image/jpg"` to the set (harmless duplicate of `"image/jpeg"`).
+
+## DEAD CODE (safe to remove)
+
+- **[src/hooks/use-mobile.ts]** Entire 19-line file is dead. `useIsMobile` is not imported anywhere; `product-spotlight.tsx` defines its own local copy.
+
+- **[src/hooks/laxree/use-laxree-motion.ts:104-124]** `useScrollProgress` export is never imported. The other exports (`useCountUp`, `useTilt`, `usePrefersReducedMotion`) are all used.
+
+- **[src/components/floating/catalogue-modal.tsx:46-47]** `closeButtonRef` declared and silenced with `void closeButtonRef;`. Pure dead code.
+
+- **[src/components/floating/enquire-modal.tsx:40, 147]** `closeButtonRef` declared, attached to the close button, but never read.
+
+- **[src/components/site/product-detail-card.tsx:26-27]** `parentSlug` and `itemSlug` props in `ProductPageWithSelector`'s type signature — never destructured or used.
+
+- **[src/lib/admin/admin-shell.tsx:26-28]** `Globe`, `Shield`, `TrendingUp` lucide icons imported but never used.
+
+- **[src/app/admin/track-pages/page.tsx:3]** `useRef` imported but never used.
+
+- **[src/app/globals.css:293-310]** `marquee-left`/`marquee-right` keyframes + `.animate-marquee-left`/`.animate-marquee-right` classes — 18 lines of dead CSS, never referenced.
+
+- **[src/app/globals.css:25-49]** Most of the `shadcn` alias CSS variables (`--color-card`, `--color-popover`, `--color-primary`, `--color-secondary`, `--color-muted`, `--color-accent`, `--color-destructive`, `--color-input`, `--color-chart-1` through `--color-chart-5`) — defined but no longer consumed by any component since all 12 shadcn UI components were deleted. Can be safely removed (keep only `--color-background`, `--color-foreground`, `--color-border`, `--color-ring` if any non-shadcn code still uses them).
+
+- **[src/app/about-us/page.tsx:64]** `DEFAULTS.team.ashish` entry (`ashish: "/images/team/ashish-agarwal.png"`) is dead — Ashish Agarwal was removed from the LEADERSHIP array in a prior refactor, so the `teamKey = "ashish"` lookup never fires. The `ashish-agarwal.png` file on disk is also dead (only `bavika-agarwal.png`, `reema-bajaj.png`, `samarth-agarwal.png` are referenced via LEADERSHIP).
+

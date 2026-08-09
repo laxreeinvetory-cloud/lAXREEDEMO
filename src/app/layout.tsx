@@ -221,7 +221,7 @@ export default function RootLayout({
                 latitude: 26.4499,
                 longitude: 74.6399,
               },
-              openingHours: "Mo-Sa 09:30-18:30",
+              openingHours: "Mo-Sa 10:00-19:00",
               areaServed: "IN",
             }),
           }}

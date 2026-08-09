@@ -71,7 +71,7 @@ const TAB_SOURCES: Record<TabKey, string[]> = {
   dealer: ["dealer-application", "dealer"],
   career: ["career-application", "career"],
   enquiry: ["enquiry-modal", "enquiry"],
-  catalogue: ["catalogue-page", "catalogue"],
+  catalogue: ["catalogue-page", "catalogue", "catalogue-discount"],
 };
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -80,10 +80,12 @@ const SOURCE_LABELS: Record<string, string> = {
   quotation: "Quotation",
   "catalogue-page": "Catalogue",
   catalogue: "Catalogue",
+  "catalogue-discount": "Catalogue",
   "dealer-application": "Dealer",
   dealer: "Dealer",
   "career-application": "Career",
   career: "Career",
+  "homepage-cta": "Homepage CTA",
   "enquiry-modal": "Enquiry",
   enquiry: "Enquiry",
 };
