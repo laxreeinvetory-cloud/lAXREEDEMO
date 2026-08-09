@@ -35,10 +35,16 @@ export function ConditionalChrome({ children }: { children: ReactNode }) {
       <div className="relative flex min-h-screen flex-col bg-charcoal">
         <ScrollProgress />
         <Navbar />
+        {/* main has no top padding — Hero and PageHero components already
+            include their own navbar-offset padding (pt-32 / paddingTop:96). */}
         <main className="flex-1 flex flex-col">{children}</main>
         <SiteFooter />
       </div>
       <FloatingRoot />
+      {/* Mobile sticky bar spacer — prevents the fixed bottom bar from
+          covering footer content on mobile. The spacer matches the
+          MobileStickyBar height (~56px). */}
+      <div className="h-14 md:hidden" aria-hidden />
       <SiteToaster />
     </SmoothScrollProvider>
   );

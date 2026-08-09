@@ -3,7 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   compress: true,
-  // Headers for caching static assets
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
+  // Headers for caching static assets + video protection
   async headers() {
     return [
       {
@@ -21,6 +27,28 @@ const nextConfig: NextConfig = {
           {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // Video files — prevent hotlinking and direct download
+        source: "/videos/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "private, max-age=0, no-cache, no-store, must-revalidate",
+          },
+          {
+            key: "Content-Disposition",
+            value: "inline",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "same-origin",
           },
         ],
       },

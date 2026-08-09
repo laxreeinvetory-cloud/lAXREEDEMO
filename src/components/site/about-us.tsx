@@ -16,14 +16,21 @@ const ABOUT_COPY =
 
 const ABOUT_CHIPS = [
   "OEM Manufacturer — Minibar & Safe Locker",
-  "Ajmer's Largest Hospitality Exhibition Centre",
+  "India's Largest Hospitality Exhibition Centre",
   "Pan-India Delivery",
+];
+
+const STATS = [
+  { value: "11+", label: "Years Experience" },
+  { value: "1,347+", label: "Projects Delivered" },
+  { value: "700+", label: "Product SKUs" },
+  { value: "28", label: "States Covered" },
 ];
 
 export function AboutUs() {
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
-  const [factoryImage, setFactoryImage] = useState<string>("/images/about/factory.jpg");
+  const [factoryImage, setFactoryImage] = useState<string>("/images/categories/about-us-team.png");
 
   useEffect(() => {
     fetch("/api/admin/cms?key=page:about-us", { cache: "no-store" })
@@ -67,15 +74,16 @@ export function AboutUs() {
               Who We Are
             </motion.span>
 
-            <motion.h2
+            <motion.p
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: 0.05, ease: "easeOut" }}
-              className="mt-5 font-display text-5xl text-ivory md:text-6xl"
+              className="mt-5 font-display text-ivory"
+              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 500, lineHeight: 1.05 }}
             >
-              About Us
-            </motion.h2>
+              Who We Are
+            </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 18 }}
@@ -120,6 +128,29 @@ export function AboutUs() {
                 Know More
                 <ArrowRight className="ml-2 h-3.5 w-3.5" strokeWidth={1.75} />
               </Link>
+            </motion.div>
+
+            {/* Stats grid */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4"
+            >
+              {STATS.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="glass-on-charcoal rounded-2xl p-4 text-center"
+                >
+                  <div className="font-mono text-[28px] leading-none text-brass">
+                    {stat.value}
+                  </div>
+                  <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-sand">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
             </motion.div>
           </div>
 

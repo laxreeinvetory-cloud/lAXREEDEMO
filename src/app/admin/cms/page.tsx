@@ -109,7 +109,7 @@ const DEFAULTS: Record<string, any> = {
       { id: "b9", name: "Taj", logo: "", order: 9, visible: true },
       { id: "b10", name: "Ananta Hotels", logo: "", order: 10, visible: true },
       { id: "b11", name: "The Lords Inn", logo: "", order: 11, visible: true },
-      { id: "b12", name: "The Derns Hotels & Resorts", logo: "", order: 12, visible: true },
+      { id: "b12", name: "The Fern Hotels & Resorts", logo: "", order: 12, visible: true },
       { id: "b13", name: "Swosti Group", logo: "", order: 13, visible: true },
     ],
   },
