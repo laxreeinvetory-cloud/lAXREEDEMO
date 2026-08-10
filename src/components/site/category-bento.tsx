@@ -8,6 +8,7 @@ import {
   useTilt,
   usePrefersReducedMotion,
 } from "@/hooks/laxree/use-laxree-motion";
+import { useImageOverrides } from "@/hooks/use-image-overrides";
 
 // Shape returned by /api/admin/products for a category row.
 type DbCategory = {
@@ -104,8 +105,10 @@ function CategoryCard({ category, large = false, index, imageOverride }: Categor
 }
 
 export function CategoryBento() {
-  // CMS / DB-driven category image overrides keyed by slug. Empty until the
-  // /api/admin/products fetch resolves; static category.image is the fallback.
+  // CMS image overrides from /admin/images (key "images", field "category:<slug>")
+  const cmsOverrides = useImageOverrides();
+
+  // DB-driven category image overrides from /api/admin/products (legacy)
   const [imageMap, setImageMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -159,15 +162,21 @@ export function CategoryBento() {
             - Tablet (md): 2-col, Amenities spans both
             - Desktop (lg): 12-col / 2-row bento — Amenities 6×2, others 3×1 */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-12 lg:grid-rows-2">
-          {CATEGORIES.map((category: Category, i: number) => (
-            <CategoryCard
-              key={category.slug}
-              category={category}
-              large={category.span === "large"}
-              index={i}
-              imageOverride={imageMap[category.slug]}
-            />
-          ))}
+          {CATEGORIES.map((category: Category, i: number) => {
+            // CMS override (from /admin/images) takes priority, then DB, then static
+            const override =
+              cmsOverrides[`category:${category.slug}`] ||
+              imageMap[category.slug];
+            return (
+              <CategoryCard
+                key={category.slug}
+                category={category}
+                large={category.span === "large"}
+                index={i}
+                imageOverride={override}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

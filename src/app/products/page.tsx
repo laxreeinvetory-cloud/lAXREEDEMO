@@ -14,6 +14,7 @@ import {
   getCategoriesByParent,
 } from "@/lib/laxree/catalogue-data";
 import { PARENT_FALLBACK_IMAGE } from "@/lib/laxree/product-images";
+import { useImageOverrides } from "@/hooks/use-image-overrides";
 
 /* ─────────────────────────────────────────────────────────────
    Parent slug → category-level hero image.
@@ -50,16 +51,18 @@ const STRENGTH_STATS = [
 function ParentCategoryCard({
   parent,
   index,
+  imageOverride,
 }: {
   parent: (typeof CATALOGUE_PARENTS)[0];
   index: number;
+  imageOverride?: string;
 }) {
   const children = getCategoriesByParent(parent.slug);
   const productCount = children.reduce(
     (sum, cat) => sum + cat.products.length,
     0,
   );
-  const image = PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/room-amenities.png";
+  const image = imageOverride || PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/room-amenities.png";
 
   return (
     <FadeIn delay={index * 0.06}>
@@ -113,6 +116,7 @@ function ParentCategoryCard({
    ───────────────────────────────────────────────────────────── */
 export default function ProductsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const cmsOverrides = useImageOverrides();
 
   const filteredParents = activeFilter === "all"
     ? CATALOGUE_PARENTS
@@ -188,6 +192,7 @@ export default function ProductsPage() {
                 key={parent.slug}
                 parent={parent}
                 index={i}
+                imageOverride={cmsOverrides[`parent:${parent.slug}`]}
               />
             ))}
           </div>

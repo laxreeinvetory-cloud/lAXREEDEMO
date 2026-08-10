@@ -19,6 +19,7 @@ import {
   PageCTA,
   FadeIn,
 } from "@/components/site/page-primitives";
+import { useImageOverrides } from "@/hooks/use-image-overrides";
 
 const PARENT_CATEGORY_MAP: Record<string, string[]> = {
   "room-amenities": ["Mini Bar", "Tea Kettle", "Kettle Tray", "Safe Box", "Wooden Hangers", "RFID Locks", "Room Telephone", "Docking Pod", "Room Dustbin", "Desktop Accessories", "Rollaway Bed", "Mattress", "Iron & Iron Board", "Baby Cot", "Coat Stand", "Luggage Rack", "Emergency Torch"],
@@ -36,6 +37,7 @@ function CategoryPageInner() {
   const slug = pathname?.split("/").pop() || "";
   const [itemImages, setItemImages] = useState<Record<string, { image: string; count: number }>>({});
   const [otherImages, setOtherImages] = useState<Record<string, { image: string; count: number }>>({});
+  const cmsOverrides = useImageOverrides();
 
   const parent = CATALOGUE_PARENTS.find((p) => p.slug === slug);
   const children = parent ? getCategoriesByParent(parent.slug) : [];
@@ -107,6 +109,12 @@ function CategoryPageInner() {
             <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {children.map((item, i) => {
                 const preview = itemImages[item.slug];
+                // CMS override (from /admin/images) takes priority, then DB-fetched image, then static fallback
+                const itemImage =
+                  cmsOverrides[`subcategory:${item.slug}`] ||
+                  preview?.image ||
+                  SUBCATEGORY_FALLBACK_IMAGE[item.slug] ||
+                  "/images/product-catalogue/coming-soon.jpg";
                 return (
                   <FadeIn key={item.slug} delay={i * 0.06}>
                     <Link
@@ -116,7 +124,7 @@ function CategoryPageInner() {
                       {/* Image area — white bg, object-contain, subtle zoom on hover */}
                       <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-white to-ivory/50">
                         <img
-                          src={preview?.image || "/images/product-catalogue/coming-soon.jpg"}
+                          src={itemImage}
                           alt={item.name}
                           loading="lazy"
                           className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
@@ -164,10 +172,15 @@ function CategoryPageInner() {
             {otherParents.map((p) => {
               const preview = otherImages[p.slug];
               const pChildren = getCategoriesByParent(p.slug);
+              const otherImage =
+                cmsOverrides[`parent:${p.slug}`] ||
+                preview?.image ||
+                PARENT_FALLBACK_IMAGE[p.slug] ||
+                "/images/product-catalogue/coming-soon.jpg";
               return (
                 <Link key={p.slug} href={`/products/${p.slug}`} className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
-                    <img src={preview?.image || "/images/product-catalogue/coming-soon.jpg"} alt={p.name} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
+                    <img src={otherImage} alt={p.name} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="p-4">
                     <h3 className="font-display text-[16px] text-ivory">{p.name}</h3>

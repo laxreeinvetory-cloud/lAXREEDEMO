@@ -2754,3 +2754,48 @@ Stage Summary:
 - Neon project: ep-autumn-queen-ax318hnt (US East 2, fresh 1GB quota)
 - Vercel project: l-axreedemo, all 3 environments updated
 - Build script auto-runs prisma db push on every deploy (tables always in sync)
+
+---
+Task ID: REWRITE-ADMIN-IMAGES
+Agent: frontend (admin Image Manager rewrite)
+Task: Rewrite `/home/z/my-project/src/app/admin/images/page.tsx` to add (1) a delete button on every card that clears the override and reverts to default, (2) Homepage Categories section (8 cards), (3) Product Page Categories section (8 cards), (4) Product Sub-Categories section (48 cards).
+
+Work Log:
+- Read prior worklog (2756 lines). Production DB is live and working. Image Manager writes persist correctly.
+- Read original 258-line page.tsx, the use-image-overrides hook, site-data.ts CATEGORIES array (8 entries), product-images.ts PARENT_FALLBACK_IMAGE (8 keys) and SUBCATEGORY_FALLBACK_IMAGE (48 keys), and the /api/admin/cms route to confirm GET/PUT contract.
+- Rewrote page.tsx (258 → 498 lines) with:
+  * SITE_IMAGES (24 entries, unchanged) for Homepage, Pages, Team Members, Experience Centers.
+  * HOMEPAGE_CATEGORY_IMAGES (8 entries) generated from CATEGORIES — cmsKey="images", field="category:<slug>", fallback=cat.image.
+  * PRODUCT_PARENT_IMAGES (8 entries) generated from PARENT_FALLBACK_IMAGE keys — cmsKey="images", field="parent:<slug>".
+  * PRODUCT_SUBCATEGORY_IMAGES (48 entries) generated from SUBCATEGORY_FALLBACK_IMAGE keys — cmsKey="images", field="subcategory:<slug>".
+  * Total: 88 image cards across 7 sections.
+- Added helper functions:
+  * slugToLabel(slug) — title-cases slug, uppercases known acronyms (RFID, FRP, POD). "mini-bar" → "Mini Bar", "rfid-locks" → "RFID Locks".
+  * isFlatImagesKey(img) — true when cmsKey === "images" (flat key mode vs nested dot-path mode).
+  * readField/setField/deleteField — handle both flat keys (new sections) and nested dot-paths (existing sections) transparently.
+- Updated saveToCMS to use setField helper (works for both flat and nested).
+- Added new deleteFromCMS(img) function:
+  * window.confirm("Remove this image override? The site will revert to the default image.")
+  * GET current section, deleteField, PUT back.
+  * If field was already absent → toast "No override set — already using default".
+  * On success → remove from local state, toast "Image override removed — reverted to default".
+  * Network error → toast "Network error removing override".
+- Added Trash2 (red) button to every card next to the Save (Check) button. Shows spinner when deleting. Both buttons disabled during any busy state (upload/save/delete).
+- Added badge overlay on each card preview: yellow "Override" badge when an override exists, black "Default" badge when fallback is in use.
+- Removed unused useRef import.
+
+Verification:
+1. `bun run lint`: ✅ 0 errors, 40 warnings (all pre-existing in OTHER files — none in admin/images/page.tsx).
+2. `npx tsc --noEmit`: ✅ 0 errors (exit 0).
+3. Dev server (port 3000): `GET /admin/images` returned HTTP 200, 39932 bytes, compiled in 1000ms, rendered in 43ms. HTML includes `src_app_admin_images_page_tsx_bd5b2edf._.js` chunk, confirming the rewritten file is served. No errors in dev.log.
+
+Stage Summary:
+- All 4 features delivered:
+  ✅ Delete button (Trash2) on every card with confirm dialog + "Image override removed — reverted to default" toast.
+  ✅ Homepage Categories section (8 cards) — flat CMS key "images", field "category:<slug>", defaults from CATEGORIES.
+  ✅ Product Page Categories section (8 cards) — flat CMS key "images", field "parent:<slug>", defaults from PARENT_FALLBACK_IMAGE.
+  ✅ Product Sub-Categories section (48 cards) — flat CMS key "images", field "subcategory:<slug>", defaults from SUBCATEGORY_FALLBACK_IMAGE.
+- All 24 existing image cards (Homepage, Pages, Team, Experience Centers) preserved and still work.
+- File length: 498 lines.
+- No other files modified. No test files created.
+- Work record written to /home/z/my-project/agent-ctx/REWRITE-ADMIN-IMAGES-frontend.md.
