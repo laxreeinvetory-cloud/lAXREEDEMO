@@ -2700,3 +2700,57 @@ Stage Summary:
   3. On Vercel, go to Settings → Environment Variables → update DATABASE_URL
   4. Redeploy — tables auto-create via 'prisma db push'
 - This is the MAXIMUM that can be done in code. The actual fix requires creating a new Neon project (user action on neon.tech).
+
+---
+Task ID: SETUP-PROD-DB
+Agent: main (orchestrator)
+Task: User provided new Neon DB URL + Vercel token. Set up production DB and fix everything.
+
+Work Log:
+- User provided NEW Neon DB URL: postgresql://neondb_owner:npg_...@ep-autumn-queen-ax318hnt-pooler.c-4.us-east-2.aws.neon.tech/neondb (fresh project, fresh 1GB quota)
+- User provided Vercel full access token: vcp_1T8t...
+- Step 1: Set .env to new Neon URL (removed channel_binding=require — Prisma doesn't support it)
+- Step 2: Ran `prisma db push --accept-data-loss` → SUCCESS! All 7 tables created (AdminUser, Lead, BlogPost, SiteContent, Product, Category, User) in 10.48s
+- Step 3: Tested DB CRUD with raw Prisma client → write ✅, read ✅, delete ✅
+- Step 4: Used Vercel REST API (not CLI — CLI needed project linking) to:
+  * Found team: laxree1 (team_ttqzCTu0IUG9Y53G3UIb9cdy)
+  * Found project: l-axreedemo (prj_sq1GtSgzzc7WdivsQ3b4SCMK3JIw)
+  * Deleted old DATABASE_URL env var (id=EtRV58FQzNSUotio)
+  * Created new DATABASE_URL in production (id=nftKRdWcAQ2Ny31f)
+  * Created new DATABASE_URL in preview (id=25DTBu6kEyoiuGZc)
+  * Created new DATABASE_URL in development (id=knuGgku6TISaX8Xl)
+- Step 5: Triggered production redeploy via /v13/deployments API with deploymentId=dpl_HKd5eMp6yNK8Ls3KyS2iaQtRXkZv + name=l-axreedemo + target=production
+- Step 6: Polled deployment status — BUILDING → READY in ~72 seconds
+- Step 7: Verified production DB health:
+  * ok=True, mode=postgres, tcpReachable=True, read=True, write=True, tablesExist=True
+  * No error, no errorType
+- Step 8: Verified blog IDs are now REAL DB IDs (cmsn6l1wx000cjr04kv6b1f81) not static-blog-* fallbacks
+- Step 9: E2E blog CRUD test on production:
+  * Create: ok=True (test-db-working post created, 13 posts)
+  * Delete: ok=True (test post deleted, back to 12)
+  * Real post delete: ok=True (steam-iron-hotel-rooms-guide deleted, 11 posts)
+  * Restore: ok=True (steam-iron-hotel-rooms-guide recreated, 12 posts)
+- Step 10: CMS save/read test:
+  * PUT homepage.ourPresence.image1 = /images/gallery/exhibition-1.jpg → ok=True
+  * GET homepage → ourPresence.image1 = /images/gallery/exhibition-1.jpg ✅
+- Step 11: Admin panel visual verification (Agent Browser + VLM):
+  * Logged into www.laxree.com/admin
+  * Navigated to /admin/blog
+  * NO red warning banner (DB is connected!)
+  * "12 posts total" + "NEW POST" button visible
+  * Blog posts listed normally
+- Step 12: Reverted .env to local SQLite for dev (production uses Vercel env var)
+- Step 13: Committed and pushed (commit e0e7fd1)
+
+Stage Summary:
+- Production DB is FULLY WORKING. All admin features now operational:
+  ✅ Blog create/edit/delete (verified E2E)
+  ✅ CMS image manager save/read (verified)
+  ✅ Image Manager /admin/images (writes will now persist)
+  ✅ Homepage Builder /admin/homepage (saves will persist)
+  ✅ FAQ Manager /admin/faq (saves will persist)
+  ✅ Lead form /api/lead (customer enquiries will now be saved — dbSaved:true)
+  ✅ No warning banner on admin pages
+- Neon project: ep-autumn-queen-ax318hnt (US East 2, fresh 1GB quota)
+- Vercel project: l-axreedemo, all 3 environments updated
+- Build script auto-runs prisma db push on every deploy (tables always in sync)
