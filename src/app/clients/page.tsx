@@ -47,14 +47,38 @@ const TRUST_STATS = [
   { value: "13+", label: "National Hotel Chains", icon: Award },
 ];
 
+type ClientLogoItem = { name: string; logo: string };
+
 export default function ClientsPage() {
   const [cms, setCms] = useState<ClientCMS>({});
+  const [logos, setLogos] = useState<ClientLogoItem[]>(CLIENT_LOGOS);
 
   useEffect(() => {
     fetch("/api/admin/cms?key=page:clients", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.ok && data.value) setCms(data.value);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Fetch CMS-managed client logos (falls back to hardcoded CLIENT_LOGOS)
+  useEffect(() => {
+    fetch("/api/admin/cms?key=client-logos", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.ok && Array.isArray(data.value) && data.value.length > 0) {
+          const cleaned = data.value
+            .filter(
+              (v: unknown): v is ClientLogoItem =>
+                !!v &&
+                typeof v === "object" &&
+                typeof (v as ClientLogoItem).name === "string" &&
+                typeof (v as ClientLogoItem).logo === "string"
+            )
+            .map((v: ClientLogoItem) => ({ name: v.name, logo: v.logo }));
+          if (cleaned.length > 0) setLogos(cleaned);
+        }
       })
       .catch(() => {});
   }, []);
@@ -127,8 +151,8 @@ export default function ClientsPage() {
           />
 
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
-            {CLIENT_LOGOS.map((client, i) => (
-              <FadeIn key={client.name} delay={(i % 8) * 0.05}>
+            {logos.map((client, i) => (
+              <FadeIn key={`${client.name}-${i}`} delay={(i % 8) * 0.05}>
                 <div className="group flex h-32 items-center justify-center rounded-[16px] border border-ink/10 bg-white p-6 shadow-sm transition-all duration-300 hover:border-brass/40 hover:shadow-xl hover:-translate-y-1">
                   {client.logo ? (
                     <img

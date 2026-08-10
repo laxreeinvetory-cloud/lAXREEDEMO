@@ -1,4 +1,6 @@
+"use client";
 
+import { useEffect, useState } from "react";
 import { Quote } from "lucide-react";
 import {
   CLIENT_LOGOS,
@@ -10,15 +12,42 @@ import {
  * Section 8 — CLIENTS & TESTIMONIALS
  * Ivory section with:
  *   - centered header (eyebrow + Fraunces headline + supporting copy)
- *   - full-width logo marquee (CLIENT_LOGOS duplicated 2x for seamless loop,
- *     .animate-marquee-slow, pause-on-hover via .marquee-pause)
+ *   - full-width logo marquee (CMS-managed `client-logos` array, duplicated
+ *     2x for seamless loop, .animate-marquee-slow, pause-on-hover via
+ *     .marquee-pause). Falls back to the hardcoded CLIENT_LOGOS array.
  *   - 3 glass testimonial cards gently floating on staggered phases via
  *     .animate-float + negative inline animationDelay per card so they never
  *     sync. Reduced-motion is handled by the global CSS media query.
  */
 const FLOAT_DELAYS = [0, -1.3, -2.6]; // negative => staggered phase from t=0
 
+type ClientLogoItem = { name: string; logo: string };
+
 export default function ClientsTestimonials() {
+  const [logos, setLogos] = useState<ClientLogoItem[]>(CLIENT_LOGOS);
+
+  useEffect(() => {
+    // Try to load CMS-managed client logos. Fall back to hardcoded defaults
+    // silently on any error/empty so the section never breaks.
+    fetch("/api/admin/cms?key=client-logos", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.ok && Array.isArray(data.value) && data.value.length > 0) {
+          const cleaned = data.value
+            .filter(
+              (v: unknown): v is ClientLogoItem =>
+                !!v &&
+                typeof v === "object" &&
+                typeof (v as ClientLogoItem).name === "string" &&
+                typeof (v as ClientLogoItem).logo === "string"
+            )
+            .map((v: ClientLogoItem) => ({ name: v.name, logo: v.logo }));
+          if (cleaned.length > 0) setLogos(cleaned);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section id="clients" className="section section-ivory py-28 md:py-36">
       {/* ── Header ─────────────────────────────────────────── */}
@@ -52,9 +81,9 @@ export default function ClientsTestimonials() {
         <div className="flex w-max animate-marquee-slow will-change-transform">
           {/* Copy 1 */}
           <div className="flex shrink-0">
-            {CLIENT_LOGOS.map((client) => (
+            {logos.map((client, idx) => (
               <div
-                key={`c1-${client.name}`}
+                key={`c1-${idx}-${client.name}`}
                 className="px-8 flex items-center shrink-0"
                 role="listitem"
               >
@@ -74,9 +103,9 @@ export default function ClientsTestimonials() {
           </div>
           {/* Copy 2 — duplicate for seamless loop (hidden from AT) */}
           <div className="flex shrink-0" aria-hidden>
-            {CLIENT_LOGOS.map((client) => (
+            {logos.map((client, idx) => (
               <div
-                key={`c2-${client.name}`}
+                key={`c2-${idx}-${client.name}`}
                 className="px-8 flex items-center shrink-0"
               >
                 {client.logo ? (

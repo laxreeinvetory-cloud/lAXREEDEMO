@@ -40,6 +40,7 @@ const navItems = [
   { label: "Track Pages", href: "/admin/track-pages", icon: FileEdit },
   { label: "Media Library", href: "/admin/media", icon: FileEdit },
   { label: "Blog Posts", href: "/admin/blog", icon: FileText },
+  { label: "Client Logos", href: "/admin/client-logos", icon: Users },
   // ── CONTENT ──
   { label: "Homepage Builder", href: "/admin/homepage", icon: Home },
   { label: "Website CMS", href: "/admin/cms", icon: Settings },

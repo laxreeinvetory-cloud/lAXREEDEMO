@@ -312,7 +312,10 @@ export default function AdminImagesPage() {
         const next = { ...values };
         delete next[img.key];
         setValues(next);
-        showToast("ok", "No override set — already using default");
+        showToast(
+          "ok",
+          "This image is already using its default — no custom override to remove. To change it, upload a new image or paste a URL above and click ✓."
+        );
         setDeleting(null);
         return;
       }

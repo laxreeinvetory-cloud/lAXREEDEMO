@@ -2837,3 +2837,73 @@ Stage Summary:
   Plus all existing image manager features (hero, about, owner, gallery, team, experience centers)
 - Every card has a delete button that reverts to default
 - All changes persist to Neon Postgres and reflect on live site instantly
+
+---
+Task ID: CLIENT-LOGOS-ADMIN
+Agent: fullstack (admin Client Logos manager)
+Task: Create new admin page `/admin/client-logos` for managing client logos (CRUD + reorder + reset-to-defaults), and update the homepage marquee component + /clients page roster to read from the `client-logos` CMS key (with fallback to the hardcoded `CLIENT_LOGOS` array).
+
+Work Log:
+- Read prior worklog (2900+ lines). Production DB is live and working. CMS GET/PUT endpoints already exist and are used widely across the admin panel.
+- Read the 4 files I needed to match patterns from / modify:
+  * `src/app/admin/faq/page.tsx` (449 lines) — pattern for client-side admin list + create/edit modal + delete-with-confirm
+  * `src/app/admin/images/page.tsx` (501 lines) — pattern for image upload + CMS save + delete override + toast
+  * `src/components/site/clients-testimonials.tsx` (135 lines, server component) — homepage marquee, used CLIENT_LOGOS directly
+  * `src/app/clients/page.tsx` (269 lines) — already client component fetching `page:clients` CMS key; used `CLIENT_LOGOS.map` directly at line 130
+  * `src/lib/admin/admin-shell.tsx` (219 lines) — admin sidebar nav items
+  * `src/lib/laxree/site-data.ts` — confirmed `CLIENT_LOGOS` array (13 entries, type `{ name, logo }`); did NOT modify it
+  * `src/app/api/admin/cms/route.ts` — confirmed GET returns `{ ok, key, value }` (value=null when row missing), PUT accepts `{ key, value }`
+  * `src/app/api/admin/upload/route.ts` — confirmed FormData upload returns `{ ok, imageUrl, filename, size }`, max 8MB
+
+Files changed:
+1. **CREATE** `src/app/admin/client-logos/page.tsx` (607 lines)
+   - Full CRUD: list grid, add via modal, edit via modal, delete with confirm
+   - Reorder with up/down arrows (persists entire reordered array on each move)
+   - "Reset to defaults" button → builds array from `CLIENT_LOGOS` and persists (replaces current list)
+   - Empty-state card with CTA buttons when no logos exist
+   - Image upload via `/api/admin/upload` (FormData with `file` + `model` fields)
+   - Toast notifications (success/error) using same color scheme as Image Manager
+   - Each card shows: white preview area, order badge (#1, #2…), name (line-clamped), URL (truncated), 4 action buttons (up/down/edit/delete)
+   - LogoEditor modal: live preview, name input, URL input, upload button, save/cancel
+   - Defensive filtering of malformed CMS entries; regenerates missing ids
+
+2. **MODIFY** `src/components/site/clients-testimonials.tsx` (135 → 164 lines)
+   - Added `"use client"` directive (was a server component)
+   - Added `useEffect` + `useState` — fetches `/api/admin/cms?key=client-logos` on mount
+   - Initializes state with hardcoded `CLIENT_LOGOS` (instant render, no flash)
+   - If CMS returns a non-empty valid array, replaces state — otherwise keeps the fallback
+   - Marquee animation, structure, duplicate-2x-for-seamless-loop, aria-hidden on copy 2 — all preserved
+   - React keys changed from `c1-${client.name}` to `c1-${idx}-${client.name}` to handle duplicate names safely
+
+3. **MODIFY** `src/app/clients/page.tsx` (269 → 293 lines)
+   - Added `ClientLogoItem` type and `logos` state initialized to `CLIENT_LOGOS`
+   - Added second `useEffect` that fetches `/api/admin/cms?key=client-logos` (alongside the existing `page:clients` fetch)
+   - Updated `CLIENT_LOGOS.map(...)` at the logo roster grid → `logos.map(...)`
+   - Updated React key from `client.name` to `${client.name}-${i}` for safety
+   - Existing page:clients fetch and all other sections unchanged
+
+4. **MODIFY** `src/lib/admin/admin-shell.tsx` (219 → 220 lines)
+   - Added one nav item: `{ label: "Client Logos", href: "/admin/client-logos", icon: Users }`
+   - Placed in the CATALOGUE section, immediately after `Blog Posts` and before the CONTENT section comment — exactly per spec
+   - `Users` icon was already imported, no new import needed
+
+Verification:
+1. `bun run lint` — ✅ 0 errors, 40 warnings (all pre-existing `<img>` warnings + unused eslint-disable directives in local-db.ts). Zero new warnings introduced. The new admin page uses `// eslint-disable-next-line @next/next/no-img-element` comments on its image previews.
+2. `npx tsc --noEmit` — ✅ exit 0, no errors.
+3. Dev server started on port 3000 (Next.js 16.1.3 Turbopack).
+4. Page load checks:
+   - `GET /admin/client-logos` → **HTTP 200** (compiled in 3.0s, rendered in 180ms)
+   - `GET /` (homepage) → **HTTP 200** (clients-testimonials.tsx now hydrates as a client component; marquee still works)
+   - `GET /clients` → **HTTP 200** (logo roster grid renders)
+5. CMS API verified:
+   - `GET /api/admin/cms?key=client-logos` returned `{"ok":true,"key":"client-logos","value":null}` — correct empty state (DB has no `client-logos` row yet, so all three public pages currently show the 13 hardcoded defaults via the fallback path)
+   - Dev server log also showed `GET /api/admin/cms?key=client-logos 200 in 5ms` confirming the new client-side fetch fires on homepage load
+
+Stage Summary:
+- New admin page is live at `/admin/client-logos` and accessible from the admin sidebar (CATALOGUE section).
+- Admin can: add a logo (with upload), edit name/URL, delete with confirm, reorder up/down, and reset to the 13 hardcoded defaults — all persisted to the `client-logos` CMS key.
+- Homepage marquee + /clients roster grid both fetch from CMS and gracefully fall back to the hardcoded array when CMS is empty.
+- No new API routes needed — reuses the existing `/api/admin/cms` GET/PUT and `/api/admin/upload` POST.
+- No modification to `src/lib/laxree/site-data.ts` — the hardcoded `CLIENT_LOGOS` array is preserved as the default fallback.
+- Work record written to `/home/z/my-project/agent-ctx/CLIENT-LOGOS-ADMIN-fullstack.md`.
+
