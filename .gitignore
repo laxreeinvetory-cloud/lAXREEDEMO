@@ -40,7 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Ignore local-only scratch files matching `local-*`, but keep the
+# src/lib/local-db.ts persistence layer (imported by src/lib/db.ts and
+# required at build time even on Vercel where it is never executed).
 local-*
+!src/lib/local-db.ts
 .claude
 .z-ai-config
 *.log
@@ -56,6 +60,8 @@ server.log
 # Database (SQLite binary — must not be committed)
 /db/*.db
 /db/*.db-journal
+# Local JSON file-based DB (runtime data from src/lib/local-db.ts — dev only)
+/db/data/
 
 # Agent scratch / tool output (local only)
 /tool-results/
