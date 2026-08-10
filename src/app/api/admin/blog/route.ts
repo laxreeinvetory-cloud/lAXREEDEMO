@@ -46,8 +46,31 @@ export async function POST(req: NextRequest) {
         date: body.date || new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),
         readTime: body.readTime || "5 min",
         published: body.published !== false,
+        // SEO fields — stored in content JSON as _seo object
       },
     });
+
+    // Store SEO fields in a separate SiteContent entry
+    if (body.seoTitle || body.metaDescription || body.keywords || body.faqJsonLd) {
+      const seoKey = `blog:seo:${body.slug}`;
+      const seoValue = {
+        seoTitle: body.seoTitle || "",
+        metaDescription: body.metaDescription || "",
+        keywords: body.keywords || "",
+        canonicalUrl: body.canonicalUrl || "",
+        ogImage: body.ogImage || "",
+        faqJsonLd: body.faqJsonLd || "",
+      };
+      try {
+        await db.siteContent.upsert({
+          where: { key: seoKey },
+          update: { value: JSON.stringify(seoValue) },
+          create: { key: seoKey, value: JSON.stringify(seoValue) },
+        });
+      } catch (e) {
+        console.error("[BLOG SEO SAVE ERROR]", e);
+      }
+    }
 
     return NextResponse.json({ ok: true, post });
   } catch (err) {
@@ -64,10 +87,35 @@ export async function PATCH(req: NextRequest) {
       data.content = JSON.stringify(data.content);
     }
 
+    // Extract SEO fields before updating blog post
+    const { seoTitle, metaDescription, keywords, canonicalUrl, ogImage, faqJsonLd, ...postData } = data;
+
     const post = await db.blogPost.update({
       where: { id },
-      data: data,
+      data: postData,
     });
+
+    // Save SEO fields to SiteContent
+    if (post.slug && (seoTitle || metaDescription || keywords || faqJsonLd)) {
+      const seoKey = `blog:seo:${post.slug}`;
+      const seoValue = {
+        seoTitle: seoTitle || "",
+        metaDescription: metaDescription || "",
+        keywords: keywords || "",
+        canonicalUrl: canonicalUrl || "",
+        ogImage: ogImage || "",
+        faqJsonLd: faqJsonLd || "",
+      };
+      try {
+        await db.siteContent.upsert({
+          where: { key: seoKey },
+          update: { value: JSON.stringify(seoValue) },
+          create: { key: seoKey, value: JSON.stringify(seoValue) },
+        });
+      } catch (e) {
+        console.error("[BLOG SEO UPDATE ERROR]", e);
+      }
+    }
 
     return NextResponse.json({ ok: true, post });
   } catch (err) {

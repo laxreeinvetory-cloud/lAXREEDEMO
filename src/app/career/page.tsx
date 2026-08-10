@@ -441,6 +441,7 @@ export default function CareerPage() {
         subtitle="Send us your resume anyway. We're always looking for talent."
         primaryLabel="Send Resume"
         secondaryLabel={`Email ${SITE.careersEmail}`}
+        secondaryHref={`mailto:${SITE.careersEmail}`}
       />
     </>
   );

@@ -29,14 +29,39 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = BLOG_POSTS_FULL.find((p) => p.slug === slug);
   if (!post) return {};
+
+  const shareUrl = `https://l-axreedemo.vercel.app/blog/${post.slug}`;
+
   return {
-    title: `${post.title} — LaxRee Amenities Blog`,
-    description: post.excerpt,
+    title: post.seoTitle || `${post.title} — LaxRee Amenities Blog`,
+    description: post.metaDescription || post.excerpt,
+    keywords: post.keywords ? post.keywords.split(",").map((k: string) => k.trim()) : undefined,
+    alternates: {
+      canonical: post.canonicalUrl || shareUrl,
+    },
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: [{ url: post.image }],
+      title: post.seoTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+      images: [{ url: post.ogImage || post.image }],
       type: "article",
+      publishedTime: post.date,
+      authors: [post.author],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.seoTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+      images: [post.ogImage || post.image],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
@@ -70,9 +95,9 @@ export default async function BlogPostPage({
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: post.title,
-    description: post.excerpt,
-    image: `https://l-axreedemo.vercel.app${post.image}`,
+    headline: post.seoTitle || post.title,
+    description: post.metaDescription || post.excerpt,
+    image: `https://l-axreedemo.vercel.app${post.ogImage || post.image}`,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -127,6 +152,19 @@ export default async function BlogPostPage({
     },
   ];
 
+  // SEO: Parse FAQ JSON-LD if present
+  let faqJsonLd: Record<string, unknown> | null = null;
+  if (post.faqJsonLd) {
+    try {
+      faqJsonLd = JSON.parse(post.faqJsonLd);
+    } catch {
+      faqJsonLd = null;
+    }
+  }
+
+  // SEO: Keywords as meta tags
+  const keywordStr = post.keywords || "";
+
   return (
     <>
       {/* SEO: Article + Breadcrumb structured data */}
@@ -138,6 +176,15 @@ export default async function BlogPostPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      {keywordStr && (
+        <meta name="keywords" content={keywordStr} />
+      )}
 
       {/* ─────────────────────────────────────────────────────
           Section 1 — Article hero (charcoal)
@@ -438,7 +485,8 @@ export default async function BlogPostPage({
         title="Need help implementing these ideas?"
         subtitle="Our factory team can manufacture to your spec."
         primaryLabel="Get a Quotation"
-        secondaryLabel="Call 1800 120 7001"
+        secondaryLabel="Call +91 92516 83662"
+        secondaryHref="tel:+919251683662"
       />
     </>
   );

@@ -23,7 +23,7 @@ type QuotationBody = {
   items: QuotationItem[];
 };
 
-const SALES_WHATSAPP = "919251683660";
+const SALES_WHATSAPP = "919251683662";
 const SALES_EMAIL = "contactus@laxree.com";
 
 export async function POST(req: NextRequest) {

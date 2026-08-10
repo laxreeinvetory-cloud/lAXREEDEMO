@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     template: "%s | LaxRee Amenities",
   },
   description:
-    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, Ajmer's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
+    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, India's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
   keywords: [
     "hotel supplies India",
     "hotel amenities manufacturer India",
@@ -196,7 +196,7 @@ export default function RootLayout({
               name: "LaxRee Amenities",
               url: BASE_URL,
               logo: `${BASE_URL}/images/laxree-logo.png`,
-              description: "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. Ajmer's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
+              description: "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. India's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
               foundingDate: "2015",
               numberOfEmployees: "50+",
               address: {
@@ -246,7 +246,7 @@ export default function RootLayout({
                 latitude: 26.4499,
                 longitude: 74.6399,
               },
-              openingHours: "Mo-Sa 09:30-18:30",
+              openingHours: "Mo-Sa 10:00-19:00",
               areaServed: "IN",
             }),
           }}

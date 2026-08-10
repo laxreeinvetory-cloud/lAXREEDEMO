@@ -106,11 +106,11 @@ function CategoryCatalogueCard({
     }
   };
 
-  // Find the matching category image (master uses the amenities image as a cover)
+  // Find the matching category image
   const categoryData = CATEGORIES.find((c) => c.slug === catalogue.category);
-  const image = isMaster
-    ? "/images/about/factory.jpg"
-    : categoryData?.image ?? "/images/about/factory.jpg";
+  const image = catalogue.image || (isMaster
+    ? "/images/categories/room-amenities.png"
+    : categoryData?.image ?? "/images/categories/room-amenities.png");
 
   return (
     <FadeIn delay={index * 0.06}>
@@ -168,6 +168,20 @@ function CategoryCatalogueCard({
           <p className="font-body text-[14px] leading-relaxed text-sand">
             {catalogue.description}
           </p>
+
+          {/* Category tiles */}
+          {catalogue.categories && catalogue.categories.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {catalogue.categories.map((cat) => (
+                <span
+                  key={cat}
+                  className="rounded-full border border-brass/20 bg-brass/5 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-brass"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+          )}
 
           <button
             type="button"

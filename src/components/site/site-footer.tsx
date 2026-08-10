@@ -26,7 +26,6 @@ const COMPANY_LINKS: LinkItem[] = [
   { label: "Contact", href: "/contact-us" },
   { label: "Blogs", href: "/blog" },
   { label: "FAQ", href: "/faq" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Experience Center", href: "/experience-center" },
 ];
 
@@ -110,8 +109,8 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Company */}
-          <FooterLinkColumn heading="Company" links={COMPANY_LINKS} />
+          {/* Company — uses CMS-driven links when available */}
+          <FooterLinkColumn heading="Company" links={companyLinks} />
 
           {/* Categories */}
           <FooterLinkColumn heading="Categories" links={CATEGORY_LINKS} />

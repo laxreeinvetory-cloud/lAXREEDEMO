@@ -352,6 +352,45 @@ export default function DealersPage() {
             </div>
           </FadeIn>
 
+          {/* Single India map with all dealer pins */}
+          <FadeIn delay={0.1} className="mt-12">
+            <div className="rounded-[24px] overflow-hidden border-2 border-brass/20 shadow-2xl shadow-brass/10">
+              <div className="bg-charcoal px-6 py-4 flex items-center justify-between border-b border-brass/20">
+                <div className="flex items-center gap-2">
+                  <MapPin size={18} strokeWidth={1.5} className="text-brass" />
+                  <span className="font-mono text-[12px] uppercase tracking-wider text-brass">
+                    Our Dealer Network Across India
+                  </span>
+                </div>
+                <span className="font-mono text-[11px] text-sand">
+                  {DEALER_CITIES.length} Locations
+                </span>
+              </div>
+              <iframe
+                title="LaxRee Dealer Network — India Map"
+                src={`https://www.google.com/maps?q=${DEALER_CITIES.map(c => encodeURIComponent(c + ", India")).join("%7C")}&output=embed`}
+                width="100%"
+                height="450"
+                style={{ border: 0, display: "block" }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            {/* Dealer location cards below map */}
+            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+              {DEALER_CITIES.map((city) => (
+                <div key={city} className="glass-on-charcoal rounded-[16px] p-4 flex items-center gap-3 hover:border-brass/40 transition-colors">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brass/30 bg-brass/10">
+                    <MapPin size={16} strokeWidth={1.5} className="text-brass" />
+                  </div>
+                  <span className="font-display text-[15px] text-ivory leading-tight">
+                    {city}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+
           {/* Stat row */}
           <FadeIn delay={0.1} className="mt-14">
             <div className="hairline-brass mb-10" />
@@ -426,9 +465,10 @@ export default function DealersPage() {
       {/* Section 6 — PageCTA (emerald) */}
       <PageCTA
         title="Questions about dealership?"
-        subtitle="Call Amit Verma, Head of Sales, at +91-92516 83662."
+        subtitle="Call Samarth Agarwal, Head of Sales, at +91-92516 83662."
         primaryLabel="Get a Quotation"
         secondaryLabel="Call +91-92516 83662"
+        secondaryHref="tel:+919251683662"
       />
     </>
   );

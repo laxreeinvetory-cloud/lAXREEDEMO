@@ -66,7 +66,11 @@
   }
 
   html {
-    scroll-behavior: auto; /* Lenis handles smooth scroll */
+    scroll-behavior: auto; /* Lenis handles smooth scroll on desktop */
+    /* Fallback smooth scroll for mobile / when Lenis is disabled */
+    -webkit-overflow-scrolling: touch;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -77,6 +81,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* Optimize text rendering for performance */
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Performance: hint the browser to GPU-composite animated elements.
+     Only applied to elements that actually animate. */
+  [style*="transform"],
+  [style*="opacity"] {
+    will-change: transform, opacity;
   }
 
   ::selection {
@@ -276,22 +289,14 @@
   animation-play-state: paused;
 }
 
+/* Clients page — dual-row logo marquee */
+
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
 .animate-float {
   animation: float-y 4s ease-in-out infinite;
-}
-
-@keyframes card-3d-rotate {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(360deg); }
-}
-
-@keyframes badge-3d-flip {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(360deg); }
 }
 
 @keyframes pulse-glow {
@@ -326,4 +331,23 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Video download protection */
+video {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+video::-webkit-media-controls-download-button {
+  display: none !important;
+}
+video::-internal-media-controls-download-button {
+  display: none !important;
 }

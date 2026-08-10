@@ -52,28 +52,44 @@ export default function ClientsTestimonials() {
         <div className="flex w-max animate-marquee-slow will-change-transform">
           {/* Copy 1 */}
           <div className="flex shrink-0">
-            {CLIENT_LOGOS.map((logo) => (
+            {CLIENT_LOGOS.map((client) => (
               <div
-                key={`c1-${logo}`}
+                key={`c1-${client.name}`}
                 className="px-8 flex items-center shrink-0"
                 role="listitem"
               >
-                <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink grayscale hover:grayscale-0 transition-all duration-300 whitespace-nowrap">
-                  {logo}
-                </span>
+                {client.logo ? (
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-300"
+                  />
+                ) : (
+                  <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink transition-all duration-300 whitespace-nowrap">
+                    {client.name}
+                  </span>
+                )}
               </div>
             ))}
           </div>
           {/* Copy 2 — duplicate for seamless loop (hidden from AT) */}
           <div className="flex shrink-0" aria-hidden>
-            {CLIENT_LOGOS.map((logo) => (
+            {CLIENT_LOGOS.map((client) => (
               <div
-                key={`c2-${logo}`}
+                key={`c2-${client.name}`}
                 className="px-8 flex items-center shrink-0"
               >
-                <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink grayscale hover:grayscale-0 transition-all duration-300 whitespace-nowrap">
-                  {logo}
-                </span>
+                {client.logo ? (
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-300"
+                  />
+                ) : (
+                  <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink transition-all duration-300 whitespace-nowrap">
+                    {client.name}
+                  </span>
+                )}
               </div>
             ))}
           </div>

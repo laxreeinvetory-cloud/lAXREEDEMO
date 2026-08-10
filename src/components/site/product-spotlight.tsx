@@ -41,16 +41,16 @@ function ProductCard({ product, active }: { product: Product; active: boolean })
         active ? "border-brass shadow-2xl" : "border-transparent shadow-md"
       }`}
     >
-      {/* Product image — 60% of card height, object-cover on charcoal bg */}
+      {/* Product image — 60% of card height, object-contain on white bg */}
       <div
         className="relative w-full overflow-hidden"
-        style={{ height: "60%", backgroundColor: "var(--color-charcoal)" }}
+        style={{ height: "60%", backgroundColor: "#ffffff" }}
       >
         <img
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
         />
         {/* Subtle brass corner accent on active card */}
         {active && (
@@ -100,10 +100,12 @@ export function ProductSpotlight() {
         if (data.ok && data.value && data.value.images) {
           // Override spotlight images from CMS
           const overrides = data.value.images as Record<string, string>;
-          setProducts(products.map((p) => ({
-            ...p,
-            image: overrides[p.slug] || p.image,
-          })));
+          setProducts((prev) =>
+            prev.map((p) => ({
+              ...p,
+              image: overrides[p.slug] || p.image,
+            })),
+          );
         }
       })
       .catch(() => {});
@@ -123,20 +125,44 @@ export function ProductSpotlight() {
   const goPrev = () => setActiveIndex((i) => Math.max(0, i - 1));
 
   return (
-    <section id="products" className="section section-ivory py-28 md:py-36">
-      <div className="container-laxree">
-        {/* Header */}
+    <section id="products" className="section section-ivory py-28 md:py-36 relative overflow-hidden">
+      {/* Decorative brass gradient blobs */}
+      <div
+        aria-hidden
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-[0.04] blur-3xl pointer-events-none"
+        style={{ background: "radial-gradient(circle, var(--color-brass), transparent 70%)" }}
+      />
+      <div
+        aria-hidden
+        className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full opacity-[0.04] blur-3xl pointer-events-none"
+        style={{ background: "radial-gradient(circle, var(--color-brass), transparent 70%)" }}
+      />
+      {/* Subtle top border accent */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/20 to-transparent pointer-events-none"
+      />
+
+      <div className="container-laxree relative">
+        {/* Header — professional creative design */}
         <div className="text-center mb-12 md:mb-16">
-          <div className="eyebrow text-ink-muted mb-3">EXPLORE</div>
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span className="h-px w-12 bg-brass/30" />
+            <span className="eyebrow text-brass" style={{ fontSize: "13px", letterSpacing: "0.2em" }}>
+              EXPLORE
+            </span>
+            <span className="h-px w-12 bg-brass/30" />
+          </div>
           <h2
-            className="font-display text-ink font-medium"
-            style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}
+            className="font-display text-ink"
+            style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)", fontWeight: 500, letterSpacing: "-0.02em" }}
           >
-            Product Spotlight
+            Product <span className="text-brass-gradient">Spotlight</span>
           </h2>
-          <p className="text-ink-muted mt-4 max-w-xl mx-auto text-base">
-            Nine flagship products from across our catalogue.
-            Use the arrows, or click any card to bring it center-stage.
+          <p className="text-ink-muted mt-5 max-w-2xl mx-auto text-[16px] leading-relaxed">
+            Nine flagship products from across our catalogue — handpicked to showcase
+            the breadth of our manufacturing capabilities. From premium minibars to
+            smart safes, each product is engineered for hospitality excellence.
           </p>
         </div>
 

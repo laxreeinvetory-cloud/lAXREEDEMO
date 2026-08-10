@@ -56,10 +56,6 @@ export default function AdminLoginPage() {
             </div>
             <button type="submit" disabled={loading} className="pill pill-brass mt-2 w-full py-3.5 text-[14px] disabled:opacity-50">{loading ? "Signing in…" : "Sign In"}</button>
           </form>
-          <div className="mt-6 rounded-xl border border-brass/20 bg-brass/5 p-4">
-            <p className="font-mono text-[10px] text-brass uppercase tracking-wider mb-1">Default Login</p>
-            <p className="font-body text-[12px] text-sand">Username: <span className="text-ivory font-mono">admin</span><br />Password: <span className="text-ivory font-mono">laxree2026</span></p>
-          </div>
         </div>
       </div>
     </div>

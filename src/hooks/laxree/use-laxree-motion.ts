@@ -102,23 +102,3 @@ export function usePrefersReducedMotion() {
 }
 
 /** Track scroll progress (0..1) of an element relative to viewport */
-export function useScrollProgress() {
-  const ref = useRef<HTMLElement | null>(null);
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    if (!ref.current) return;
-    const onScroll = () => {
-      const el = ref.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // 0 when element top hits bottom of viewport, 1 when bottom hits top
-      const p = 1 - rect.bottom / (rect.height + vh);
-      setProgress(Math.max(0, Math.min(1, p)));
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return { ref, progress };
-}
