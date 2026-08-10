@@ -30,7 +30,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "mattress": "/images/product-catalogue/mattress/LRMR-251-8.jpg",
   "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.jpg",
   "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.jpg",
-  "luggage-rack": "/images/product-catalogue/coming-soon.jpg",
+  "luggage-rack": "/images/product-catalogue/furniture/LRGF---673---Luggage-Rack.jpg",
   // ── Washroom Amenities ──
   "hair-dryer": "/images/product-catalogue/hair-dryer/LRHD-276.jpg",
   "soap-dispenser": "/images/product-catalogue/soap-dispenser/LRWA--358.jpg",
@@ -54,11 +54,11 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "sign-board": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.jpg",
   "stand-pole": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.jpg",
   "digital-signage": "/images/product-catalogue/ssp-digital-signage/LRDS-43.jpg",
-  // ── Furniture ──
-  "outdoor-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "guest-room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "restaurant-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
-  "room-furniture": "/images/product-catalogue/furniture/3-Tab-Shingles.jpg",
+  // ── Furniture ── (using actual chair/table images from furniture folder)
+  "outdoor-furniture": "/images/product-catalogue/furniture/LRBF---526.jpg",
+  "guest-room-furniture": "/images/product-catalogue/furniture/LRBF---527.jpg",
+  "restaurant-furniture": "/images/product-catalogue/furniture/LRBF---528.jpg",
+  "room-furniture": "/images/product-catalogue/furniture/LRBF---530.jpg",
   "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.jpg",
   // ── Linen ──
   "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.png",
