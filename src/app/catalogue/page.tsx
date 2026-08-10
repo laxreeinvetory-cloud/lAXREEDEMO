@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import {
   Check,
   Download,
@@ -27,6 +27,22 @@ import {
   type CatalogueFile,
 } from "@/lib/laxree/site-data";
 import { useEnquiry } from "@/components/providers/enquiry-provider";
+
+type CatalogueCMS = {
+  discountEnabled?: boolean;
+  discountCode?: string;
+  discountPercent?: string;
+  discountTitle?: string;
+  discountSubtitle?: string;
+  discountValidity?: string;
+  heroEyebrow?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  whatsInsideTitle?: string;
+  whatsInsideItems?: string[];
+  ctaTitle?: string;
+  ctaSubtitle?: string;
+};
 
 const DISCOUNT_CODE = "LAXREE10";
 
@@ -183,7 +199,17 @@ function CategoryCatalogueCard({
 /* ─────────────────────────────────────────────────────────────
    QuickLeadForm — compact lead capture for discount code
    ───────────────────────────────────────────────────────────── */
-function QuickLeadForm() {
+function QuickLeadForm({
+  discountCode = DISCOUNT_CODE,
+  discountPercent = "10%",
+  discountTitle = "Unlock 10% Off Your First Order",
+  discountSubtitle = "Enter your details to receive a discount code valid for 30 days. We'll also WhatsApp you the latest pricing.",
+}: {
+  discountCode?: string;
+  discountPercent?: string;
+  discountTitle?: string;
+  discountSubtitle?: string;
+}) {
   const { notify } = useEnquiry();
   const [form, setForm] = useState({
     name: "",
@@ -233,7 +259,7 @@ function QuickLeadForm() {
 
   const copyCode = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(DISCOUNT_CODE).then(
+      navigator.clipboard.writeText(discountCode).then(
         () => notify("info", "Code copied to clipboard"),
         () => {}
       );
@@ -256,19 +282,19 @@ function QuickLeadForm() {
           </span>
         </div>
         <h3 className="font-display text-[24px] font-medium leading-tight text-ink">
-          Your 10% code is ready, {form.name.split(" ")[0] || "there"}.
+          Your {discountPercent} code is ready, {form.name.split(" ")[0] || "there"}.
         </h3>
         <div className="rounded-2xl border border-brass/40 bg-brass/10 p-5">
           <div className="mb-2 flex items-center gap-2 text-brass">
             <Check className="h-4 w-4" strokeWidth={2.2} />
-            <span className="data-label text-[10px]">YOUR 10% OFF CODE</span>
+            <span className="data-label text-[10px]">YOUR {discountPercent} OFF CODE</span>
           </div>
           <div className="flex items-center justify-between gap-3">
             <span
               className="font-mono font-medium tracking-[0.15em] text-brass"
               style={{ fontSize: "28px" }}
             >
-              {DISCOUNT_CODE}
+              {discountCode}
             </span>
             <button
               type="button"
@@ -304,10 +330,10 @@ function QuickLeadForm() {
     >
       <div>
         <h3 className="font-display text-[26px] font-medium leading-tight text-ink">
-          Unlock 10% Off Your First Order
+          {discountTitle}
         </h3>
         <p className="mt-2 font-body text-[14px] leading-relaxed text-ink-muted">
-          Enter your details to receive a discount code valid for 30 days. We&apos;ll also WhatsApp you the latest pricing.
+          {discountSubtitle}
         </p>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
@@ -385,6 +411,24 @@ function QuickLeadForm() {
 export default function CataloguePage() {
   const masterCatalogue = CATALOGUES.find((c) => c.category === "master")!;
   const categoryCatalogues = CATALOGUES.filter((c) => c.category !== "master");
+  const [cms, setCms] = useState<CatalogueCMS>({});
+
+  useEffect(() => {
+    fetch("/api/admin/cms?key=page:catalogue", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.ok && data.value) setCms(data.value);
+      })
+      .catch(() => {});
+  }, []);
+
+  const showDiscount = cms.discountEnabled !== false; // default true unless explicitly disabled
+  const discountCode = cms.discountCode || DISCOUNT_CODE;
+  const discountPercent = cms.discountPercent || "10%";
+  const discountTitle = cms.discountTitle || `Unlock ${discountPercent} Off Your First Order`;
+  const discountSubtitle = cms.discountSubtitle || "Enter your details to receive a discount code valid for 30 days. We'll also WhatsApp you the latest pricing.";
+  const ctaTitle = cms.ctaTitle || "Need a printed catalogue couriered?";
+  const ctaSubtitle = cms.ctaSubtitle || "We'll send a physical copy to your hotel address. Just ask.";
 
   return (
     <>
@@ -481,6 +525,7 @@ export default function CataloguePage() {
       {/* ─────────────────────────────────────────────
           Section 4 — What's inside + Discount form (charcoal)
           ───────────────────────────────────────────── */}
+      {showDiscount && (
       <section className="section section-charcoal py-20 md:py-28">
         <div className="container-laxree">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start">
@@ -490,10 +535,10 @@ export default function CataloguePage() {
                 <SectionHeading
                   theme="charcoal"
                   eyebrow="WHAT'S INSIDE"
-                  title="More Than a Price List"
+                  title={cms.whatsInsideTitle || "More Than a Price List"}
                 />
                 <ul className="mt-8 flex flex-col gap-4">
-                  {WHATS_INSIDE.map((item) => (
+                  {(cms.whatsInsideItems && cms.whatsInsideItems.length > 0 ? cms.whatsInsideItems : WHATS_INSIDE).map((item) => (
                     <li
                       key={item}
                       className="flex items-start gap-3 font-body text-[15px] text-sand"
@@ -533,18 +578,19 @@ export default function CataloguePage() {
 
             {/* Right — discount form */}
             <FadeIn delay={0.1}>
-              <QuickLeadForm />
+              <QuickLeadForm discountCode={discountCode} discountPercent={discountPercent} discountTitle={discountTitle} discountSubtitle={discountSubtitle} />
             </FadeIn>
           </div>
         </div>
       </section>
+      )}
 
       {/* ─────────────────────────────────────────────
           Section 5 — PageCTA (emerald)
           ───────────────────────────────────────────── */}
       <PageCTA
-        title="Need a printed catalogue couriered?"
-        subtitle="We'll send a physical copy to your hotel address. Just ask."
+        title={ctaTitle}
+        subtitle={ctaSubtitle}
       />
     </>
   );

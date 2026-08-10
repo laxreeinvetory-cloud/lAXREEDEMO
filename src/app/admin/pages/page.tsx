@@ -94,20 +94,23 @@ const CATALOGUE_DEFAULTS: PageContent = {
     "Get instant access to our complete product range. No email required for available catalogues.",
   featuredTitle: "Master Catalogue",
   featuredSubtitle:
-    "The complete LaxRee Amenities product range — all 700+ SKUs across all 5 categories in one PDF.",
+    "The complete LaxRee Amenities product range — all 700+ SKUs across all 8 categories in one PDF.",
   categoriesTitle: "Download by Category",
   categoriesSubtitle:
     "Pick the category you need. Some catalogues are available now; others are coming soon.",
   benefitsTitle: "What's Inside",
   benefitsSubtitle:
     "Every catalogue includes detailed specifications, images, and pricing guidance.",
-  discountTitle: "Get 10% Off Your First Order",
-  discountSubtitle:
-    "Share your details and we'll send you a discount code via WhatsApp.",
   ctaTitle: "Need a Printed Catalogue?",
   ctaSubtitle:
     "We'll courier a physical copy to your hotel or office anywhere in India.",
   ctaButtonText: "Request Printed Copy",
+  // Discount section controls
+  discountEnabled: "true",
+  discountCode: "LAXREE10",
+  discountPercent: "10%",
+  discountTitle: "Unlock 10% Off Your First Order",
+  discountSubtitle: "Enter your details to receive a discount code valid for 30 days. We'll also WhatsApp you the latest pricing.",
 };
 
 const CONTACT_DEFAULTS: PageContent = {
@@ -282,8 +285,11 @@ const PAGES: PageDef[] = [
       {
         title: "Discount Offer",
         fields: [
-          { key: "discountTitle", label: "Title" },
-          { key: "discountSubtitle", label: "Subtitle", multiline: true },
+          { key: "discountEnabled", label: "Enable Discount Section (true/false)", placeholder: "true or false" },
+          { key: "discountCode", label: "Discount Code", placeholder: "LAXREE10" },
+          { key: "discountPercent", label: "Discount Percentage", placeholder: "10%" },
+          { key: "discountTitle", label: "Discount Title" },
+          { key: "discountSubtitle", label: "Discount Subtitle", multiline: true },
         ],
       },
       {

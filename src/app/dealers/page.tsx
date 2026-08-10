@@ -51,9 +51,9 @@ const PROCESS_STEPS = [
   },
   {
     number: "03",
-    title: "Factory Visit",
+    title: "Office Visit",
     description:
-      "Visit our Ajmer campus for a factory tour — or schedule a virtual walkthrough.",
+      "Visit our office for a product walkthrough — or schedule a virtual meeting with our sales team.",
   },
   {
     number: "04",

@@ -11,8 +11,7 @@ import { ConditionalChrome } from "@/components/providers/conditional-chrome";
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
   display: "swap",
   preload: true,
 });
@@ -135,6 +134,9 @@ export const metadata: Metadata = {
     "geo.placename": "Ajmer, Rajasthan, India",
     "geo.position": "26.4499;74.6399",
     "ICBM": "26.4499, 74.6399",
+    ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+      ? { "google-site-verification": process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+      : {}),
   },
 };
 
@@ -158,9 +160,31 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
+        {/* Google Analytics */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+
         {/* SEO: Preconnect to external domains */}
-        <link rel="preconnect" href="https://sketchfab.com" />
-        <link rel="dns-prefetch" href="https://sketchfab.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
         {/* SEO: Structured data — Organization + LocalBusiness + WebSite */}
         <script

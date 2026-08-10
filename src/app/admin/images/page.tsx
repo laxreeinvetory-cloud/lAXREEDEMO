@@ -102,7 +102,7 @@ export default function AdminImagesPage() {
       // Fetch current CMS value
       const getRes = await fetch(`/api/admin/cms?key=${img.cmsKey}`, { cache: "no-store" });
       const getData = await getRes.json();
-      let current: any = getData.value || {};
+      const current: Record<string, unknown> = getData.value || {};
 
       // Set nested field
       const parts = img.field.split(".");
