@@ -93,7 +93,7 @@ const DEFAULT_FAQS: FaqItem[] = [
     id: "faq-8",
     question: "Can I visit your showroom or manufacturing facility?",
     answer:
-      "Yes, our showroom and manufacturing facility is located at Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001. We're open Monday to Saturday, 9:30 AM to 6:30 PM. We recommend calling ahead to schedule a guided tour of our hospitality exhibition centre.",
+      "Yes, our showroom and manufacturing facility is located at Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001. We're open Monday to Saturday, 9:30 AM to 6:30 PM. We recommend calling ahead to schedule a guided tour of our Hotel Supplier Experience Center.",
     category: "General",
     sortOrder: 7,
     published: true,

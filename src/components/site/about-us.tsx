@@ -16,7 +16,7 @@ const ABOUT_COPY =
 
 const ABOUT_CHIPS = [
   "OEM Manufacturer — Minibar & Safe Locker",
-  "India's Largest Hospitality Exhibition Centre",
+  "India's Largest Hotel Supplier Experience Center",
   "Pan-India Delivery",
 ];
 

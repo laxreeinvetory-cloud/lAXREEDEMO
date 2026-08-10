@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "LaxRee Amenities — Hotel Supplies Redefined",
     short_name: "LaxRee",
     description:
-      "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, India's largest hospitality exhibition centre.",
+      "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, India's largest Hotel Supplier Experience Center.",
     start_url: "/",
     display: "standalone",
     background_color: "#12100D",

@@ -87,7 +87,7 @@ function ProductCard({ product, active }: { product: Product; active: boolean })
 }
 
 export function ProductSpotlight() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(3);
   const [products, setProducts] = useState(SPOTLIGHT_PRODUCTS);
   const reduced = usePrefersReducedMotion();
   const isMobile = useIsMobile();

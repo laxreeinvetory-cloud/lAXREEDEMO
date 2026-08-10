@@ -573,7 +573,7 @@ export const TIMELINE: Milestone[] = [
     year: "2025",
     title: "Largest Exhibition Centre",
     description:
-      "Established India's largest hospitality exhibition centre in Gurugram — a 50,000+ sq ft flagship showcase featuring 700+ products, complete room setups, and hands-on product testing.",
+      "Established India's largest Hotel Supplier Experience Center in Gurugram — a 50,000+ sq ft flagship showcase featuring 700+ products, complete room setups, and hands-on product testing.",
   },
   {
     year: "2023",
@@ -630,6 +630,7 @@ export const LEADERSHIP: TeamMember[] = [
     role: "Head of HR",
     bio: "Heads Human Resources, talent acquisition, and organizational culture. Ensures a motivated workforce across factory, sales, and corporate teams.",
     initials: "BA",
+    image: "/images/team/bavika-agarwal.png",
     
   },
 ];

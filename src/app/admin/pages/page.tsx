@@ -54,6 +54,27 @@ type SettingsResponse = {
    target. The /api/admin/settings route upserts these under their
    respective `page:<slug>` keys in the SiteContent table.
    ───────────────────────────────────────────────────────────── */
+const ABOUT_US_DEFAULTS: PageContent = {
+  heroEyebrow: "Who We Are",
+  heroTitle: "Eleven Years of Opening Doors",
+  heroSubtitle: "LaxRee Amenities is an OEM manufacturer and India's largest Hotel Supplier Experience Center — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
+  storyTitle: "Our Story",
+  storyBody: "Founded in 2020, LaxRee Amenities started with a single product line — absorption minibars. Today, we manufacture 700+ SKUs across 8 categories.",
+  founderQuote: "For eleven years, we have opened doors for hotels across India — not just with products, but with a promise. Every minibar we manufacture, every safe we assemble, every piece of furniture we craft carries the same standard: quality you can audit, durability you can trust, and service that never sleeps.",
+  founderName: "Ashish Agarwal",
+  founderRole: "Founder & Managing Director",
+  oemTitle: "We Own the Factory. You Get the Value.",
+  oemSubtitle: "Three production lines, one QC lab, zero middlemen — that's the math behind LaxRee pricing.",
+  valuesTitle: "Our Values",
+  valuesSubtitle: "The principles that guide every product we make and every relationship we build.",
+  certTitle: "Quality You Can Audit",
+  certSubtitle: "Every product line is backed by internationally recognised certifications.",
+  leadershipTitle: "The People Behind LaxRee",
+  leadershipSubtitle: "A founding team that still walks the factory floor every morning.",
+  ctaTitle: "Ready to elevate your Guest Experience?",
+  ctaSubtitle: "Get a custom quotation within 24 hours. No obligation.",
+};
+
 const CAREER_DEFAULTS: PageContent = {
   heroEyebrow: "Career",
   heroTitle: "Build Your Career in Hospitality Procurement",
@@ -143,6 +164,74 @@ const EXPERIENCE_CENTER_DEFAULTS: PageContent = {
    of pushing another entry here.
    ───────────────────────────────────────────────────────────── */
 const PAGES: PageDef[] = [
+  {
+    slug: "about-us",
+    label: "About Us",
+    icon: Building2,
+    storageKey: "page:about-us",
+    defaults: ABOUT_US_DEFAULTS,
+    groups: [
+      {
+        title: "Hero Section",
+        subtitle: "Top banner shown when the page loads.",
+        fields: [
+          { key: "heroEyebrow", label: "Eyebrow", placeholder: "Who We Are" },
+          { key: "heroTitle", label: "Title" },
+          { key: "heroSubtitle", label: "Subtitle", multiline: true },
+        ],
+      },
+      {
+        title: "Our Story Section",
+        fields: [
+          { key: "storyTitle", label: "Section Title" },
+          { key: "storyBody", label: "Section Body Text", multiline: true },
+        ],
+      },
+      {
+        title: "Founder's Message",
+        fields: [
+          { key: "founderQuote", label: "Founder's Quote", multiline: true },
+          { key: "founderName", label: "Founder Name" },
+          { key: "founderRole", label: "Founder Role" },
+        ],
+      },
+      {
+        title: "OEM Manufacturing Section",
+        fields: [
+          { key: "oemTitle", label: "Section Title" },
+          { key: "oemSubtitle", label: "Section Subtitle", multiline: true },
+        ],
+      },
+      {
+        title: "Values Section",
+        fields: [
+          { key: "valuesTitle", label: "Section Title" },
+          { key: "valuesSubtitle", label: "Section Subtitle", multiline: true },
+        ],
+      },
+      {
+        title: "Certifications Section",
+        fields: [
+          { key: "certTitle", label: "Section Title" },
+          { key: "certSubtitle", label: "Section Subtitle", multiline: true },
+        ],
+      },
+      {
+        title: "Leadership Section",
+        fields: [
+          { key: "leadershipTitle", label: "Section Title" },
+          { key: "leadershipSubtitle", label: "Section Subtitle", multiline: true },
+        ],
+      },
+      {
+        title: "Call-to-Action",
+        fields: [
+          { key: "ctaTitle", label: "Title" },
+          { key: "ctaSubtitle", label: "Subtitle", multiline: true },
+        ],
+      },
+    ],
+  },
   {
     slug: "career",
     label: "Career",

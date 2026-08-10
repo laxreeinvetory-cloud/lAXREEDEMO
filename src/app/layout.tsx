@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     template: "%s | LaxRee Amenities",
   },
   description:
-    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, India's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
+    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, India's largest Hotel Supplier Experience Center. 11+ years, 700+ SKUs, 7+ certifications.",
   keywords: [
     "hotel supplies India",
     "hotel amenities manufacturer India",
@@ -196,8 +196,8 @@ export default function RootLayout({
               name: "LaxRee Amenities",
               url: BASE_URL,
               logo: `${BASE_URL}/images/laxree-logo.png`,
-              description: "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. India's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
-              foundingDate: "2015",
+              description: "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. India's largest Hotel Supplier Experience Center. 11+ years, 700+ SKUs, 7+ certifications.",
+              foundingDate: "2020",
               numberOfEmployees: "50+",
               address: {
                 "@type": "PostalAddress",

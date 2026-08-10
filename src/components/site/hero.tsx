@@ -199,7 +199,7 @@ export function Hero() {
             >
               Premium hotel &amp; resort amenities, furniture, linen, roofing
               and lighting — manufactured and supplied pan-India by LaxRee,
-              India&apos;s largest hospitality exhibition centre.
+              IndiaIndia&apos;s largest Hotel Supplier Experience Centerapos;s largest Hotel Supplier Experience Center.
             </motion.p>
 
             {/* CTAs */}

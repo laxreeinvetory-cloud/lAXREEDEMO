@@ -57,7 +57,7 @@ const VALUE_ICONS: Record<string, LucideIcon> = {
 const DEFAULTS = {
   heroEyebrow: "Who We Are",
   heroTitle: "Eleven Years of Opening Doors",
-  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
+  heroSubtitle: "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest Hotel Supplier Experience Center — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications.",
   heroImage: "",
   factoryImage: "",
   team: {
@@ -82,7 +82,7 @@ export default function AboutUsPage() {
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
         eyebrow={content.heroEyebrow || "Who We Are"}
         title={content.heroTitle || "Eleven Years of Opening Doors"}
-        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest hospitality exhibition centre — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
+        subtitle={content.heroSubtitle || "LaxRee Amenities is an 11-year-old OEM manufacturer and India's largest Hotel Supplier Experience Center — serving 1,347+ hotel projects across India with 700+ SKUs and 7+ certifications."}
       >
         {/* Stats band — glass-on-charcoal strip, static Plex Mono numbers */}
         <div className="glass-on-charcoal rounded-3xl p-6 md:p-8 max-w-4xl">
@@ -130,7 +130,7 @@ export default function AboutUsPage() {
             <FadeIn>
               <div className="space-y-5 font-body text-ink-muted text-[15px] md:text-base leading-relaxed">
                 <p>
-                  In <span className="text-ink font-medium">2015</span>, LaxRee
+                  In <span className="text-ink font-medium">2020</span>, LaxRee
                   opened its first manufacturing line in Ajmer — absorption
                   minibars at 200 units a month, a single shift, and a founder
                   who inspected every unit himself. The premise was simple:
@@ -149,7 +149,7 @@ export default function AboutUsPage() {
                 <p>
                   In 2019 we opened{" "}
                   <span className="text-ink font-medium">
-                    India's largest hospitality exhibition centre
+                    India's largest Hotel Supplier Experience Center
                   </span>
                   : 12,000 sq ft of working product displays where procurement
                   teams can test minibar cooling curves, weigh safe-locker
@@ -207,7 +207,7 @@ export default function AboutUsPage() {
             theme="charcoal"
             eyebrow="Our Journey"
             title="Milestones That Built LaxRee"
-            body="From one minibar line in 2015 to a 700+ SKU catalogue and a 22-state network — every milestone is a factory floor we added or a door we opened."
+            body="From one minibar line in 2020 to a 700+ SKU catalogue and a 22-state network — every milestone is a factory floor we added or a door we opened."
           />
 
           {/* Timeline rail */}
