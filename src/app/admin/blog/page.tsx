@@ -53,8 +53,17 @@ export default function AdminBlogPage() {
 
   const deletePost = async (id: string) => {
     if (!confirm("Delete this blog post?")) return;
-    await fetch(`/api/admin/blog?id=${id}`, { method: "DELETE" });
-    fetchPosts();
+    try {
+      const res = await fetch(`/api/admin/blog?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (!data.ok) {
+        alert(`Delete failed: ${data.message || data.error || "Unknown error"}`);
+        return;
+      }
+      fetchPosts();
+    } catch (err) {
+      alert(`Network error: ${err instanceof Error ? err.message : "Unknown"}`);
+    }
   };
 
   if (loading) {

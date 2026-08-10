@@ -170,11 +170,68 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ ok: false, message: "ID required" }, { status: 400 });
     }
 
-    await db.blogPost.delete({ where: { id } });
+    // If the ID is a static-fallback ID (starts with "static-blog-"),
+    // the post doesn't exist in the DB yet. Try to seed all static posts
+    // first, then find and delete the one matching this slug.
+    if (id.startsWith("static-blog-")) {
+      const slug = id.replace("static-blog-", "");
+      try {
+        // Seed all static posts into the DB so they can be edited/deleted
+        const staticPosts = getStaticBlogPosts();
+        for (const p of staticPosts) {
+          await db.blogPost.upsert({
+            where: { slug: p.slug },
+            create: {
+              slug: p.slug,
+              title: p.title,
+              category: p.category,
+              excerpt: p.excerpt,
+              content: p.content,
+              image: p.image,
+              author: p.author,
+              authorRole: p.authorRole,
+              date: p.date,
+              readTime: p.readTime,
+              published: p.published,
+            },
+            update: {},
+          });
+        }
+        // Now find the real DB post by slug and delete it
+        const realPost = await db.blogPost.findUnique({ where: { slug } });
+        if (realPost) {
+          await db.blogPost.delete({ where: { id: realPost.id } });
+          return NextResponse.json({ ok: true, message: "Post deleted" });
+        }
+        return NextResponse.json({ ok: false, message: "Post not found after seeding" }, { status: 404 });
+      } catch (seedErr) {
+        console.error("[ADMIN BLOG DELETE SEED ERROR]", seedErr);
+        return NextResponse.json({
+          ok: false,
+          message: "Database is not writable. Check that the Neon Postgres DATABASE_URL is configured on Vercel and that 'prisma db push' has been run to create tables.",
+          error: seedErr instanceof Error ? seedErr.message : String(seedErr),
+        }, { status: 500 });
+      }
+    }
 
-    return NextResponse.json({ ok: true, message: "Post deleted" });
+    // Normal delete — the ID is a real DB row ID
+    try {
+      await db.blogPost.delete({ where: { id } });
+      return NextResponse.json({ ok: true, message: "Post deleted" });
+    } catch (deleteErr) {
+      // If the record doesn't exist, return 404 instead of 500
+      const msg = deleteErr instanceof Error ? deleteErr.message : String(deleteErr);
+      if (msg.includes("P2025") || msg.includes("not found")) {
+        return NextResponse.json({ ok: false, message: "Post not found in database" }, { status: 404 });
+      }
+      throw deleteErr;
+    }
   } catch (err) {
     console.error("[ADMIN BLOG DELETE ERROR]", err);
-    return NextResponse.json({ ok: false, message: "Server error" }, { status: 500 });
+    return NextResponse.json({
+      ok: false,
+      message: "Database error. If this persists, check that the Neon Postgres DATABASE_URL is configured on Vercel.",
+      error: err instanceof Error ? err.message : String(err),
+    }, { status: 500 });
   }
 }

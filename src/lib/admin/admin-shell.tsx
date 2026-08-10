@@ -59,12 +59,33 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dbWarning, setDbWarning] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user && pathname !== "/admin/login") {
       router.push("/admin/login");
     }
   }, [user, loading, pathname, router]);
+
+  // Check DB health on admin pages load
+  useEffect(() => {
+    if (user && pathname !== "/admin/login") {
+      fetch("/api/admin/health", { cache: "no-store" })
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data.ok) {
+            setDbWarning(
+              data.error || "Database connection failed. Admin changes will not persist."
+            );
+          } else {
+            setDbWarning(null);
+          }
+        })
+        .catch(() => {
+          // Health check failed — don't block the admin
+        });
+    }
+  }, [user, pathname]);
 
   if (loading) {
     return (
@@ -161,6 +182,26 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
         {/* Page content */}
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+          {dbWarning && (
+            <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 p-4">
+              <div className="flex items-start gap-3">
+                <Database className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[14px] font-semibold text-red-400">
+                    Database Not Connected — Admin Changes Will NOT Persist
+                  </p>
+                  <p className="mt-1 text-[12px] text-sand leading-relaxed">
+                    {dbWarning}
+                  </p>
+                  <p className="mt-2 text-[12px] text-sand">
+                    Fix: On Vercel, set the <code className="text-brass">DATABASE_URL</code> environment variable
+                    to a valid Neon Postgres connection string, then redeploy. The build will
+                    automatically run <code className="text-brass">prisma db push</code> to create tables.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
           {children}
         </main>
       </div>

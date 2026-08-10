@@ -69,8 +69,8 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.png",
   // ── Bath Tub ──
   "bath-tub-models": "/images/product-catalogue/bath-tub/LRBT---311-Color-Body.jpg",
-  // ── Amenities Tray Set ──
-  "amenities-tray-set-models": "/images/product-catalogue/amenities-tray-set/LRAT-366.jpg",
+  // ── Amenities Tray Set ── (LRAT-366/367/368 are bathtub photos — use LRAT-370 which is an actual tray set)
+  "amenities-tray-set-models": "/images/product-catalogue/amenities-tray-set/LRAT-370.jpg",
   // ── Dome & Space POD ──
   "dome-models": "/images/product-catalogue/dome-space-pod/LRDO---2001--4-2-Mtr.jpg",
 };
