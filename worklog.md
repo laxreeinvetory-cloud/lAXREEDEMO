@@ -2670,3 +2670,33 @@ Stage Summary:
   The build script (package.json) now includes 'prisma db push --accept-data-loss'
   so tables will be created automatically on the first deploy with a working DB.
 - Local dev works fine (JSON file-based DB, health check ok=True read=True write=True).
+
+---
+Task ID: FIX-HEALTH-DIAGNOSTICS
+Agent: main (orchestrator)
+Task: User reported admin banner shows "Can't reach database server" — wants it fixed.
+
+Work Log:
+- Diagnosed with raw `pg` npm package: TCP connection to Neon SUCCEEDS, but Neon rejects ALL queries with error code 53000: "Your project has exceeded the data transfer quota."
+- Root cause: Neon free-tier 1GB/month data transfer quota EXCEEDED. This is a billing issue, not a code issue.
+- Updated /api/admin/health endpoint:
+  * Now tests raw TCP connection (using Node's net module) BEFORE Prisma query
+  * If TCP works but Prisma fails → detects as DB_REJECTED_CONNECTION (not a network issue)
+  * Returns errorType + fixInstructions in response
+  * Vercel-verified: tcpReachable=true, errorType=DB_REJECTED_CONNECTION
+- Updated admin banner:
+  * Shows the REAL error (quota exceeded, not "can't reach")
+  * Has a "How to Fix" box with step-by-step instructions
+  * VLM-verified on live /admin/blog page
+
+Stage Summary:
+- The admin panel now shows the CORRECT diagnosis:
+  "TCP connection succeeded, but Prisma cannot run queries. 
+   This usually means your Neon free-tier data transfer quota (1GB/month) 
+   has been exceeded."
+- The "How to Fix" box shows:
+  1. Go to https://neon.tech and create a NEW project (fresh 1GB quota)
+  2. Copy the new connection string
+  3. On Vercel, go to Settings → Environment Variables → update DATABASE_URL
+  4. Redeploy — tables auto-create via 'prisma db push'
+- This is the MAXIMUM that can be done in code. The actual fix requires creating a new Neon project (user action on neon.tech).
