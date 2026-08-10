@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Quote, Star, TrendingUp, Award, MapPin, Building2 } from "lucide-react";
 import {
   PageHero,
@@ -13,6 +14,29 @@ import {
   TESTIMONIALS,
 } from "@/lib/laxree/site-data";
 
+type ClientCMS = {
+  heroEyebrow?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  statsValue1?: string;
+  statsLabel1?: string;
+  statsValue2?: string;
+  statsLabel2?: string;
+  statsValue3?: string;
+  statsLabel3?: string;
+  statsValue4?: string;
+  statsLabel4?: string;
+  rosterEyebrow?: string;
+  rosterTitle?: string;
+  rosterBody?: string;
+  caseStudiesEyebrow?: string;
+  caseStudiesTitle?: string;
+  testimonialsEyebrow?: string;
+  testimonialsTitle?: string;
+  ctaTitle?: string;
+  ctaSubtitle?: string;
+};
+
 /* ─────────────────────────────────────────────────────────────
    Trust stats
    ───────────────────────────────────────────────────────────── */
@@ -24,16 +48,31 @@ const TRUST_STATS = [
 ];
 
 export default function ClientsPage() {
+  const [cms, setCms] = useState<ClientCMS>({});
+
+  useEffect(() => {
+    fetch("/api/admin/cms?key=page:clients", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.ok && data.value) setCms(data.value);
+      })
+      .catch(() => {});
+  }, []);
+
+  const stats = [
+    { value: cms.statsValue1 || "1,347+", label: cms.statsLabel1 || "Projects Delivered", icon: Building2 },
+    { value: cms.statsValue2 || "28", label: cms.statsLabel2 || "States Covered", icon: MapPin },
+    { value: cms.statsValue3 || "97.4%", label: cms.statsLabel3 || "On-Time Delivery", icon: TrendingUp },
+    { value: cms.statsValue4 || "13+", label: cms.statsLabel4 || "National Hotel Chains", icon: Award },
+  ];
+
   return (
     <>
-      {/* ─────────────────────────────────────────────
-          Section 1 — PageHero (charcoal)
-          ───────────────────────────────────────────── */}
       <PageHero
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Clients" }]}
-        eyebrow="OUR CLIENTS"
-        title="Trusted by the Best in Hospitality"
-        subtitle="Proudly serving India's most prestigious hotel chains — from heritage properties to new-build resorts. 1,347+ projects delivered across 28 states."
+        eyebrow={cms.heroEyebrow || "OUR CLIENTS"}
+        title={cms.heroTitle || "Trusted by the Best in Hospitality"}
+        subtitle={cms.heroSubtitle || "Proudly serving India's most prestigious hotel chains — from heritage properties to new-build resorts. 1,347+ projects delivered across 28 states."}
       />
 
       {/* ─────────────────────────────────────────────
@@ -42,7 +81,7 @@ export default function ClientsPage() {
       <section className="section section-charcoal py-12 md:py-16">
         <div className="container-laxree">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {TRUST_STATS.map((s, i) => {
+            {stats.map((s, i) => {
               const Icon = s.icon;
               return (
                 <FadeIn key={s.label} delay={i * 0.1}>
@@ -82,9 +121,9 @@ export default function ClientsPage() {
         <div className="container-laxree">
           <SectionHeading
             theme="ivory"
-            eyebrow="CLIENT ROSTER"
-            title="Hotels That Choose LaxRee"
-            body="A selection of the hospitality brands we manufacture and supply for — from luxury chains to boutique resorts."
+            eyebrow={cms.rosterEyebrow || "CLIENT ROSTER"}
+            title={cms.rosterTitle || "Hotels That Choose LaxRee"}
+            body={cms.rosterBody || "A selection of the hospitality brands we manufacture and supply for — from luxury chains to boutique resorts."}
           />
 
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
@@ -116,8 +155,8 @@ export default function ClientsPage() {
         <div className="container-laxree">
           <SectionHeading
             theme="charcoal"
-            eyebrow="CASE STUDIES"
-            title="Projects We're Proud Of"
+            eyebrow={cms.caseStudiesEyebrow || "CASE STUDIES"}
+            title={cms.caseStudiesTitle || "Projects We're Proud Of"}
           />
 
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -174,8 +213,8 @@ export default function ClientsPage() {
         <div className="container-laxree">
           <SectionHeading
             theme="ivory"
-            eyebrow="TESTIMONIALS"
-            title="What Procurement Leaders Say"
+            eyebrow={cms.testimonialsEyebrow || "TESTIMONIALS"}
+            title={cms.testimonialsTitle || "What Procurement Leaders Say"}
           />
 
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -222,8 +261,8 @@ export default function ClientsPage() {
           Section 6 — PageCTA (emerald)
           ───────────────────────────────────────────── */}
       <PageCTA
-        title="Join 1,347+ satisfied hotel projects"
-        subtitle="Let's discuss your next renovation or new-build."
+        title={cms.ctaTitle || "Join 1,347+ satisfied hotel projects"}
+        subtitle={cms.ctaSubtitle || "Let's discuss your next renovation or new-build."}
       />
     </>
   );

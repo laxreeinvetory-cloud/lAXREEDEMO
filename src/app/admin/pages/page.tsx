@@ -134,6 +134,29 @@ const CATALOGUE_DEFAULTS: PageContent = {
   discountSubtitle: "Enter your details to receive a discount code valid for 30 days. We'll also WhatsApp you the latest pricing.",
 };
 
+const CLIENTS_DEFAULTS: PageContent = {
+  heroEyebrow: "OUR CLIENTS",
+  heroTitle: "Trusted by the Best in Hospitality",
+  heroSubtitle: "Proudly serving India's most prestigious hotel chains — from heritage properties to new-build resorts. 1,347+ projects delivered across 28 states.",
+  statsValue1: "1,347+",
+  statsLabel1: "Projects Delivered",
+  statsValue2: "28",
+  statsLabel2: "States Covered",
+  statsValue3: "97.4%",
+  statsLabel3: "On-Time Delivery",
+  statsValue4: "13+",
+  statsLabel4: "National Hotel Chains",
+  rosterEyebrow: "CLIENT ROSTER",
+  rosterTitle: "Hotels That Choose LaxRee",
+  rosterBody: "A selection of the hospitality brands we manufacture and supply for — from luxury chains to boutique resorts.",
+  caseStudiesEyebrow: "CASE STUDIES",
+  caseStudiesTitle: "Projects We're Proud Of",
+  testimonialsEyebrow: "TESTIMONIALS",
+  testimonialsTitle: "What Procurement Leaders Say",
+  ctaTitle: "Join 1,347+ satisfied hotel projects",
+  ctaSubtitle: "Let's discuss your next renovation or new-build.",
+};
+
 const CONTACT_DEFAULTS: PageContent = {
   heroEyebrow: "Contact Us",
   heroTitle: "Get in Touch",
@@ -387,6 +410,65 @@ const PAGES: PageDef[] = [
           { key: "ctaTitle", label: "Title" },
           { key: "ctaSubtitle", label: "Subtitle", multiline: true },
           { key: "ctaButtonText", label: "Button Text" },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "clients",
+    label: "Clients",
+    icon: Building2,
+    storageKey: "page:clients",
+    defaults: CLIENTS_DEFAULTS,
+    groups: [
+      {
+        title: "Hero Section",
+        fields: [
+          { key: "heroEyebrow", label: "Eyebrow", placeholder: "OUR CLIENTS" },
+          { key: "heroTitle", label: "Title" },
+          { key: "heroSubtitle", label: "Subtitle", multiline: true },
+        ],
+      },
+      {
+        title: "Trust Stats",
+        fields: [
+          { key: "statsValue1", label: "Stat 1 Value", placeholder: "1,347+" },
+          { key: "statsLabel1", label: "Stat 1 Label", placeholder: "Projects Delivered" },
+          { key: "statsValue2", label: "Stat 2 Value", placeholder: "28" },
+          { key: "statsLabel2", label: "Stat 2 Label", placeholder: "States Covered" },
+          { key: "statsValue3", label: "Stat 3 Value", placeholder: "97.4%" },
+          { key: "statsLabel3", label: "Stat 3 Label", placeholder: "On-Time Delivery" },
+          { key: "statsValue4", label: "Stat 4 Value", placeholder: "13+" },
+          { key: "statsLabel4", label: "Stat 4 Label", placeholder: "National Hotel Chains" },
+        ],
+      },
+      {
+        title: "Client Roster Section",
+        fields: [
+          { key: "rosterEyebrow", label: "Eyebrow" },
+          { key: "rosterTitle", label: "Title" },
+          { key: "rosterBody", label: "Body Text", multiline: true },
+        ],
+      },
+      {
+        title: "Case Studies Section",
+        fields: [
+          { key: "caseStudiesEyebrow", label: "Eyebrow" },
+          { key: "caseStudiesTitle", label: "Title" },
+        ],
+      },
+      {
+        title: "Testimonials Section",
+        fields: [
+          { key: "testimonialsEyebrow", label: "Eyebrow" },
+          { key: "testimonialsTitle", label: "Title" },
+        ],
+      },
+      {
+        title: "Call-to-Action",
+        fields: [
+          { key: "ctaTitle", label: "Title" },
+          { key: "ctaSubtitle", label: "Subtitle", multiline: true },
         ],
       },
     ],
