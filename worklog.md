@@ -2315,3 +2315,29 @@ Stage Summary:
   - db/data/siteContent.json (CMS overrides, created on first admin save)
 - Key decision: Used a JSON file-based persistence layer instead of switching Prisma to SQLite, because the Prisma client is already generated for PostgreSQL (for Vercel/Neon production). The JSON layer is dev-only and doesn't affect production.
 - All 5 user-reported issues now fixed and verified.
+
+---
+Task ID: FIX-BATHTUB-AMENITIES
+Agent: main (orchestrator)
+Task: User reported "abhi bhi bath tub hi aa rha hain amenites" on www.laxree.com — nothing updated, bath tub showing for amenities.
+
+Work Log:
+- Fetched live www.laxree.com homepage HTML and extracted all 40 image URLs.
+- Verified Vercel deployment DID happen: furniture preview images (outdoor-furniture-preview.jpg etc.) are live on /products/furniture. Bavika real portrait is live on /about-us (VLM confirmed "a real photo of a woman with long hair wearing a blazer").
+- Used Agent Browser + VLM to visually inspect the live homepage category bento section ("Eight Categories. One Standard.").
+- ROOT CAUSE FOUND: The "Washroom Amenities" category card image (/images/categories/washroom-amenities.png) had a BATHTUB visible in the bathroom background. The user saw "Amenities" in the card name ("Washroom Amenities") and a bathtub in the image — hence "bath tub aa rha hain amenities".
+- Generated a new washroom-amenities.png: clean flat-lay of washroom accessories (hair dryer, magnifying mirror with brass trim, soap dispenser, soap dish, towel) on white background. NO bathtub visible. VLM confirmed: "No, there is no bathtub visible."
+- Verified all other category images are appropriate (lobby-items, furniture, linen, amenities-tray-set, space-pod, room-amenities — all correct).
+- Committed and pushed to origin/main (commit 29fddba).
+- Waited ~2.5 minutes for Vercel build + deploy + CDN propagation.
+- Verified live site: downloaded https://www.laxree.com/images/categories/washroom-amenities.png — MD5 matches local file. VLM confirmed on live homepage: "Washroom Amenities card shows washroom accessories. It does not show a bathtub."
+- Also explained to user: admin changes made on localhost (dev/preview) do NOT sync to www.laxree.com (production uses separate Neon Postgres DB). Admin changes must be made on www.laxree.com/admin to appear live.
+
+Stage Summary:
+- File changed: public/images/categories/washroom-amenities.png (88KB, 1024x1024 PNG)
+- Commit: 29fddba "Fix washroom-amenities category image: remove bathtub from background"
+- Live verification: MD5 match + VLM "no bathtub visible" on www.laxree.com homepage
+- All 3 pushes to Vercel confirmed deployed:
+  1. 80910e2 — admin persistence, furniture previews, Bavika image, blog detail DB fetch, OurPresence sync
+  2. 16ac01c — include local-db.ts in repo (build fix)
+  3. 29fddba — washroom-amenities image (remove bathtub)
