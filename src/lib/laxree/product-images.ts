@@ -54,12 +54,16 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "sign-board": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.jpg",
   "stand-pole": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.jpg",
   "digital-signage": "/images/product-catalogue/ssp-digital-signage/LRDS-43.jpg",
-  // ── Furniture ── (using actual chair/table images from furniture folder)
-  "outdoor-furniture": "/images/product-catalogue/furniture/LRBF---526.jpg",
-  "guest-room-furniture": "/images/product-catalogue/furniture/LRBF---527.jpg",
+  // ── Furniture ── (using AI-generated category previews for the right
+  // visual match — the LRBF---5xx photos are all banquet/event chairs
+  // which gave "Outdoor Furniture" a gold chair preview that looked wrong.)
+  "outdoor-furniture": "/images/product-catalogue/furniture/outdoor-furniture-preview.jpg",
+  "guest-room-furniture": "/images/product-catalogue/furniture/guest-room-furniture-preview.jpg",
   "restaurant-furniture": "/images/product-catalogue/furniture/LRBF---528.jpg",
-  "room-furniture": "/images/product-catalogue/furniture/LRBF---530.jpg",
+  "room-furniture": "/images/product-catalogue/furniture/LRBF---526.jpg",
+  "pool-lounger": "/images/product-catalogue/furniture/pool-lounger-preview.jpg",
   "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.jpg",
+  "frp-flower-pots": "/images/product-catalogue/furniture/frp-flower-pots-preview.jpg",
   // ── Linen ──
   "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.png",
   "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.png",

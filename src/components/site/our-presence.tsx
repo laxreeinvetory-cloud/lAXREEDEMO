@@ -35,19 +35,21 @@ export default function OurPresence() {
       .then((r) => r.json())
       .then((data) => {
         if (data.ok && data.settings) {
-          const op = data.settings.homepage?.ourPresence;
-          if (op) {
+          // Images can be saved by two admin pages:
+          //   1. /admin/images     → saves to key "homepage"         (field ourPresence.image1-10)
+          //   2. /admin/homepage   → saves to key "homepage:full"    (field ourPresence.image1-5)
+          // We merge both, with the dedicated /admin/images key taking
+          // priority since it has the full image1-10 range.
+          const opFull = data.settings["homepage:full"]?.ourPresence;
+          const opImages = data.settings["homepage"]?.ourPresence;
+          const op = { ...(opFull || {}), ...(opImages || {}) };
+          if (op && Object.keys(op).length > 0) {
             const updated = [...EXHIBITIONS];
-            if (op.image1 && updated[0]) updated[0] = { ...updated[0], image: op.image1 };
-            if (op.image2 && updated[1]) updated[1] = { ...updated[1], image: op.image2 };
-            if (op.image3 && updated[2]) updated[2] = { ...updated[2], image: op.image3 };
-            if (op.image4 && updated[3]) updated[3] = { ...updated[3], image: op.image4 };
-            if (op.image5 && updated[4]) updated[4] = { ...updated[4], image: op.image5 };
-            if (op.image6 && updated[5]) updated[5] = { ...updated[5], image: op.image6 };
-            if (op.image7 && updated[6]) updated[6] = { ...updated[6], image: op.image7 };
-            if (op.image8 && updated[7]) updated[7] = { ...updated[7], image: op.image8 };
-            if (op.image9 && updated[8]) updated[8] = { ...updated[8], image: op.image9 };
-            if (op.image10 && updated[9]) updated[9] = { ...updated[9], image: op.image10 };
+            const keys = ["image1","image2","image3","image4","image5","image6","image7","image8","image9","image10"];
+            keys.forEach((k, idx) => {
+              const val = op[k];
+              if (val && updated[idx]) updated[idx] = { ...updated[idx], image: val };
+            });
             setExhibitions(updated);
           }
         }

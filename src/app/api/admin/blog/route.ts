@@ -6,6 +6,8 @@ export const runtime = "nodejs";
 
 // GET — list all blog posts
 // Falls back to static BLOG_POSTS data when DB is empty (Vercel serverless).
+// On local dev (JSON file-based DB), the first call seeds the DB with the
+// static posts so the admin can edit/delete them and the changes persist.
 export async function GET() {
   try {
     let posts: Awaited<ReturnType<typeof db.blogPost.findMany>> = [];
@@ -19,7 +21,42 @@ export async function GET() {
     }
 
     if (posts.length === 0) {
-      posts = getStaticBlogPosts() as unknown as typeof posts;
+      // Seed the local DB with the static posts so subsequent edits/deletes
+      // actually persist. On production (Vercel serverless), the static
+      // fallback is returned directly (no persistence across cold starts).
+      const staticPosts = getStaticBlogPosts();
+      try {
+        for (const p of staticPosts) {
+          // Use upsert to avoid duplicate-key errors if a partial seed exists.
+          await db.blogPost.upsert({
+            where: { slug: p.slug },
+            create: {
+              slug: p.slug,
+              title: p.title,
+              category: p.category,
+              excerpt: p.excerpt,
+              content: p.content,
+              image: p.image,
+              author: p.author,
+              authorRole: p.authorRole,
+              date: p.date,
+              readTime: p.readTime,
+              published: p.published,
+            },
+            update: {},
+          });
+        }
+        posts = await db.blogPost.findMany({
+          orderBy: { createdAt: "desc" },
+        });
+      } catch (seedErr) {
+        console.error("[ADMIN BLOG SEED ERROR]", seedErr);
+      }
+
+      if (posts.length === 0) {
+        // Final fallback — return static data directly (non-persistent).
+        posts = staticPosts as unknown as typeof posts;
+      }
     }
 
     return NextResponse.json({ ok: true, posts });

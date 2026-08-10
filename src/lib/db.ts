@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { localDb } from '@/lib/local-db'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -8,11 +9,9 @@ const globalForPrisma = globalThis as unknown as {
  * Detects whether DATABASE_URL points at a SQLite file (local dev) while the
  * Prisma schema is configured for PostgreSQL (production / Vercel + Neon).
  *
- * When this mismatch is present, any real Prisma query would hang forever
- * trying to reach a Postgres server that doesn't exist locally. Instead of
- * hanging, we return `null` and let callers fall back to static catalogue
- * data. This keeps every API route snappy on local dev without touching the
- * schema (which must stay `postgresql` for the Vercel deployment).
+ * When this mismatch is present, we route every DB call to a local JSON
+ * file-based store (see src/lib/local-db.ts) so that admin edits persist
+ * during local development. In production, a real PrismaClient is used.
  */
 function isLocalSqliteMismatch(): boolean {
   const url = process.env.DATABASE_URL || '';
@@ -33,72 +32,31 @@ function createClient(): PrismaClient {
 }
 
 /**
- * `db` is a Proxy over the real PrismaClient.
+ * `db` is a Proxy over either the local JSON store (dev) or a real
+ * PrismaClient (production).
  *
  * When running locally with a SQLite-style DATABASE_URL but a PostgreSQL
- * schema, the Proxy short-circuits every model accessor (`db.product`,
- * `db.category`, …) so that `findMany` / `count` / etc. resolve to empty
- * results immediately. This makes the admin/products API respond instantly
- * with the static catalogue fallback instead of hanging on a Postgres
- * connection that will never succeed.
+ * schema, the Proxy hands out model adapters from `localDb`. Each adapter
+ * implements findMany / findUnique / create / update / upsert / delete /
+ * deleteMany / count / aggregate / groupBy and persists rows to
+ * `<projectRoot>/db/data/<model>.json`.
  *
  * On production (Vercel + Neon Postgres), `DATABASE_URL` is a real
  * `postgres://` URL, so the Proxy delegates to a genuine PrismaClient.
  */
 export const db = new Proxy({} as PrismaClient, {
   get(_target, prop: string | symbol) {
-    // Local SQLite mismatch → return no-op handlers for known model names.
+    // Local SQLite mismatch → use the JSON file-based store.
     if (isLocalSqliteMismatch()) {
-      const noopModel = new Proxy({} as Record<string, (...args: unknown[]) => unknown>, {
-        get(_t, method: string | symbol) {
-          // All model methods resolve to empty / zero / null so callers
-          // treating the result as an array or count keep working.
-          // IMPORTANT: findUnique/findFirst must return null (not []) so
-          // truthiness checks like `if (dbAdmin)` work correctly.
-          if (method === 'findMany') {
-            return async () => [];
-          }
-          if (method === 'findUnique' || method === 'findFirst') {
-            return async () => null;
-          }
-          if (method === 'count' || method === 'aggregate') {
-            return async () => 0;
-          }
-          if (method === 'create') {
-            return async () => ({ id: 'local-noop' });
-          }
-          if (method === 'createMany') {
-            return async () => ({ count: 0 });
-          }
-          if (method === 'update' || method === 'upsert') {
-            return async () => ({ id: 'local-noop' });
-          }
-          if (method === 'updateMany') {
-            return async () => ({ count: 0 });
-          }
-          if (method === 'delete') {
-            return async () => ({ id: 'local-noop' });
-          }
-          if (method === 'deleteMany') {
-            return async () => ({ count: 0 });
-          }
-          // Anything else (groupBy, etc.) → null
-          return async () => null;
-        },
-      });
-
-      const knownModels = new Set([
-        'adminUser', 'lead', 'blogPost', 'siteContent', 'product', 'category', 'user',
-      ]);
-      if (typeof prop === 'string' && knownModels.has(prop)) {
-        return noopModel;
-      }
-
+      const model = localDb[prop as string];
+      if (model) return model;
       // `$disconnect`, `$connect`, `$transaction`, etc. → no-op
       if (typeof prop === 'string' && prop.startsWith('$')) {
-        return typeof prop === 'string' && prop === '$transaction'
-          ? async (fn: unknown) => (typeof fn === 'function' ? (fn as () => unknown)() : [])
-          : async () => undefined;
+        if (prop === '$transaction') {
+          return async (fn: unknown) =>
+            typeof fn === 'function' ? (fn as () => unknown)() : [];
+        }
+        return async () => undefined;
       }
       return undefined;
     }
