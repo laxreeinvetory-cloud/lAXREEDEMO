@@ -2552,3 +2552,82 @@ Stage Summary:
 - All commits pushed to origin/main (62ba139, 997b893)
 - Vercel deployment confirmed live (health endpoint + warning banner verified)
 - The ONLY remaining issue is the Neon database being unreachable, which requires user action on the Neon/Vercel dashboard.
+
+---
+
+Task ID: CLEANUP-FILES
+Agent: general-purpose (file cleanup sub-agent)
+Task: Remove UNNECESSARY image files from public/images/ to reduce deployment size for Vercel.
+
+Work Log:
+- Read prior worklog (2554 lines, 30+ prior task entries) to understand context. Most recent task was FIX-PROD-DB-FINAL.
+- Inventory of public/images/ before cleanup:
+  * Total image files: 2,494 (.png/.jpg/.jpeg/.webp/.svg/.gif)
+  * Total size: 135 MB (du) / 128.9 MB (sum of file sizes)
+  * Largest subdirs: product-catalogue/ (97 MB across 50+ subdirs), categories/ (11 MB), products/ (9.9 MB), team/ (7.5 MB)
+- Referenced-image analysis:
+  * Extracted 282 unique referenced image paths from src/ via `grep -rohE '"/images/[^"]+"' src/ | sort -u`
+  * Sources: src/lib/laxree/site-data.ts (177 refs), src/lib/laxree/product-images.ts (108 refs), src/lib/laxree/catalogue-data.ts (172 refs), plus components and pages.
+  * Filtered out 3 placeholder/irrelevant strings ("/images/path/to/image.jpg", "/images/product-catalogue/... or uploaded URL", etc.).
+  * Also filtered false-positive "mini-bar.webp" that appeared only in code comments (// Falls back to ... mini-bar.webp), not as actual string literals.
+- Built Python analysis script (/home/z/analyze_images.py) that classifies every image on disk into:
+  1. REFERENCED (path appears in refs) -> KEEP
+  2. UNREFERENCED-WITH-PAIR (different extension of same base name IS referenced) -> DELETE (the unreferenced variant)
+  3. TRULY ORPHAN (no extension variant referenced) -> DELETE
+  4. PROTECTED (laxree-logo.*, owner*, hero-room.*, og/default.*) -> KEEP regardless
+- Verified zero overlap between the delete list (2,211 files) and the referenced list (282 paths). Confirmed all 6 protected files (laxree-logo.png/.webp, owner.jpg, owner-cropped.jpg/.webp, hero-room.png) exist on disk and are NOT in the delete list.
+
+Deletion Summary:
+- Total files deleted: 2,211
+  * 1,945 truly orphan files (no extension variant referenced) = 83.4 MB
+  * 266 unreferenced-with-referenced-pair files (the .jpg/.png/.webp variant that's NOT referenced) = 10.5 MB
+- Total size saved: ~99 MB
+- public/images/ before: 2,494 files, 135 MB
+- public/images/ after: 283 files, 36 MB (73% reduction)
+
+Categories of deleted files (top by count):
+- product-catalogue/furniture: 749 files (746 orphan, 3 pair) — bulk of savings (42 MB)
+- product-catalogue/excel-images: 417 files (316 orphan, 101 pair)
+- product-catalogue/tea-kettle: 56 orphan
+- product-catalogue/lobby-items: 54 orphan
+- product-catalogue/ssp-bath-tubs: 32 (30 orphan, 2 pair)
+- product-catalogue/hand-dryer: 32 (24 orphan, 8 pair)
+- product-catalogue/bath-tub: 32 (16 orphan, 16 pair)
+- products/: 24 (6 orphan — incl. kettle-set-clean.{png,webp}, luggage-trolley-clean.{png,webp}, safe-box-clean.{png,webp}; 18 pair — unreferenced .png/.webp variants of referenced .jpg files)
+- blog/: 17 (15 pair, 2 orphan)
+- gallery/: 13 (10 pair, 3 orphan)
+- categories/: 17 (4 pair: furniture.png/.webp, roofing.png/.webp; 13 orphan: amenities.* x3, dome.* x3, linen.* x3, lobby.* x2, washroom.* x2 — all replaced by referenced variants like linen-new.jpg, washroom-amenities.png, etc.)
+- Many other product-catalogue subdirs with 2-30 unreferenced files each.
+
+Special note on "clean" suffix files:
+- Found 6 "-clean" suffix files in public/images/products/: kettle-set-clean.{png,webp}, luggage-trolley-clean.{png,webp}, safe-box-clean.{png,webp}
+- Grep confirmed NONE are referenced in src/. The non-clean variants (kettle-set.jpg, luggage-trolley.jpg, safe-box.jpg) ARE referenced.
+- All 6 "clean" files deleted.
+
+Verification:
+1. All 282 referenced image paths verified to still exist on disk:
+   - 2 paths were ALREADY MISSING before cleanup (pre-existing issue, not caused by this task):
+     * /images/blog/custom-og.jpg — only appears as `placeholder="..."` in admin form, never loaded as actual image
+     * /images/og/default.jpg — referenced in src/app/api/admin/settings/route.ts and src/app/admin/seo/page.tsx as default OG image, but file never existed in git history
+   - Neither was in my delete list (they didn't exist on disk to delete). Restored nothing from git because neither file was ever tracked by git (verified via `git log --all -- 'public/images/og/'` — empty output).
+2. `bun run lint`: 0 errors, 41 pre-existing warnings (all about <img> vs <Image /> and unused eslint-disable directives — unrelated to image cleanup).
+3. `npx tsc --noEmit`: PASSED with no errors.
+4. Dev server started at localhost:3000:
+   - Homepage (GET /) returned HTTP 200, size 251 KB
+   - 41 unique image references extracted from homepage HTML — all verified to exist on disk
+   - 5 critical images spot-checked via HTTP HEAD: taj.png, mini-bar.jpg, hero-room.png, laxree-logo.png, about-us-team.png — all returned HTTP 200
+   - 16 critical product/category images spot-checked: bath-tub.jpg, door-lock.jpg, safe-box.jpg, kettle-set.jpg, luggage-trolley.jpg, hair-dryer.jpg, magnifying-mirror.jpg, hand-dryer.jpg, owner-cropped.jpg, room-amenities.png, washroom-amenities.png, furniture.jpg, linen-new.jpg, roofing.jpg, lobby-items.png, space-pod.png — all HTTP 200
+   - Product category pages: /products (200), /products/room-amenities (200), /products/bath-tub (200), /products/washroom-amenities (200), /products/furniture (200), /products/linen (200), /products/lobby-items (200)
+   - Sub-category page /products/bath-tub/bath-tub-models returned 200, 17 unique image refs all verified to exist
+   - Sub-category pages /products/room-amenities/mini-bar, /room-amenities/safe-box, /washroom-amenities/hand-dryer, /furniture/guest-room-furniture, /linen/bath-linen all returned 200 with zero missing image refs
+   - Other pages: /blog (200), /about-us (200) — all image refs verified
+5. Dev server stopped after verification.
+
+Stage Summary:
+- public/images/ reduced from 135 MB / 2,494 files -> 36 MB / 283 files
+- ~99 MB of deployment size saved
+- 2,211 unnecessary image files removed
+- All referenced images still serve correctly (HTTP 200)
+- Lint passes, TypeScript compiles, homepage and key product pages render correctly
+- No source code, schema, or config files touched — only files under public/images/
+- Pre-existing missing files (/images/og/default.jpg, /images/blog/custom-og.jpg) noted but not in scope to fix (would require either creating the files or modifying source code).
