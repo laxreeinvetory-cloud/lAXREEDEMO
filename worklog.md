@@ -2631,3 +2631,42 @@ Stage Summary:
 - Lint passes, TypeScript compiles, homepage and key product pages render correctly
 - No source code, schema, or config files touched — only files under public/images/
 - Pre-existing missing files (/images/og/default.jpg, /images/blog/custom-og.jpg) noted but not in scope to fix (would require either creating the files or modifying source code).
+
+---
+Task ID: FIX-NEON-QUOTA
+Agent: main (orchestrator)
+Task: User provided Neon DATABASE_URL. Fix the production DB issue.
+
+Work Log:
+- Set .env to the real Neon URL: postgresql://neondb_owner:npg_...@ep-bitter-art-atlflf3d-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require
+- Tried prisma db push — failed with P1001 "Can't reach database server"
+- Tested raw TCP connection to Neon on port 5432 — SUCCESS (port is reachable)
+- Installed pg npm package and tested direct Node.js connection — connection established, SSL handshake completed, but query failed with: "Your project has exceeded the data transfer quota. Upgrade your plan to increase limits." (Neon error code 53000)
+- ROOT CAUSE: The Neon free-tier project has EXCEEDED its 1GB/month data transfer quota. All DB operations (even DDL like CREATE TABLE) are blocked by Neon.
+- Tried creating tables via raw SQL — also blocked by quota.
+- Cleaned up: removed pg dependency, removed test scripts, reverted .env to local SQLite for dev.
+- Also launched cleanup agent (CLEANUP-FILES) which removed 2,211 unreferenced image files (135MB → 36MB). This reduces both Vercel deploy size AND data transfer.
+
+Stage Summary:
+- Code fixes all deployed and live on www.laxree.com:
+  * Admin DB warning banner (VLM-verified showing on /admin/blog)
+  * /api/admin/health endpoint (returns detailed diagnostics)
+  * Blog delete with static-fallback ID handling + helpful errors
+  * Amenities tray set image fix (LRAT-366 bathtub → LRAT-370 tray set, VLM-verified)
+  * Furniture preview images (outdoor/guest-room/pool-lounger/frp-flower-pots)
+  * Bavika real portrait
+  * Washroom amenities image (bathtub removed)
+  * 2,211 unused images removed (135MB → 36MB)
+- REMAINING BLOCKER (USER ACTION REQUIRED):
+  The Neon free-tier database has exceeded its 1GB/month data transfer quota.
+  Error: "Your project has exceeded the data transfer quota" (code 53000)
+  Fix: Create a NEW Neon project to get a fresh 1GB quota:
+    1. Go to https://neon.tech → log in
+    2. Create a NEW project (fresh 1GB quota)
+    3. Copy the new connection string
+    4. Go to Vercel → Project Settings → Environment Variables
+    5. Update DATABASE_URL with the new connection string
+    6. Trigger a redeploy — build auto-runs 'prisma db push' to create tables
+  The build script (package.json) now includes 'prisma db push --accept-data-loss'
+  so tables will be created automatically on the first deploy with a working DB.
+- Local dev works fine (JSON file-based DB, health check ok=True read=True write=True).
