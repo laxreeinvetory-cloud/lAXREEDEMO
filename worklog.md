@@ -2799,3 +2799,41 @@ Stage Summary:
 - File length: 498 lines.
 - No other files modified. No test files created.
 - Work record written to /home/z/my-project/agent-ctx/REWRITE-ADMIN-IMAGES-frontend.md.
+
+---
+Task ID: IMAGE-OVERRIDE-SYSTEM
+Agent: main (orchestrator) + full-stack-developer subagent
+Task: User wants: (1) delete option in Media Manager, (2) change homepage "Eight Categories" preview images from admin, (3) change product page + Browse by Type preview images from admin.
+
+Work Log:
+- Created useImageOverrides() hook (src/hooks/use-image-overrides.ts) — fetches CMS key "images" and returns a flat map of overrides
+- Updated category-bento.tsx — uses cmsOverrides["category:<slug>"] with priority over DB and static fallback
+- Updated products/page.tsx — ParentCategoryCard now accepts imageOverride prop, passes cmsOverrides["parent:<slug>"]
+- Updated products/[slug]/page.tsx — sub-category cards use cmsOverrides["subcategory:<slug>"], Other Categories rail uses cmsOverrides["parent:<slug>"]
+- Subagent rewrote src/app/admin/images/page.tsx (498 lines):
+  * 88 image cards across 7 sections
+  * DELETE button (Trash2 icon) on every card with confirm dialog
+  * New section: Homepage Categories (8 cards) — category:<slug>
+  * New section: Product Page Categories (8 cards) — parent:<slug>
+  * New section: Product Sub-Categories (48 cards) — subcategory:<slug>
+  * Override/Default badge on each preview
+  * Helpers: slugToLabel, isFlatImagesKey, readField, setField, deleteField
+- Lint: 0 errors, 40 warnings (all pre-existing <img> warnings)
+- tsc: 0 errors
+- Pushed commit 9b21a53, triggered Vercel redeploy → READY
+- E2E verified on production:
+  * Health: ok=True read=True write=True (DB still working)
+  * Admin /admin/images page: all 7 sections visible (VLM-verified)
+  * Save override: category:bath-tub → /images/products/bath-tub.jpg → ok=True
+  * Read back: category:bath-tub = /images/products/bath-tub.jpg ✅
+  * Delete override: cleared → ok=True, reverted to "NOT SET" ✅
+
+Stage Summary:
+- Admin can now change/delete preview images for:
+  1. Homepage "Eight Categories" bento (8 categories)
+  2. /products page parent category cards (8 categories)
+  3. /products/[slug] "Browse by Type" sub-category cards (48 sub-categories)
+  4. /products/[slug] "Other Categories" rail (8 categories)
+  Plus all existing image manager features (hero, about, owner, gallery, team, experience centers)
+- Every card has a delete button that reverts to default
+- All changes persist to Neon Postgres and reflect on live site instantly
