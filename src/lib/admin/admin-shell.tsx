@@ -59,7 +59,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [dbWarning, setDbWarning] = useState<string | null>(null);
+  const [dbWarning, setDbWarning] = useState<{
+    error: string;
+    fixInstructions: string;
+    errorType: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!loading && !user && pathname !== "/admin/login") {
@@ -74,9 +78,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         .then((r) => r.json())
         .then((data) => {
           if (!data.ok) {
-            setDbWarning(
-              data.error || "Database connection failed. Admin changes will not persist."
-            );
+            setDbWarning({
+              error: data.error || "Database connection failed.",
+              fixInstructions: data.fixInstructions || "Check your DATABASE_URL on Vercel.",
+              errorType: data.errorType || "UNKNOWN",
+            });
           } else {
             setDbWarning(null);
           }
@@ -183,21 +189,24 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         {/* Page content */}
         <main className="flex-1 p-6 md:p-8 overflow-y-auto">
           {dbWarning && (
-            <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 p-4">
+            <div className="mb-6 rounded-xl border border-red-500/40 bg-red-500/10 p-5">
               <div className="flex items-start gap-3">
                 <Database className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
-                <div>
+                <div className="flex-1">
                   <p className="text-[14px] font-semibold text-red-400">
                     Database Not Connected — Admin Changes Will NOT Persist
                   </p>
-                  <p className="mt-1 text-[12px] text-sand leading-relaxed">
-                    {dbWarning}
+                  <p className="mt-1.5 text-[12px] text-sand leading-relaxed">
+                    {dbWarning.error}
                   </p>
-                  <p className="mt-2 text-[12px] text-sand">
-                    Fix: On Vercel, set the <code className="text-brass">DATABASE_URL</code> environment variable
-                    to a valid Neon Postgres connection string, then redeploy. The build will
-                    automatically run <code className="text-brass">prisma db push</code> to create tables.
-                  </p>
+                  <div className="mt-3 rounded-lg bg-charcoal/60 border border-red-500/20 p-3">
+                    <p className="text-[11px] font-mono uppercase tracking-wider text-brass mb-1.5">
+                      How to Fix
+                    </p>
+                    <p className="text-[12px] text-ivory leading-relaxed whitespace-pre-line">
+                      {dbWarning.fixInstructions}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
