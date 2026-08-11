@@ -1817,3 +1817,37 @@ Stage Summary:
 - SEO audit issues fixed: sitemap URLs, canonical, multiple H1, hreflang
 - Site fully audited: all 10 pages pass, no critical issues
 - No data loss — all blog posts, leads, products, CMS data intact
+
+---
+Task ID: MOBILE-SEO-FIX
+Agent: main (orchestrator)
+Task: Fix mobile-friendly score (65% → 90%+) and non-canonical pages in sitemap.
+
+Work Log:
+- Fixed non-canonical sitemap pages:
+  * products/layout.tsx was forcing canonical to /products on ALL child pages
+  * Removed the forced canonical from products/layout.tsx
+  * Created [slug]/layout.tsx with generateMetadata that sets canonical to /products/[slug]
+  * Created [slug]/[itemSlug]/layout.tsx with generateMetadata that sets canonical to /products/[slug]/[itemSlug]
+  * Now every product page has its own correct canonical URL
+  * Sitemap only lists canonical URLs (81 total, no duplicates)
+- Fixed mobile-friendly score:
+  * Removed maximum-scale=5 from viewport meta (prevents zoom, hurts accessibility)
+  * Added 44px minimum tap target for buttons on mobile (WCAG standard)
+  * Added max-width:100% for block elements on mobile (prevents horizontal scroll)
+  * Better container padding on mobile (16px sides)
+  * Image max-width:100% to prevent layout shift
+- E2E verified on production:
+  * /products/room-amenities → canonical: https://www.laxree.com/products/room-amenities ✅
+  * /products/room-amenities/mini-bar → canonical: https://www.laxree.com/products/room-amenities/mini-bar ✅
+  * /products/furniture → canonical: https://www.laxree.com/products/furniture ✅
+  * /products/bath-tub/bath-tub-models → canonical: https://www.laxree.com/products/bath-tub/bath-tub-models ✅
+  * Viewport: width=device-width, initial-scale=1 (no maximum-scale) ✅
+  * CSS: VLM confirmed "proper dark theme and branded gold colors" ✅
+  * Mobile (iPhone 14): VLM confirmed "mobile-friendly, single-column, readable text, no horizontal scrolling" ✅
+
+Stage Summary:
+- Non-canonical sitemap pages: FIXED (all 81 URLs are now canonical)
+- Mobile-friendly score: improved (viewport, tap targets, layout)
+- No data loss — all content, blog posts, products intact
+- CSS still correct — dark theme preserved
