@@ -4,8 +4,7 @@ import "./globals.css";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { ConditionalChrome } from "@/components/providers/conditional-chrome";
-import { GoogleAnalytics } from "@/components/seo/google-analytics";
-import { db } from "@/lib/db";
+import { AnalyticsLoader } from "@/components/seo/analytics-loader";
 
 /* ─────────────────────────────────────────────────────────────
    Fonts — display: "swap" for fast text render
@@ -149,69 +148,22 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-/**
- * Fetch analytics config (GA ID + GSC token) from the CMS database.
- * Returns { gaId, gscToken } or empty strings if not configured.
- * The admin sets these from /admin/analytics → saved to CMS key "analytics-config".
- */
-// Force dynamic rendering so the analytics config is fetched on every request
-// (not cached at build time). This ensures GA/GSC tags reflect the latest
-// admin-saved config.
-export const dynamic = "force-dynamic";
-
-async function getAnalyticsConfig(): Promise<{ gaId: string; gscToken: string }> {
-  // During build, skip DB fetch — use env vars only.
-  // At runtime (on Vercel), fetch from DB so admin can configure without redeploy.
-  if (process.env.NEXT_PHASE === "phase-production-build") {
-    return {
-      gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "",
-      gscToken: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
-    };
-  }
-  try {
-    const row = await db.siteContent.findUnique({
-      where: { key: "analytics-config" },
-      select: { value: true },
-    });
-    if (row?.value) {
-      const parsed = JSON.parse(row.value);
-      return {
-        gaId: typeof parsed.gaId === "string" ? parsed.gaId : "",
-        gscToken: typeof parsed.gscToken === "string" ? parsed.gscToken : "",
-      };
-    }
-  } catch {
-    // DB might not be available — fall through to env vars
-  }
-  return {
-    gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "",
-    gscToken: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
-  };
-}
-
 /* ─────────────────────────────────────────────────────────────
-   Root Layout — async so it can fetch analytics config from DB
+   Root Layout — sync (non-async) to preserve static CSS prerendering.
+   Analytics config (GA/GSC) is loaded client-side via AnalyticsLoader.
    ───────────────────────────────────────────────────────────── */
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { gaId, gscToken } = await getAnalyticsConfig();
-
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Google Search Console verification meta tag */}
-        {gscToken && (
-          <meta name="google-site-verification" content={gscToken} />
-        )}
-      </head>
       <body
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
-        {/* Google Analytics 4 — GA ID from CMS (admin/analytics) or env var */}
-        <GoogleAnalytics gaId={gaId} />
+        {/* Analytics (GA4 + GSC) — loaded client-side from CMS config */}
+        <AnalyticsLoader />
 
         {/* SEO: Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
