@@ -1585,3 +1585,28 @@ Stage Summary:
 - Visual dashboard with real-time charts for tracking leads
 - Professional leads Excel export
 - All changes live on www.laxree.com
+
+---
+Task ID: URGENT-CSS-FIX
+Agent: main (orchestrator)
+Task: Website CSS broken — entire site showing unstyled HTML. Fix immediately, no data loss, improve performance.
+
+Work Log:
+- Diagnosed root cause: layout.tsx was made async + force-dynamic to fetch GA/GSC config from DB server-side. This broke CSS prerendering — all pages rendered as unstyled HTML on production.
+- Fix 1: Reverted layout to sync (non-async) — CSS prerenders correctly again
+- Fix 2: Created AnalyticsLoader client component that loads GA/GSC config from CMS client-side (after hydration) — doesn't affect CSS prerendering
+- Fix 3: Removed force-dynamic and DB fetch from layout
+- Fix 4: Blog post data loss — the blog GET endpoint only seeded static posts when DB was completely empty. If posts were deleted (leaving some behind), deleted static posts were never restored. Fixed to check which static posts are missing from DB and re-seed them on every request.
+- Build: 0 errors, 112 static pages generated
+- E2E verified on production:
+  * CSS: VLM confirmed "proper dark theme, branded gold and white colors, professional layout"
+  * Blog posts: 12 (was 3 — restored)
+  * DB health: ok=True read=True write=True
+  * All 10 pages: HTTP 200
+  * No data loss — leads, products, categories all intact
+
+Stage Summary:
+- Website CSS fully restored
+- No data loss — all blog posts, leads, products, CMS data intact
+- Analytics (GA/GSC) still works — loaded client-side via AnalyticsLoader
+- Performance: static prerendering restored (was broken by force-dynamic)
