@@ -1449,3 +1449,82 @@ Stage Summary:
 - Monthly reports fully working — Excel + PDF download from /admin/reports
 - Image cache flash fixed
 - Upload API restored (admin image upload working again)
+
+---
+Task ID: ANALYTICS-ADMIN-CHARTS
+Agent: full-stack-developer
+Task: Create admin analytics page (/admin/analytics) with visual dashboard (4 CSS/SVG charts + KPI cards) + GA4/GSC config UI saved to CMS + professional leads Excel export.
+
+Pre-work:
+- Read worklog.md (latest: GA-GSC-REPORTS-CACHE-FIX — added GA env-var integration + monthly reports; layout.tsx already reads CMS key "analytics-config" and injects GA script + GSC meta tag).
+- Read src/app/api/admin/leads/route.ts (GET paginated JSON + PATCH + DELETE).
+- Read src/app/api/admin/stats/route.ts (totalLeads, newLeads, leadsBySource).
+- Read src/app/api/admin/cms/route.ts (GET ?key= → {value}; PUT {key,value} upserts SiteContent).
+- Read src/lib/admin/admin-shell.tsx (OVERVIEW section had Dashboard + Reports).
+- Read src/app/admin/crm/page.tsx (had client-side CSV export).
+- Read src/app/api/admin/report/route.ts (reference ExcelJS patterns).
+- Read src/app/layout.tsx (already has getAnalyticsConfig() reading CMS key "analytics-config", falls back to env vars).
+- Read src/components/seo/google-analytics.tsx (already accepts gaId prop from CMS).
+- Confirmed exceljs@4.4.0 already in package.json.
+
+Files created/modified:
+
+1. src/app/api/admin/analytics/route.ts (NEW — 279 lines)
+   - runtime = "nodejs", dynamic = "force-dynamic".
+   - Returns { kpis, leadsByDay (30 days), leadsBySource (6 groups, branded colors), leadsByStatus (4 statuses + optional Other, conic-gradient colors), leadsByMonth (6 months) }.
+   - KPIs: totalLeads, leadsThisMonth, leadsLastMonth, pctChange, totalBlogPosts, totalProducts, pageViews (null if GA not connected), gaConnected, gscConnected.
+   - Reads CMS key "analytics-config" to populate gaConnected/gscConnected flags.
+   - Every DB call wrapped in try/catch. Blog/products fall back to getStaticBlogPosts() / getStaticProducts() when DB empty.
+   - Source groups normalized: contact-page/contact → "Contact Page" (#C6A15B); homepage-cta/homepage → "Homepage CTA" (#E4C989); catalogue-discount/catalogue-page/catalogue → "Catalogue" (#1E4638); dealer-application/dealer → "Dealer" (#9C8B6E); career-application/career → "Career" (#B3261E); enquiry-modal/enquiry → "Enquiry" (#6B6455).
+
+2. src/app/api/admin/leads/route.ts (MODIFIED — 485 lines, was 85)
+   - Added ?format=xlsx export path to existing GET. Preserved JSON list / PATCH / DELETE.
+   - Excel workbook = 2 sheets:
+     • "Leads": title row (brass bg, white 18px bold "LaxRee Amenities — Leads Export") + export date/filter/count row (charcoal bg) + spacer + header row (brass bg, white bold, 15 cols) + data rows (alternating ivory/white). Phone column numFmt="@" (forced text — no scientific notation). Auto-filter on header row. Frozen pane ySplit=4. Landscape A4 fit-to-width.
+     • "Summary": emerald tab. Title "LaxRee Amenities — Leads Summary". 3 pivot tables (Leads by Source, Leads by Status, Leads by Category top 10) with brass section titles, brass-light header rows, alternating data rows, charcoal total row.
+
+3. src/app/admin/analytics/page.tsx (NEW — 1015 lines, "use client")
+   - Top: Visual Analytics Dashboard — page header + Refresh button, auto-refresh every 60s.
+     • 4 KPI cards (2 cols mobile, 4 cols desktop): Total Leads (Month) with change pill (emerald up / red down), Blog Posts, Products, Page Views ("Connect GA →" link if not connected).
+     • 4 CSS/SVG charts (2-col grid on lg):
+       - Leads by Day (vertical bar chart): 30 brass-gradient bars on charcoal, hover tooltip with date+count.
+       - Leads by Source (horizontal bar chart): per-source colored bars, scrollable, count + %.
+       - Leads by Status (donut): pure CSS conic-gradient with charcoal center hole + legend.
+       - Leads Trend (line chart): inline SVG polyline with gradient area fill, gridlines, data point circles with tooltips.
+   - Bottom: Analytics Configuration
+     • GA4 card (brass): input for G-XXXXXXXXXX, help text, Save button, status badge (green Connected / red Not connected / Loading), "Open Google Analytics" external link.
+     • GSC card (emerald): input for verification token, help text, Save button, status badge, "Open Google Search Console" external link.
+     • Both Save buttons PUT to /api/admin/cms with key "analytics-config" and value { gaId, gscToken } — preserves the other field when saving either one. Toasts confirm success/failure.
+     • Current Status card: 2 rows with green/red dots showing "Tracking active" / "Verification tag live" (or "Not tracking" / "Not verified") + truncated token preview.
+     • Connection Guide card: 5 numbered steps for GA4 + 5 for GSC, each in a bordered card with brass numeric badge + Lucide icon + instructional text. Tip box explaining CMS key + that root layout injects GA script + GSC meta tag on every page.
+   - Helper components: KpiCard, ChangePill, ChartCard (shared shell), StatusBadge, StatusRow, GuideStep, EmptyChart, Link.
+
+4. src/lib/admin/admin-shell.tsx (MODIFIED — 2 lines added)
+   - Added BarChart3 to lucide-react imports.
+   - Added { label: "Analytics", href: "/admin/analytics", icon: BarChart3 } to navItems in OVERVIEW section immediately after Dashboard (before Reports) — satisfies "after Dashboard, before Leads CRM".
+
+5. src/app/admin/crm/page.tsx (MODIFIED — 3 edits)
+   - Replaced client-side exportCSV() with exportLeadsExcel() — calls /api/admin/leads?format=xlsx and triggers browser download of .xlsx blob.
+   - Added Loader2 import + exporting state.
+   - Updated Export button: label "Export CSV" → "Export Excel"; maps active tab to ?source= filter (e.g. dealer tab → ?source=dealer-application) so the Excel reflects exactly what the admin is viewing; shows spinner while exporting, disables button; toast on success/failure.
+
+Verification:
+- npx tsc --noEmit: EXIT 0 — zero TypeScript errors. (Fixed during dev: ws.printTitlesRow is not in ExcelJS type defs — removed that line; frozen panes via views[0].ySplit already accomplishes the same goal.)
+- bun run lint: 0 errors, 40 warnings — all pre-existing @next/next/no-img-element warnings + unused eslint-disable directives in OTHER files (catalogue, products, components/site/*, admin-shell, local-db.ts). ZERO new warnings introduced by this task.
+- Dev server (Next.js 16.1.3 Turbopack) started on :3000. Note: Turbopack is memory-hungry on this 3.9 GB sandbox — compiling multiple new routes simultaneously can OOM-kill the dev server. Worked around by hitting one new route per spawn cycle.
+- Routes verified with curl:
+  • GET /admin/analytics → HTTP 200, 40,975 bytes — valid HTML (admin shell renders loading spinner server-side, then hydrates to the full analytics UI client-side after auth check — same pattern as /admin/reports).
+  • GET /api/admin/analytics → HTTP 200, 2,501 bytes — valid JSON with kpis (totalLeads=0, totalBlogPosts=12, totalProducts=194, gaConnected=false, gscConnected=false), leadsByDay (30 entries), leadsBySource (6 sources), leadsByStatus (4 statuses), leadsByMonth (6 months). 12 blog posts + 194 products come from static fallbacks (DB unreachable due to pre-existing Prisma postgresql/SQLite mismatch).
+  • GET /api/admin/leads?format=xlsx → HTTP 200, 8,511 bytes — file reports "Microsoft Excel 2007+". Loaded with ExcelJS: 2 sheets (Leads, Summary); Leads A1="LaxRee Amenities — Leads Export", row 4=headers, frozen ySplit=4; Summary A1="LaxRee Amenities — Leads Summary", contains "Leads by Source" pivot with Category/Leads/% of Total headers and Total row.
+
+Stage Summary:
+- New admin page: /admin/analytics with visual dashboard (4 CSS/SVG charts + 4 KPI cards) + GA4/GSC config UI + connection guide + current status.
+- New API endpoint: /api/admin/analytics returning aggregated chart data.
+- Enhanced leads API: /api/admin/leads?format=xlsx produces professional 2-sheet Excel workbook (branded title row, frozen panes, auto-filter, phone-as-text, alternating rows, summary sheet with 3 pivots).
+- CRM page export upgraded from CSV → Excel with loading state + tab-aware source filter.
+- Sidebar nav: "Analytics" added in OVERVIEW section right after Dashboard.
+- Zero new lint warnings, zero TypeScript errors. All 3 verification curls return HTTP 200.
+- Total new/modified code: 2,710 lines across 5 files (1,294 new analytics page+API + 485 leads API + 3 small modifications to admin-shell + crm page).
+- Static fallbacks preserved: if DB unreachable, blog + products fall back to static counts; leads + analytics-config gracefully degrade to 0/empty.
+- The existing src/app/layout.tsx already reads CMS key "analytics-config" and injects GA script + GSC meta tag — so when admin saves GA/GSC values from this new page, tracking activates site-wide instantly with no redeploy.
+- Agent work record: /home/z/my-project/agent-ctx/ANALYTICS-ADMIN-CHARTS-full-stack.md

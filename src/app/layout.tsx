@@ -4,6 +4,8 @@ import "./globals.css";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { ConditionalChrome } from "@/components/providers/conditional-chrome";
+import { GoogleAnalytics } from "@/components/seo/google-analytics";
+import { db } from "@/lib/db";
 
 /* ─────────────────────────────────────────────────────────────
    Fonts — display: "swap" for fast text render
@@ -147,40 +149,56 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+/**
+ * Fetch analytics config (GA ID + GSC token) from the CMS database.
+ * Returns { gaId, gscToken } or empty strings if not configured.
+ * The admin sets these from /admin/analytics → saved to CMS key "analytics-config".
+ */
+async function getAnalyticsConfig(): Promise<{ gaId: string; gscToken: string }> {
+  try {
+    const row = await db.siteContent.findUnique({
+      where: { key: "analytics-config" },
+      select: { value: true },
+    });
+    if (row?.value) {
+      const parsed = JSON.parse(row.value);
+      return {
+        gaId: typeof parsed.gaId === "string" ? parsed.gaId : "",
+        gscToken: typeof parsed.gscToken === "string" ? parsed.gscToken : "",
+      };
+    }
+  } catch {
+    // DB might not be available during build — fall through to env vars
+  }
+  return {
+    gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "",
+    gscToken: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
+  };
+}
+
 /* ─────────────────────────────────────────────────────────────
-   Root Layout
+   Root Layout — async so it can fetch analytics config from DB
    ───────────────────────────────────────────────────────────── */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { gaId, gscToken } = await getAnalyticsConfig();
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Google Search Console verification meta tag */}
+        {gscToken && (
+          <meta name="google-site-verification" content={gscToken} />
+        )}
+      </head>
       <body
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
-        {/* Google Analytics */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
-                    page_path: window.location.pathname,
-                  });
-                `,
-              }}
-            />
-          </>
-        )}
+        {/* Google Analytics 4 — GA ID from CMS (admin/analytics) or env var */}
+        <GoogleAnalytics gaId={gaId} />
 
         {/* SEO: Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

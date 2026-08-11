@@ -29,6 +29,7 @@ import {
   Mail,
   Hotel,
   ClipboardList,
+  Loader2,
 } from "lucide-react";
 import { toast, AdminToaster } from "@/lib/admin/admin-toast";
 
@@ -133,47 +134,30 @@ function parseItems(
   }
 }
 
-function exportCSV(leads: Lead[]) {
-  const headers = [
-    "Name",
-    "Phone",
-    "Email",
-    "Source",
-    "Status",
-    "Hotel",
-    "Category",
-    "Ref No",
-    "Avg Room Rent",
-    "Timeline",
-    "Property Type",
-    "Project Stage",
-    "Date",
-    "Message",
-  ];
-  const rows = leads.map((l) => [
-    l.name,
-    l.phone,
-    l.email || "",
-    SOURCE_LABELS[l.source] || l.source,
-    l.status,
-    l.hotel || "",
-    l.category || "",
-    l.refNo || "",
-    l.avgRoomRent || "",
-    l.timeline || "",
-    l.propertyType || "",
-    l.projectStage || "",
-    new Date(l.createdAt).toISOString(),
-    (l.message || "").replace(/\s+/g, " "),
-  ]);
-  const csv = [headers, ...rows]
-    .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
-    .join("\n");
-  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+/**
+ * Build a professional .xlsx workbook on the client side via the
+ * /api/admin/leads?format=xlsx endpoint. The server does the heavy
+ * lifting (branded styling, summary sheet, frozen panes, filters,
+ * phone-as-text format). All we do here is trigger the download.
+ *
+ * Pass the active filter (status/source) so the export reflects what
+ * the admin is currently viewing.
+ */
+async function exportLeadsExcel(filter: { status?: string; source?: string }) {
+  const params = new URLSearchParams({ format: "xlsx" });
+  if (filter.status) params.set("status", filter.status);
+  if (filter.source) params.set("source", filter.source);
+  const res = await fetch(`/api/admin/leads?${params.toString()}`);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  const blob = await res.blob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `laxree-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+  const cd = res.headers.get("Content-Disposition") || "";
+  const match = cd.match(/filename="?([^";\n]+)"?/i);
+  a.download = match?.[1] || `laxree-leads-${new Date().toISOString().slice(0, 10)}.xlsx`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -187,6 +171,7 @@ export default function AdminCrmPage() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Lead | null>(null);
   const [cycling, setCycling] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   const fetchLeads = useCallback(async () => {
     setLoading(true);
@@ -293,18 +278,41 @@ export default function AdminCrmPage() {
             Refresh
           </button>
           <button
-            onClick={() => {
+            onClick={async () => {
               if (filtered.length === 0) {
                 toast("info", "No leads to export for the current filter.");
                 return;
               }
-              exportCSV(filtered);
-              toast("success", `Exported ${filtered.length} leads to CSV.`);
+              setExporting(true);
+              try {
+                // Map the active tab → source filter so the Excel reflects
+                // exactly what the admin is viewing (e.g. "dealer" tab → ?source=dealer-application).
+                const tabSourceMap: Record<TabKey, string | undefined> = {
+                  all: undefined,
+                  contact: "contact-page",
+                  quotation: "quotation",
+                  dealer: "dealer-application",
+                  career: "career-application",
+                  enquiry: "enquiry-modal",
+                  catalogue: "catalogue-discount",
+                };
+                await exportLeadsExcel({ source: tabSourceMap[tab] });
+                toast("success", `Exported ${filtered.length} leads to Excel.`);
+              } catch (err) {
+                toast("error", `Export failed: ${err instanceof Error ? err.message : String(err)}`);
+              } finally {
+                setExporting(false);
+              }
             }}
-            className="inline-flex items-center gap-2 rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-yellow-500"
+            disabled={exporting}
+            className="inline-flex items-center gap-2 rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-yellow-500 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Download className="h-4 w-4" />
-            Export CSV
+            {exporting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4" />
+            )}
+            Export Excel
           </button>
         </div>
       </header>

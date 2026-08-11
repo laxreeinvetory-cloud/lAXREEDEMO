@@ -1,27 +1,25 @@
 import Script from "next/script";
 
 /**
- * GoogleAnalytics — injects Google Analytics 4 (gtag.js) only when
- * NEXT_PUBLIC_GA_MEASUREMENT_ID is set.
+ * GoogleAnalytics — injects Google Analytics 4 (gtag.js).
  *
- * Set the env var on Vercel:
- *   Project Settings → Environment Variables → NEXT_PUBLIC_GA_MEASUREMENT_ID
- *   Value: G-XXXXXXXXXX (from Google Analytics → Admin → Data Streams)
+ * The GA Measurement ID is read from the CMS (key "analytics-config",
+ * field "gaId") which is set by the admin from /admin/analytics.
+ * Falls back to NEXT_PUBLIC_GA_MEASUREMENT_ID env var if CMS has no value.
  *
- * Once set, this component renders the gtag.js script tags. If the env var
- * is not set, nothing is rendered (no error, no console noise).
+ * If no ID is configured, nothing is rendered.
  */
-export function GoogleAnalytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+export function GoogleAnalytics({ gaId }: { gaId?: string }) {
+  const id = gaId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-  if (!gaId || !gaId.startsWith("G-")) {
+  if (!id || !id.startsWith("G-")) {
     return null;
   }
 
   return (
     <>
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
         strategy="afterInteractive"
       />
       <Script id="google-analytics" strategy="afterInteractive">
@@ -29,7 +27,7 @@ export function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}', {
+          gtag('config', '${id}', {
             page_path: window.location.pathname,
           });
         `}
