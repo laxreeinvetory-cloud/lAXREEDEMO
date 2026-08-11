@@ -85,6 +85,52 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* ── Mobile-friendly improvements ──────────────────────────
+     1. Minimum tap target size (44px) for interactive elements on mobile
+     2. Prevent text selection on UI controls (better UX)
+     3. Ensure readable font sizes on small screens
+     ──────────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    /* Ensure all clickable buttons/links have at least 44px tap target */
+    button:not([disabled]),
+    a[href],
+    [role="button"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* But don't force min-size on inline text links or tiny icons */
+    a[href] {
+      min-height: unset;
+      min-width: unset;
+    }
+
+    /* Inline links in body text should not have forced tap target */
+    p a[href],
+    span a[href],
+    li a[href] {
+      min-height: unset;
+      min-width: unset;
+    }
+
+    /* Prevent horizontal overflow on mobile — only target block elements */
+    div, section, article, header, footer, nav, main, aside, figure {
+      max-width: 100%;
+    }
+
+    /* Better touch scrolling momentum */
+    .container-laxree {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+
+  /* Prevent layout shift on mobile when images load */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
   /* Performance: hint the browser to GPU-composite animated elements.
      Only applied to elements that actually animate. */
   [style*="transform"],

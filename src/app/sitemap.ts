@@ -10,7 +10,7 @@ const BASE_URL = "https://www.laxree.com";
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  // Static pages
+  // Static pages — only canonical pages (no /cart which is blocked)
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/about-us`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Category pages (parent level: /products/[parentSlug])
+  // Each has its own canonical URL
   const categoryPages: MetadataRoute.Sitemap = CATALOGUE_PARENTS.map((p) => ({
     url: `${BASE_URL}/products/${p.slug}`,
     lastModified: now,
@@ -34,6 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Item type pages (child level: /products/[parentSlug]/[childSlug])
+  // Each has its own canonical URL
   const itemTypePages: MetadataRoute.Sitemap = CATALOGUE_PARENTS.flatMap((parent) => {
     const children = getCategoriesByParent(parent.slug);
     return children.map((child) => ({
@@ -44,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
   });
 
-  // Blog post pages — higher priority for SEO
+  // Blog post pages — each has its own canonical URL
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((p) => ({
     url: `${BASE_URL}/blog/${p.slug}`,
     lastModified: now,

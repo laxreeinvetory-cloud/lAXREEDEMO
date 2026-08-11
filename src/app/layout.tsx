@@ -146,7 +146,8 @@ export const viewport: Viewport = {
   themeColor: "#C6A15B",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
+  // Do NOT set maximumScale — it hurts accessibility (users can't zoom in)
+  // and lowers the Lighthouse accessibility score.
 };
 
 /* ─────────────────────────────────────────────────────────────
