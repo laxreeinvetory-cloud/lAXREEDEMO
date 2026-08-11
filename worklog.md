@@ -1851,3 +1851,31 @@ Stage Summary:
 - Mobile-friendly score: improved (viewport, tap targets, layout)
 - No data loss — all content, blog posts, products intact
 - CSS still correct — dark theme preserved
+
+---
+Task ID: CACHE-FLASH-FIX
+Agent: main (orchestrator)
+Task: Fix image cache flash — old images showing first, then updated images appear.
+
+Work Log:
+- Root cause: useImageOverrides hook fetched CMS overrides asynchronously. Components rendered the static default image first, then swapped to the override once the fetch completed — causing a visible "flash of old image".
+- Fix: useImageOverrides hook now returns { overrides, loaded }
+- All image cards show an animated pulse placeholder (bg-charcoal or bg-ivory) while loaded=false
+- Once overrides are fetched, the correct image renders directly — no flash
+- If no override exists for a key, the default image renders (same as before)
+
+Components updated:
+- category-bento.tsx: CategoryCard shows bg-charcoal pulse placeholder until loaded
+- products/page.tsx: ParentCategoryCard shows bg-charcoal pulse placeholder until loaded
+- products/[slug]/page.tsx: sub-category cards + Other Categories rail show pulse placeholders
+
+E2E verified on production:
+- Homepage categories: actual images showing (no placeholder stuck, no flash)
+- Products page: correct images showing
+- CSS: proper dark theme, branded colors
+- VLM confirmed: "actual images now, not placeholder pulse animations"
+
+Stage Summary:
+- Image cache flash fixed — users see a brief dark placeholder, then the correct image directly
+- No more "old image first, then updated image" flash
+- All images load correctly
