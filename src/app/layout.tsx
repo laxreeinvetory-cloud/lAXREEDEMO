@@ -160,6 +160,14 @@ export const viewport: Viewport = {
 export const dynamic = "force-dynamic";
 
 async function getAnalyticsConfig(): Promise<{ gaId: string; gscToken: string }> {
+  // During build, skip DB fetch — use env vars only.
+  // At runtime (on Vercel), fetch from DB so admin can configure without redeploy.
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return {
+      gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "",
+      gscToken: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
+    };
+  }
   try {
     const row = await db.siteContent.findUnique({
       where: { key: "analytics-config" },
@@ -173,7 +181,7 @@ async function getAnalyticsConfig(): Promise<{ gaId: string; gscToken: string }>
       };
     }
   } catch {
-    // DB might not be available during build — fall through to env vars
+    // DB might not be available — fall through to env vars
   }
   return {
     gaId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "",
