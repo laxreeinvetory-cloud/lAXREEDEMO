@@ -5,29 +5,30 @@ import { getStaticBlogPosts } from "@/lib/admin/static-fallback";
 export const runtime = "nodejs";
 
 // GET — list all blog posts
-// Falls back to static BLOG_POSTS data when DB is empty (Vercel serverless).
-// On local dev (JSON file-based DB), the first call seeds the DB with the
-// static posts so the admin can edit/delete them and the changes persist.
+// Merges static BLOG_POSTS data with DB posts so deleted static posts
+// are restored on the next request. DB posts take priority (admin edits
+// win), but any static post missing from the DB is re-seeded.
 export async function GET() {
   try {
-    let posts: Awaited<ReturnType<typeof db.blogPost.findMany>> = [];
+    let dbPosts: Awaited<ReturnType<typeof db.blogPost.findMany>> = [];
 
     try {
-      posts = await db.blogPost.findMany({
+      dbPosts = await db.blogPost.findMany({
         orderBy: { createdAt: "desc" },
       });
     } catch (dbErr) {
       console.error("[ADMIN BLOG GET DB ERROR]", dbErr);
     }
 
-    if (posts.length === 0) {
-      // Seed the local DB with the static posts so subsequent edits/deletes
-      // actually persist. On production (Vercel serverless), the static
-      // fallback is returned directly (no persistence across cold starts).
-      const staticPosts = getStaticBlogPosts();
+    const staticPosts = getStaticBlogPosts();
+
+    // Find which static posts are missing from the DB and seed them
+    const dbSlugs = new Set(dbPosts.map((p: { slug: string }) => p.slug));
+    const missingStatic = staticPosts.filter((p) => !dbSlugs.has(p.slug));
+
+    if (missingStatic.length > 0) {
       try {
-        for (const p of staticPosts) {
-          // Use upsert to avoid duplicate-key errors if a partial seed exists.
+        for (const p of missingStatic) {
           await db.blogPost.upsert({
             where: { slug: p.slug },
             create: {
@@ -46,20 +47,24 @@ export async function GET() {
             update: {},
           });
         }
-        posts = await db.blogPost.findMany({
+        // Re-fetch with the newly seeded posts
+        dbPosts = await db.blogPost.findMany({
           orderBy: { createdAt: "desc" },
         });
       } catch (seedErr) {
         console.error("[ADMIN BLOG SEED ERROR]", seedErr);
-      }
-
-      if (posts.length === 0) {
-        // Final fallback — return static data directly (non-persistent).
-        posts = staticPosts as unknown as typeof posts;
+        // If seeding fails (e.g. DB not writable), merge static posts into
+        // the response so the admin still sees all posts.
+        const existingSlugs = new Set(dbPosts.map((p: { slug: string }) => p.slug));
+        for (const p of staticPosts) {
+          if (!existingSlugs.has(p.slug)) {
+            dbPosts.push(p as unknown as (typeof dbPosts)[0]);
+          }
+        }
       }
     }
 
-    return NextResponse.json({ ok: true, posts });
+    return NextResponse.json({ ok: true, posts: dbPosts });
   } catch (err) {
     console.error("[ADMIN BLOG GET ERROR]", err);
     return NextResponse.json({ ok: false, message: "Server error" }, { status: 500 });
