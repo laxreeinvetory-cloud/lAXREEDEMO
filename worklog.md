@@ -1528,3 +1528,60 @@ Stage Summary:
 - Static fallbacks preserved: if DB unreachable, blog + products fall back to static counts; leads + analytics-config gracefully degrade to 0/empty.
 - The existing src/app/layout.tsx already reads CMS key "analytics-config" and injects GA script + GSC meta tag — so when admin saves GA/GSC values from this new page, tracking activates site-wide instantly with no redeploy.
 - Agent work record: /home/z/my-project/agent-ctx/ANALYTICS-ADMIN-CHARTS-full-stack.md
+
+---
+Task ID: ANALYTICS-ADMIN-CHARTS
+Agent: main (orchestrator) + full-stack-developer subagent
+Task: Add GA/GSC config in admin (no env vars), visual analytics dashboard with charts, improve leads Excel export, fix report format.
+
+Work Log:
+- Created /admin/analytics page (1015 lines) with:
+  * Visual analytics dashboard (top section):
+    - 4 KPI cards (Total Leads, Blog Posts, Products, Page Views)
+    - Leads by Day bar chart (30 days, CSS bars)
+    - Leads by Source horizontal bar chart (per-source colors)
+    - Leads by Status donut chart (CSS conic-gradient)
+    - Leads Trend line chart (6 months, SVG polyline)
+    - Auto-refresh every 60s
+  * GA4 configuration section:
+    - Input for G-XXXXXXXXXX
+    - Save button → CMS key "analytics-config"
+    - Status badge (Connected/Not connected)
+    - "Open Google Analytics" link
+  * GSC verification section:
+    - Input for verification token
+    - Save button → same CMS key
+    - Status badge
+    - "Open Google Search Console" link
+  * Connection guide with step-by-step instructions
+- Created /api/admin/analytics endpoint (279 lines):
+  * Returns aggregated chart data: kpis, leadsByDay (30d), leadsBySource, leadsByStatus, leadsByMonth (6mo)
+- Updated layout.tsx:
+  * Made RootLayout async
+  * getAnalyticsConfig() fetches GA ID + GSC token from CMS DB (key "analytics-config")
+  * Skips DB fetch during build (NEXT_PHASE check) to avoid build failures
+  * Injects GA script via GoogleAnalytics component (gaId prop)
+  * Injects GSC verification meta tag in <head>
+  * export const dynamic = "force-dynamic" so config is fetched on every request
+- Improved leads Excel export (/api/admin/leads?format=xlsx):
+  * 2-sheet workbook (Leads + Summary)
+  * Title row with brass background
+  * Professional headers, frozen panes, auto-filter
+  * Alternating row colors
+  * Phone numbers as text (no scientific notation)
+  * Summary sheet with pivot tables (by source, status, category)
+- Added "Analytics" to admin sidebar (OVERVIEW section, after Dashboard)
+- Lint: 0 errors, tsc: 0 errors
+- E2E verified on production:
+  * /admin/analytics page: HTTP 200
+  * /api/admin/analytics: HTTP 200, returns 30 days of chart data
+  * GA script appears in live HTML when gaId is set in CMS ✅
+  * GSC meta tag appears in live HTML when gscToken is set in CMS ✅
+  * Leads Excel export: HTTP 200, valid xlsx file
+  * DB health: ok=True
+
+Stage Summary:
+- Admin can now configure GA + GSC from /admin/analytics (no env vars, no redeploy)
+- Visual dashboard with real-time charts for tracking leads
+- Professional leads Excel export
+- All changes live on www.laxree.com
