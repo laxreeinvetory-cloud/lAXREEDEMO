@@ -5,9 +5,8 @@ import { getStaticBlogPosts } from "@/lib/admin/static-fallback";
 export const runtime = "nodejs";
 
 // GET — list all blog posts
-// Merges static BLOG_POSTS data with DB posts so deleted static posts
-// are restored on the next request. DB posts take priority (admin edits
-// win), but any static post missing from the DB is re-seeded.
+// Merges static BLOG_POSTS data with DB posts. Static posts that the admin
+// has explicitly deleted are NOT re-seeded (tracked in CMS key "blog-deleted-slugs").
 export async function GET() {
   try {
     let dbPosts: Awaited<ReturnType<typeof db.blogPost.findMany>> = [];
@@ -20,11 +19,30 @@ export async function GET() {
       console.error("[ADMIN BLOG GET DB ERROR]", dbErr);
     }
 
+    // Fetch the admin-deleted slugs list so we don't re-seed deleted posts
+    let deletedSlugs: Set<string> = new Set();
+    try {
+      const deletedRow = await db.siteContent.findUnique({
+        where: { key: "blog-deleted-slugs" },
+        select: { value: true },
+      });
+      if (deletedRow?.value) {
+        const parsed = JSON.parse(deletedRow.value);
+        if (Array.isArray(parsed)) {
+          deletedSlugs = new Set(parsed.filter((s) => typeof s === "string"));
+        }
+      }
+    } catch {
+      // ignore
+    }
+
     const staticPosts = getStaticBlogPosts();
 
-    // Find which static posts are missing from the DB and seed them
+    // Find which static posts are missing from the DB AND not in deleted-slugs
     const dbSlugs = new Set(dbPosts.map((p: { slug: string }) => p.slug));
-    const missingStatic = staticPosts.filter((p) => !dbSlugs.has(p.slug));
+    const missingStatic = staticPosts.filter(
+      (p) => !dbSlugs.has(p.slug) && !deletedSlugs.has(p.slug)
+    );
 
     if (missingStatic.length > 0) {
       try {
@@ -53,16 +71,19 @@ export async function GET() {
         });
       } catch (seedErr) {
         console.error("[ADMIN BLOG SEED ERROR]", seedErr);
-        // If seeding fails (e.g. DB not writable), merge static posts into
-        // the response so the admin still sees all posts.
+        // If seeding fails, merge static posts into the response
         const existingSlugs = new Set(dbPosts.map((p: { slug: string }) => p.slug));
         for (const p of staticPosts) {
-          if (!existingSlugs.has(p.slug)) {
+          if (!existingSlugs.has(p.slug) && !deletedSlugs.has(p.slug)) {
             dbPosts.push(p as unknown as (typeof dbPosts)[0]);
           }
         }
       }
     }
+
+    // Filter out any posts whose slug is in the deleted-slugs list
+    // (in case they were re-seeded before the deleted-slugs check was added)
+    dbPosts = dbPosts.filter((p: { slug: string }) => !deletedSlugs.has(p.slug));
 
     return NextResponse.json({ ok: true, posts: dbPosts });
   } catch (err) {
@@ -175,11 +196,14 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ ok: false, message: "ID required" }, { status: 400 });
     }
 
+    let deletedSlug: string | null = null;
+
     // If the ID is a static-fallback ID (starts with "static-blog-"),
-    // the post doesn't exist in the DB yet. Try to seed all static posts
-    // first, then find and delete the one matching this slug.
+    // the post doesn't exist in the DB yet. Seed all static posts first,
+    // then find and delete the one matching this slug.
     if (id.startsWith("static-blog-")) {
       const slug = id.replace("static-blog-", "");
+      deletedSlug = slug;
       try {
         // Seed all static posts into the DB so they can be edited/deleted
         const staticPosts = getStaticBlogPosts();
@@ -206,36 +230,63 @@ export async function DELETE(req: NextRequest) {
         const realPost = await db.blogPost.findUnique({ where: { slug } });
         if (realPost) {
           await db.blogPost.delete({ where: { id: realPost.id } });
-          return NextResponse.json({ ok: true, message: "Post deleted" });
         }
-        return NextResponse.json({ ok: false, message: "Post not found after seeding" }, { status: 404 });
       } catch (seedErr) {
         console.error("[ADMIN BLOG DELETE SEED ERROR]", seedErr);
-        return NextResponse.json({
-          ok: false,
-          message: "Database is not writable. Check that the Neon Postgres DATABASE_URL is configured on Vercel and that 'prisma db push' has been run to create tables.",
-          error: seedErr instanceof Error ? seedErr.message : String(seedErr),
-        }, { status: 500 });
+        // Even if DB delete fails, track the slug so it doesn't reappear
+      }
+    } else {
+      // Normal delete — the ID is a real DB row ID
+      try {
+        // Get the slug before deleting so we can track it
+        const post = await db.blogPost.findUnique({ where: { id } });
+        if (post) {
+          deletedSlug = post.slug;
+        }
+        await db.blogPost.delete({ where: { id } });
+      } catch (deleteErr) {
+        const msg = deleteErr instanceof Error ? deleteErr.message : String(deleteErr);
+        if (msg.includes("P2025") || msg.includes("not found")) {
+          return NextResponse.json({ ok: false, message: "Post not found in database" }, { status: 404 });
+        }
+        throw deleteErr;
       }
     }
 
-    // Normal delete — the ID is a real DB row ID
-    try {
-      await db.blogPost.delete({ where: { id } });
-      return NextResponse.json({ ok: true, message: "Post deleted" });
-    } catch (deleteErr) {
-      // If the record doesn't exist, return 404 instead of 500
-      const msg = deleteErr instanceof Error ? deleteErr.message : String(deleteErr);
-      if (msg.includes("P2025") || msg.includes("not found")) {
-        return NextResponse.json({ ok: false, message: "Post not found in database" }, { status: 404 });
+    // Track the deleted slug so the GET endpoint doesn't re-seed it
+    if (deletedSlug) {
+      try {
+        const existingRow = await db.siteContent.findUnique({
+          where: { key: "blog-deleted-slugs" },
+          select: { value: true },
+        });
+        let deletedList: string[] = [];
+        if (existingRow?.value) {
+          const parsed = JSON.parse(existingRow.value);
+          if (Array.isArray(parsed)) {
+            deletedList = parsed.filter((s) => typeof s === "string");
+          }
+        }
+        if (!deletedList.includes(deletedSlug)) {
+          deletedList.push(deletedSlug);
+        }
+        await db.siteContent.upsert({
+          where: { key: "blog-deleted-slugs" },
+          create: { key: "blog-deleted-slugs", value: JSON.stringify(deletedList) },
+          update: { value: JSON.stringify(deletedList) },
+        });
+      } catch (trackErr) {
+        console.error("[BLOG DELETE TRACK ERROR]", trackErr);
+        // Non-fatal — the post is still deleted from the DB
       }
-      throw deleteErr;
     }
+
+    return NextResponse.json({ ok: true, message: "Post deleted" });
   } catch (err) {
     console.error("[ADMIN BLOG DELETE ERROR]", err);
     return NextResponse.json({
       ok: false,
-      message: "Database error. If this persists, check that the Neon Postgres DATABASE_URL is configured on Vercel.",
+      message: "Database error.",
       error: err instanceof Error ? err.message : String(err),
     }, { status: 500 });
   }

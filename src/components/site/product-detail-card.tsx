@@ -184,10 +184,10 @@ export function ProductPageWithSelector({
             </div>
           )}
 
-          {/* Title */}
-          <h1 className="font-display text-2xl md:text-3xl text-ink leading-tight font-medium">
+          {/* Title — h2 (PageHero already has the page h1) */}
+          <h2 className="font-display text-2xl md:text-3xl text-ink leading-tight font-medium">
             {product.name}
-          </h1>
+          </h2>
 
           {/* Model badge (Dolphy-style pill) */}
           <div className="inline-flex items-center rounded-full bg-ink/5 px-4 py-1.5 w-fit">

@@ -929,7 +929,7 @@ function ConnectionGuide() {
             </GuideStep>
             <GuideStep n={3} icon={<Link2 className="h-3.5 w-3.5" />}>
               Under <span className="text-ivory">Data Streams</span>, add a <em>Web</em> stream and
-              enter your site URL (e.g. https://l-axreedemo.vercel.app).
+              enter your site URL (e.g. https://www.laxree.com).
             </GuideStep>
             <GuideStep n={4} icon={<TrendingUp className="h-3.5 w-3.5" />}>
               Copy the <span className="text-ivory">Measurement ID</span> (format{" "}

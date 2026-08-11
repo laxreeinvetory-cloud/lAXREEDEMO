@@ -344,7 +344,7 @@ export default function TrackPagesPage() {
       {/* Selected page editor */}
       {selectedPage ? (
         <div className="max-w-3xl">
-          <a href={`https://l-axreedemo.vercel.app${selectedPage.url}`} target="_blank" rel="noopener noreferrer"
+          <a href={`https://www.laxree.com${selectedPage.url}`} target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-yellow-500 hover:text-yellow-400 mb-6">
             <ExternalLink className="h-4 w-4" /> View {selectedPage.label} page →
           </a>

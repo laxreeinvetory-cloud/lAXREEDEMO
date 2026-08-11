@@ -124,7 +124,7 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
 
-  const shareUrl = `https://l-axreedemo.vercel.app/blog/${post.slug}`;
+  const shareUrl = `https://www.laxree.com/blog/${post.slug}`;
 
   return {
     title: post.seoTitle || `${post.title} — LaxRee Amenities Blog`,
@@ -184,7 +184,7 @@ export default async function BlogPostPage({
   const related = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   // SEO: Canonical + share URL
-  const shareUrl = `https://l-axreedemo.vercel.app/blog/${post.slug}`;
+  const shareUrl = `https://www.laxree.com/blog/${post.slug}`;
 
   // SEO: Article structured data (JSON-LD)
   const articleJsonLd = {
@@ -192,7 +192,7 @@ export default async function BlogPostPage({
     "@type": "Article",
     headline: post.seoTitle || post.title,
     description: post.metaDescription || post.excerpt,
-    image: `https://l-axreedemo.vercel.app${post.ogImage || post.image}`,
+    image: `https://www.laxree.com${post.ogImage || post.image}`,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -205,7 +205,7 @@ export default async function BlogPostPage({
       name: "LaxRee Amenities",
       logo: {
         "@type": "ImageObject",
-        url: "https://l-axreedemo.vercel.app/images/laxree-logo.png",
+        url: "https://www.laxree.com/images/laxree-logo.png",
       },
     },
     mainEntityOfPage: {
@@ -219,8 +219,8 @@ export default async function BlogPostPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://l-axreedemo.vercel.app" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://l-axreedemo.vercel.app/blog" },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.laxree.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.laxree.com/blog" },
       { "@type": "ListItem", position: 3, name: post.title, item: shareUrl },
     ],
   };

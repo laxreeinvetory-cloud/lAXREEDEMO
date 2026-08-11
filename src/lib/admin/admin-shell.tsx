@@ -151,7 +151,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
         <div className="shrink-0 p-4 border-t border-white/10">
           <a
-            href="https://l-axreedemo.vercel.app"
+            href="https://www.laxree.com"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-[13px] text-sand hover:bg-white/5 hover:text-ivory transition-colors mb-1"

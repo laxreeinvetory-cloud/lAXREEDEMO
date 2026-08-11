@@ -37,6 +37,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://l-axreedemo.vercel.app/sitemap.xml",
+    sitemap: "https://www.laxree.com/sitemap.xml",
   };
 }

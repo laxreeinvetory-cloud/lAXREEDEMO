@@ -5,7 +5,7 @@ import {
   getCategoriesByParent,
 } from "@/lib/laxree/catalogue-data";
 
-const BASE_URL = "https://l-axreedemo.vercel.app";
+const BASE_URL = "https://www.laxree.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

@@ -36,7 +36,7 @@ const plexMono = IBM_Plex_Mono({
 /* ─────────────────────────────────────────────────────────────
    SEO Metadata
    ───────────────────────────────────────────────────────────── */
-const BASE_URL = "https://l-axreedemo.vercel.app";
+const BASE_URL = "https://www.laxree.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -98,6 +98,7 @@ export const metadata: Metadata = {
     languages: {
       "en-IN": BASE_URL,
       "en": BASE_URL,
+      "x-default": BASE_URL,
     },
   },
   icons: {

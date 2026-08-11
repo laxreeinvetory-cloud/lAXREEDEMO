@@ -115,18 +115,23 @@ export default function AdminBlogPage() {
                 onClick={() => togglePublish(post)}
                 className={`p-2 rounded-lg transition-colors ${post.published ? "text-emerald-400 hover:bg-emerald/10" : "text-sand hover:bg-white/5"}`}
                 title={post.published ? "Unpublish" : "Publish"}
+                aria-label={post.published ? `Unpublish ${post.title}` : `Publish ${post.title}`}
               >
                 {post.published ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
               </button>
               <button
                 onClick={() => setEditing(post)}
                 className="p-2 rounded-lg text-sand hover:bg-white/5 hover:text-brass transition-colors"
+                title={`Edit ${post.title}`}
+                aria-label={`Edit ${post.title}`}
               >
                 <Edit3 className="h-4 w-4" />
               </button>
               <button
                 onClick={() => deletePost(post.id)}
                 className="p-2 rounded-lg text-sand hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                title={`Delete ${post.title}`}
+                aria-label={`Delete ${post.title}`}
               >
                 <Trash2 className="h-4 w-4" />
               </button>
