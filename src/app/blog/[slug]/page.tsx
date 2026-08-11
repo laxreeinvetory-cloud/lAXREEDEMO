@@ -207,7 +207,7 @@ export default async function BlogPostPage({
       name: "LaxRee Amenities",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.laxree.com/images/laxree-logo.png",
+        url: "https://www.laxree.com/images/laxree-logo.webp",
       },
     },
     mainEntityOfPage: {

@@ -64,7 +64,7 @@ function ParentCategoryCard({
     (sum, cat) => sum + cat.products.length,
     0,
   );
-  const image = imageOverride || PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/room-amenities.png";
+  const image = imageOverride || PARENT_FALLBACK_IMAGE[parent.slug] || "/images/categories/room-amenities.webp";
 
   return (
     <FadeIn delay={index * 0.06}>

@@ -66,7 +66,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "frp-flower-pots": "/images/product-catalogue/furniture/frp-flower-pots-preview.jpg",
   // ── Linen ──
   "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.png",
-  "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.png",
+  "bath-linen": "/images/product-catalogue/bath-linen/bath-towel-brown.webp",
   // ── Bath Tub ──
   "bath-tub-models": "/images/product-catalogue/bath-tub/LRBT---311-Color-Body.jpg",
   // ── Amenities Tray Set ── (LRAT-366/367/368 are bathtub photos — use LRAT-370 which is an actual tray set)
@@ -79,14 +79,14 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
    Parent slug → category-level hero image.
    ───────────────────────────────────────────────────────────── */
 export const PARENT_FALLBACK_IMAGE: Record<string, string> = {
-  "room-amenities": "/images/categories/room-amenities.png",
-  "washroom-amenities": "/images/categories/washroom-amenities.png",
-  "lobby-items": "/images/categories/lobby-items.png",
+  "room-amenities": "/images/categories/room-amenities.webp",
+  "washroom-amenities": "/images/categories/washroom-amenities.webp",
+  "lobby-items": "/images/categories/lobby-items.webp",
   "furniture": "/images/categories/furniture.jpg",
   "linen": "/images/categories/linen-new.jpg",
   "bath-tub": "/images/products/bath-tub.jpg",
   "amenities-tray-set": "/images/categories/amenities-tray-set.jpg",
-  "dome-space-pod": "/images/categories/space-pod.png",
+  "dome-space-pod": "/images/categories/space-pod.webp",
 };
 
 /**

@@ -61,10 +61,10 @@ const DEFAULTS = {
   heroImage: "",
   factoryImage: "",
   team: {
-    ashish: "/images/team/ashish-agarwal.png",
-    samarth: "/images/team/samarth-agarwal.png",
-    reema: "/images/team/reema-bajaj.png",
-    bavika: "/images/team/bavika-agarwal.png",
+    ashish: "/images/team/ashish-agarwal.webp",
+    samarth: "/images/team/samarth-agarwal.webp",
+    reema: "/images/team/reema-bajaj.webp",
+    bavika: "/images/team/bavika-agarwal.webp",
   },
 };
 
@@ -174,7 +174,7 @@ export default function AboutUsPage() {
                 style={{ borderRadius: 24 }}
               >
                 <img
-                  src={content.factoryImage || content.heroImage || "/images/categories/about-us-team.png"}
+                  src={content.factoryImage || content.heroImage || "/images/categories/about-us-team.webp"}
                   alt="Inside the LaxRee manufacturing facility in Ajmer, Rajasthan"
                   width={800}
                   height={640}

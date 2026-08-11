@@ -538,7 +538,7 @@ function LogoEditor({
               className={inputClass}
               value={logoUrl}
               onChange={(e) => setLogoUrl(e.target.value)}
-              placeholder="/images/client-logos/radisson.png or /api/admin/upload/…"
+              placeholder="/images/client-logos/radisson.webp or /api/admin/upload/…"
             />
             <p className="font-mono text-[10px] text-sand/60 mt-1">
               Paste an existing image URL, or upload a new file below.

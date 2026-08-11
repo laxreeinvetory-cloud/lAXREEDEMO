@@ -82,7 +82,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-5">
             <Link href="/" className="group">
               <img
-                src="/images/laxree-logo.png"
+                src="/images/laxree-logo.webp"
                 alt="LaxRee Amenities — Hotel Supplies Redefined"
                 width={160}
                 height={38}

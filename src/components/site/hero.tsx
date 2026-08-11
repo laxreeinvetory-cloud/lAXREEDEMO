@@ -15,7 +15,7 @@ import {
 } from "@/hooks/laxree/use-laxree-motion";
 
 // Static fallback hero image — used when the CMS has no override.
-const DEFAULT_HERO_IMAGE = "/images/hero-room.png";
+const DEFAULT_HERO_IMAGE = "/images/hero-room.webp";
 
 /* ───────────────────────────────────────────────────────────
    Headline word-by-word reveal

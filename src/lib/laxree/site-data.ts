@@ -68,7 +68,7 @@ export const CATEGORIES: Category[] = [
     name: "Room Amenities",
     count: 91,
     blurb: "Mini bars, kettles, safes, locks, hangers, phones, dustbins, desktop accessories.",
-    image: "/images/categories/room-amenities.png",
+    image: "/images/categories/room-amenities.webp",
     span: "large",
   },
   {
@@ -76,7 +76,7 @@ export const CATEGORIES: Category[] = [
     name: "Washroom Amenities",
     count: 43,
     blurb: "Hair dryers, soap dispensers, mirrors, dryers, grab bars.",
-    image: "/images/categories/washroom-amenities.png",
+    image: "/images/categories/washroom-amenities.webp",
     span: "default",
   },
   {
@@ -84,7 +84,7 @@ export const CATEGORIES: Category[] = [
     name: "Lobby Items",
     count: 31,
     blurb: "Trolleys, dustbins, Q managers, signage, digital signage.",
-    image: "/images/categories/lobby-items.png",
+    image: "/images/categories/lobby-items.webp",
     span: "default",
   },
   {
@@ -124,7 +124,7 @@ export const CATEGORIES: Category[] = [
     name: "Dome & Space POD",
     count: 4,
     blurb: "Geodesic domes and space pods for resorts and events.",
-    image: "/images/categories/space-pod.png",
+    image: "/images/categories/space-pod.webp",
     span: "default",
   },
 ];
@@ -304,19 +304,19 @@ export type ClientLogo = {
 };
 
 export const CLIENT_LOGOS: ClientLogo[] = [
-  { name: "Radisson", logo: "/images/client-logos/radisson.png" },
-  { name: "Holiday Inn", logo: "/images/client-logos/holiday-inn.png" },
-  { name: "Fairmont", logo: "/images/client-logos/fairmont.png" },
-  { name: "Taj", logo: "/images/client-logos/taj.png" },
-  { name: "Club Mahindra", logo: "/images/client-logos/club-mahindra.png" },
-  { name: "Ramada", logo: "/images/client-logos/ramada.png" },
-  { name: "The Fern Hotels & Resorts", logo: "/images/client-logos/the-fern.png" },
-  { name: "Sayaji Hotels", logo: "/images/client-logos/sayaji.png" },
-  { name: "Sunday Hotels", logo: "/images/client-logos/sunday-hotels.png" },
-  { name: "7 Apple Hotels", logo: "/images/client-logos/7-apple.png" },
-  { name: "Ananta Hotels", logo: "/images/client-logos/ananta.png" },
-  { name: "The Lords Inn", logo: "/images/client-logos/the-lords-inn.png" },
-  { name: "Swosti Group", logo: "/images/client-logos/swosti.png" },
+  { name: "Radisson", logo: "/images/client-logos/radisson.webp" },
+  { name: "Holiday Inn", logo: "/images/client-logos/holiday-inn.webp" },
+  { name: "Fairmont", logo: "/images/client-logos/fairmont.webp" },
+  { name: "Taj", logo: "/images/client-logos/taj.webp" },
+  { name: "Club Mahindra", logo: "/images/client-logos/club-mahindra.webp" },
+  { name: "Ramada", logo: "/images/client-logos/ramada.webp" },
+  { name: "The Fern Hotels & Resorts", logo: "/images/client-logos/the-fern.webp" },
+  { name: "Sayaji Hotels", logo: "/images/client-logos/sayaji.webp" },
+  { name: "Sunday Hotels", logo: "/images/client-logos/sunday-hotels.webp" },
+  { name: "7 Apple Hotels", logo: "/images/client-logos/7-apple.webp" },
+  { name: "Ananta Hotels", logo: "/images/client-logos/ananta.webp" },
+  { name: "The Lords Inn", logo: "/images/client-logos/the-lords-inn.webp" },
+  { name: "Swosti Group", logo: "/images/client-logos/swosti.webp" },
 ];
 
 export type Exhibition = {
@@ -616,21 +616,21 @@ export const LEADERSHIP: TeamMember[] = [
     role: "Head of Sales (Country)",
     bio: "Leads the national sales team and direct procurement contracts with hotel chains across India. Drives revenue growth and strategic client relationships.",
     initials: "SA",
-    image: "/images/team/samarth-agarwal.png",
+    image: "/images/team/samarth-agarwal.webp",
   },
   {
     name: "Reema Bajaj",
     role: "CMO",
     bio: "Chief Marketing Officer overseeing brand strategy, digital presence, and market expansion. 12+ years in hospitality brand building.",
     initials: "RB",
-    image: "/images/team/reema-bajaj.png",
+    image: "/images/team/reema-bajaj.webp",
   },
   {
     name: "Bavika Agarwal",
     role: "Head of HR",
     bio: "Heads Human Resources, talent acquisition, and organizational culture. Ensures a motivated workforce across factory, sales, and corporate teams.",
     initials: "BA",
-    image: "/images/team/bavika-agarwal.png",
+    image: "/images/team/bavika-agarwal.webp",
     
   },
 ];
@@ -1073,7 +1073,7 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "18 MB",
     category: "master",
     available: true,
-    image: "/images/categories/room-amenities.png",
+    image: "/images/categories/room-amenities.webp",
     categories: ["Room Amenities", "Washroom Amenities", "Lobby Items", "Furniture", "Linen", "Bath Tub", "Amenities Tray Set", "Dome & Space POD"],
   },
   {
@@ -1085,7 +1085,7 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "amenities",
     available: false,
-    image: "/images/categories/washroom-amenities.png",
+    image: "/images/categories/washroom-amenities.webp",
     categories: ["Mini Bar", "Safe Box", "Kettle", "Door Lock", "Hair Dryer", "Hand Dryer"],
   },
   {

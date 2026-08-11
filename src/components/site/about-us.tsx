@@ -30,7 +30,7 @@ const STATS = [
 export function AboutUs() {
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
-  const [factoryImage, setFactoryImage] = useState<string>("/images/categories/about-us-team.png");
+  const [factoryImage, setFactoryImage] = useState<string>("/images/categories/about-us-team.webp");
 
   useEffect(() => {
     fetch("/api/admin/cms?key=page:about-us", { cache: "no-store" })

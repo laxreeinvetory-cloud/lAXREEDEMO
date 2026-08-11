@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         name: body.name,
         count: Number.isFinite(Number(body.count)) ? Number(body.count) : 0,
         blurb: body.blurb || "",
-        image: body.image || "/images/categories/room-amenities.png",
+        image: body.image || "/images/categories/room-amenities.webp",
         span: body.span || "default",
         sortOrder: Number.isFinite(Number(body.sortOrder)) ? Number(body.sortOrder) : 0,
       },
