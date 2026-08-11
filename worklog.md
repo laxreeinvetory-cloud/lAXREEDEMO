@@ -1761,3 +1761,59 @@ Next actions recommended (in priority order):
 4. (Optional polish) Add empty-state messaging to "Leads by Day" chart when total < 5 (addresses L1)
 
 No code changes were made by this audit task — audit only. All findings documented above for the next implementation pass.
+
+---
+Task ID: SEO-AUDIT-FIX
+Agent: main (orchestrator) + general-purpose subagent (deep audit)
+Task: Full live site audit + SEO audit Excel analysis + fix blog delete + improve SEO + no data loss.
+
+Work Log:
+- Read SEO Dashboard & Technical audit xlsx (11 sheets):
+  * Hreflang conflicts: No self-referencing hreflang on 4 pages
+  * Broken external links: wa.me links returning 429 (WhatsApp rate-limits crawlers — not a real bug)
+  * Low text to HTML ratio: 0.02-0.06 on most pages (thin content)
+  * Low word count: blog page 82 words, FAQ 108 words, product pages ~120-150 words
+  * Long title elements: 10 pages with titles >60 chars
+  * Orphaned sitemap pages: sitemap referenced l-axreedemo.vercel.app URLs
+  * Multiple H1 tags: 15+ product detail pages had 2 H1 tags
+  * Blocked from crawling: /cart (intentional — cart should not be crawled)
+- Deep live audit (expert subagent): ALL 10 PAGES PASS. No CRITICAL/HIGH issues.
+  * All pages HTTP 200, CSS correct, 0 console errors
+  * Page load times: 75-531ms (fast)
+  * Mobile responsive: ✅
+  * 12 blog posts, 194 products, 8 categories all intact
+
+Fixes applied:
+1. Blog delete fix (CRITICAL):
+   - DELETE handler now tracks deleted slugs in CMS key "blog-deleted-slugs"
+   - GET handler checks deleted-slugs list and does NOT re-seed deleted posts
+   - Previously: deleted posts kept reappearing because GET auto-seeded all static posts
+   - Now: deleted posts stay deleted ✅ (verified on production)
+2. Sitemap/robots/canonical URLs (HIGH SEO):
+   - Replaced 27 references of l-axreedemo.vercel.app → www.laxree.com
+   - sitemap.xml now outputs correct www.laxree.com URLs ✅
+   - robots.txt Sitemap directive now points to www.laxree.com/sitemap.xml ✅
+   - Canonical URLs now https://www.laxree.com ✅
+   - OG/Twitter metadata URLs now correct ✅
+3. Multiple H1 tags fix (HIGH SEO):
+   - product-detail-card.tsx: h1 → h2 (PageHero already has the page h1)
+   - Fixes 15+ product detail pages that had 2 H1 tags
+4. Self-referencing hreflang (MEDIUM SEO):
+   - Added x-default to layout alternates.languages
+5. Accessibility (MEDIUM):
+   - Added aria-label + title to all admin/blog action buttons (publish, edit, delete)
+
+E2E verified on production:
+- Blog delete: deleted post stays deleted (11 posts, slug not present) ✅
+- Sitemap: https://www.laxree.com URLs ✅
+- Robots: Sitemap: https://www.laxree.com/sitemap.xml ✅
+- Canonical: https://www.laxree.com ✅
+- CSS: VLM confirmed "proper dark theme and branded gold/white colors" ✅
+- All 12 blog posts intact (restored test delete) ✅
+- No data loss ✅
+
+Stage Summary:
+- Blog delete now works permanently (no re-seeding of deleted posts)
+- SEO audit issues fixed: sitemap URLs, canonical, multiple H1, hreflang
+- Site fully audited: all 10 pages pass, no critical issues
+- No data loss — all blog posts, leads, products, CMS data intact
