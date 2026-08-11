@@ -37,7 +37,7 @@ function CategoryPageInner() {
   const slug = pathname?.split("/").pop() || "";
   const [itemImages, setItemImages] = useState<Record<string, { image: string; count: number }>>({});
   const [otherImages, setOtherImages] = useState<Record<string, { image: string; count: number }>>({});
-  const cmsOverrides = useImageOverrides();
+  const { overrides: cmsOverrides, loaded: overridesLoaded } = useImageOverrides();
 
   const parent = CATALOGUE_PARENTS.find((p) => p.slug === slug);
   const children = parent ? getCategoriesByParent(parent.slug) : [];
@@ -123,12 +123,16 @@ function CategoryPageInner() {
                     >
                       {/* Image area — white bg, object-contain, subtle zoom on hover */}
                       <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-white to-ivory/50">
-                        <img
-                          src={itemImage}
-                          alt={item.name}
-                          loading="lazy"
-                          className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
-                        />
+                        {overridesLoaded ? (
+                          <img
+                            src={itemImage}
+                            alt={item.name}
+                            loading="lazy"
+                            className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-ivory to-ivory/50 animate-pulse" />
+                        )}
                         {/* Model count badge */}
                         <span className="absolute right-3 top-3 rounded-full bg-charcoal/85 px-3 py-1 font-mono text-[10px] text-brass backdrop-blur-sm transition-colors duration-300 group-hover:bg-brass group-hover:text-charcoal">
                           {preview?.count || 0} Models
@@ -180,7 +184,11 @@ function CategoryPageInner() {
               return (
                 <Link key={p.slug} href={`/products/${p.slug}`} className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
-                    <img src={otherImage} alt={p.name} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
+                    {overridesLoaded ? (
+                      <img src={otherImage} alt={p.name} loading="lazy" className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105" />
+                    ) : (
+                      <div className="absolute inset-0 bg-charcoal animate-pulse" />
+                    )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-display text-[16px] text-ivory">{p.name}</h3>

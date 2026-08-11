@@ -27,9 +27,11 @@ type CategoryCardProps = {
   index: number;
   /** Optional DB-driven image override; falls back to category.image. */
   imageOverride?: string;
+  /** When false, show a placeholder instead of the image (prevents flash of old image) */
+  overridesLoaded?: boolean;
 };
 
-function CategoryCard({ category, large = false, index, imageOverride }: CategoryCardProps) {
+function CategoryCard({ category, large = false, index, imageOverride, overridesLoaded = true }: CategoryCardProps) {
   const reduced = usePrefersReducedMotion();
   const tilt = useTilt(6);
 
@@ -60,16 +62,20 @@ function CategoryCard({ category, large = false, index, imageOverride }: Categor
         aria-label={`${category.name} — ${category.count} products`}
         className="group relative block h-full w-full overflow-hidden rounded-[24px] border border-brass/0 transition-colors duration-500 hover:border-brass/40 focus-visible:border-brass/60"
       >
-        {/* Background image */}
-        <img
-          src={resolvedImage}
-          alt={category.name}
-          width={large ? 1200 : 800}
-          height={large ? 1200 : 560}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-        />
+        {/* Background image — hidden until CMS overrides are loaded to prevent flash */}
+        {overridesLoaded ? (
+          <img
+            src={resolvedImage}
+            alt={category.name}
+            width={large ? 1200 : 800}
+            height={large ? 1200 : 560}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-charcoal animate-pulse" />
+        )}
 
         {/* Charcoal → transparent gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/40 to-transparent" />
@@ -106,7 +112,7 @@ function CategoryCard({ category, large = false, index, imageOverride }: Categor
 
 export function CategoryBento() {
   // CMS image overrides from /admin/images (key "images", field "category:<slug>")
-  const cmsOverrides = useImageOverrides();
+  const { overrides: cmsOverrides, loaded } = useImageOverrides();
 
   // DB-driven category image overrides from /api/admin/products (legacy)
   const [imageMap, setImageMap] = useState<Record<string, string>>({});
@@ -174,6 +180,7 @@ export function CategoryBento() {
                 large={category.span === "large"}
                 index={i}
                 imageOverride={override}
+                overridesLoaded={loaded}
               />
             );
           })}

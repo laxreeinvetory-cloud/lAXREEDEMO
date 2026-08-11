@@ -11,34 +11,44 @@ import { useEffect, useState } from "react";
  *   - "parent:<slug>"        → /products page parent category card image
  *   - "subcategory:<slug>"   → /products/[slug] "Browse by Type" sub-category card image
  *
- * Usage:
- *   const overrides = useImageOverrides();
- *   const img = overrides["category:room-amenities"] || defaultImage;
+ * Returns { overrides, loaded }:
+ *   - overrides: the map (empty until fetch completes)
+ *   - loaded: false until fetch completes — use this to suppress image
+ *     rendering so the user doesn't see a flash of the old/default image
  *
- * The hook returns an empty map on first render and fills in once the
- * fetch resolves. Components default to their static fallback while loading.
+ * Usage:
+ *   const { overrides, loaded } = useImageOverrides();
+ *   const img = overrides["category:room-amenities"] || defaultImage;
+ *   // Only render <img> when loaded === true to avoid flash
  */
-export function useImageOverrides(): Record<string, string> {
+export function useImageOverrides(): {
+  overrides: Record<string, string>;
+  loaded: boolean;
+} {
   const [overrides, setOverrides] = useState<Record<string, string>>({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     fetch("/api/admin/cms?key=images", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (cancelled || !data?.value) return;
-        const map = data.value;
-        if (typeof map === "object" && !Array.isArray(map)) {
-          setOverrides(map as Record<string, string>);
+        if (cancelled) {
+          setLoaded(true);
+          return;
         }
+        if (data?.value && typeof data.value === "object" && !Array.isArray(data.value)) {
+          setOverrides(data.value as Record<string, string>);
+        }
+        setLoaded(true);
       })
       .catch(() => {
-        // keep empty overrides — components use static fallbacks
+        setLoaded(true);
       });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  return overrides;
+  return { overrides, loaded };
 }

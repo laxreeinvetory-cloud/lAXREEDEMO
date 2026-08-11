@@ -52,10 +52,12 @@ function ParentCategoryCard({
   parent,
   index,
   imageOverride,
+  overridesLoaded = true,
 }: {
   parent: (typeof CATALOGUE_PARENTS)[0];
   index: number;
   imageOverride?: string;
+  overridesLoaded?: boolean;
 }) {
   const children = getCategoriesByParent(parent.slug);
   const productCount = children.reduce(
@@ -72,12 +74,16 @@ function ParentCategoryCard({
       >
         {/* Image area — 4:3 aspect, object-cover for lifestyle look */}
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-charcoal">
-          <img
-            src={image}
-            alt={parent.name}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          />
+          {overridesLoaded ? (
+            <img
+              src={image}
+              alt={parent.name}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-charcoal animate-pulse" />
+          )}
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
           {/* Model count badge */}
@@ -116,7 +122,7 @@ function ParentCategoryCard({
    ───────────────────────────────────────────────────────────── */
 export default function ProductsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const cmsOverrides = useImageOverrides();
+  const { overrides: cmsOverrides, loaded } = useImageOverrides();
 
   const filteredParents = activeFilter === "all"
     ? CATALOGUE_PARENTS
@@ -193,6 +199,7 @@ export default function ProductsPage() {
                 parent={parent}
                 index={i}
                 imageOverride={cmsOverrides[`parent:${parent.slug}`]}
+                overridesLoaded={loaded}
               />
             ))}
           </div>
