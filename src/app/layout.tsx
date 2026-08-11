@@ -4,7 +4,8 @@ import "./globals.css";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { ConditionalChrome } from "@/components/providers/conditional-chrome";
-import { AnalyticsLoader } from "@/components/seo/analytics-loader";
+import { GoogleAnalytics } from "@/components/seo/google-analytics";
+import { db } from "@/lib/db";
 
 /* ─────────────────────────────────────────────────────────────
    Fonts — display: "swap" for fast text render
@@ -38,7 +39,8 @@ const plexMono = IBM_Plex_Mono({
    ───────────────────────────────────────────────────────────── */
 const BASE_URL = "https://www.laxree.com";
 
-export const metadata: Metadata = {
+// Static metadata base — merged with dynamic GSC token in generateMetadata below
+const staticMetadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
     default: "LaxRee Amenities — Hotel Supplies Redefined | OEM Manufacturer in Ajmer",
@@ -142,6 +144,41 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * generateMetadata — async metadata generation.
+ * Fetches GSC verification token from CMS so it appears in server-rendered HTML
+ * (visible in view-source). During build, skips DB fetch and uses env vars.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return staticMetadata;
+  }
+
+  let gscToken = process.env.NEXT_PUBLIC_GSC_VERIFICATION || "";
+  try {
+    const row = await db.siteContent.findUnique({
+      where: { key: "analytics-config" },
+      select: { value: true },
+    });
+    if (row?.value) {
+      const parsed = JSON.parse(row.value);
+      if (typeof parsed.gscToken === "string" && parsed.gscToken) {
+        gscToken = parsed.gscToken;
+      }
+    }
+  } catch {
+    // DB not available — use env var
+  }
+
+  return {
+    ...staticMetadata,
+    other: {
+      ...(staticMetadata.other as Record<string, string> | undefined),
+      ...(gscToken ? { "google-site-verification": gscToken } : {}),
+    },
+  };
+}
+
 export const viewport: Viewport = {
   themeColor: "#C6A15B",
   width: "device-width",
@@ -150,22 +187,49 @@ export const viewport: Viewport = {
   // and lowers the Lighthouse accessibility score.
 };
 
+/**
+ * Fetch GA ID from CMS (admin-configured via /admin/analytics).
+ * During build, skips DB fetch and uses env var.
+ */
+async function getGaId(): Promise<string> {
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+  }
+  try {
+    const row = await db.siteContent.findUnique({
+      where: { key: "analytics-config" },
+      select: { value: true },
+    });
+    if (row?.value) {
+      const parsed = JSON.parse(row.value);
+      if (typeof parsed.gaId === "string" && parsed.gaId.startsWith("G-")) {
+        return parsed.gaId;
+      }
+    }
+  } catch {
+    // DB not available
+  }
+  return process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
+}
+
 /* ─────────────────────────────────────────────────────────────
-   Root Layout — sync (non-async) to preserve static CSS prerendering.
-   Analytics config (GA/GSC) is loaded client-side via AnalyticsLoader.
+   Root Layout — async so GA script is server-rendered (visible in
+   view-source). Uses NEXT_PHASE guard to skip DB during build.
    ───────────────────────────────────────────────────────────── */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = await getGaId();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
-        {/* Analytics (GA4 + GSC) — loaded client-side from CMS config */}
-        <AnalyticsLoader />
+        {/* Google Analytics 4 — server-rendered so it appears in view-source */}
+        <GoogleAnalytics gaId={gaId} />
 
         {/* SEO: Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
