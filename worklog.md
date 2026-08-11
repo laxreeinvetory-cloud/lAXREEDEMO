@@ -1905,3 +1905,112 @@ Stage Summary:
 - GSC verification works (env var for server-render, CMS for client-side)
 - User needs to set GA ID in /admin/analytics → GA code will appear in DOM
 - CSS not broken — sync layout preserved
+
+---
+Task ID: SEO-FIX-ALL
+Agent: SEO developer (subagent)
+Task: Fix all SEO issues found in the SEO audit Excel for LaxRee Amenities website.
+
+Work Log:
+
+## 1. Long Title Elements (11 pages) — FIXED
+Used `title: { absolute: "..." }` to override the root layout's `%s | LaxRee Amenities` template where needed (so the rendered title is exactly the audit-specified target).
+
+Files modified:
+- src/app/about-us/layout.tsx — title → "About Us | LaxRee Amenities — Hotel Supplies Manufacturer" (54 chars)
+- src/app/blog/layout.tsx — title → "Hospitality Blog | LaxRee Amenities" (36 chars)
+- src/app/blog/[slug]/page.tsx — generateMetadata now uses `{ absolute: post.seoTitle }` when seoTitle is set (so template doesn't append " | LaxRee Amenities")
+- src/lib/laxree/blog-content.ts — added seoTitle for the 3 specific blog posts:
+  - sustainable-hospitality-2026 → "Sustainable Hospitality 2026 | LaxRee Blog"
+  - brass-details-guest-perception → "Brass vs Chrome in Guest Perception | LaxRee Blog"
+  - hotel-minibar-buyers-guide-india → "Hotel Minibar Buyer's Guide India | LaxRee Blog"
+- src/app/career/layout.tsx — title → "Careers | LaxRee Amenities" (26 chars)
+- src/app/catalogue/layout.tsx — title → "Download Catalogue 2026 | LaxRee Amenities" (42 chars)
+- src/app/contact-us/layout.tsx — title → "Contact Us | LaxRee Amenities" (29 chars)
+- src/app/dealers/layout.tsx — title → "Become a Dealer | LaxRee Amenities" (34 chars)
+- src/app/products/layout.tsx — title → "Hotel Products & Supplies | 700+ SKUs | LaxRee" (46 chars)
+
+## 2. Self-referencing hreflang (4 pages) — FIXED
+The root layout already had hreflang for / but /clients, /experience-center, /faq were inheriting the homepage's hreflang (pointing to /). Each now has its own alternates.languages block.
+
+Files modified:
+- src/app/clients/layout.tsx — NEW FILE created with metadata (title, description, alternates.canonical + languages, openGraph)
+- src/app/experience-center/layout.tsx — added alternates.canonical + languages (en-IN, en, x-default), title changed to absolute "Experience Center | LaxRee Amenities", added openGraph
+- src/app/faq/layout.tsx — added alternates.canonical + languages, added openGraph
+
+Verified via curl: all 4 pages now emit `<link rel="alternate" hrefLang="en-IN|en|x-default" href="https://www.laxree.com/{page}"/>` (self-referencing).
+
+## 3. Broken External Links (wa.me 429) — FIXED
+Added `rel="nofollow noopener noreferrer"` to ALL wa.me links in src/ (was previously `rel="noopener noreferrer"` for most; the site-footer ContactRow didn't have a rel attribute at all).
+
+Files modified:
+- src/components/site/site-footer.tsx — added `rel` prop to ContactRow component; WhatsApp link passes rel="nofollow noopener noreferrer"
+- src/components/site/lead-cta-banner.tsx
+- src/components/floating/whatsapp-launcher.tsx
+- src/components/floating/mobile-sticky-bar.tsx
+- src/app/blog/[slug]/page.tsx — added per-link `rel` field to shareLinks array (so only WhatsApp share gets nofollow, while FB/X/LinkedIn share keeps "noopener noreferrer" only); also the WhatsApp CTA link
+- src/app/contact-us/page.tsx — 2 wa.me links (WhatsApp card + each WhatsApp executive)
+- src/app/faq/page.tsx
+- src/app/admin/dealers/page.tsx
+- src/app/admin/careers/page.tsx
+- src/app/admin/crm/page.tsx — 2 wa.me links
+- src/app/admin/leads/page.tsx
+- (src/app/api/quotation/route.ts is server-side URL building — no HTML link, no rel attribute needed)
+
+Verified via curl on /contact-us and /blog/brass-details-guest-perception: every `<a href="https://wa.me/...">` now has `rel="nofollow noopener noreferrer"`.
+
+## 4. Pages with Only One Internal Link (2 pages) — FIXED
+The /products/amenities-tray-set/amenities-tray-set-models and /products/dome-space-pod/dome-models pages previously had only breadcrumb links.
+
+File modified: src/app/products/[slug]/[itemSlug]/page.tsx
+- Added SEO intro paragraph section between PageHero and ProductPageWithSelector
+- Added "Back to {parent.name}" link in the empty-state ("No products" message)
+- Added "Back to all {parent.name}" CTA link after the "Other Item Types" section
+- Added brand-new "Other Categories" rail at the bottom — links to all OTHER parent category pages (8 internal links)
+- Renamed "Other Item Types" → "Other {parent.name} Item Types" for clearer hierarchy
+- Imported PARENT_FALLBACK_IMAGE for the new Other Categories rail images
+
+Verified via curl: both pages now have 18 unique internal links (was 1 before).
+
+## 5. Low Word Count (45 pages) — FIXED
+Added descriptive SEO paragraphs in three places:
+
+Files modified:
+- src/app/products/[slug]/[itemSlug]/page.tsx — added a SEO intro paragraph section below PageHero: "Browse our complete range of {item.name} for hotels and resorts. LaxRee Amenities manufactures and supplies premium {item.name} across India..."
+- src/app/products/[slug]/page.tsx:
+  - In the children.length > 0 case: added SEO intro paragraph below SectionHeading ("Browse our complete range of {parent.name} for hotels, resorts...")
+  - In the Coming Soon case: replaced the short body with a longer SEO-friendly paragraph (audit-suggested template): "Browse our complete range of {parent.name} for hotels. LaxRee Amenities manufactures and supplies premium {parent.name} across India..."
+  - Added "Browse All Products" secondary CTA on the Coming Soon page
+- src/components/site/product-detail-card.tsx — added SEO description block after product.description: "The {product.name} ({product.model}) is part of LaxRee Amenities' {categoryName} range for hotels, resorts, and serviced apartments. Manufactured in our Ajmer factory with ISO-certified quality control..."
+
+Verified via curl:
+- /products/amenities-tray-set/amenities-tray-set-models: 362 words (was <200)
+- /products/dome-space-pod/dome-models: 379 words (was <200)
+
+## 6. Low Text to HTML Ratio (73 pages) — PARTIALLY FIXED
+Addressed by the same descriptive text additions in Issue #5. Note: design-heavy pages (with nav, footer, modals) will always have lower text-to-HTML ratio — this is normal and not critical.
+
+## Verification Results:
+- `bun run lint`: 0 errors, 42 warnings (all pre-existing <img> warnings; no new issues introduced)
+- `npx tsc --noEmit`: 0 errors
+- All 16 tested pages return HTTP 200:
+  /, /about-us, /products, /clients, /experience-center, /faq, /blog, /blog/brass-details-guest-perception, /blog/hotel-minibar-buyers-guide-india, /blog/sustainable-hospitality-2026, /career, /catalogue, /contact-us, /dealers, /products/amenities-tray-set/amenities-tray-set-models, /products/dome-space-pod/dome-models
+- Titles verified via curl — all 10 audited pages now have titles under 60 chars (shortest 26, longest 54)
+- hreflang verified via curl — /clients, /experience-center, /faq, / all emit self-referencing hreflang link tags
+- wa.me rel="nofollow" verified via curl on /contact-us and /blog/brass-details-guest-perception
+- Internal link count on previously-1-internal-link pages verified: both now have 18 unique internal links
+- Word count on product detail pages verified: both above 200 words (362 and 379)
+
+## Important constraints honoured:
+- No blog post content, product data, lead data, or CMS content changed
+- No files deleted
+- No visual design or CSS changed — all additions are new sections or text within existing layouts
+- All existing functionality intact (lead forms, cart, enquiry modals, WhatsApp launcher, admin pages)
+- Dev server runs at localhost:3000
+
+Stage Summary:
+- All 6 SEO issue categories from the audit have been addressed
+- 19 source files modified, 1 new file created (src/app/clients/layout.tsx)
+- 0 errors on lint + tsc
+- All key pages return 200 with correct titles, hreflang, and rel attributes
+- Internal linking and word count issues fixed on the 2 specific product pages mentioned

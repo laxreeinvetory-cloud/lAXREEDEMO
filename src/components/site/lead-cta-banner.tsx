@@ -177,7 +177,7 @@ export function LeadCtaBanner() {
               <a
                 href={`https://wa.me/${SITE.whatsapp}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="pill pill-ghost-ivory border-ivory/40 px-6 py-3 text-xs inline-flex items-center justify-center gap-2 self-start"
               >
                 <MessageCircle size={16} strokeWidth={1.5} />

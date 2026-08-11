@@ -8,7 +8,7 @@ import type { Metadata } from "next";
  * [slug]/layout.tsx and [slug]/[itemSlug]/layout.tsx.
  */
 export const metadata: Metadata = {
-  title: "Hotel Products & Supplies — 700+ SKUs | Minibars, Safes, Locks, Kettles",
+  title: { absolute: "Hotel Products & Supplies | 700+ SKUs | LaxRee" },
   description: "Browse 700+ hotel supply products: minibars, safe lockers, RFID door locks, electric kettles, hair dryers, luggage trolleys, magnifying mirrors, hand dryers. OEM manufactured in India with full specifications and bulk pricing.",
   keywords: ["hotel products India", "hotel minibar price", "hotel safe locker", "RFID door lock hotel", "electric kettle hotel", "hotel supplies catalogue", "buy hotel amenities bulk India"],
   openGraph: {

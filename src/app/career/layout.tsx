@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Careers at LaxRee Amenities — Jobs in Hospitality Manufacturing",
+  title: { absolute: "Careers | LaxRee Amenities" },
   description: "Join LaxRee Amenities — OEM manufacturer of hotel supplies in Ajmer, Rajasthan. Open positions in sales, manufacturing, design, quality control, and field service. Competitive salary, health insurance, growth opportunities.",
   keywords: ["hotel supplies jobs India", "LaxRee careers", "hospitality manufacturing jobs Ajmer", "hotel amenities sales jobs", "OEM factory jobs Rajasthan"],
   alternates: { canonical: "https://www.laxree.com/career" },

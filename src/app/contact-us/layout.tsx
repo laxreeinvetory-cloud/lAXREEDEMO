@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact LaxRee Amenities — Hotel Supplies Manufacturer in Ajmer",
+  title: { absolute: "Contact Us | LaxRee Amenities" },
   description: "Contact LaxRee Amenities for hotel supplies enquiries, quotations, after-sales support, and dealership. Phone: +91 92516 83662. Plot No. 1 & 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001.",
   keywords: ["contact LaxRee Amenities", "hotel supplies contact India", "hotel minibar manufacturer contact", "hospitality supplies phone number", "hotel amenities enquiry Ajmer"],
   alternates: { canonical: "https://www.laxree.com/contact-us" },

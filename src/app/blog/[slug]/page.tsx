@@ -127,7 +127,9 @@ export async function generateMetadata({
   const shareUrl = `https://www.laxree.com/blog/${post.slug}`;
 
   return {
-    title: post.seoTitle || `${post.title} — LaxRee Amenities Blog`,
+    title: post.seoTitle
+      ? { absolute: post.seoTitle }
+      : `${post.title} — LaxRee Amenities Blog`,
     description: post.metaDescription || post.excerpt,
     keywords: post.keywords ? post.keywords.split(",").map((k: string) => k.trim()) : undefined,
     alternates: {
@@ -229,21 +231,25 @@ export default async function BlogPostPage({
       label: "Share on Facebook",
       href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
       Icon: Facebook,
+      rel: "noopener noreferrer",
     },
     {
       label: "Share on X",
       href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`,
       Icon: Twitter,
+      rel: "noopener noreferrer",
     },
     {
       label: "Share on LinkedIn",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
       Icon: Linkedin,
+      rel: "noopener noreferrer",
     },
     {
       label: "Share on WhatsApp",
       href: `https://wa.me/?text=${encodeURIComponent(`${post.title} ${shareUrl}`)}`,
       Icon: MessageCircle,
+      rel: "nofollow noopener noreferrer",
     },
   ];
 
@@ -499,12 +505,12 @@ export default async function BlogPostPage({
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                {shareLinks.map(({ label, href, Icon }) => (
+                {shareLinks.map(({ label, href, Icon, rel }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel={rel}
                     aria-label={label}
                     className="flex items-center justify-center w-11 h-11 rounded-full border border-ink/15 text-ink-muted transition-all hover:border-brass hover:text-brass hover:-translate-y-0.5"
                   >
@@ -517,7 +523,7 @@ export default async function BlogPostPage({
                 <a
                   href={`https://wa.me/${SITE.whatsapp}`}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-wider text-brass hover:text-brass-light transition-colors"
                 >
                   Or talk to our team on WhatsApp

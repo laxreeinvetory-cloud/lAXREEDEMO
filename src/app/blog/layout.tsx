@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hospitality Trends Blog — Hotel Supplies Procurement Guides | LaxRee",
+  title: { absolute: "Hospitality Blog | LaxRee Amenities" },
   description: "Expert procurement guides for hotel supplies in India: minibar buying guide, safe locker specs, RFID door lock comparison, kettle selection, soap dispenser guide, steam iron specs. Bulk pricing benchmarks included.",
   keywords: ["hotel supplies blog India", "hotel amenities procurement guide", "hotel minibar buying guide", "hotel safe locker guide", "RFID door lock guide", "hotel supplies blog", "hospitality trends 2026"],
   alternates: { canonical: "https://www.laxree.com/blog" },

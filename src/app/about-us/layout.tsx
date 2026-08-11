@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us — OEM Hotel Supplies Manufacturer in Ajmer, Rajasthan",
+  title: { absolute: "About Us | LaxRee Amenities — Hotel Supplies Manufacturer" },
   description: "LaxRee Amenities is an 11-year-old OEM manufacturer of hotel minibars, safe lockers, furniture, linen, roofing and dome structures. India's largest Hotel Supplier Experience Center. 1,347+ projects delivered across 28 states.",
   keywords: ["LaxRee Amenities about", "hotel supplies manufacturer India", "OEM minibar manufacturer", "hotel amenities factory Ajmer", "Hotel Supplier Experience Center Rajasthan"],
   alternates: { canonical: "https://www.laxree.com/about-us" },

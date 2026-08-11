@@ -444,7 +444,7 @@ export default function AdminCrmPage() {
                       <a
                         href={`https://wa.me/${lead.phone.replace(/\D/g, "")}`}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="nofollow noopener noreferrer"
                         title="WhatsApp"
                         className="rounded-md p-1.5 text-sand hover:bg-emerald/10 hover:text-emerald-300 transition-colors"
                       >
@@ -568,7 +568,7 @@ function LeadDetailModal({
             <a
               href={`https://wa.me/${lead.phone.replace(/\D/g, "")}`}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-emerald/20 px-3.5 py-2 text-sm font-medium text-emerald-300 border border-emerald/30 transition-colors hover:bg-emerald/30"
             >
               <MessageCircle className="h-4 w-4" /> WhatsApp

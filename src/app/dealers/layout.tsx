@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Become a LaxRee Dealer — Hotel Supplies Dealership in India",
+  title: { absolute: "Become a Dealer | LaxRee Amenities" },
   description: "Partner with LaxRee Amenities as a dealer. Protected territory, OEM factory-direct pricing, 700+ SKUs, 7-day stock replenishment, co-marketing support. Apply for dealership across 22+ Indian cities.",
   keywords: ["hotel supplies dealership India", "become hotel amenities dealer", "LaxRee dealer program", "hotel products distributor", "hospitality supplies franchise"],
   alternates: { canonical: "https://www.laxree.com/dealers" },

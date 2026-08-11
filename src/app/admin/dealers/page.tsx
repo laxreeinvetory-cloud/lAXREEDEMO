@@ -572,7 +572,7 @@ function DealerDetailModal({
             <a
               href={`https://wa.me/${lead.phone.replace(/\D/g, "")}`}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-emerald/20 px-3.5 py-2 text-sm font-medium text-emerald-300 border border-emerald/30 hover:bg-emerald/30"
             >
               <Phone className="h-4 w-4" /> WhatsApp

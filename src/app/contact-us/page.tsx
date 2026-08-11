@@ -302,7 +302,7 @@ export default function ContactUsPage() {
                     <a
                       href={`https://wa.me/${SITE.whatsapp}`}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow noopener noreferrer"
                       className="inline-flex items-center gap-2 font-body text-ivory text-base hover:text-brass-light transition-colors"
                     >
                       Chat with us
@@ -502,7 +502,7 @@ export default function ContactUsPage() {
                     <a
                       href={`https://wa.me/${exec.phone}`}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow noopener noreferrer"
                       className="pill pill-ghost-brass text-[11px] px-4 py-2 inline-flex items-center gap-1.5"
                     >
                       <MessageCircle size={13} strokeWidth={1.5} />

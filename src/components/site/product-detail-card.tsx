@@ -203,6 +203,13 @@ export function ProductPageWithSelector({
             </p>
           )}
 
+          {/* SEO description block — additional descriptive text for crawlers */}
+          <div className="mt-2 rounded-2xl border border-ink/10 bg-white/40 p-5">
+            <p className="font-body text-[14px] leading-relaxed text-ink-muted">
+              The <strong className="text-ink">{product.name}</strong> ({product.model}) is part of LaxRee Amenities&rsquo; {categoryName} range for hotels, resorts, and serviced apartments. Manufactured in our Ajmer factory with ISO-certified quality control, every unit ships with a 2-year warranty and 7-year spare-parts guarantee. Bulk pricing is available for hospitality procurement teams ordering 50+ units &mdash; request a quotation for tiered pricing, custom branding, branded packaging, and tender-ready documentation. LaxRee Amenities is an OEM hotel supplies manufacturer pan-India, with delivery to all 28 states and 1,347+ projects delivered.
+            </p>
+          </div>
+
           {/* CTA Buttons (Dolphy-style: orange + green) */}
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <button

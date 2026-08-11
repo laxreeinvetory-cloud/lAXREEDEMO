@@ -11,6 +11,7 @@ export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
   if (post.slug === "sustainable-hospitality-2026") {
     full.author = "Sunita Jain";
     full.authorRole = "Head of Quality & Compliance";
+    full.seoTitle = "Sustainable Hospitality 2026 | LaxRee Blog";
     full.content = [
       {
         paragraphs: [
@@ -57,6 +58,7 @@ export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
   } else if (post.slug === "brass-details-guest-perception") {
     full.author = "Priya Sharma";
     full.authorRole = "Director, Operations";
+    full.seoTitle = "Brass vs Chrome in Guest Perception | LaxRee Blog";
     full.content = [
       {
         paragraphs: [
@@ -150,6 +152,7 @@ export const BLOG_POSTS_FULL: BlogPostFull[] = BLOG_POSTS.map((post) => {
   if (post.slug === "hotel-minibar-buyers-guide-india") {
     full.author = "Ashish Agarwal";
     full.authorRole = "Founder & Managing Director";
+    full.seoTitle = "Hotel Minibar Buyer's Guide India | LaxRee Blog";
     full.content = [
       {
         paragraphs: [

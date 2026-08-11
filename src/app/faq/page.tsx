@@ -325,7 +325,7 @@ export default function FaqPage() {
               <a
                 href={`https://wa.me/${SITE.whatsapp}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="glass-on-charcoal rounded-2xl p-6 flex flex-col items-center gap-3 transition-all hover:border-brass/40 hover:-translate-y-0.5"
               >
                 <div className="grid place-items-center h-12 w-12 rounded-full bg-brass/15 text-brass">

@@ -106,6 +106,14 @@ function CategoryPageInner() {
         <section className="section section-ivory py-20 md:py-28">
           <div className="container-laxree">
             <SectionHeading theme="ivory" eyebrow="ITEM TYPES" title={`Browse ${parent.name} by Type`} body={`Click any item type below to see all available models with full specifications, images, and model numbers.`} />
+
+            {/* SEO intro paragraph — descriptive category text */}
+            <div className="mt-8 mx-auto max-w-3xl">
+              <p className="font-body text-[15px] leading-relaxed text-ink-muted text-center">
+                Browse our complete range of {parent.name.toLowerCase()} for hotels, resorts and serviced apartments. LaxRee Amenities is an OEM manufacturer and pan-India supplier of premium {parent.name.toLowerCase()}, with {children.length} item types and {totalProducts}+ models available across {Object.keys(PARENT_CATEGORY_MAP).length} parent categories. All products are manufactured in our Ajmer factory with ISO-certified quality control, 2-year warranty, and 7-year spare-parts guarantee. Contact us for custom quotes, bulk pricing, and sample units.
+              </p>
+            </div>
+
             <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {children.map((item, i) => {
                 const preview = itemImages[item.slug];
@@ -162,9 +170,20 @@ function CategoryPageInner() {
         </section>
       ) : (
         <section className="section section-ivory py-20 md:py-28">
-          <div className="container-laxree max-w-2xl text-center">
+          <div className="container-laxree max-w-3xl text-center">
             <SectionHeading theme="ivory" eyebrow="COMING SOON" title={`${parent.name} Catalogue`} body={`The detailed product catalogue for ${parent.name} is being finalised.`} />
-            <div className="mt-8"><Link href="/contact-us" className="pill pill-brass px-6 py-3 text-[13px] inline-flex items-center gap-2">Request Custom Quote <ArrowRight className="h-4 w-4" /></Link></div>
+
+            {/* SEO description paragraph for Coming Soon categories */}
+            <div className="mt-8 mx-auto max-w-2xl">
+              <p className="font-body text-[15px] leading-relaxed text-ink-muted">
+                Browse our complete range of {parent.name.toLowerCase()} for hotels. LaxRee Amenities manufactures and supplies premium {parent.name.toLowerCase()} across India, with OEM capabilities, custom branding, and bulk pricing for hospitality procurement. While the full catalogue is being finalised, our factory team can quote on any specification — from custom dimensions and finishes to branded packaging and tender-ready documentation. Contact us for custom quotes and bulk pricing.
+              </p>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Link href="/contact-us" className="pill pill-brass px-6 py-3 text-[13px] inline-flex items-center gap-2">Request Custom Quote <ArrowRight className="h-4 w-4" /></Link>
+              <Link href="/products" className="pill pill-ghost-brass px-6 py-3 text-[13px] inline-flex items-center gap-2">Browse All Products <ArrowRight className="h-4 w-4" /></Link>
+            </div>
           </div>
         </section>
       )}

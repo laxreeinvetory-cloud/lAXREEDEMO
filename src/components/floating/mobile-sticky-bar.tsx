@@ -32,7 +32,7 @@ export function MobileStickyBar() {
       <a
         href={`https://wa.me/${SITE.whatsapp}`}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="nofollow noopener noreferrer"
         className="flex flex-1 flex-row items-center justify-center gap-2 py-4 text-white transition-colors duration-200 hover:bg-[#1fb855] active:bg-[#1aa849]"
         aria-label="Chat with LaxRee on WhatsApp"
       >

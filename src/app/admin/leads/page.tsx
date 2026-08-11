@@ -296,7 +296,7 @@ export default function AdminLeadsPage() {
               <a
                 href={`https://wa.me/${selectedLead.phone.replace(/\D/g, "")}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="flex-1 rounded-full bg-[#25D366] py-3 text-center text-sm font-medium text-white"
               >
                 WhatsApp

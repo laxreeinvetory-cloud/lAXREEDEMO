@@ -130,6 +130,7 @@ export function SiteFooter() {
                 href={`https://wa.me/${SITE.whatsapp}`}
                 Icon={MessageCircle}
                 label="WhatsApp Us"
+                rel="nofollow noopener noreferrer"
               />
               <ContactRow
                 href={`mailto:${email}`}
@@ -190,15 +191,18 @@ function ContactRow({
   href,
   Icon,
   label,
+  rel,
 }: {
   href: string;
   Icon: LucideIcon;
   label: string;
+  rel?: string;
 }) {
   return (
     <li>
       <a
         href={href}
+        rel={rel}
         className="font-body text-sm text-sand hover:text-ivory transition-colors inline-flex items-center gap-2.5"
       >
         <Icon

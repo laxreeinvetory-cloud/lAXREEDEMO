@@ -84,7 +84,7 @@ export function WhatsappLauncher() {
                 key={exec.name}
                 href={`https://wa.me/${exec.phone}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 variants={chipVariants}
                 className="glass-on-charcoal group flex items-center gap-2.5 rounded-full py-2 pl-4 pr-3 transition-colors duration-300 hover:border-brass/40"
                 aria-label={`Chat with ${exec.name} on WhatsApp`}
