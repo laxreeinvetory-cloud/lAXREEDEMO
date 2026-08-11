@@ -1403,3 +1403,49 @@ Stage Summary:
 - Zero new lint warnings, zero TypeScript errors. All 3 verification curls return HTTP 200 with non-zero byte payloads.
 - Total new code: 1,799 lines (1,306 API + 493 admin page). Plus 2-line modification to admin-shell.tsx (import + nav item) and 1-line lint fix to admin/images/page.tsx.
 - Static fallbacks preserved: if DB is unreachable, blog + products fall back to getStaticBlogPosts() / getStaticProducts(); leads and site-content counts gracefully degrade to 0/empty.
+
+---
+Task ID: GA-GSC-REPORTS-CACHE-FIX
+Agent: main (orchestrator) + full-stack-developer subagent
+Task: Fix image cache issue, add Google Analytics + Search Console, add monthly report section (PDF + Excel).
+
+Work Log:
+- Fixed image cache issue: useImageOverrides hook now returns { overrides, loaded } so components can suppress the flash of old image before CMS override loads.
+- Restored /api/admin/upload route (was accidentally deleted in a prior commit) — admin image upload was completely broken on production. Both POST (upload) and GET (serve) routes restored from commit 1fcbfb2.
+- Added Google Analytics 4 integration:
+  * New component: src/components/seo/google-analytics.tsx
+  * Only renders if NEXT_PUBLIC_GA_MEASUREMENT_ID env var is set (format: G-XXXXXXXXXX)
+  * Uses next/script with afterInteractive strategy
+  * Added to root layout (src/app/layout.tsx)
+- Added Google Search Console verification:
+  * If NEXT_PUBLIC_GSC_VERIFICATION env var is set, adds google-site-verification meta tag
+  * Configured in layout.tsx metadata.other
+- Created /admin/reports page (493 lines):
+  * Month selector (last 6 months)
+  * Download Excel button → /api/admin/report?format=xlsx
+  * Download PDF/HTML button → /api/admin/report?format=pdf
+  * Live KPI preview from /api/admin/stats
+  * Toast notifications
+- Created /api/admin/report API route (1306 lines):
+  * Gathers: leads, blog posts, products, site content from DB
+  * Excel format: 7 styled sheets (Summary, Leads, Leads by Source, Leads by Status, Leads by Day, Blog Posts, Products). Brass headers, alternating rows, frozen panes.
+  * PDF/HTML format: print-friendly branded report with KPI cards, tables, CSS bar chart, "Print / Save as PDF" button.
+  * Every DB call wrapped in try/catch with static fallbacks.
+- Added "Reports" to admin sidebar (OVERVIEW section, after Dashboard).
+- Lint: 0 errors, tsc: 0 errors (stale .next cache file ignored).
+- Pushed commit 00feb1b, Vercel deploy READY.
+- E2E verified on production:
+  * /admin/reports page: HTTP 200
+  * Excel download: HTTP 200, 22KB, file type "Microsoft Excel 2007+"
+  * PDF/HTML download: HTTP 200, 24KB
+  * Upload API restored: HTTP 405 on GET (expected — only POST allowed)
+  * DB health: ok=True read=True write=True
+  * GA script: not yet in HTML (NEXT_PUBLIC_GA_MEASUREMENT_ID not set on Vercel yet)
+
+Stage Summary:
+- User needs to set 2 env vars on Vercel to activate GA + GSC:
+  1. NEXT_PUBLIC_GA_MEASUREMENT_ID = G-XXXXXXXXXX (from Google Analytics)
+  2. NEXT_PUBLIC_GSC_VERIFICATION = <token> (from Google Search Console)
+- Monthly reports fully working — Excel + PDF download from /admin/reports
+- Image cache flash fixed
+- Upload API restored (admin image upload working again)
