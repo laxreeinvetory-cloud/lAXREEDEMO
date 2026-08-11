@@ -154,6 +154,11 @@ export const viewport: Viewport = {
  * Returns { gaId, gscToken } or empty strings if not configured.
  * The admin sets these from /admin/analytics → saved to CMS key "analytics-config".
  */
+// Force dynamic rendering so the analytics config is fetched on every request
+// (not cached at build time). This ensures GA/GSC tags reflect the latest
+// admin-saved config.
+export const dynamic = "force-dynamic";
+
 async function getAnalyticsConfig(): Promise<{ gaId: string; gscToken: string }> {
   try {
     const row = await db.siteContent.findUnique({
