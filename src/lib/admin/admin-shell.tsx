@@ -26,11 +26,13 @@ import {
   Globe,
   Shield,
   TrendingUp,
+  FileBarChart,
 } from "lucide-react";
 
 const navItems = [
   // ── OVERVIEW ──
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "Reports", href: "/admin/reports", icon: FileBarChart },
   // ── CRM ──
   { label: "Leads CRM", href: "/admin/crm", icon: Database },
   { label: "Leads (Legacy)", href: "/admin/leads", icon: Users },
