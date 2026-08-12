@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Upload, Check, X, Loader2, Image as ImageIcon, ExternalLink } from "lucide-react";
+import { Upload, Check, X, Loader2, Image as ImageIcon, Trash2, ExternalLink } from "lucide-react";
+import { CATEGORIES } from "@/lib/laxree/site-data";
+import { PARENT_FALLBACK_IMAGE, SUBCATEGORY_FALLBACK_IMAGE } from "@/lib/laxree/product-images";
 
 const inputClass = "w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:border-yellow-500 focus:outline-none";
 const labelClass = "block text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5";
@@ -16,9 +18,10 @@ type ImageEntry = {
   fallback: string;
 };
 
-const EDITABLE_IMAGES: ImageEntry[] = [
+// ── Site images (nested CMS keys) ──
+const SITE_IMAGES: ImageEntry[] = [
   // Homepage
-  { key: "hero", label: "Homepage Hero Image", section: "Homepage", cmsKey: "homepage:hero", field: "heroImage", fallback: "/images/products/mini-bar.jpg" },
+  { key: "hero", label: "Homepage Hero Image", section: "Homepage", cmsKey: "homepage:hero", field: "heroImage", fallback: "/images/products/mini-bar.webp" },
   { key: "about", label: "About Us — Factory Image", section: "Homepage", cmsKey: "homepage", field: "aboutUs.image", fallback: "/images/about/factory.jpg" },
   { key: "owner", label: "Owner's Photo", section: "Homepage", cmsKey: "homepage", field: "ownerMessage.image", fallback: "/images/owner-cropped.jpg" },
   { key: "gallery1", label: "Our Presence — Gallery Image 1", section: "Homepage", cmsKey: "homepage", field: "ourPresence.image1", fallback: "/images/gallery/exhibition-1.jpg" },
@@ -31,16 +34,123 @@ const EDITABLE_IMAGES: ImageEntry[] = [
   { key: "about-factory", label: "About Us Page — Factory Image", section: "Pages", cmsKey: "page:about-us", field: "factoryImage", fallback: "/images/about/factory.jpg" },
   { key: "clients-hero", label: "Clients Page — Hero Image", section: "Pages", cmsKey: "page:clients", field: "heroImage", fallback: "" },
   { key: "exp-hero", label: "Experience Center — Hero Image", section: "Pages", cmsKey: "page:experience-center", field: "heroImage", fallback: "" },
+  // Team Members
+  { key: "team-samarth", label: "Team — Samarth Agarwal (Head of Sales)", section: "Team Members", cmsKey: "page:about-us", field: "team.samarth", fallback: "/images/team/samarth-agarwal.webp" },
+  { key: "team-reema", label: "Team — Reema Bajaj (CMO)", section: "Team Members", cmsKey: "page:about-us", field: "team.reema", fallback: "/images/team/reema-bajaj.webp" },
+  { key: "team-bavika", label: "Team — Bavika Agarwal (Head of HR)", section: "Team Members", cmsKey: "page:about-us", field: "team.bavika", fallback: "/images/team/bavika-agarwal.webp" },
+  // Experience Centers
+  { key: "ec-ajmer", label: "Experience Center — Ajmer", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.ajmer", fallback: "/images/experience-centers/ajmer-center.jpeg" },
+  { key: "ec-jaipur", label: "Experience Center — Jaipur", section: "Experience Centers", cmsKey: "page:experience-center", field: "centerImages.jaipur", fallback: "/images/experience-centers/jaipur-center.jpeg" },
 ];
+
+// ── Homepage Categories (8 cards on homepage "Eight Categories" bento) ──
+const HOMEPAGE_CATEGORY_IMAGES: ImageEntry[] = CATEGORIES.map((c) => ({
+  key: `cat-${c.slug}`,
+  label: c.name,
+  section: "Homepage Categories",
+  cmsKey: "images",
+  field: `category:${c.slug}`,
+  fallback: c.image,
+}));
+
+// ── Product Page Categories (8 parent cards on /products page) ──
+const PRODUCT_PARENT_IMAGES: ImageEntry[] = Object.entries(PARENT_FALLBACK_IMAGE).map(([slug, img]) => ({
+  key: `parent-${slug}`,
+  label: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+  section: "Product Page Categories",
+  cmsKey: "images",
+  field: `parent:${slug}`,
+  fallback: img,
+}));
+
+// ── Product Sub-Categories ("Browse by Type" cards) ──
+function slugToLabel(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => {
+      const upper = ["rfid", "frp", "pod", "dnd"];
+      if (upper.includes(w)) return w.toUpperCase();
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join(" ");
+}
+
+const PRODUCT_SUBCATEGORY_IMAGES: ImageEntry[] = Object.entries(SUBCATEGORY_FALLBACK_IMAGE).map(([slug, img]) => ({
+  key: `sub-${slug}`,
+  label: slugToLabel(slug),
+  section: "Product Sub-Categories",
+  cmsKey: "images",
+  field: `subcategory:${slug}`,
+  fallback: img,
+}));
+
+const EDITABLE_IMAGES: ImageEntry[] = [
+  ...SITE_IMAGES,
+  ...HOMEPAGE_CATEGORY_IMAGES,
+  ...PRODUCT_PARENT_IMAGES,
+  ...PRODUCT_SUBCATEGORY_IMAGES,
+];
+
+// ── Helpers for flat "images" CMS key vs nested dot-paths ──
+function isFlatImagesKey(img: ImageEntry): boolean {
+  return img.cmsKey === "images";
+}
+
+function readField(section: unknown, img: ImageEntry): string {
+  if (isFlatImagesKey(img)) {
+    const map = section as Record<string, unknown>;
+    const val = map?.[img.field];
+    return typeof val === "string" ? val : "";
+  }
+  const parts = img.field.split(".");
+  let val: unknown = section;
+  for (const p of parts) {
+    val = (val as Record<string, unknown>)?.[p];
+  }
+  return typeof val === "string" ? val : "";
+}
+
+function setField(current: Record<string, unknown>, img: ImageEntry, value: string): void {
+  if (isFlatImagesKey(img)) {
+    current[img.field] = value;
+    return;
+  }
+  const parts = img.field.split(".");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let obj: any = current;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!obj[parts[i]]) obj[parts[i]] = {};
+    obj = obj[parts[i]];
+  }
+  obj[parts[parts.length - 1]] = value;
+}
+
+function deleteField(current: Record<string, unknown>, img: ImageEntry): boolean {
+  if (isFlatImagesKey(img)) {
+    if (!(img.field in current)) return false;
+    delete current[img.field];
+    return true;
+  }
+  const parts = img.field.split(".");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let obj: any = current;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!obj || typeof obj !== "object" || !(parts[i] in obj)) return false;
+    obj = obj[parts[i]];
+  }
+  if (!obj || typeof obj !== "object" || !(parts[parts.length - 1] in obj)) return false;
+  delete obj[parts[parts.length - 1]];
+  return true;
+}
 
 export default function AdminImagesPage() {
   const [values, setValues] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState<string | null>(null);
   const [saving, setSaving] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const [toast, setToast] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
 
   useEffect(() => {
-    // Fetch all CMS content at once
     fetch("/api/admin/cms", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
@@ -49,13 +159,8 @@ export default function AdminImagesPage() {
           for (const img of EDITABLE_IMAGES) {
             const section = data.content[img.cmsKey];
             if (section) {
-              // Navigate nested field (e.g., "aboutUs.image")
-              const parts = img.field.split(".");
-              let val: any = section;
-              for (const p of parts) {
-                val = val?.[p];
-              }
-              if (typeof val === "string" && val) vals[img.key] = val;
+              const val = readField(section, img);
+              if (val) vals[img.key] = val;
             }
           }
           setValues(vals);
@@ -84,7 +189,6 @@ export default function AdminImagesPage() {
       }
       const data = await res.json();
       if (data.ok) {
-        // Save to CMS immediately
         await saveToCMS(img, data.imageUrl);
         setValues({ ...values, [img.key]: data.imageUrl });
       } else {
@@ -99,21 +203,10 @@ export default function AdminImagesPage() {
   const saveToCMS = async (img: ImageEntry, imageUrl: string) => {
     setSaving(img.key);
     try {
-      // Fetch current CMS value
       const getRes = await fetch(`/api/admin/cms?key=${img.cmsKey}`, { cache: "no-store" });
       const getData = await getRes.json();
-      const current: any = getData.value || {};
-
-      // Set nested field
-      const parts = img.field.split(".");
-      let obj = current;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (!obj[parts[i]]) obj[parts[i]] = {};
-        obj = obj[parts[i]];
-      }
-      obj[parts[parts.length - 1]] = imageUrl;
-
-      // Save back
+      const current: Record<string, unknown> = getData.value || {};
+      setField(current, img, imageUrl);
       const putRes = await fetch("/api/admin/cms", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -129,6 +222,46 @@ export default function AdminImagesPage() {
       showToast("err", "Network error saving");
     }
     setSaving(null);
+  };
+
+  const deleteFromCMS = async (img: ImageEntry) => {
+    const confirmed = window.confirm(
+      "Remove this image override? The site will revert to the default image."
+    );
+    if (!confirmed) return;
+
+    setDeleting(img.key);
+    try {
+      const getRes = await fetch(`/api/admin/cms?key=${img.cmsKey}`, { cache: "no-store" });
+      const getData = await getRes.json();
+      const current: Record<string, unknown> = getData.value || {};
+      const removed = deleteField(current, img);
+      if (!removed) {
+        const next = { ...values };
+        delete next[img.key];
+        setValues(next);
+        showToast("ok", "This image is already using its default — no custom override to remove.");
+        setDeleting(null);
+        return;
+      }
+      const putRes = await fetch("/api/admin/cms", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: img.cmsKey, value: current }),
+      });
+      const putData = await putRes.json();
+      if (putData.ok) {
+        const next = { ...values };
+        delete next[img.key];
+        setValues(next);
+        showToast("ok", "Image override removed — reverted to default");
+      } else {
+        showToast("err", "Failed to remove override");
+      }
+    } catch {
+      showToast("err", "Network error removing override");
+    }
+    setDeleting(null);
   };
 
   // Group by section
@@ -153,6 +286,8 @@ export default function AdminImagesPage() {
               const current = values[img.key] || img.fallback;
               const isUploading = uploading === img.key;
               const isSaving = saving === img.key;
+              const isDeleting = deleting === img.key;
+              const hasOverride = Boolean(values[img.key]);
               return (
                 <div key={img.key} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
                   {/* Image preview */}
@@ -163,9 +298,15 @@ export default function AdminImagesPage() {
                     ) : (
                       <ImageIcon className="h-10 w-10 text-gray-700" />
                     )}
-                    {(isUploading || isSaving) && (
+                    {(isUploading || isSaving || isDeleting) && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                         <Loader2 className="h-6 w-6 text-yellow-500 animate-spin" />
+                      </div>
+                    )}
+                    {/* Override/Default badge */}
+                    {hasOverride && (
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-yellow-500 text-black text-[9px] font-bold uppercase tracking-wider">
+                        Override
                       </div>
                     )}
                   </div>
@@ -185,8 +326,18 @@ export default function AdminImagesPage() {
                         onClick={() => saveToCMS(img, values[img.key] || img.fallback)}
                         disabled={isSaving}
                         className="shrink-0 rounded-lg bg-white/10 text-white px-2 py-1.5 text-xs hover:bg-white/20 border border-white/15 disabled:opacity-40"
+                        title="Save"
                       >
                         {isSaving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteFromCMS(img)}
+                        disabled={isDeleting}
+                        className="shrink-0 rounded-lg bg-red-500/10 text-red-400 px-2 py-1.5 text-xs hover:bg-red-500/20 border border-red-500/20 disabled:opacity-40"
+                        title="Delete override"
+                      >
+                        {isDeleting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
                       </button>
                     </div>
                     <label className="block">
