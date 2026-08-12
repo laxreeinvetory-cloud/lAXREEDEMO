@@ -2226,3 +2226,32 @@ What user needs to re-do:
 1. Re-enter GA Measurement ID in /admin/analytics
 2. Re-enter GSC verification token in /admin/analytics
 3. Re-upload any custom images via /admin/images (if they had changed any)
+
+---
+Task ID: RESTORE-ADMIN-IMAGES
+Agent: main (orchestrator)
+Task: Restore all admin/images sections (were lost in rebase) + fix analytics config.
+
+Work Log:
+- Found that admin/images page was missing ALL sections except Homepage + Pages
+  (Team Members, Experience Centers, Homepage Categories, Product Page Categories,
+  Product Sub-Categories were all missing after a git rebase)
+- Restored full admin/images page with ALL 7 sections:
+  1. Homepage Images (8 cards)
+  2. Pages Images (4 cards)
+  3. Team Members Images (3 cards)
+  4. Experience Centers Images (2 cards)
+  5. Homepage Categories Images (8 cards)
+  6. Product Page Categories Images (8 cards)
+  7. Product Sub-Categories Images (48 cards)
+  Total: 81 image cards with 81 delete buttons
+- Added helpers: readField, setField, deleteField, isFlatImagesKey
+- Delete button on every card with confirm dialog + override/default badge
+- Fallback paths updated to .webp for converted images
+- Lint: 0 errors, tsc: 0 errors, build: 112 static pages
+- E2E verified on production:
+  * /admin/images: HTTP 200 ✅
+  * All 7 section headings present (verified via JS) ✅
+  * 81 image cards with 81 delete buttons ✅
+  * CSS: proper dark theme ✅
+- Analytics config: was lost in DB switch. User needs to re-enter GA ID + GSC token.
