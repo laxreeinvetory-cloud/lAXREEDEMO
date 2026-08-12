@@ -4,7 +4,6 @@ import "./globals.css";
 import { EnquiryProvider } from "@/components/providers/enquiry-provider";
 import { CartProvider } from "@/components/providers/cart-provider";
 import { ConditionalChrome } from "@/components/providers/conditional-chrome";
-import { AnalyticsLoader } from "@/components/seo/analytics-loader";
 
 /* ─────────────────────────────────────────────────────────────
    Fonts — display: "swap" for fast text render
@@ -12,7 +11,8 @@ import { AnalyticsLoader } from "@/components/seo/analytics-loader";
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
   preload: true,
 });
@@ -36,7 +36,7 @@ const plexMono = IBM_Plex_Mono({
 /* ─────────────────────────────────────────────────────────────
    SEO Metadata
    ───────────────────────────────────────────────────────────── */
-const BASE_URL = "https://www.laxree.com";
+const BASE_URL = "https://l-axreedemo.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     template: "%s | LaxRee Amenities",
   },
   description:
-    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, India's largest Hotel Supplier Experience Center. 11+ years, 700+ SKUs, 7+ certifications.",
+    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, Ajmer's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
   keywords: [
     "hotel supplies India",
     "hotel amenities manufacturer India",
@@ -98,7 +98,6 @@ export const metadata: Metadata = {
     languages: {
       "en-IN": BASE_URL,
       "en": BASE_URL,
-      "x-default": BASE_URL,
     },
   },
   icons: {
@@ -136,9 +135,6 @@ export const metadata: Metadata = {
     "geo.placename": "Ajmer, Rajasthan, India",
     "geo.position": "26.4499;74.6399",
     "ICBM": "26.4499, 74.6399",
-    ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
-      ? { "google-site-verification": process.env.NEXT_PUBLIC_GSC_VERIFICATION }
-      : {}),
   },
 };
 
@@ -146,14 +142,11 @@ export const viewport: Viewport = {
   themeColor: "#C6A15B",
   width: "device-width",
   initialScale: 1,
-  // Do NOT set maximumScale — it hurts accessibility (users can't zoom in)
-  // and lowers the Lighthouse accessibility score.
+  maximumScale: 5,
 };
 
 /* ─────────────────────────────────────────────────────────────
-   Root Layout — sync (non-async) to preserve static CSS prerendering.
-   GA/GSC config is loaded client-side via AnalyticsLoader (from CMS).
-   For GSC verification, set NEXT_PUBLIC_GSC_VERIFICATION env var on Vercel.
+   Root Layout
    ───────────────────────────────────────────────────────────── */
 export default function RootLayout({
   children,
@@ -165,12 +158,9 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
-        {/* Analytics (GA4 + GSC) — loaded client-side from CMS config */}
-        <AnalyticsLoader />
-
         {/* SEO: Preconnect to external domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://sketchfab.com" />
+        <link rel="dns-prefetch" href="https://sketchfab.com" />
 
         {/* SEO: Structured data — Organization + LocalBusiness + WebSite */}
         <script
@@ -182,8 +172,8 @@ export default function RootLayout({
               name: "LaxRee Amenities",
               url: BASE_URL,
               logo: `${BASE_URL}/images/laxree-logo.webp`,
-              description: "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. India's largest Hotel Supplier Experience Center. 11+ years, 700+ SKUs, 7+ certifications.",
-              foundingDate: "2020",
+              description: "OEM manufacturer of hotel amenities, furniture, linen, roofing and dome structures. Ajmer's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
+              foundingDate: "2015",
               numberOfEmployees: "50+",
               address: {
                 "@type": "PostalAddress",
@@ -232,7 +222,7 @@ export default function RootLayout({
                 latitude: 26.4499,
                 longitude: 74.6399,
               },
-              openingHours: "Mo-Sa 10:00-19:00",
+              openingHours: "Mo-Sa 09:30-18:30",
               areaServed: "IN",
             }),
           }}

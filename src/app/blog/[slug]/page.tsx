@@ -13,105 +13,11 @@ import {
 } from "lucide-react";
 import { PageCTA, GlassCard, FadeIn } from "@/components/site/page-primitives";
 import { BLOG_POSTS_FULL } from "@/lib/laxree/blog-content";
-import { BLOG_POSTS, SITE, type BlogPostFull } from "@/lib/laxree/site-data";
-import { db } from "@/lib/db";
+import { SITE } from "@/lib/laxree/site-data";
 
-/* Pre-generate the known slugs. dynamicParams = true (default) lets
-   admin-created DB posts render on-demand at /blog/<slug>. */
+/* Pre-generate the 3 known slugs */
 export function generateStaticParams() {
   return BLOG_POSTS_FULL.map((p) => ({ slug: p.slug }));
-}
-
-export const dynamic = "force-dynamic";
-
-// Fetch a blog post by slug. Tries the hardcoded BLOG_POSTS_FULL first
-// (these have rich, hand-written content). If not found, falls back to
-// the database (admin-created posts). Returns null if not found anywhere.
-async function getPost(slug: string): Promise<BlogPostFull | null> {
-  // 1. Hardcoded rich-content posts
-  const staticPost = BLOG_POSTS_FULL.find((p) => p.slug === slug);
-  if (staticPost) return staticPost;
-
-  // 2. Database posts (admin-created)
-  try {
-    const row = await db.blogPost.findUnique({ where: { slug } });
-    if (!row) return null;
-
-    // Parse content JSON (stored as string in DB)
-    let contentSections: BlogPostFull["content"] = [];
-    try {
-      const parsed = JSON.parse(row.content);
-      if (Array.isArray(parsed)) {
-        contentSections = parsed.map((s: { type?: string; text?: string; heading?: string; paragraphs?: string[] }) => {
-          // Support both the admin editor's flat format ({type, text}) and
-          // the rich format ({heading, paragraphs: [...]}) used by BLOG_POSTS_FULL.
-          if (s.paragraphs && Array.isArray(s.paragraphs)) {
-            return { heading: s.heading, paragraphs: s.paragraphs };
-          }
-          // Flat format: { type: "paragraph", text: "..." }
-          if (s.text) {
-            return { paragraphs: [s.text] };
-          }
-          return { paragraphs: [] };
-        });
-      }
-    } catch {
-      contentSections = [];
-    }
-
-    // If no content sections, use the excerpt as a single paragraph so the
-    // article body is never empty.
-    if (contentSections.length === 0 && row.excerpt) {
-      contentSections = [{ paragraphs: [row.excerpt] }];
-    }
-
-    // Fetch SEO fields from SiteContent if present
-    let seoTitle = "";
-    let metaDescription = "";
-    let keywords = "";
-    let canonicalUrl = "";
-    let ogImage = "";
-    let faqJsonLd = "";
-    try {
-      const seoRow = await db.siteContent.findUnique({
-        where: { key: `blog:seo:${slug}` },
-      });
-      if (seoRow) {
-        const seo = JSON.parse(seoRow.value);
-        seoTitle = seo.seoTitle || "";
-        metaDescription = seo.metaDescription || "";
-        keywords = seo.keywords || "";
-        canonicalUrl = seo.canonicalUrl || "";
-        ogImage = seo.ogImage || "";
-        faqJsonLd = seo.faqJsonLd || "";
-      }
-    } catch {
-      // SEO fields are optional
-    }
-
-    return {
-      slug: row.slug,
-      title: row.title,
-      category: row.category,
-      excerpt: row.excerpt,
-      image: row.image,
-      author: row.author,
-      authorRole: row.authorRole,
-      date: row.date,
-      readTime: row.readTime,
-      content: contentSections,
-      // SEO fields
-      seoTitle,
-      metaDescription,
-      keywords,
-      canonicalUrl,
-      ogImage,
-      faqJsonLd,
-    } as BlogPostFull;
-  } catch (err) {
-    console.error("[BLOG DETAIL DB ERROR]", err);
-    return null;
-  }
 }
 
 /* SEO metadata */
@@ -121,43 +27,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = BLOG_POSTS_FULL.find((p) => p.slug === slug);
   if (!post) return {};
-
-  const shareUrl = `https://www.laxree.com/blog/${post.slug}`;
-
   return {
-    title: post.seoTitle
-      ? { absolute: post.seoTitle }
-      : `${post.title} — LaxRee Amenities Blog`,
-    description: post.metaDescription || post.excerpt,
-    keywords: post.keywords ? post.keywords.split(",").map((k: string) => k.trim()) : undefined,
-    alternates: {
-      canonical: post.canonicalUrl || shareUrl,
-    },
+    title: `${post.title} — LaxRee Amenities Blog`,
+    description: post.excerpt,
     openGraph: {
-      title: post.seoTitle || post.title,
-      description: post.metaDescription || post.excerpt,
-      images: [{ url: post.ogImage || post.image }],
+      title: post.title,
+      description: post.excerpt,
+      images: [{ url: post.image }],
       type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.seoTitle || post.title,
-      description: post.metaDescription || post.excerpt,
-      images: [post.ogImage || post.image],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
     },
   };
 }
@@ -178,23 +57,22 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = BLOG_POSTS_FULL.find((p) => p.slug === slug);
   if (!post) notFound();
 
-  // Related = the other posts (exclude current). Mix static posts with any
-  // DB posts so admin-created posts also show related content.
-  const related = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  // Related = the other posts (exclude current)
+  const related = BLOG_POSTS_FULL.filter((p) => p.slug !== post.slug);
 
   // SEO: Canonical + share URL
-  const shareUrl = `https://www.laxree.com/blog/${post.slug}`;
+  const shareUrl = `https://l-axreedemo.vercel.app/blog/${post.slug}`;
 
   // SEO: Article structured data (JSON-LD)
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: post.seoTitle || post.title,
-    description: post.metaDescription || post.excerpt,
-    image: `https://www.laxree.com${post.ogImage || post.image}`,
+    headline: post.title,
+    description: post.excerpt,
+    image: `https://l-axreedemo.vercel.app${post.image}`,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -207,7 +85,7 @@ export default async function BlogPostPage({
       name: "LaxRee Amenities",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.laxree.com/images/laxree-logo.webp",
+        url: "https://l-axreedemo.vercel.app/images/laxree-logo.webp",
       },
     },
     mainEntityOfPage: {
@@ -221,8 +99,8 @@ export default async function BlogPostPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.laxree.com" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.laxree.com/blog" },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://l-axreedemo.vercel.app" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://l-axreedemo.vercel.app/blog" },
       { "@type": "ListItem", position: 3, name: post.title, item: shareUrl },
     ],
   };
@@ -231,40 +109,23 @@ export default async function BlogPostPage({
       label: "Share on Facebook",
       href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
       Icon: Facebook,
-      rel: "noopener noreferrer",
     },
     {
       label: "Share on X",
       href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`,
       Icon: Twitter,
-      rel: "noopener noreferrer",
     },
     {
       label: "Share on LinkedIn",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
       Icon: Linkedin,
-      rel: "noopener noreferrer",
     },
     {
       label: "Share on WhatsApp",
       href: `https://wa.me/?text=${encodeURIComponent(`${post.title} ${shareUrl}`)}`,
       Icon: MessageCircle,
-      rel: "nofollow noopener noreferrer",
     },
   ];
-
-  // SEO: Parse FAQ JSON-LD if present
-  let faqJsonLd: Record<string, unknown> | null = null;
-  if (post.faqJsonLd) {
-    try {
-      faqJsonLd = JSON.parse(post.faqJsonLd);
-    } catch {
-      faqJsonLd = null;
-    }
-  }
-
-  // SEO: Keywords as meta tags
-  const keywordStr = post.keywords || "";
 
   return (
     <>
@@ -277,15 +138,6 @@ export default async function BlogPostPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-      {keywordStr && (
-        <meta name="keywords" content={keywordStr} />
-      )}
 
       {/* ─────────────────────────────────────────────────────
           Section 1 — Article hero (charcoal)
@@ -505,12 +357,12 @@ export default async function BlogPostPage({
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                {shareLinks.map(({ label, href, Icon, rel }) => (
+                {shareLinks.map(({ label, href, Icon }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
-                    rel={rel}
+                    rel="noopener noreferrer"
                     aria-label={label}
                     className="flex items-center justify-center w-11 h-11 rounded-full border border-ink/15 text-ink-muted transition-all hover:border-brass hover:text-brass hover:-translate-y-0.5"
                   >
@@ -523,7 +375,7 @@ export default async function BlogPostPage({
                 <a
                   href={`https://wa.me/${SITE.whatsapp}`}
                   target="_blank"
-                  rel="nofollow noopener noreferrer"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-wider text-brass hover:text-brass-light transition-colors"
                 >
                   Or talk to our team on WhatsApp
@@ -586,8 +438,7 @@ export default async function BlogPostPage({
         title="Need help implementing these ideas?"
         subtitle="Our factory team can manufacture to your spec."
         primaryLabel="Get a Quotation"
-        secondaryLabel="Call +91 92516 83662"
-        secondaryHref="tel:+919251683662"
+        secondaryLabel="Call 1800 120 7001"
       />
     </>
   );
