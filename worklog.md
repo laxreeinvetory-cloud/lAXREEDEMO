@@ -2187,3 +2187,42 @@ What user should know:
 - When Neon quota resets, old leads may become accessible (but we can't guarantee)
 - All NEW leads from now on will save correctly to the new DB
 - The admin dashboard "Total Leads" count is CORRECT — it reflects the new DB
+
+---
+Task ID: FULL-ADMIN-AUDIT-RECOVERY
+Agent: main (orchestrator)
+Task: User reports updates lost. Full admin audit + try to recover old DB data.
+
+Old DB Recovery Attempt:
+- Tried with channel_binding=require, non-pooler endpoint, raw pg connection
+- ALL FAILED — Neon error: "Your project has exceeded the data transfer quota" (Code: 53000)
+- Old DB data (leads, image overrides, analytics config) is INACCESSIBLE
+- Data is NOT deleted — it's there but Neon blocks all access until quota resets or plan upgraded
+
+Full Admin Audit Results:
+1. ✅ DB Health: ok=True, read=True, write=True
+2. ✅ Blog Posts: 12 (all present)
+3. ❌ Leads: 0 (old leads stuck in blocked DB)
+4. ✅ Stats: working correctly (totalLeads=0, blogPosts=12)
+5. ❌ Image Overrides: 0 (were 22 in old DB — LOST)
+6. ✅ Client Logos: using defaults (fine)
+7. ❌ Analytics Config: NOT SET (GA/GSC config LOST)
+8. ✅ Homepage content: using defaults (fine)
+9. ✅ Blog deleted-slugs: cleared (all 12 posts show)
+10. ✅ All 13 pages: HTTP 200
+
+Fixes Applied:
+- Cleared blog-deleted-slugs list
+- Verified lead form saves correctly (test lead → saved → deleted)
+- Verified blog CRUD works (create/edit/delete)
+
+What's LOST (in old blocked DB, unrecoverable):
+- Old leads (yesterday/morning enquiries)
+- 22 image overrides (custom images user uploaded via admin)
+- Analytics config (GA ID + GSC token)
+- Any uploaded images (stored as base64 in SiteContent)
+
+What user needs to re-do:
+1. Re-enter GA Measurement ID in /admin/analytics
+2. Re-enter GSC verification token in /admin/analytics
+3. Re-upload any custom images via /admin/images (if they had changed any)
