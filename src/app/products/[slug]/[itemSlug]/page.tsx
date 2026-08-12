@@ -199,7 +199,7 @@ export default async function ItemPage({
               const pChildren = getCategoriesByParent(p.slug);
               const otherImage =
                 PARENT_FALLBACK_IMAGE[p.slug] ||
-                "/images/product-catalogue/coming-soon.jpg";
+                "/images/product-catalogue/coming-soon.webp";
               return (
                 <Link key={p.slug} href={`/products/${p.slug}`} className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">

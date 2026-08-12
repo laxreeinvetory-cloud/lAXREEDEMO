@@ -29,7 +29,7 @@ const CENTERS = [
     description:
       "Located at our manufacturing headquarters in Ajmer, this experience center showcases our complete product range alongside the factory floor. See how products are made, meet our design team, and experience the quality firsthand.",
     highlight: false,
-    image: "/images/experience-centers/ajmer-center.jpeg",
+    image: "/images/experience-centers/ajmer-center.webp",
     stats: [
       { label: "Showroom Area", value: "20,000+ sq ft" },
       { label: "Factory Tour", value: "Available" },
@@ -44,7 +44,7 @@ const CENTERS = [
     description:
       "Our Jaipur experience center brings the full LaxRee range to Rajasthan's capital. Explore room setups, test minibars, compare furniture finishes, and get expert consultation for your hospitality project.",
     highlight: false,
-    image: "/images/experience-centers/jaipur-center.jpeg",
+    image: "/images/experience-centers/jaipur-center.webp",
     stats: [
       { label: "Showroom Area", value: "15,000+ sq ft" },
       { label: "Room Setups", value: "5 Complete Rooms" },

@@ -192,7 +192,7 @@ function BlogEditor({
     title: post?.title || "",
     category: post?.category || "Procurement Guide",
     excerpt: post?.excerpt || "",
-    image: post?.image || "/images/blog/blog-1.jpg",
+    image: post?.image || "/images/blog/blog-1.webp",
     author: post?.author || "LaxRee Editorial Team",
     authorRole: post?.authorRole || "Hospitality Procurement Insights",
     date: post?.date || new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),
@@ -268,7 +268,7 @@ function BlogEditor({
               </div>
               <div className="col-span-2">
                 <label className={labelClass}>Cover Image URL</label>
-                <input className={inputClass} value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="/images/blog/blog-1.jpg" />
+                <input className={inputClass} value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="/images/blog/blog-1.webp" />
               </div>
               <div>
                 <label className={labelClass}>Author Name</label>

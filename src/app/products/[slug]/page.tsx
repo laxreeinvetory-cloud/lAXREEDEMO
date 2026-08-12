@@ -68,7 +68,7 @@ function CategoryPageInner() {
           const withImage = fallback
             ? null  // fallback takes priority — don't use DB image
             : childProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
-          images[child.slug] = { image: fallback || withImage?.image || "/images/product-catalogue/coming-soon.jpg", count: childProducts.length };
+          images[child.slug] = { image: fallback || withImage?.image || "/images/product-catalogue/coming-soon.webp", count: childProducts.length };
         }
         setItemImages(images);
         const otherImgs: Record<string, { image: string; count: number }> = {};
@@ -80,7 +80,7 @@ function CategoryPageInner() {
           const withImage = fallback
             ? null
             : otherProducts.find((p: { image: string }) => !p.image.includes("coming-soon"));
-          otherImgs[other.slug] = { image: fallback || withImage?.image || "/images/product-catalogue/coming-soon.jpg", count: otherProducts.length };
+          otherImgs[other.slug] = { image: fallback || withImage?.image || "/images/product-catalogue/coming-soon.webp", count: otherProducts.length };
         }
         setOtherImages(otherImgs);
       })
@@ -122,7 +122,7 @@ function CategoryPageInner() {
                   cmsOverrides[`subcategory:${item.slug}`] ||
                   preview?.image ||
                   SUBCATEGORY_FALLBACK_IMAGE[item.slug] ||
-                  "/images/product-catalogue/coming-soon.jpg";
+                  "/images/product-catalogue/coming-soon.webp";
                 return (
                   <FadeIn key={item.slug} delay={i * 0.06}>
                     <Link
@@ -199,7 +199,7 @@ function CategoryPageInner() {
                 cmsOverrides[`parent:${p.slug}`] ||
                 preview?.image ||
                 PARENT_FALLBACK_IMAGE[p.slug] ||
-                "/images/product-catalogue/coming-soon.jpg";
+                "/images/product-catalogue/coming-soon.webp";
               return (
                 <Link key={p.slug} href={`/products/${p.slug}`} className="group glass-on-charcoal rounded-[20px] overflow-hidden transition-all duration-300 hover:border-brass/40">
                   <div className="aspect-[4/3] w-full overflow-hidden bg-charcoal">
