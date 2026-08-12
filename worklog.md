@@ -2119,3 +2119,34 @@ The Vercel token has expired. User needs to update DATABASE_URL on Vercel:
 NOTE: Image overrides saved via admin (22 overrides) were in the old DB which is now blocked.
 The user will need to re-upload any custom images they changed via admin.
 All static/default images are intact (not affected by DB switch).
+
+---
+Task ID: NEW-NEON-DB-LIVE
+Agent: main (orchestrator)
+Task: User provided new Vercel token. Update DATABASE_URL on Vercel to new Neon DB, deploy, verify everything.
+
+Work Log:
+- Verified new Vercel token works (user: laxreeinvetory@gmail.com)
+- Found project: l-axreedemo (prj_sq1GtSgzzc7WdivsQ3b4SCMK3JIw)
+- Deleted 3 old DATABASE_URL env vars (production, preview, development)
+- Added new DATABASE_URL to all 3 environments:
+  postgresql://neondb_owner:npg_hR2VELmp5awy@ep-rapid-snow-axzl7ps7-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require
+- Triggered production redeploy → READY in 75 seconds
+- Full E2E verification on production:
+  * DB Health: ok=True, mode=postgres, read=True, write=True ✅
+  * Blog posts: 12 ✅
+  * Blog create: ok=True ✅
+  * Blog delete: ok=True ✅
+  * CMS save: ok=True ✅
+  * CMS read: ok=True ✅
+  * Lead form: ok=True, dbSaved=True ✅ (leads now persist to DB!)
+  * All 11 pages: HTTP 200 ✅
+  * CSS: VLM confirmed "proper dark theme, branded gold and white colors, hero image loading" ✅
+
+Stage Summary:
+- New Neon DB (ep-rapid-snow) is LIVE and fully working
+- All admin features operational: blog CRUD, CMS, leads, image manager
+- No quota errors — fresh 1GB monthly transfer limit
+- 12 blog posts seeded
+- All pages loading correctly with proper CSS
+- Lead form now saves to DB (was silently dropping leads when old DB was blocked)
