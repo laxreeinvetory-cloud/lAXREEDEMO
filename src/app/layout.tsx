@@ -41,11 +41,11 @@ const BASE_URL = "https://l-axreedemo.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "LaxRee Amenities — Hotel Supplies Redefined | OEM Manufacturer in Ajmer",
+    default: "Hotel Supplies & Amenities Manufacturer India | LaxRee",
     template: "%s | LaxRee Amenities",
   },
   description:
-    "Premium hotel & resort amenities, furniture, linen, roofing and lighting — manufactured and supplied pan-India by LaxRee, Ajmer's largest hospitality exhibition centre. 11+ years, 700+ SKUs, 7+ certifications.",
+    "LaxRee is a leading hotel supplies manufacturer in India - amenities, furniture, linen & more for hotels & resorts. 700+ SKUs, pan-India delivery.",
   keywords: [
     "hotel supplies India",
     "hotel amenities manufacturer India",

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cart & Quotation Request — LaxRee Amenities",
-  description: "Review your selected hotel supply products and submit for quotation. Get professional PDF and Excel quotation sent directly to our sales team via WhatsApp.",
+  title: { absolute: "Your Cart | LaxRee Amenities" },
+  description: "Review your selected hotel amenities & supplies before checkout with LaxRee, India's trusted hotel products supplier.",
   keywords: ["hotel supplies quotation", "LaxRee cart", "hotel products quote request"],
   alternates: { canonical: "https://www.laxree.com/cart" },
   robots: { index: false, follow: false },

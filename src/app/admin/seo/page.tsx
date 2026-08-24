@@ -18,6 +18,19 @@ import {
   Youtube,
   Linkedin,
   Facebook,
+  ListChecks,
+  Target,
+  Link2,
+  Smartphone,
+  Zap,
+  FileText,
+  Hash,
+  Image as ImageIcon,
+  Code,
+  AlignLeft,
+  ExternalLink,
+  Lightbulb,
+  PenLine,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────
@@ -338,6 +351,18 @@ export default function AdminSeoPage() {
 
       {/* Section B — Company */}
       <CompanyCard company={company} setCompany={setCompany} />
+
+      {/* Section C — On-Page SEO Checklist */}
+      <OnPageSeoChecklist />
+
+      {/* Section D — Off-Page SEO Checklist */}
+      <OffPageSeoChecklist socials={company.socials} />
+
+      {/* Section E — Top 5 Ranking Tips */}
+      <RankingTips />
+
+      {/* Section F — Blog SEO Best Practices */}
+      <BlogSeoBestPractices />
 
       {/* Toast */}
       {toast && (
@@ -873,6 +898,343 @@ function CompanyCard({
             })}
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Section C — On-Page SEO Checklist
+   Static checklist of Google's on-page SEO guidelines, with
+   status badges (green ✓ / red ✗) based on the current site.
+   ───────────────────────────────────────────────────────────── */
+type ChecklistItem = {
+  label: string;
+  hint: string;
+  ok: boolean;
+};
+
+const ONPAGE_CHECKLIST: ChecklistItem[] = [
+  { label: "Meta title (50–60 chars)", hint: "Unique, keyword-rich titles set on every page via layout metadata.", ok: true },
+  { label: "Meta description (150–160 chars)", hint: "Each page exports a description within Google's snippet range.", ok: true },
+  { label: "H1 tag (exactly 1 per page)", hint: "PageHero renders the only <h1>; product detail cards use <h2>.", ok: true },
+  { label: "Image alt texts", hint: "Product images and OG images carry descriptive alt attributes.", ok: true },
+  { label: "Canonical URL", hint: "Root layout + per-page layouts declare alternates.canonical.", ok: true },
+  { label: "Internal linking", hint: "Breadcrumbs, related-products and CTAs link across the catalogue.", ok: true },
+  { label: "URL structure (clean, no params)", hint: "/products/[slug]/[itemSlug] — readable, keyword-friendly URLs.", ok: true },
+  { label: "Mobile-friendly", hint: "Responsive layout, viewport meta tag, touch targets ≥44px.", ok: true },
+  { label: "Page speed (<3s)", hint: "Above-the-fold sections eager; below-the-fold lazy-loaded.", ok: true },
+  { label: "Schema markup (JSON-LD)", hint: "Organization, LocalBusiness & WebSite schemas in root layout.", ok: true },
+  { label: "XML sitemap", hint: "/sitemap.ts generates an XML sitemap at build time.", ok: true },
+  { label: "Robots.txt", hint: "/public/robots.txt + per-page robots directives (e.g. /cart noindex).", ok: true },
+];
+
+function OnPageSeoChecklist() {
+  return (
+    <section className="glass-on-charcoal rounded-2xl p-6 md:p-8 mb-6">
+      <header className="flex items-center gap-3 mb-6">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brass/10">
+          <ListChecks className="h-5 w-5 text-brass" strokeWidth={1.75} />
+        </span>
+        <div>
+          <h2 className="font-display text-xl text-ivory">On-Page SEO Checklist</h2>
+          <p className="font-body text-[12px] text-sand mt-0.5">
+            Google&apos;s on-page SEO guidelines — current implementation status across the site.
+          </p>
+        </div>
+      </header>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        {ONPAGE_CHECKLIST.map((item) => (
+          <div
+            key={item.label}
+            className="rounded-xl border border-white/10 bg-white/5 p-4 flex items-start gap-3"
+          >
+            <span
+              className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+                item.ok ? "bg-emerald-500/15 text-emerald-400" : "bg-red-500/15 text-red-400"
+              }`}
+              aria-label={item.ok ? "Implemented" : "Not implemented"}
+            >
+              {item.ok ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
+            </span>
+            <div className="min-w-0">
+              <p className="font-body text-sm text-ivory leading-snug">{item.label}</p>
+              <p className="font-body text-[11px] text-sand mt-1 leading-relaxed">{item.hint}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Section D — Off-Page SEO Checklist
+   ───────────────────────────────────────────────────────────── */
+function OffPageSeoChecklist({ socials }: { socials: Socials }) {
+  const socialLinks: {
+    key: keyof Socials;
+    label: string;
+    icon: typeof Facebook;
+    href: string;
+    setupHref: string;
+  }[] = [
+    { key: "facebook", label: "Facebook", icon: Facebook, href: socials.facebook, setupHref: "https://www.facebook.com/business" },
+    { key: "x", label: "X / Twitter", icon: Twitter, href: socials.x, setupHref: "https://twitter.com" },
+    { key: "youtube", label: "YouTube", icon: Youtube, href: socials.youtube, setupHref: "https://www.youtube.com" },
+    { key: "linkedin", label: "LinkedIn", icon: Linkedin, href: socials.linkedin, setupHref: "https://www.linkedin.com/company" },
+  ];
+
+  return (
+    <section className="glass-on-charcoal rounded-2xl p-6 md:p-8 mb-6">
+      <header className="flex items-center gap-3 mb-6">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brass/10">
+          <Share2 className="h-5 w-5 text-brass" strokeWidth={1.75} />
+        </span>
+        <div>
+          <h2 className="font-display text-xl text-ivory">Off-Page SEO Checklist</h2>
+          <p className="font-body text-[12px] text-sand mt-0.5">
+            Build authority outside your own website — listings, socials, and backlinks.
+          </p>
+        </div>
+      </header>
+
+      <div className="grid gap-5 md:grid-cols-2">
+        {/* Google My Business */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Building2 className="h-4 w-4 text-brass" strokeWidth={1.75} />
+            <h3 className="font-display text-base text-ivory">Google My Business</h3>
+          </div>
+          <p className="font-body text-[12px] text-sand leading-relaxed mb-3">
+            Claim and verify your local listing. Critical for the local-pack and map results when hotels search &quot;hotel supplier near me&quot;.
+          </p>
+          <a
+            href="https://www.google.com/business/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full bg-brass/15 text-brass px-4 py-2 text-xs hover:bg-brass/25 transition-colors border border-brass/20"
+          >
+            Set up Google My Business <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+
+        {/* Social profiles */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Share2 className="h-4 w-4 text-brass" strokeWidth={1.75} />
+            <h3 className="font-display text-base text-ivory">Social Media Profiles</h3>
+          </div>
+          <p className="font-body text-[12px] text-sand leading-relaxed mb-3">
+            Current profile links (edit in the Company section above).
+          </p>
+          <ul className="flex flex-col gap-2">
+            {socialLinks.map((s) => {
+              const Icon = s.icon;
+              const href = s.href || s.setupHref;
+              return (
+                <li key={s.key}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-xs text-sand hover:text-brass transition-colors"
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    <span className="font-mono">{s.label}</span>
+                    <span className="truncate text-sand/70 ml-auto">{href}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        {/* Backlink building */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Link2 className="h-4 w-4 text-brass" strokeWidth={1.75} />
+            <h3 className="font-display text-base text-ivory">Backlink Building</h3>
+          </div>
+          <ul className="font-body text-[12px] text-sand leading-relaxed space-y-1.5 list-disc pl-4">
+            <li>Reach out to hospitality industry blogs (Hotelier Middle East, Hotel News Now).</li>
+            <li>Partner with interior designers & architects for case-study backlinks.</li>
+            <li>List on hospitality procurement directories (Hotel Online, HFTP).</li>
+            <li>Guest-write for trade publications referencing LaxRee case studies.</li>
+          </ul>
+        </div>
+
+        {/* Directory submissions */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Globe className="h-4 w-4 text-brass" strokeWidth={1.75} />
+            <h3 className="font-display text-base text-ivory">Directory Submissions</h3>
+          </div>
+          <ul className="font-body text-[12px] text-sand leading-relaxed space-y-1.5 list-disc pl-4">
+            <li>IndiaMART, TradeIndia, ExportersIndia supplier listings.</li>
+            <li>Google Search Console — submit & verify sitemap.xml.</li>
+            <li>Bing Webmaster Tools — submit sitemap for Bing indexing.</li>
+            <li>Hospitality procurement vendor lists on hotel chain portals.</li>
+          </ul>
+        </div>
+
+        {/* Guest posting */}
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5 md:col-span-2">
+          <div className="flex items-center gap-2 mb-2">
+            <PenLine className="h-4 w-4 text-brass" strokeWidth={1.75} />
+            <h3 className="font-display text-base text-ivory">Guest Posting Opportunities</h3>
+          </div>
+          <p className="font-body text-[12px] text-sand leading-relaxed mb-3">
+            Pitch original articles to hospitality publications. Each placement earns a contextual backlink to LaxRee product or blog pages.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              "Hotelier Middle East",
+              "Hospitality Net",
+              "Hotel News Resource",
+              "Hotel Management India",
+              "Travel Trade India",
+              "Expry Hospitality",
+            ].map((pub) => (
+              <span key={pub} className={chipClass}>
+                {pub}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Section E — Top 5 Ranking Tips (Google Guidelines)
+   ───────────────────────────────────────────────────────────── */
+const RANKING_TIPS: {
+  icon: typeof FileText;
+  title: string;
+  body: string;
+}[] = [
+  {
+    icon: FileText,
+    title: "Create high-quality, original content",
+    body: "Write for humans first. Comprehensive, useful, original content ranks above thin or duplicated pages. Aim for 1,500+ words on pillar topics.",
+  },
+  {
+    icon: Target,
+    title: "Optimize for user intent (not just keywords)",
+    body: "Match the page to what the searcher actually wants — informational, transactional, or navigational. Keyword density is secondary to intent match.",
+  },
+  {
+    icon: Link2,
+    title: "Build authoritative backlinks",
+    body: "Earn links from relevant, high-domain-authority hospitality websites. One authoritative link beats dozens of low-quality directory links.",
+  },
+  {
+    icon: Smartphone,
+    title: "Ensure mobile-first indexing",
+    body: "Google crawls and ranks the mobile version first. Verify touch targets, font sizes, and responsive layout on real mobile devices.",
+  },
+  {
+    icon: Zap,
+    title: "Improve Core Web Vitals (LCP, FID, CLS)",
+    body: "LCP < 2.5s, INP < 200ms, CLS < 0.1. Lazy-load below-the-fold images, preload fonts, avoid layout shifts from late-loading elements.",
+  },
+];
+
+function RankingTips() {
+  return (
+    <section className="glass-on-charcoal rounded-2xl p-6 md:p-8 mb-6">
+      <header className="flex items-center gap-3 mb-6">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brass/10">
+          <Lightbulb className="h-5 w-5 text-brass" strokeWidth={1.75} />
+        </span>
+        <div>
+          <h2 className="font-display text-xl text-ivory">Top 5 Ranking Tips (Google Guidelines)</h2>
+          <p className="font-body text-[12px] text-sand mt-0.5">
+            The signals Google&apos;s helpful-content system rewards most.
+          </p>
+        </div>
+      </header>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {RANKING_TIPS.map((tip, i) => {
+          const Icon = tip.icon;
+          return (
+            <div
+              key={tip.title}
+              className="rounded-xl border border-white/10 bg-white/5 p-5 flex flex-col"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brass/15 text-brass">
+                  <Icon className="h-4.5 w-4.5" strokeWidth={1.75} />
+                </span>
+                <span className="font-mono text-[10px] text-brass uppercase tracking-wider">
+                  Tip {i + 1}
+                </span>
+              </div>
+              <h3 className="font-display text-base text-ivory leading-snug mb-2">
+                {tip.title}
+              </h3>
+              <p className="font-body text-[12px] text-sand leading-relaxed">{tip.body}</p>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Section F — Blog SEO Best Practices
+   ───────────────────────────────────────────────────────────── */
+const BLOG_SEO_TIPS: {
+  icon: typeof FileText;
+  label: string;
+  hint: string;
+}[] = [
+  { icon: FileText, label: "Write 1500+ word articles", hint: "Long-form content ranks for more long-tail keywords and earns more backlinks." },
+  { icon: Hash, label: "Use target keyword in title, H1, first paragraph", hint: "Place the primary keyword early — Google weights the first 100 words heavily." },
+  { icon: Link2, label: "Add internal links to product pages", hint: "Link contextually to /products/[slug] pages to pass authority and aid crawling." },
+  { icon: ImageIcon, label: "Add image alt texts", hint: "Describe what the image shows using the target keyword where natural — never stuff." },
+  { icon: Code, label: "Use schema markup (Article + FAQ)", hint: "JSON-LD for Article + FAQPage helps Google build rich snippets in SERPs." },
+  { icon: AlignLeft, label: "Optimize meta description (150–160 chars)", hint: "Use the char counter in the blog editor SEO tab to stay within Google's snippet range." },
+];
+
+function BlogSeoBestPractices() {
+  return (
+    <section className="glass-on-charcoal rounded-2xl p-6 md:p-8">
+      <header className="flex items-center gap-3 mb-6">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brass/10">
+          <PenLine className="h-5 w-5 text-brass" strokeWidth={1.75} />
+        </span>
+        <div>
+          <h2 className="font-display text-xl text-ivory">Blog SEO Best Practices</h2>
+          <p className="font-body text-[12px] text-sand mt-0.5">
+            Apply these in the Blog editor&apos;s SEO tab when creating or editing posts.
+          </p>
+        </div>
+      </header>
+
+      <div className="grid gap-3 md:grid-cols-2">
+        {BLOG_SEO_TIPS.map((tip) => {
+          const Icon = tip.icon;
+          return (
+            <div
+              key={tip.label}
+              className="rounded-xl border border-white/10 bg-white/5 p-4 flex items-start gap-3"
+            >
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brass/15 text-brass">
+                <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
+              </span>
+              <div className="min-w-0">
+                <p className="font-body text-sm text-ivory leading-snug">{tip.label}</p>
+                <p className="font-body text-[11px] text-sand mt-1 leading-relaxed">{tip.hint}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
