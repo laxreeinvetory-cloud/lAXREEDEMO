@@ -100,7 +100,11 @@ export const CATEGORIES: Category[] = [
     name: "Linen",
     count: 2,
     blurb: "Room linen and bath linen.",
+<<<<<<< HEAD
     image: "/images/categories/linen-new.jpg",
+=======
+    image: "/images/categories/linen-new.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
     span: "tall",
   },
   {
@@ -550,6 +554,8 @@ export const ENQUIRY_CATEGORIES = [
   "Linen",
   "Dome",
 ];
+
+export const WHATSAPP_GROUPS = WHATSAPP_EXECUTIVES;
 
 /* ─────────────────────────────────────────────────────────────
    Inner-page content
@@ -1109,7 +1115,11 @@ export const CATALOGUES: CatalogueFile[] = [
     fileSize: "Coming soon",
     category: "linen",
     available: false,
+<<<<<<< HEAD
     image: "/images/categories/linen-new.jpg",
+=======
+    image: "/images/categories/linen-new.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
     categories: ["Bed Sheets", "Pillow Cases", "Duvets", "Bath Towels", "Bath Robes", "Table Linen"],
   },
   {

@@ -2255,3 +2255,39 @@ Work Log:
   * 81 image cards with 81 delete buttons ✅
   * CSS: proper dark theme ✅
 - Analytics config: was lost in DB switch. User needs to re-enter GA ID + GSC token.
+<<<<<<< HEAD
+=======
+
+---
+Task ID: WEBP-BATCH-2
+Agent: main (orchestrator)
+Task: Convert remaining 186 images to WebP, reduce file size without quality loss.
+
+Work Log:
+- Found 186 PNG/JPG files >10KB without WebP versions
+- Converted ALL to WebP using sharp:
+  * Quality: 85 (visually identical — no visible quality loss)
+  * Max width: 1200px (resized larger images)
+  * Effort: 4 (good compression speed)
+- Results:
+  * 186 images converted, 0 failed
+  * 8.8MB saved on this batch
+  * Total public/images: 90MB → 9.3MB (90% reduction!)
+  * 230 WebP files, 62 JPG files (small/unused, no WebP), 1 PNG
+- Updated 16 source files from .jpg/.png to .webp references
+- Deleted old PNG/JPG files (WebP versions are smaller)
+- Build: 0 errors, 112 static pages
+- E2E verified on production:
+  * WebP images: HTTP 200 ✅
+  * samarth.webp: 104KB ✅
+  * radisson.webp: 42KB ✅
+  * room-amenities.webp: 105KB ✅
+  * CSS: "proper dark theme, branded gold and white colors, hero image loading" ✅
+
+Stage Summary:
+- ALL images now WebP (except 62 small JPGs that don't need conversion)
+- public/images: 90MB → 9.3MB (90% reduction)
+- Image quality preserved (quality 85 — no visible loss)
+- Site will load MUCH faster
+- No data changed
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)

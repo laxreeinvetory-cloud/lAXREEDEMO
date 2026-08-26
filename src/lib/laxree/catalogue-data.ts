@@ -354,7 +354,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-155",
         name: "0.8L Electric Kettle — Double Layer SS304",
         category: "Tea Kettle",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT--155.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT--155.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "0.8L electric kettle, double layer with SS 304 food-grade inner stainless steel body. Matt finish PP outer surface. Automatic shut-off, anti-scalding. Power: 220V, 50Hz, 1200W.",
         tier: "Premium",
@@ -404,7 +408,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-156",
         name: "1L Electric Kettle — Strix Controller, Double Layer",
         category: "Tea Kettle",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT--156.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT--156.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "1L electric kettle with Strix controller. Double layer body with SS 304 food-grade inner stainless steel, PP housing outer. Anti-scratch round spout, flat lid design. Auto shut-off, anti-scalding. Power: 220V, 50Hz, 1000W.",
         tier: "Lux",
@@ -434,7 +442,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-160",
         name: "TCM Tray Set — ABS Material",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT--160.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT--160.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray set comprising main tray and sachet holder. Made in ABS material. Suitable for all kettles. Size: W380 × D260 × H55mm.",
         tier: "Essential",
@@ -450,7 +462,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-158",
         name: "TCM Tray with Anti-Theft Mechanism — ABS",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-158.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-158.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS material. Size: W440 × D225 × H30mm.",
         tier: "Essential",
@@ -524,7 +540,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-167",
         name: "TCM Tray with Anti-Theft — ABS + SS",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-167.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-167.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS with SS accents. Size: W350 × D204 × H50mm.",
         tier: "Premium",
@@ -584,7 +604,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-163",
         name: "TCM Tray — ABS with PU Leatherette Covering",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-163.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-163.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray comprising main tray and sachet holder. ABS body with PU leatherette covering. Suitable for all kettles. Size: W390 × D260 × H30mm.",
         tier: "Lux",
@@ -600,7 +624,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-159",
         name: "TCM Tray — Melamine, In-Built Compartments",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-159.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-159.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray with in-built compartments for sachet, stirrer, mugs, and water bottle. Made in melamine material. Suitable for all kettle types. Size: W420 × D300 × H28mm.",
         tier: "Lux",
@@ -619,7 +647,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-164",
         name: "TCM Tray — Leatherette, Premium",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-164.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-164.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray made in leatherette. In-built sachet holder. Suitable for all kettle types. Size: W340 × D300 × H40mm. Luxury finish for premium rooms.",
         tier: "Lux",
@@ -635,7 +667,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-165",
         name: "TCM Tray with Anti-Theft — ABS + SS, Compact",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-165.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-165.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray with anti-theft mechanism. In-built sachet holder, separate compartment for stirrer, water spill collector. Made in ABS with SS accents. Size: W267 × D198 × H70mm.",
         tier: "Lux",
@@ -654,7 +690,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWT-162",
         name: "TCM Tray — Leatherette, Large",
         category: "Kettle Tray",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWT-162.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWT-162.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "TCM tray comprising main tray and sachet holder. Made in leatherette material. Suitable for all kettles. Size: W450 × D300 × H55mm. Large premium tray for luxury rooms.",
         tier: "Lux",
@@ -695,7 +735,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-206",
         name: "Medium Size Safe Box",
         category: "Safe Box",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRSB-206.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRSB-206.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Right hand flip with 4-6 digit personal codes. Auto lock on 4 times wrong codes input. Low energy consumption. Manual over-ride key. Pre-drilled mount holes. Master over-ride key option available.",
         tier: "Essential",
@@ -831,7 +875,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRSB-204",
         name: "Laptop Size Safe Box — Steel Ring, Lux",
         category: "Safe Box",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRSB-204.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRSB-204.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "LED display with back-lit keypad with aesthetic steel ring around the display panel. Right hand flip with 4-6 digit personal codes. LED light inside. Auto lock on 4 times wrong codes input. Master over-ride key option. Last 100 event records.",
         tier: "Lux",
@@ -877,7 +925,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-229B",
         name: "Solid Wood Hanger with Anti-Slip Notch — B Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-229-B.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-229-B.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'B' grade lotus wood with central hook that can be 360° swiveled and a multi-function cross bar with anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -893,7 +945,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-227B",
         name: "Solid Wood Hanger — Antitheft, U-Shape Notch, B Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-227-B.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-227-B.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'B' grade Lotus wood with antitheft attachment, multi-function cross bar and U-shape notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -909,7 +965,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-231B",
         name: "Solid Wood Hanger with Anti-Slip Notch & Metal Clips — B Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-231-B.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-231-B.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'B' grade lotus wood with central hook that can be 360° swiveled and metal clips for pants. Anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -925,7 +985,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-226B",
         name: "Solid Wood Hanger — Antitheft, SS Clip, B Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-226-B.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-226-B.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'B' grade wood with antitheft attachment, U-shape notch and stainless-steel clip for pants. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Essential",
@@ -942,7 +1006,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-229",
         name: "Solid Wood Hanger with Anti-Slip Notch — A Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-229.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-229.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'A' grade lotus wood with central hook that can be 360° swiveled and a multi-function cross bar with anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -958,7 +1026,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-234",
         name: "Solid Wood Hanger — Anti-Slip Teeth Bar, A Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-234.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-234.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'A' grade lotus wood with anti-slip teeth bar. Premium build with smooth finish. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -973,7 +1045,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-227",
         name: "Solid Wood Hanger — Antitheft, U-Shape, A Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-227.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-227.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'A' grade Lotus wood with antitheft attachment, multi-function cross bar and U-shape notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -989,7 +1065,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-231",
         name: "Solid Wood Hanger with Anti-Slip Notch & Metal Clips — A Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-231.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-231.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'A' grade lotus wood with central hook that can be 360° swiveled and metal clips for pants. Anti-slip notch. Colour: Natural Wood. Size: 44.5 cm.",
         tier: "Premium",
@@ -1022,7 +1102,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-228",
         name: "Satin Finish Shawl Hanger — Antitheft",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-228.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-228.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Satin finish shawl hanger with antitheft attachment. Luxury off-white finish for premium wardrobes. Size: 44.5 cm.",
         tier: "Lux",
@@ -1037,7 +1121,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWH-232",
         name: "Solid Wood Structure Coat Hanger — Flat Hook, A Grade",
         category: "Wooden Hangers",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWH-232.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWH-232.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Made in 'A' grade lotus wood with flat hook that can be 360° swiveled. Multifunction anti-slip bar with teeth. Designed for coats and heavier garments. Colour: Natural Wood.",
         tier: "Lux",
@@ -1603,7 +1691,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRDA-812",
         name: "Notepad Holder — Leatherette",
         category: "Desktop Accessories",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRDA-812.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRDA-812.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Notepad holder made in leatherette. Size: W200 × D105 × H10mm.",
         tier: "Premium",
@@ -1765,7 +1857,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRHD-280",
         name: "Hair Dryer with Foldable Handle + Hang-Up Loop",
         category: "Hair Dryer",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRHD-280.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRHD-280.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Power: 2100W. Safety switch. Power supply: 220-240V, 50Hz. 2 speed blow with 3 mode hot/cold intensity option. Ionised air for softer hair. Magnetic removable air-blast nozzles. Auto off on over-heat. Twisted cord length: 2m. Size: W270 × D140 × H250mm.",
         tier: "Lux",
@@ -1792,7 +1888,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-382",
         name: "Manual Soap Dispenser — ABS, 350ml",
         category: "Soap Dispenser",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA-382.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA-382.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Manual soap dispenser made in ABS. Capacity: 350ml. Wall-mounted for guest-room washbasins.",
         tier: "Essential",
@@ -1808,7 +1908,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-383",
         name: "Manual Soap Dispenser — 3 Liquid Types, 400ml",
         category: "Soap Dispenser",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA-383.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA-383.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Manual soap dispenser that supports 3 liquid types (soap, shampoo, lotion). Capacity: 400ml. Wall-mounted.",
         tier: "Essential",
@@ -2095,7 +2199,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-384",
         name: "Automatic Lobby Soap Dispenser — 3 Liquid Types, 1200ml",
         category: "Lobby Soap Dispenser",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA-384.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA-384.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Automatic (sensor) lobby soap dispenser supporting 3 liquid types (soap, shampoo, lotion). Capacity: 1200ml. Touch-free operation for high-traffic washrooms.",
         tier: "Premium",
@@ -2204,7 +2312,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-405",
         name: "Recessed Tissue Dispenser — 304 SS Mirror, W252×D74×H128mm",
         category: "Paper Dispenser",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA--405.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA--405.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Recessed tissue dispenser made in 304 stainless steel with mirror finish. Size: W252 × D74 × H128mm. Wall-recessed for a clean, flush look.",
         tier: "Premium",
@@ -2221,7 +2333,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-404",
         name: "Multi-Purpose Paper Dispenser — 304 SS, 325×102×435mm",
         category: "Paper Dispenser",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA--404.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA--404.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Multi-purpose paper dispenser made in 304 stainless steel. Size: 325 × 102 × 435mm. Suitable for multiple paper formats in luxury washrooms.",
         tier: "Lux",
@@ -2470,7 +2586,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-348",
         name: "Towel Rod — SS Finish",
         category: "Towel Rod",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA-348.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA-348.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Towel rod in stainless-steel finish. Wall-mounted for bathroom and washroom use.",
         tier: "Essential",
@@ -2499,7 +2619,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRWA-349",
         name: "Handicap Grab Bar — 202 SS Grade",
         category: "Handicap Grab Bar",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRWA--349.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRWA--349.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Handicap grab bar made in 202 stainless-steel grade. Wall-mounted for accessible washrooms.",
         tier: "Essential",
@@ -2543,7 +2667,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLT-402",
         name: "Luggage Hand Cart — 2 Wheel",
         category: "Luggage Trolley",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLT-402.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLT-402.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Stainless steel body. Heavy duty two wheel luggage cart. Soft carpet luggage platform. Suitable for smaller passages and lifts. Size: L570 × D730 × H1280mm.",
         tier: "Essential",
@@ -2643,7 +2771,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-453",
         name: "Lobby Dustbin — MS Powder Coated, Round, D250×H600mm",
         category: "Lobby Dustbin",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--453.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--453.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Lobby dustbin made in MS powder coated body. Round shape. Size: D250 × H600mm. Black finish.",
         tier: "Essential",
@@ -2689,7 +2821,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-452",
         name: "Lobby Dustbin — MS Powder Coated, Rectangle, L310×W250×H600mm",
         category: "Lobby Dustbin",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--452.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--452.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Lobby dustbin made in MS powder coated body. Rectangle shape. Size: L310 × W250 × H600mm. Black finish.",
         tier: "Premium",
@@ -2704,7 +2840,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-445",
         name: "Lobby Dustbin — SS, L250×W250×H600mm",
         category: "Lobby Dustbin",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--445.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--445.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Lobby dustbin made in stainless steel. Square footprint. Size: L250 × W250 × H600mm.",
         tier: "Premium",
@@ -2720,7 +2860,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-447",
         name: "Lobby Dustbin — SS + Synthetic Stone, L300×W300×H680mm",
         category: "Lobby Dustbin",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--447.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--447.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Lobby dustbin made in SS with synthetic stone top panel. Square footprint. Size: L300 × W300 × H680mm. Luxury finish for premium lobbies.",
         tier: "Lux",
@@ -2736,7 +2880,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-448",
         name: "Lobby Dustbin — SS + Natural Stone, L300×W300×H680mm",
         category: "Lobby Dustbin",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--448.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--448.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Lobby dustbin made in SS with natural stone top panel. Square footprint. Size: L300 × W300 × H680mm. Genuine stone luxury finish.",
         tier: "Lux",
@@ -2752,7 +2900,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-446",
         name: "Lobby Dustbin — SS + Natural Stone, L280×W280×H620mm",
         category: "Lobby Dustbin",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--446.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--446.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Lobby dustbin made in SS with natural stone top panel. Compact square footprint. Size: L280 × W280 × H620mm. Genuine stone luxury finish.",
         tier: "Lux",
@@ -2777,7 +2929,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-457S",
         name: "Q Manager Stanchion — SS, Retractable Belt 2m",
         category: "Q Manager",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--457-S.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--457-S.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Stainless-steel stanchion with retractable belt (2m). Size: 320 × 51 × 950mm. Crowd-control post for lobbies and queues.",
         tier: "Essential",
@@ -2793,7 +2949,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458B",
         name: "Q Manager Stanchion — Ball Top, Black",
         category: "Q Manager",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--458-B.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--458-B.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Ball-top stanchion in black finish. Size: 320 × 51 × 950mm. Crowd-control post with classic ball-top design.",
         tier: "Essential",
@@ -2808,7 +2968,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-457G",
         name: "Q Manager Stanchion — SS Gold",
         category: "Q Manager",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--457-G.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--457-G.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Stainless-steel stanchion in gold finish. Size: 320 × 51 × 950mm. Premium crowd-control post for upscale lobbies.",
         tier: "Premium",
@@ -2823,7 +2987,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458S",
         name: "Q Manager Stanchion — Ball Top, SS",
         category: "Q Manager",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--458-S.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--458-S.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Ball-top stanchion in stainless-steel finish. Size: 320 × 51 × 950mm. Premium ball-top crowd-control post.",
         tier: "Premium",
@@ -2839,7 +3007,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-458G",
         name: "Q Manager Stanchion — Ball Top, Gold",
         category: "Q Manager",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--458-G.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--458-G.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Ball-top stanchion in gold finish. Size: 320 × 51 × 950mm. Luxury ball-top crowd-control post.",
         tier: "Lux",
@@ -2889,7 +3061,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-459-A4",
         name: "A4 Signage — Gold / SS / Black",
         category: "Sign Board",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--459-A4.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--459-A4.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "A4-size signage panel. Available in Gold, SS and Black finishes. Wall-mounted for directional and informational use.",
         tier: "Essential",
@@ -2903,7 +3079,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-459-A3",
         name: "A3 Signage — Gold / SS / Black",
         category: "Sign Board",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--459-A3.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--459-A3.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "A3-size signage panel. Available in Gold, SS and Black finishes. Larger format for high-visibility directional and informational use.",
         tier: "Essential",
@@ -2917,7 +3097,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-460",
         name: "A4 Signage with Pole — SS",
         category: "Sign Board",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--460.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--460.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "A4-size signage panel mounted on a pole in stainless-steel finish. Freestanding for lobby and entrance use.",
         tier: "Premium",
@@ -2931,7 +3115,11 @@ export const CATALOGUE_CATEGORIES: CatalogueCategory[] = [
         model: "LRLI-463",
         name: "Wet Floor Sign — SS",
         category: "Sign Board",
+<<<<<<< HEAD
         image: "/images/product-catalogue/excel-images/LRLI--463.jpg",
+=======
+        image: "/images/product-catalogue/excel-images/LRLI--463.webp",
+>>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
         description:
           "Wet floor caution sign in stainless-steel finish. Durable and visible. For washroom entrances and spill zones.",
         tier: "Premium",
