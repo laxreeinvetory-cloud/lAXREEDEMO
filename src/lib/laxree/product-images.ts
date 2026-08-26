@@ -17,11 +17,7 @@
 export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   // ── Room Amenities ── (premium/lux tier models for previews)
   "mini-bar": "/images/product-catalogue/mini-bar/LRMB-126.webp",
-<<<<<<< HEAD
-  "tea-kettle": "/images/product-catalogue/excel-images/LRWT--155.jpg",
-=======
   "tea-kettle": "/images/product-catalogue/excel-images/LRWT--155.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "kettle-tray": "/images/product-catalogue/excel-images/LRWT-168.webp",
   "safe-box": "/images/product-catalogue/excel-images/LRSB--214.webp",
   "wooden-hangers": "/images/product-catalogue/hangers/LRRA-653.webp",
@@ -32,13 +28,8 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "desktop-accessories": "/images/product-catalogue/desktop-accessories/LRAT-370.webp",
   "rollaway-bed": "/images/product-catalogue/rollaway-bed/LRMR-251.webp",
   "mattress": "/images/product-catalogue/mattress/LRMR-251-8.webp",
-<<<<<<< HEAD
-  "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.jpg",
-  "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.jpg",
-=======
   "iron-iron-board": "/images/product-catalogue/excel-images/Ironing-Board.webp",
   "emergency-torch": "/images/product-catalogue/emergency-torch/LRET-351.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "luggage-rack": "/images/product-catalogue/furniture/LRGF---673---Luggage-Rack.webp",
   // ── Washroom Amenities ──
   "hair-dryer": "/images/product-catalogue/hair-dryer/LRHD-276.webp",
@@ -57,11 +48,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "handicap-grab-bar": "/images/product-catalogue/handicap-grab-bar/LRWA-349.webp",
   // ── Lobby Items ──
   "luggage-trolley": "/images/product-catalogue/luggage-trolley-LT-801.webp",
-<<<<<<< HEAD
-  "housekeeping-trolley": "/images/product-catalogue/housekeeping-trolley/LRHT--425.jpg",
-=======
   "housekeeping-trolley": "/images/product-catalogue/housekeeping-trolley/LRHT--425.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "lobby-dustbin": "/images/product-catalogue/ssp-lobby-dustbins/LRLI-445.webp",
   "q-manager": "/images/product-catalogue/ssp-q-manager/LRLI-457B.webp",
   "sign-board": "/images/product-catalogue/ssp-sign-board/LRLI-458-Twisted.webp",
@@ -75,11 +62,7 @@ export const SUBCATEGORY_FALLBACK_IMAGE: Record<string, string> = {
   "restaurant-furniture": "/images/product-catalogue/furniture/LRBF---528.webp",
   "room-furniture": "/images/product-catalogue/furniture/LRBF---526.webp",
   "pool-lounger": "/images/product-catalogue/furniture/pool-lounger-preview.webp",
-<<<<<<< HEAD
-  "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.jpg",
-=======
   "garden-umbrella": "/images/product-catalogue/excel-images/Golf-Umbrella.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "frp-flower-pots": "/images/product-catalogue/furniture/frp-flower-pots-preview.webp",
   // ── Linen ──
   "room-linen": "/images/product-catalogue/room-linen/bedsheet-plain.webp",
@@ -100,11 +83,7 @@ export const PARENT_FALLBACK_IMAGE: Record<string, string> = {
   "washroom-amenities": "/images/categories/washroom-amenities.webp",
   "lobby-items": "/images/categories/lobby-items.webp",
   "furniture": "/images/categories/furniture.webp",
-<<<<<<< HEAD
-  "linen": "/images/categories/linen-new.jpg",
-=======
   "linen": "/images/categories/linen-new.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "bath-tub": "/images/products/bath-tub.webp",
   "amenities-tray-set": "/images/categories/amenities-tray-set.webp",
   "dome-space-pod": "/images/categories/space-pod.webp",
@@ -150,7 +129,6 @@ export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
   // Docking Pod products — DB points to telephone images, fix them
   "LRDR-177": "/images/product-catalogue/excel-images/LRDR-177.webp",
   "LRDR 177": "/images/product-catalogue/excel-images/LRDR-177.webp",
-<<<<<<< HEAD
   "LRDR-178": "/images/product-catalogue/excel-images/LRDR-180.jpg",
   "LRDR 178": "/images/product-catalogue/excel-images/LRDR-180.jpg",
   "LRDR-176": "/images/product-catalogue/excel-images/LRDR-184.jpg",
@@ -165,41 +143,18 @@ export const PRODUCT_IMAGE_OVERRIDE: Record<string, string> = {
   "LRDR-185": "/images/product-catalogue/excel-images/LRDR-185.webp",
   "LRDR-186": "/images/product-catalogue/excel-images/LRDR-186.webp",
   "LRDR-188": "/images/product-catalogue/excel-images/LRDR-188.jpg",
-=======
-  "LRDR-178": "/images/product-catalogue/excel-images/LRDR-180.webp",
-  "LRDR 178": "/images/product-catalogue/excel-images/LRDR-180.webp",
-  "LRDR-176": "/images/product-catalogue/excel-images/LRDR-184.webp",
-  "LRDR 176": "/images/product-catalogue/excel-images/LRDR-184.webp",
   // Room Telephone products — ensure they point to telephone images
-  "LRDR-179": "/images/product-catalogue/excel-images/LRDR-179.webp",
-  "LRDR-180": "/images/product-catalogue/excel-images/LRDR-180.webp",
-  "LRDR-181": "/images/product-catalogue/excel-images/LRDR-181.webp",
-  "LRDR-182": "/images/product-catalogue/excel-images/LRDR-182.webp",
-  "LRDR-183": "/images/product-catalogue/excel-images/LRDR-183.webp",
-  "LRDR-184": "/images/product-catalogue/excel-images/LRDR-184.webp",
-  "LRDR-185": "/images/product-catalogue/excel-images/LRDR-185.webp",
-  "LRDR-186": "/images/product-catalogue/excel-images/LRDR-186.webp",
-  "LRDR-188": "/images/product-catalogue/excel-images/LRDR-188.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "LRDR-189": "/images/product-catalogue/excel-images/LRDR--189.webp",
   "LRDR-190": "/images/product-catalogue/excel-images/LRDR--190.webp",
   "LRDR-191": "/images/product-catalogue/ssp-telephones/LRDR-191.webp",
   "LRDR-192": "/images/product-catalogue/ssp-telephones/LRDR-192.webp",
   // RFID Lock accessories — DB points all to LRFD-608, fix with correct images
   "DND Set": "/images/product-catalogue/excel-images/DND-Set.webp",
-<<<<<<< HEAD
   "Encoder (ZFD)": "/images/product-catalogue/excel-images/Encoder-ZFD.jpg",
   "Encoder (Orbita)": "/images/product-catalogue/excel-images/Encoder-Orbita.webp",
   "Key Tag": "/images/product-catalogue/excel-images/Key-Tag.jpg",
   "Key Card (Z)": "/images/product-catalogue/excel-images/Key-Card-Z.jpg",
   "Key Card (O)": "/images/product-catalogue/excel-images/Key-Card-O.jpg",
-=======
-  "Encoder (ZFD)": "/images/product-catalogue/excel-images/Encoder-ZFD.webp",
-  "Encoder (Orbita)": "/images/product-catalogue/excel-images/Encoder-Orbita.webp",
-  "Key Tag": "/images/product-catalogue/excel-images/Key-Tag.webp",
-  "Key Card (Z)": "/images/product-catalogue/excel-images/Key-Card-Z.webp",
-  "Key Card (O)": "/images/product-catalogue/excel-images/Key-Card-O.webp",
->>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
   "Energy Saver Switch": "/images/product-catalogue/excel-images/Energy-Saver-Switch.webp",
   // Safe Box products — DB has mattress image for LRSB-210 and duplicates
   "LRSB-210": "/images/product-catalogue/safe-box/LRSB-211.webp",
