@@ -57,7 +57,8 @@ export default async function ItemPage({
 
   if (!item || !parent) notFound();
 
-  // Load products from DB
+  // Load products — merge DB products with static catalogue products
+  // Static products ensure all models show even on a fresh DB
   let allProducts: CatalogueProduct[] = [];
   try {
     const categoryFilters = [item.name];
@@ -73,8 +74,13 @@ export default async function ItemPage({
       orderBy: { sortOrder: "asc" },
     });
     const realProducts = dbItems.filter((p) => !p.model.startsWith("TBD"));
+
+    // Start with static products from the catalogue
+    allProducts = [...item.products];
+
+    // Merge DB products — DB takes priority for same model
     if (realProducts.length > 0) {
-      allProducts = realProducts.map((p) => ({
+      const dbProducts = realProducts.map((p) => ({
         model: p.model,
         name: p.name,
         category: p.category,
@@ -82,8 +88,11 @@ export default async function ItemPage({
         description: p.description,
         specs: (() => { try { return JSON.parse(p.specs); } catch { return []; } })(),
       }));
-    } else {
-      allProducts = item.products;
+      const dbModels = new Set(dbProducts.map((p) => p.model));
+      // Remove static products that have DB versions (DB wins)
+      allProducts = allProducts.filter((p) => !dbModels.has(p.model));
+      // Prepend DB products
+      allProducts = [...dbProducts, ...allProducts];
     }
   } catch {
     allProducts = item.products;
