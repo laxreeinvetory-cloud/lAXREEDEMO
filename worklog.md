@@ -2291,3 +2291,40 @@ Stage Summary:
 - Site will load MUCH faster
 - No data changed
 >>>>>>> 8c22f8e (New Neon DB (ep-sweet-sea) + convert ALL images to WebP + cleanup unused files)
+
+---
+Task ID: MULTI-IMAGE-GALLERY
+Agent: main (orchestrator)
+Task: Add multi-image gallery upload to admin product editor (like reference site in screenshot).
+
+Work Log:
+- Analyzed user's screenshots:
+  * Image 1 (current site): single product image, basic thumbnail
+  * Image 2 (reference site): main image + 4 thumbnail gallery below (Amazon-style)
+- The product detail card (product-detail-card.tsx) ALREADY has multi-image gallery support:
+  * Main image + thumbnail strip
+  * Fetches from CMS key 'product-images:<model>' as { images: [...], video: '...' }
+  * Video thumbnail support
+- Added multi-image gallery upload to admin product editor:
+  * "Product Gallery (Multiple Images)" section in product editor modal
+  * Multi-file upload (select multiple images at once)
+  * Images show as thumbnails with remove (X) button on hover
+  * Each image uploaded via /api/admin/upload (compressed if >1MB)
+  * Saved to CMS key 'product-images:<model>' as { images: [...], video: '...' }
+  * Gallery images auto-load from CMS when editing existing product
+  * Product video URL field (optional)
+  * Gallery saves immediately (no need to click "Save Product" for gallery changes)
+- Build: 0 errors, 117 static pages
+- Deploy: READY ✅
+- CSS: proper dark theme ✅
+- Admin products page: HTTP 200 ✅
+
+How it works for admin user:
+1. Go to /admin/products
+2. Click "Edit" on any product (or create new)
+3. In the modal, scroll to "Product Gallery (Multiple Images)" section
+4. Click "Add Images" — select multiple images from computer
+5. Images upload and show as thumbnails
+6. Click X on any thumbnail to remove it
+7. Optionally paste a product video URL
+8. The gallery shows on the live product detail page with main image + thumbnails
