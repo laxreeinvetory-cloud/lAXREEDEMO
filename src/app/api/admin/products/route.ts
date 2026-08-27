@@ -35,9 +35,17 @@ export async function GET(req: NextRequest) {
       console.error("[ADMIN PRODUCTS GET DB ERROR]", dbErr);
     }
 
-    // Fallback to static data if DB is empty or unavailable
-    if (products.length === 0) {
-      products = getStaticProducts(category || undefined) as unknown as typeof products;
+    // Merge with static data — if DB has very few products, the static catalogue
+    // is the source of truth. We merge DB products (admin-created) with static
+    // products, with DB taking priority for duplicates (same model number).
+    const staticProducts = getStaticProducts(category || undefined);
+    const dbModels = new Set(products.map((p: { model: string }) => p.model));
+    const missingFromDb = staticProducts.filter(
+      (p: { model: string }) => !dbModels.has(p.model)
+    );
+    if (missingFromDb.length > 0) {
+      // Add static products that are missing from the DB
+      products = [...products, ...(missingFromDb as unknown as typeof products)];
     }
     if (categories.length === 0) {
       categories = getStaticCategories() as unknown as typeof categories;
