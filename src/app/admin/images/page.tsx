@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Upload, Check, X, Loader2, Image as ImageIcon, Trash2, ExternalLink } from "lucide-react";
-import { CATEGORIES } from "@/lib/laxree/site-data";
+import { CATEGORIES, SPOTLIGHT_PRODUCTS } from "@/lib/laxree/site-data";
 import { PARENT_FALLBACK_IMAGE, SUBCATEGORY_FALLBACK_IMAGE } from "@/lib/laxree/product-images";
 
 const inputClass = "w-full rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus:border-yellow-500 focus:outline-none";
@@ -63,7 +63,16 @@ const PRODUCT_PARENT_IMAGES: ImageEntry[] = Object.entries(PARENT_FALLBACK_IMAGE
   fallback: img,
 }));
 
-// ── Product Sub-Categories ("Browse by Type" cards) ──
+// ── Product Spotlight (homepage carousel — 9 products) ──
+const SPOTLIGHT_IMAGES: ImageEntry[] = SPOTLIGHT_PRODUCTS.map((p) => ({
+  key: `spotlight-${p.slug}`,
+  label: `${p.name} (${p.category})`,
+  section: "Product Spotlight",
+  cmsKey: "homepage:spotlight",
+  field: `images.${p.slug}`,
+  fallback: p.image,
+}));
+
 function slugToLabel(slug: string): string {
   return slug
     .split("-")
@@ -86,6 +95,7 @@ const PRODUCT_SUBCATEGORY_IMAGES: ImageEntry[] = Object.entries(SUBCATEGORY_FALL
 
 const EDITABLE_IMAGES: ImageEntry[] = [
   ...SITE_IMAGES,
+  ...SPOTLIGHT_IMAGES,
   ...HOMEPAGE_CATEGORY_IMAGES,
   ...PRODUCT_PARENT_IMAGES,
   ...PRODUCT_SUBCATEGORY_IMAGES,
