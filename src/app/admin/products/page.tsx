@@ -534,7 +534,97 @@ function ProductEditor({
   const [sortOrder, setSortOrder] = useState(product?.sortOrder ?? 0);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryUploading, setGalleryUploading] = useState(false);
+  const [galleryVideo, setGalleryVideo] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  // Load existing gallery images from CMS when editing
+  useEffect(() => {
+    if (!product?.model) return;
+    fetch(`/api/admin/cms?key=product-images:${product.model}`, { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.value) {
+          if (Array.isArray(data.value.images)) {
+            setGalleryImages(data.value.images.filter((i: unknown) => typeof i === "string"));
+          }
+          if (typeof data.value.video === "string") {
+            setGalleryVideo(data.value.video);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [product?.model]);
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setGalleryUploading(true);
+    setError("");
+    try {
+      const newImages: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        let uploadFile = file;
+        if (file.size > 1 * 1024 * 1024) {
+          const compressed = await compressImage(file, 1024, 0.85);
+          uploadFile = compressed;
+        }
+        const formData = new FormData();
+        formData.append("file", uploadFile);
+        formData.append("model", `gallery-${model || "product"}-${i}`);
+        const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.ok && data.imageUrl) newImages.push(data.imageUrl);
+        }
+      }
+      if (newImages.length > 0) {
+        const updated = [...galleryImages, ...newImages];
+        setGalleryImages(updated);
+        // Save to CMS
+        await fetch("/api/admin/cms", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            key: `product-images:${model}`,
+            value: { images: updated, video: galleryVideo },
+          }),
+        });
+      }
+    } catch {
+      setError("Gallery upload failed — please try again");
+    }
+    setGalleryUploading(false);
+    if (galleryInputRef.current) galleryInputRef.current.value = "";
+  };
+
+  const removeGalleryImage = async (idx: number) => {
+    const updated = galleryImages.filter((_, i) => i !== idx);
+    setGalleryImages(updated);
+    await fetch("/api/admin/cms", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        key: `product-images:${model}`,
+        value: { images: updated, video: galleryVideo },
+      }),
+    });
+  };
+
+  const saveGalleryVideo = async (url: string) => {
+    setGalleryVideo(url);
+    await fetch("/api/admin/cms", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        key: `product-images:${model}`,
+        value: { images: galleryImages, video: url },
+      }),
+    });
+  };
 
   const addSpec = () => setSpecs([...specs, { label: "", value: "" }]);
   const updateSpec = (i: number, key: keyof Spec, val: string) =>
@@ -686,6 +776,67 @@ function ProductEditor({
                   Upload JPEG/PNG/WebP (max 10MB) or paste image URL
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* GALLERY — Multiple images upload */}
+          <div className="border-t border-white/10 pt-4">
+            <label className={labelClass}>Product Gallery (Multiple Images)</label>
+            <p className="text-[10px] text-gray-500 mb-2">
+              Upload multiple product images — they'll show as a gallery with thumbnails on the product page.
+            </p>
+            <div className="flex flex-wrap gap-3 mb-3">
+              {galleryImages.map((img, i) => (
+                <div key={i} className="relative h-20 w-20 rounded-lg border border-white/15 bg-gray-800 overflow-hidden group">
+                  <img src={img} alt={`Gallery ${i + 1}`} className="h-full w-full object-contain" />
+                  <button
+                    type="button"
+                    onClick={() => removeGalleryImage(i)}
+                    className="absolute top-0.5 right-0.5 h-5 w-5 rounded-full bg-red-600 text-white grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Remove image"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+              {/* Upload button */}
+              <button
+                type="button"
+                onClick={() => galleryInputRef.current?.click()}
+                disabled={galleryUploading}
+                className="h-20 w-20 rounded-lg border-2 border-dashed border-white/20 bg-gray-800 hover:border-brass/50 hover:bg-gray-800/50 grid place-items-center transition-colors disabled:opacity-50"
+                aria-label="Add images"
+              >
+                {galleryUploading ? (
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                ) : (
+                  <div className="flex flex-col items-center gap-1 text-gray-500">
+                    <Upload className="h-5 w-5" />
+                    <span className="text-[8px]">Add Images</span>
+                  </div>
+                )}
+              </button>
+              <input
+                ref={galleryInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={handleGalleryUpload}
+                className="hidden"
+              />
+            </div>
+            {/* Video URL */}
+            <div className="mt-2">
+              <label className="block text-[10px] font-medium text-gray-400 mb-1">Product Video URL (optional)</label>
+              <input
+                type="text"
+                value={galleryVideo}
+                onChange={(e) => setGalleryVideo(e.target.value)}
+                onBlur={(e) => saveGalleryVideo(e.target.value)}
+                placeholder="/uploads/product-video.mp4 or URL"
+                className={inputClass + " text-xs"}
+              />
+              <p className="text-[10px] text-gray-500 mt-0.5">MP4 video URL — shows in product gallery as a playable video thumbnail</p>
             </div>
           </div>
 
