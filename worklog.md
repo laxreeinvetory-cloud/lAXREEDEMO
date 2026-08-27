@@ -2328,3 +2328,28 @@ How it works for admin user:
 6. Click X on any thumbnail to remove it
 7. Optionally paste a product video URL
 8. The gallery shows on the live product detail page with main image + thumbnails
+
+---
+Task ID: RESTORE-MISSING-PRODUCTS
+Agent: main (orchestrator)
+Task: User reports minibar only shows 1 model, many products missing. Fix without data loss.
+
+Root Cause:
+- When we switched Neon databases, the new DB had only 1 product (LRMB-132)
+- The API only fell back to static data when DB was COMPLETELY empty (0 products)
+- Since there was 1 product in the DB, the static fallback didn't trigger
+- 174+ static products were missing from the live site
+
+Fix:
+- Updated /api/admin/products GET endpoint to ALWAYS merge static catalogue
+  products with DB products
+- DB products take priority (admin edits win for duplicates)
+- Static products that are missing from DB are added automatically
+- This ensures all products always show, even on a fresh DB
+- No data loss — DB products are preserved, static products are added
+
+E2E verified on production:
+- Total products: 194 (was 1)
+- Mini Bar: 7 products (LRMB-126 to LRMB-132) ✅
+- All 50+ categories represented ✅
+- No data loss ✅
