@@ -2353,3 +2353,25 @@ E2E verified on production:
 - Mini Bar: 7 products (LRMB-126 to LRMB-132) ✅
 - All 50+ categories represented ✅
 - No data loss ✅
+
+---
+Task ID: FIX-PRODUCT-DETAIL-MODELS
+Agent: main (orchestrator)
+Task: Product detail page showing only 1 model instead of all models. Fix.
+
+Root Cause:
+- Product detail page ([itemSlug]/page.tsx) fetched products from DB
+- DB only had 1 product (LRMB-132) — showed just that model
+- Static catalogue had 7 minibar models but they were ignored
+- Same issue as the products API: "if DB has ≥1 product, don't use static"
+
+Fix:
+- Product detail page now ALWAYS starts with static products from catalogue-data.ts
+- DB products are merged on top (DB takes priority for same model)
+- This ensures all models show on every product detail page
+- Same fix pattern as the products API route
+
+E2E verified on production:
+- Mini Bar page: 7 models available ✅ (was 1)
+- Models: LRMB-126, 127, 128, 129, 130, 131, 132 ✅
+- No data loss ✅
