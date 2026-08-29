@@ -331,11 +331,6 @@ export const EXHIBITIONS: Exhibition[] = [
   { image: "/images/gallery/exhibition-3.webp", caption: "India International Hospitality Expo (IHE)", year: "2024" },
   { image: "/images/gallery/exhibition-4.webp", caption: "Hospitality World Expo, Mumbai", year: "2024" },
   { image: "/images/gallery/exhibition-5.webp", caption: "Hotel & Restaurant Association Show", year: "2023" },
-  { image: "/images/gallery/exhibition-1.webp", caption: "LaxRee Experience Center Tour", year: "2023" },
-  { image: "/images/gallery/exhibition-2.webp", caption: "Trade Expo, Bengaluru", year: "2023" },
-  { image: "/images/gallery/exhibition-3.webp", caption: "Hotel Supply Expo, Delhi", year: "2022" },
-  { image: "/images/gallery/exhibition-4.webp", caption: "Hospitality Summit, Jaipur", year: "2022" },
-  { image: "/images/gallery/exhibition-5.webp", caption: "Manufacturing Facility Showcase", year: "2022" },
 ];
 
 export type Certification = {
