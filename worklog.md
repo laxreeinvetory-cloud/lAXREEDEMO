@@ -2413,3 +2413,43 @@ Work Log:
 Build: 0 errors, 113 static pages
 Deploy: READY ✅
 CSS: proper dark theme ✅
+
+---
+Task ID: FIX-STALE-IMAGES-UPLOAD
+Agent: main (orchestrator)
+Task: Old images showing on site, new uploads not working. Fix without data loss.
+
+Root Causes:
+1. Upload API routes (POST + GET serve) were accidentally deleted in a prior
+   cleanup commit. Admin image uploads returned 404 — new images couldn't be saved.
+2. CMS still had old image override URLs pointing to deleted upload paths
+   (from old blocked DB). These stale URLs caused:
+   - "Old images showing" — CMS returned old override URLs that 404'd
+   - "Connecting with Hospitality old images" — OurPresence component
+     fetched stale override URLs from CMS
+   - "Purani images aa rahi" — same stale URLs
+
+Fixes Applied:
+1. Restored /api/admin/upload/route.ts (POST handler — accepts file uploads)
+2. Restored /api/admin/upload/[filename]/route.ts (GET handler — serves uploaded images)
+3. Cleared ALL stale CMS image overrides:
+   - homepage.ourPresence.image1-5 → empty strings (shows default exhibition images)
+   - images key → empty object (clears category/parent/subcategory/spotlight overrides)
+   - homepage:hero → empty (shows default hero image)
+   - homepage:spotlight → empty (shows default spotlight images)
+4. Now site shows ONLY current/default images
+5. Admin can re-upload new images via /admin/images — upload API works now
+
+No data loss:
+- Only stale override URLs were cleared (pointed to deleted/non-existent uploads)
+- Static default images are intact (exhibition-1.webp through exhibition-5.webp)
+- All blog posts, products, leads intact
+- Upload API restored — new uploads will work and persist
+
+E2E verified on production:
+- Upload route: HTTP 405 on GET (correct — only POST allowed) ✅
+- OurPresence: shows /images/gallery/exhibition-1.webp through 5 ✅
+- Image overrides: 0 (all cleared) ✅
+- CSS: proper dark theme ✅
+- Build: 0 errors, 113 static pages ✅
+- Deploy: READY ✅
