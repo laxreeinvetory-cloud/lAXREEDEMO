@@ -111,7 +111,7 @@ export function ProductPageWithSelector({
                 }`}
               >
                 <div className="h-10 w-10 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                  <img src={p.image} alt={p.model} className="h-full w-full object-contain" style={{ filter: "brightness(0.92) contrast(1.08)" }}  loading="lazy" decoding="async" />
+                  <img src={p.image} alt={p.model} width={800} height={600} className="h-full w-full object-contain" style={{ filter: "brightness(0.92) contrast(1.08)" }}  loading="lazy" decoding="async" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-xs text-brass">{p.model}</p>
@@ -136,7 +136,7 @@ export function ProductPageWithSelector({
               <img
                 src={images[Math.max(0, activeImage)] || images[0]}
                 alt={product.name}
-                className="h-full w-full object-contain p-8"
+                width={800} height={600} className="h-full w-full object-contain p-8"
                 style={{ filter: "brightness(0.95) contrast(1.05)" }}
                loading="lazy" decoding="async" />
             )}
@@ -152,7 +152,7 @@ export function ProductPageWithSelector({
                   activeImage === i ? "border-brass ring-2 ring-brass/20" : "border-ink/10 hover:border-brass/50"
                 }`}
               >
-                <img src={img} alt={`${product.name} ${i + 1}`} className="h-full w-full object-contain" style={{ filter: "brightness(0.95) contrast(1.05)" }}  loading="lazy" decoding="async" />
+                <img src={img} alt={`${product.name} ${i + 1}`} width={800} height={600} className="h-full w-full object-contain" style={{ filter: "brightness(0.95) contrast(1.05)" }}  loading="lazy" decoding="async" />
               </button>
             ))}
             {videoUrl && (
@@ -291,7 +291,7 @@ export function SuggestionCard({
           src={product.image}
           alt={product.name}
           loading="lazy" decoding="async"
-          className="h-full w-full object-contain p-2 transition-transform duration-500 hover:scale-105"
+          width={800} height={600} className="h-full w-full object-contain p-2 transition-transform duration-500 hover:scale-105"
           style={{ filter: "brightness(0.92) contrast(1.08)" }}
         />
       </div>

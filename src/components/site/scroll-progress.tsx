@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion"
+// Tree-shaken: only motion, useScroll, useSpring are bundled;
 
 /**
  * ScrollProgress — a thin brass progress bar fixed at the top of the viewport.

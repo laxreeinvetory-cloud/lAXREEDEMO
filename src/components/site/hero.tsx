@@ -308,7 +308,7 @@ function HeroFallback({ src }: { src: string }) {
         <img
           src={src}
           alt="LaxRee Amenities — Premium Hotel Room"
-          className="w-full h-full object-cover"
+          width={800} height={600} className="w-full h-full object-cover"
           loading="lazy"
           decoding="async"
           onError={(e) => {

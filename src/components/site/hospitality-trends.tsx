@@ -54,7 +54,7 @@ export function HospitalityTrends() {
                   src={post.image}
                   alt={post.title}
                   loading="lazy" decoding="async"
-                  className="w-full h-full object-cover"
+                  width={800} height={600} className="w-full h-full object-cover"
                 />
               </div>
               <div className="p-6 flex flex-col gap-3 flex-1">

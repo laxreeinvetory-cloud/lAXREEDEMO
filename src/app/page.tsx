@@ -1,10 +1,9 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/site/hero";
-import { TrustMarquee } from "@/components/site/trust-marquee";
-import { CategoryBento } from "@/components/site/category-bento";
 
-// Lazy-load below-the-fold sections to reduce initial JS payload
-// These sections are below the first viewport and don't need to load immediately
+// Lazy-load ALL below-the-fold sections to minimize initial JS payload
+const TrustMarquee = dynamic(() => import("@/components/site/trust-marquee").then(m => m.TrustMarquee));
+const CategoryBento = dynamic(() => import("@/components/site/category-bento").then(m => m.CategoryBento));
 const AboutUs = dynamic(() => import("@/components/site/about-us").then(m => m.AboutUs));
 const ProductSpotlight = dynamic(() => import("@/components/site/product-spotlight").then(m => m.ProductSpotlight));
 const ClientsTestimonials = dynamic(() => import("@/components/site/clients-testimonials"));
