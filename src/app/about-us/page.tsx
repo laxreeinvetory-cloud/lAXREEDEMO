@@ -447,7 +447,7 @@ export default function AboutUsPage() {
                         src={memberImage}
                         alt={member.name}
                         className="w-full h-full object-cover"
-                      />
+                       loading="lazy" />
                     </div>
                   ) : (
                     <div className="w-20 h-20 rounded-full bg-brass/10 border border-brass/30 grid place-items-center">

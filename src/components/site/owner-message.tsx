@@ -45,7 +45,7 @@ export function OwnerMessage() {
                   src="/images/owner-cropped.webp"
                   alt="Ashish Agarwal — Founder & Managing Director, LaxRee Amenities"
                   className="w-full h-full object-cover object-top"
-                />
+                 loading="lazy" decoding="async" />
               </div>
               {/* Brass dot accent */}
               <span

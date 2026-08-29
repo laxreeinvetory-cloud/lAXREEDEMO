@@ -159,7 +159,7 @@ export default function ClientsPage() {
                       src={client.logo}
                       alt={client.name}
                       className="max-h-20 max-w-full object-contain transition-all duration-300 group-hover:scale-110"
-                    />
+                     loading="lazy" />
                   ) : (
                     <span className="font-display text-[16px] font-medium text-ink-muted transition-colors duration-300 group-hover:text-ink text-center">
                       {client.name}

@@ -92,7 +92,7 @@ export default function ClientsTestimonials() {
                     src={client.logo}
                     alt={client.name}
                     className="h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-300"
-                  />
+                   loading="lazy" decoding="async" />
                 ) : (
                   <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink transition-all duration-300 whitespace-nowrap">
                     {client.name}
@@ -113,7 +113,7 @@ export default function ClientsTestimonials() {
                     src={client.logo}
                     alt={client.name}
                     className="h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-all duration-300"
-                  />
+                   loading="lazy" decoding="async" />
                 ) : (
                   <span className="font-display text-[22px] leading-none text-ink-muted/40 hover:text-ink transition-all duration-300 whitespace-nowrap">
                     {client.name}

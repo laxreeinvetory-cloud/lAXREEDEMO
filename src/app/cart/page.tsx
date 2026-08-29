@@ -288,7 +288,7 @@ export default function CartPage() {
                           src={item.image}
                           alt={item.name}
                           className="h-full w-full object-contain"
-                        />
+                         loading="lazy" />
                       </div>
 
                       {/* Product info */}
@@ -604,7 +604,7 @@ function generateProfessionalQuotationHTML(
 <div class="page">
   <div class="header">
     <div class="header-logo">
-      <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" />
+      <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities"  loading="lazy" />
     </div>
     <div class="header-ref">
       <div class="label">Quotation Request</div>
@@ -653,7 +653,7 @@ function generateProfessionalQuotationHTML(
     <div class="note"><p><strong>Note:</strong> This is a quotation request, not a confirmed order. Rates, taxes, and delivery charges will be provided by the LaxRee sales team upon confirmation.</p></div>
   </div>
   <div class="footer">
-    <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities" />
+    <img src="https://laxree.com/wp-content/uploads/2025/05/laxree-new-logo-file-1-scaled.png" alt="LaxRee Amenities"  loading="lazy" />
     <div class="footer-addr">Plot No. 1 &amp; 2, Harbilas Sharda Marg, Civil Lines, Ajmer, Rajasthan 305001<br>Phone: +91 92516 83662 &nbsp;|&nbsp; Email: contactus@laxree.com</div>
     <div class="footer-certs">ISO 9001 • ISO 14001 • ISO 45001 • CE Certified • RoHS Compliant</div>
   </div>

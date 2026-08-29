@@ -162,7 +162,7 @@ export default function ExperienceCenterPage() {
                       src={centerImages[center.id] || center.image}
                       alt={center.name}
                       className="absolute inset-0 h-full w-full object-cover"
-                    />
+                     loading="lazy" />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <Building2 className="h-24 w-24 text-brass/30" />

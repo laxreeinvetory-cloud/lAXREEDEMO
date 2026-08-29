@@ -47,7 +47,7 @@ function LaxReeLogo({ compact = false, logoSrc }: { compact?: boolean; logoSrc?:
           maxHeight: 40,
           objectFit: "contain",
         }}
-      />
+       loading="lazy" decoding="async" />
     </Link>
   );
 }

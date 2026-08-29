@@ -310,6 +310,8 @@ function HeroFallback({ src }: { src: string }) {
         src={src}
         alt="LaxRee Amenities — Premium Hotel Room"
         className="w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).style.display = "none";
         }}

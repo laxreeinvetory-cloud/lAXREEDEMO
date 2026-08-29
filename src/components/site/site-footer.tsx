@@ -88,7 +88,7 @@ export function SiteFooter() {
                 height={38}
                 className="h-auto w-auto transition-opacity duration-300 group-hover:opacity-90"
                 style={{ maxWidth: 160 }}
-              />
+               loading="lazy" decoding="async" />
             </Link>
             <p className="font-body text-[13px] leading-relaxed text-sand max-w-xs">
               {address}

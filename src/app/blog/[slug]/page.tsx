@@ -229,7 +229,7 @@ export default async function BlogPostPage({
               src={post.image}
               alt={post.title}
               className="w-full aspect-[21/9] object-cover"
-            />
+             loading="lazy" />
           </div>
         </div>
       </section>

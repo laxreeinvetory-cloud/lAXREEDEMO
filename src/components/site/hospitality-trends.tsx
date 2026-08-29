@@ -53,7 +53,7 @@ export function HospitalityTrends() {
                 <img
                   src={post.image}
                   alt={post.title}
-                  loading="lazy"
+                  loading="lazy" decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>

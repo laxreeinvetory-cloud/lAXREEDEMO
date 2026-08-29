@@ -49,7 +49,7 @@ function ProductCard({ product, active }: { product: Product; active: boolean })
         <img
           src={product.image}
           alt={product.name}
-          loading="lazy"
+          loading="lazy" decoding="async"
           className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
         />
         {/* Subtle brass corner accent on active card */}

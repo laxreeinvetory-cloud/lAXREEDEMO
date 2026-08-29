@@ -159,7 +159,7 @@ export default function OurPresence() {
                       <img
                         src={ex.image}
                         alt={`${ex.caption} — ${ex.year}`}
-                        loading="lazy"
+                        loading="lazy" decoding="async"
                         width={960}
                         height={540}
                         className="w-full h-full object-cover select-none"
