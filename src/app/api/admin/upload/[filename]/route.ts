@@ -18,7 +18,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ fil
       if (commaIdx > -1) { mime = row.value.substring(5, commaIdx).split(";")[0] || "image/jpeg"; base64Data = row.value.substring(commaIdx + 1); }
     }
     const body = new Uint8Array(Buffer.from(base64Data, "base64"));
-    return new NextResponse(body, { status: 200, headers: { "Content-Type": mime, "Cache-Control": "public, max-age=31536000, immutable", "X-Content-Type-Options": "nosniff" } });
+    return new NextResponse(body, { status: 200, headers: { "Content-Type": mime, "Cache-Control": "no-cache, no-store, must-revalidate", "X-Content-Type-Options": "nosniff" } });
   } catch (err) {
     return new NextResponse("Server error", { status: 500 });
   }

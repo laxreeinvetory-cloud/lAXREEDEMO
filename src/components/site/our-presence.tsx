@@ -157,7 +157,7 @@ export default function OurPresence() {
                     <div className="relative w-full h-full card-24 overflow-hidden bg-charcoal">
                       {imagesLoaded ? (
                         <img
-                          src={ex.image}
+                          src={ex.image + (ex.image.includes("?") ? "&" : "?") + "v=" + (imagesLoaded ? "1" : "0")}
                           alt={`${ex.caption} — ${ex.year}`}
                           loading="lazy" decoding="async"
                           width={960}
