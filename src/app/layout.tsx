@@ -159,8 +159,6 @@ export default function RootLayout({
         className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable} antialiased bg-charcoal text-ivory font-body`}
       >
         {/* SEO: Preconnect to external domains */}
-        <link rel="preconnect" href="https://sketchfab.com" />
-        <link rel="dns-prefetch" href="https://sketchfab.com" />
 
         {/* SEO: Structured data — Organization + LocalBusiness + WebSite */}
         <script

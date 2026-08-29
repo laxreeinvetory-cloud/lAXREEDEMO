@@ -29,6 +29,7 @@ export function GoogleAnalytics({ gaId }: { gaId?: string }) {
           gtag('js', new Date());
           gtag('config', '${id}', {
             page_path: window.location.pathname,
+            cookie_flags: 'SameSite=None; Secure',
           });
         `}
       </Script>

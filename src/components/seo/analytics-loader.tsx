@@ -57,6 +57,7 @@ export function AnalyticsLoader() {
           window.gtag("js", new Date());
           window.gtag("config", gaId, {
             page_path: window.location.pathname,
+            cookie_flags: "SameSite=None; Secure",
           });
         }
       })
