@@ -5,15 +5,25 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
   },
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   // Headers for caching static assets + video protection
   async headers() {
     return [
       {
         source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",
