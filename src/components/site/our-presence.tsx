@@ -26,8 +26,9 @@ const AUTO_ADVANCE_MS = 5000;
 export default function OurPresence() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [exhibitions, setExhibitions] = useState<Exhibition[]>(EXHIBITIONS);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  // Start EMPTY — no default images. Fill only after CMS fetch completes.
+  // This prevents the "flash of old/default images" before overrides load.
+  const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
   const reduced = usePrefersReducedMotion();
   const total = exhibitions.length;
 
@@ -35,24 +36,25 @@ export default function OurPresence() {
     fetch("/api/admin/settings", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
+        // Start with default exhibitions
+        const updated = [...EXHIBITIONS];
         if (data.ok && data.settings) {
           const opFull = data.settings["homepage:full"]?.ourPresence;
           const opImages = data.settings["homepage"]?.ourPresence;
           const op = { ...(opFull || {}), ...(opImages || {}) };
           if (op && Object.keys(op).length > 0) {
-            const updated = [...EXHIBITIONS];
             const keys = ["image1","image2","image3","image4","image5","image6","image7","image8","image9","image10"];
             keys.forEach((k, idx) => {
               const val = op[k];
               if (val && updated[idx]) updated[idx] = { ...updated[idx], image: val };
             });
-            setExhibitions(updated);
           }
         }
-        setImagesLoaded(true);
+        setExhibitions(updated);
       })
       .catch(() => {
-        setImagesLoaded(true);
+        // If fetch fails, use default exhibitions
+        setExhibitions([...EXHIBITIONS]);
       });
   }, []);
 
@@ -100,11 +102,14 @@ export default function OurPresence() {
 
         {/* ── Coverflow stage ────────────────────────────────── */}
         <div className="mt-16">
-          <div
-            className="relative"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
+          {total === 0 ? (
+            <div className="relative mx-auto w-full max-w-[960px] aspect-video rounded-[24px] bg-charcoal animate-pulse" />
+          ) : (
+            <div
+              className="relative"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
             <motion.div
               className="relative mx-auto w-full max-w-[960px] aspect-video cursor-grab active:cursor-grabbing"
               style={{ perspective: "1600px" }}
@@ -155,9 +160,9 @@ export default function OurPresence() {
                     }}
                   >
                     <div className="relative w-full h-full card-24 overflow-hidden bg-charcoal">
-                      {imagesLoaded ? (
+                      {ex.image ? (
                         <img
-                          src={ex.image + (ex.image.includes("?") ? "&" : "?") + "v=" + (imagesLoaded ? "1" : "0")}
+                          src={ex.image + (ex.image.includes("?") ? "&" : "?") + "v=1"}
                           alt={`${ex.caption} — ${ex.year}`}
                           loading="lazy" decoding="async"
                           width={960}
@@ -209,28 +214,29 @@ export default function OurPresence() {
             >
               {isPaused ? <Play size={14} strokeWidth={2} /> : <Pause size={14} strokeWidth={2} />}
             </button>
-          </div>
 
-          {/* Pagination dots */}
-          <div className="mt-8 flex justify-center gap-2">
-            {exhibitions.map((ex, i) => {
-              const isCurrent = i === activeIndex;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => goTo(i)}
-                  aria-label={`Go to ${ex.caption} ${ex.year}`}
-                  aria-current={isCurrent ? "true" : undefined}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    isCurrent
-                      ? "w-8 bg-brass"
-                      : "w-1.5 bg-sand/30 hover:bg-sand/60"
-                  }`}
-                />
-              );
-            })}
+            {/* Pagination dots */}
+            <div className="mt-8 flex justify-center gap-2">
+              {exhibitions.map((ex, i) => {
+                const isCurrent = i === activeIndex;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => goTo(i)}
+                    aria-label={`Go to ${ex.caption} ${ex.year}`}
+                    aria-current={isCurrent ? "true" : undefined}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      isCurrent
+                        ? "w-8 bg-brass"
+                        : "w-1.5 bg-sand/30 hover:bg-sand/60"
+                    }`}
+                  />
+                );
+              })}
+            </div>
           </div>
+          )}
         </div>
       </div>
     </section>
