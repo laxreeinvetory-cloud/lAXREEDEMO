@@ -98,26 +98,26 @@ export function Hero() {
   const { openModal } = useEnquiry();
   const reduced = usePrefersReducedMotion();
 
-  // CMS-driven hero image override (key "homepage:hero" field "heroImage").
-  // Falls back to the static /images/products/mini-bar.webp image when the
-  // CMS has no value or the fetch fails.
-  const [heroImage, setHeroImage] = useState<string>(DEFAULT_HERO_IMAGE);
+  // Start EMPTY — fill only after CMS fetch to prevent flash of default image
+  const [heroImage, setHeroImage] = useState<string>("");
   useEffect(() => {
     let cancelled = false;
     fetch("/api/admin/cms?key=homepage:hero", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (cancelled || !data) return;
+        if (cancelled) return;
         const override =
           data?.value && typeof data.value === "object"
             ? (data.value as { heroImage?: unknown }).heroImage
             : undefined;
         if (typeof override === "string" && override.trim()) {
           setHeroImage(override.trim());
+        } else {
+          setHeroImage(DEFAULT_HERO_IMAGE);
         }
       })
       .catch(() => {
-        /* keep fallback */
+        setHeroImage(DEFAULT_HERO_IMAGE);
       });
     return () => {
       cancelled = true;
@@ -302,20 +302,22 @@ export function Hero() {
    ─────────────────────────────────────────────────────────── */
 
 function HeroFallback({ src }: { src: string }) {
-  // Premium hero image display — fills the stage with object-cover for
-  // an immersive look. Brass border + shadow for premium feel.
   return (
     <div className="w-full h-full rounded-[24px] overflow-hidden border-2 border-brass/20 bg-charcoal/60 shadow-2xl shadow-brass/10 relative">
-      <img
-        src={src}
-        alt="LaxRee Amenities — Premium Hotel Room"
-        className="w-full h-full object-cover"
-        loading="lazy"
-        decoding="async"
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).style.display = "none";
-        }}
-      />
+      {src ? (
+        <img
+          src={src}
+          alt="LaxRee Amenities — Premium Hotel Room"
+          className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).style.display = "none";
+          }}
+        />
+      ) : (
+        <div className="w-full h-full bg-charcoal animate-pulse" />
+      )}
       {/* Subtle gradient overlay at bottom for depth */}
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent pointer-events-none" />
       {/* Brass top accent */}

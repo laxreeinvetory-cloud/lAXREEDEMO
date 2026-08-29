@@ -24,11 +24,10 @@ const FLOAT_DELAYS = [0, -1.3, -2.6]; // negative => staggered phase from t=0
 type ClientLogoItem = { name: string; logo: string };
 
 export default function ClientsTestimonials() {
-  const [logos, setLogos] = useState<ClientLogoItem[]>(CLIENT_LOGOS);
+  // Start EMPTY — fill only after CMS fetch to prevent flash of default logos
+  const [logos, setLogos] = useState<ClientLogoItem[]>([]);
 
   useEffect(() => {
-    // Try to load CMS-managed client logos. Fall back to hardcoded defaults
-    // silently on any error/empty so the section never breaks.
     fetch("/api/admin/cms?key=client-logos", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -42,10 +41,14 @@ export default function ClientsTestimonials() {
                 typeof (v as ClientLogoItem).logo === "string"
             )
             .map((v: ClientLogoItem) => ({ name: v.name, logo: v.logo }));
-          if (cleaned.length > 0) setLogos(cleaned);
+          setLogos(cleaned.length > 0 ? cleaned : [...CLIENT_LOGOS]);
+        } else {
+          setLogos([...CLIENT_LOGOS]);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setLogos([...CLIENT_LOGOS]);
+      });
   }, []);
 
   return (
@@ -72,6 +75,11 @@ export default function ClientsTestimonials() {
       </div>
 
       {/* ── Full-width logo marquee ────────────────────────── */}
+      {logos.length === 0 ? (
+        <div className="mt-14 w-full" style={{ height: 80 }}>
+          <div className="h-full bg-ivory animate-pulse rounded-lg" />
+        </div>
+      ) : (
       <div
         className="marquee-pause mt-14 w-full overflow-hidden"
         style={{ height: 80 }}
@@ -124,6 +132,7 @@ export default function ClientsTestimonials() {
           </div>
         </div>
       </div>
+      )}
 
       {/* ── Floating glass testimonial cards ──────────────── */}
       <div className="container-laxree">
