@@ -32,6 +32,7 @@ const SITE_IMAGES: ImageEntry[] = [
   // Pages
   { key: "about-hero", label: "About Us Page — Hero Image", section: "Pages", cmsKey: "page:about-us", field: "heroImage", fallback: "" },
   { key: "about-factory", label: "About Us Page — Factory Image", section: "Pages", cmsKey: "page:about-us", field: "factoryImage", fallback: "/images/about/factory.webp" },
+  { key: "about-minibar", label: "About Us Page — Production Line Image (Minibar)", section: "Pages", cmsKey: "page:about-us", field: "factoryImage", fallback: "/images/products/mini-bar.webp" },
   { key: "clients-hero", label: "Clients Page — Hero Image", section: "Pages", cmsKey: "page:clients", field: "heroImage", fallback: "" },
   { key: "exp-hero", label: "Experience Center — Hero Image", section: "Pages", cmsKey: "page:experience-center", field: "heroImage", fallback: "" },
   // Team Members
