@@ -27,6 +27,7 @@ export default function OurPresence() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [exhibitions, setExhibitions] = useState<Exhibition[]>(EXHIBITIONS);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const reduced = usePrefersReducedMotion();
   const total = exhibitions.length;
 
@@ -35,11 +36,6 @@ export default function OurPresence() {
       .then((r) => r.json())
       .then((data) => {
         if (data.ok && data.settings) {
-          // Images can be saved by two admin pages:
-          //   1. /admin/images     → saves to key "homepage"         (field ourPresence.image1-10)
-          //   2. /admin/homepage   → saves to key "homepage:full"    (field ourPresence.image1-5)
-          // We merge both, with the dedicated /admin/images key taking
-          // priority since it has the full image1-10 range.
           const opFull = data.settings["homepage:full"]?.ourPresence;
           const opImages = data.settings["homepage"]?.ourPresence;
           const op = { ...(opFull || {}), ...(opImages || {}) };
@@ -53,8 +49,11 @@ export default function OurPresence() {
             setExhibitions(updated);
           }
         }
+        setImagesLoaded(true);
       })
-      .catch(() => {});
+      .catch(() => {
+        setImagesLoaded(true);
+      });
   }, []);
 
   const goTo = useCallback((i: number) => {
@@ -156,15 +155,19 @@ export default function OurPresence() {
                     }}
                   >
                     <div className="relative w-full h-full card-24 overflow-hidden bg-charcoal">
-                      <img
-                        src={ex.image}
-                        alt={`${ex.caption} — ${ex.year}`}
-                        loading="lazy" decoding="async"
-                        width={960}
-                        height={540}
-                        className="w-full h-full object-cover select-none"
-                        draggable={false}
-                      />
+                      {imagesLoaded ? (
+                        <img
+                          src={ex.image}
+                          alt={`${ex.caption} — ${ex.year}`}
+                          loading="lazy" decoding="async"
+                          width={960}
+                          height={540}
+                          className="w-full h-full object-cover select-none"
+                          draggable={false}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-charcoal animate-pulse" />
+                      )}
                       {/* Active-slide caption (charcoal gradient for legibility) */}
                       {isActive && (
                         <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-charcoal/85 via-charcoal/40 to-transparent pointer-events-none">
