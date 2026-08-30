@@ -9,6 +9,7 @@ type BlogPost = {
   title: string;
   category: string;
   excerpt: string;
+  content?: string; // JSON string of body content sections
   image: string;
   author: string;
   authorRole: string;
@@ -198,6 +199,16 @@ function BlogEditor({
     date: post?.date || new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" }),
     readTime: post?.readTime || "5 min",
     published: post?.published ?? true,
+    // Body content — array of sections (heading + paragraphs)
+    bodyContent: (() => {
+      try {
+        if (post?.content) {
+          const parsed = JSON.parse(post.content);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch {}
+      return [{ heading: "", paragraphs: [""] }];
+    })(),
     // SEO fields
     seoTitle: post?.seoTitle || "",
     metaDescription: post?.metaDescription || "",
@@ -207,6 +218,14 @@ function BlogEditor({
     faqJsonLd: post?.faqJsonLd || "",
   });
 
+  // Body content helpers
+  const addSection = () => setForm({ ...form, bodyContent: [...form.bodyContent, { heading: "", paragraphs: [""] }] });
+  const removeSection = (idx: number) => setForm({ ...form, bodyContent: form.bodyContent.filter((_: unknown, i: number) => i !== idx) });
+  const updateHeading = (idx: number, val: string) => setForm({ ...form, bodyContent: form.bodyContent.map((s: any, i: number) => i === idx ? { ...s, heading: val } : s) });
+  const addParagraph = (idx: number) => setForm({ ...form, bodyContent: form.bodyContent.map((s: any, i: number) => i === idx ? { ...s, paragraphs: [...s.paragraphs, ""] } : s) });
+  const removeParagraph = (secIdx: number, paraIdx: number) => setForm({ ...form, bodyContent: form.bodyContent.map((s: any, i: number) => i === secIdx ? { ...s, paragraphs: s.paragraphs.filter((_: unknown, j: number) => j !== paraIdx) } : s) });
+  const updateParagraph = (secIdx: number, paraIdx: number, val: string) => setForm({ ...form, bodyContent: form.bodyContent.map((s: any, i: number) => i === secIdx ? { ...s, paragraphs: s.paragraphs.map((p: string, j: number) => j === paraIdx ? val : p) } : s) });
+
   const inputClass = "w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-ivory placeholder:text-sand/30 focus:border-brass focus:bg-white/15 focus:outline-none transition-colors";
   const labelClass = "data-label mb-1.5 block text-[11px] text-sand font-medium";
   const [activeTab, setActiveTab] = useState<"content" | "seo">("content");
@@ -214,7 +233,12 @@ function BlogEditor({
   const handleSave = () => {
     if (!form.title.trim()) { alert("Title is required"); return; }
     if (!form.slug.trim()) { alert("Slug is required"); return; }
-    onSave(form);
+    // Convert bodyContent to content JSON string for storage
+    const { bodyContent, ...restForm } = form;
+    onSave({
+      ...restForm,
+      content: JSON.stringify(bodyContent),
+    });
   };
 
   return (
@@ -264,7 +288,49 @@ function BlogEditor({
               </div>
               <div className="col-span-2">
                 <label className={labelClass}>Excerpt (summary for blog listing)</label>
-                <textarea className={inputClass} rows={3} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Short description shown on blog listing page..." />
+                <textarea className={inputClass} rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Short description shown on blog listing page..." />
+              </div>
+
+              {/* BODY CONTENT — Article sections with heading + paragraphs */}
+              <div className="col-span-2 border-t border-white/10 pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <label className={labelClass + " mb-0"}>Article Body Content</label>
+                  <button type="button" onClick={addSection} className="inline-flex items-center gap-1 rounded-lg bg-brass/20 text-brass px-3 py-1 text-xs hover:bg-brass/30 border border-brass/30">
+                    + Add Section
+                  </button>
+                </div>
+                <p className="text-[10px] text-sand/50 mb-3">Write your article in sections. Each section has a heading (optional) and one or more paragraphs.</p>
+                {form.bodyContent.map((section: any, secIdx: number) => (
+                  <div key={secIdx} className="mb-4 rounded-xl border border-white/10 bg-white/5 p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-brass uppercase tracking-wider">Section {secIdx + 1}</span>
+                      {form.bodyContent.length > 1 && (
+                        <button type="button" onClick={() => removeSection(secIdx)} className="text-red-400 hover:text-red-300 text-xs">Remove Section</button>
+                      )}
+                    </div>
+                    <input
+                      className={inputClass + " mb-2"}
+                      value={section.heading || ""}
+                      onChange={(e) => updateHeading(secIdx, e.target.value)}
+                      placeholder="Section heading (optional)"
+                    />
+                    {section.paragraphs.map((para: string, paraIdx: number) => (
+                      <div key={paraIdx} className="flex gap-2 mb-2">
+                        <textarea
+                          className={inputClass}
+                          rows={3}
+                          value={para}
+                          onChange={(e) => updateParagraph(secIdx, paraIdx, e.target.value)}
+                          placeholder={`Paragraph ${paraIdx + 1}...`}
+                        />
+                        {section.paragraphs.length > 1 && (
+                          <button type="button" onClick={() => removeParagraph(secIdx, paraIdx)} className="text-red-400 hover:text-red-300 text-xs shrink-0 pt-2">✕</button>
+                        )}
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => addParagraph(secIdx)} className="text-[11px] text-brass hover:text-brass-light">+ Add Paragraph</button>
+                  </div>
+                ))}
               </div>
               <div className="col-span-2">
                 <label className={labelClass}>Cover Image URL</label>
