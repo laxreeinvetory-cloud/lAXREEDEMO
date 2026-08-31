@@ -13,21 +13,77 @@ import {
 } from "lucide-react";
 import { PageCTA, GlassCard, FadeIn } from "@/components/site/page-primitives";
 import { BLOG_POSTS_FULL } from "@/lib/laxree/blog-content";
-import { SITE } from "@/lib/laxree/site-data";
+import { BLOG_POSTS, SITE, type BlogPostFull } from "@/lib/laxree/site-data";
+import { db } from "@/lib/db";
 
-/* Pre-generate the 3 known slugs */
+export const dynamic = "force-dynamic";
+
 export function generateStaticParams() {
   return BLOG_POSTS_FULL.map((p) => ({ slug: p.slug }));
 }
 
-/* SEO metadata */
+async function getPost(slug: string): Promise<BlogPostFull | null> {
+  // 1. Hardcoded rich-content posts
+  const staticPost = BLOG_POSTS_FULL.find((p) => p.slug === slug);
+  if (staticPost) return staticPost;
+
+  // 2. Database posts (admin-created)
+  try {
+    const row = await db.blogPost.findUnique({ where: { slug } });
+    if (!row) return null;
+
+    let contentSections: BlogPostFull["content"] = [];
+    try {
+      const parsed = JSON.parse(row.content);
+      if (Array.isArray(parsed)) {
+        contentSections = parsed.map((s: { heading?: string; paragraphs?: string[]; type?: string; text?: string }) => {
+          if (s.paragraphs && Array.isArray(s.paragraphs)) {
+            return { heading: s.heading, paragraphs: s.paragraphs };
+          }
+          if (s.text) return { paragraphs: [s.text] };
+          return { paragraphs: [] };
+        });
+      }
+    } catch {
+      contentSections = [];
+    }
+    if (contentSections.length === 0 && row.excerpt) {
+      contentSections = [{ paragraphs: [row.excerpt] }];
+    }
+
+    let seoTitle = "", metaDescription = "", keywords = "", canonicalUrl = "", ogImage = "", faqJsonLd = "";
+    try {
+      const seoRow = await db.siteContent.findUnique({ where: { key: `blog:seo:${slug}` } });
+      if (seoRow) {
+        const seo = JSON.parse(seoRow.value);
+        seoTitle = seo.seoTitle || "";
+        metaDescription = seo.metaDescription || "";
+        keywords = seo.keywords || "";
+        canonicalUrl = seo.canonicalUrl || "";
+        ogImage = seo.ogImage || "";
+        faqJsonLd = seo.faqJsonLd || "";
+      }
+    } catch {}
+
+    return {
+      slug: row.slug, title: row.title, category: row.category, excerpt: row.excerpt,
+      image: row.image, author: row.author, authorRole: row.authorRole,
+      date: row.date, readTime: row.readTime, content: contentSections,
+      seoTitle, metaDescription, keywords, canonicalUrl, ogImage, faqJsonLd,
+    } as BlogPostFull;
+  } catch (err) {
+    console.error("[BLOG DETAIL DB ERROR]", err);
+    return null;
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = BLOG_POSTS_FULL.find((p) => p.slug === slug);
+  const post = await getPost(slug);
   if (!post) return {};
   return {
     title: `${post.title} — LaxRee Amenities Blog`,
@@ -57,11 +113,11 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = BLOG_POSTS_FULL.find((p) => p.slug === slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
   // Related = the other posts (exclude current)
-  const related = BLOG_POSTS_FULL.filter((p) => p.slug !== post.slug);
+  const related = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   // SEO: Canonical + share URL
   const shareUrl = `https://l-axreedemo.vercel.app/blog/${post.slug}`;
